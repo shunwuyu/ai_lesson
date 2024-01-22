@@ -1,5 +1,6 @@
 # Logs
 logs
+*.zip
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -128,3 +129,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+*.pyc
+/my_folder
+*.log
+**/.DS_Store

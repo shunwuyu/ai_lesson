@@ -1,3 +1,4 @@
+
 import requests
 from PIL import Image # python 最常用的图像处理库
 from transformers import pipeline # 用于加载模型

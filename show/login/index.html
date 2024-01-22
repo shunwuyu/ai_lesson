@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .form input {
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 200px;
+    }
+
+    .form button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form class="form">
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button type="button" id="loginBtn">Login</button>
+    </form>
+    <p id="errorMsg" class="error"></p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const loginBtn = document.getElementById('loginBtn');
+      const errorMsg = document.getElementById('errorMsg');
+
+      loginBtn.addEventListener('click', () => {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (username === '' || password === '') {
+          errorMsg.textContent = 'Username and password are required.';
+        } else {
+          // Perform login logic here
+          // You can send the username and password to the server for authentication
+          // For example: 
+          // fetch('/login', {
+          //   method: 'POST',
+          //   body: JSON.stringify({ username, password }),
+          //   headers: {
+          //     'Content-Type': 'application/json'
+          //   }
+          // })
+          // .then(response => {
+          //   if (response.ok) {
+          //     // Login successful, redirect or perform other actions
+          //   } else {
+          //     // Login failed, display error message
+          //     errorMsg.textContent = 'Invalid username or password.';
+          //   }
+          // })
+          // .catch(error => {
+          //   // Handle network error
+          //   errorMsg.textContent = 'An error occurred. Please try again later.';
+          // });
+
+          // Just for demonstration purposes - show success message
+          alert('Login successful!');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
