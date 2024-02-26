@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    function listToTree(arr) {
+    let map = {}; // 创建一个对象来存储每个节点及其子节点
+    
+    arr.forEach((item) => {
+        item.children = []; // 初始化所有节点的 children 属性为空数组
+        
+        if (!map[item.id]) {
+            map[item.id] = [item]; // 如果该节点不在 map 中，则添加到 map 中并设置为包含自身的数组
+        } else {
+            map[item.id].push(item); // 否则直接将当前节点 push 进已经存在于 map 中的数组
+        }
+    });
+  
+    const treeData = []; // 最后返回的树形结构数据
+  
+    function buildTree(parentId) {
+      for (let i in map[parentId]) {
+          const node = map[parentId][i];
+          
+          if (node.pid === parentId) {
+              const childNodes = buildTree(node.id); // 递归调用函数获取子节点
+              
+              if (childNodes.length > 0) {
+                  node.children = childNodes; // 将子节点赋值给当前节点的 children 属性
+              }
+              
+              treeData.push(node); // 将当前节点添加到树形结构数据中
+          }
+      }
+      
+      return treeData;
+    }
+  
+    return buildTree('root'); // root 可根据实际情况修改为合适的起始节点 id
+}
+ 
+// 测试样例
+const dataList = [
+    { id: '1', pid: 'root' },
+    { id: '2', pid: 'root' },
+    { id: '3', pid: '1' },
+    { id: '4', pid: '1' },
+    { id: '5', pid: '2' },
+    { id: '6', pid: '2' },
+    { id: '7', pid: '3' },
+    { id: '8', pid: '3' },
+    { id: '9', pid: '4' },
+    { id: '10', pid: '4' }
+];
+ 
+console.log(listToTree(dataList));
+    </script>
+</body>
+</html>

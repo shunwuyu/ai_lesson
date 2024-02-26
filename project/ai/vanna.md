@@ -1,5 +1,5 @@
 https://juejin.cn/post/6844903520169099271?searchId=20240128171230266511C1CCC8E8453594
-inner join  left join  right join
+inner join  left join  right join  
 
 https://vanna.ai/Chinook.sqlite
 ```
