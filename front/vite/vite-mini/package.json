@@ -12,6 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "koa": "^2.15.0",
-    "vue": "^3.4.20"
+    "vue": "^3.4.20",
+    "vue-router": "^4.1.6",
+    "markdown-it": "^13.0.1",
+    "highlight.js": "^11.7.0",
+    "crypto-js": "^4.1.1",
+    "@tailwindcss/typography": "^0.5.9",
+    "@icon-park/vue-next": "^1.4.2"
   }
 }

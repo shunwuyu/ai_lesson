@@ -1,0 +1,1 @@
+[source](https://github.com/ustbhuangyi/better-scroll/blob/dev/packages/examples/vue/components/pullup/default.vue#L55)
