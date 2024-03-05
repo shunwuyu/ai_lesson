@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+</head>
+<body>
+<ul id="name_list"></ul>
+
+<script type="text/html" id="user_tmpl">
+    <%for ( var i = 0; i < users.length; i++ ) { %>
+        <li>
+            <a href="<%=users[i].url%>">
+                <%=users[i].name%>
+            </a>
+        </li>
+    <% } %>
+</script>
+<script>
+var container = document.getElementById("name_list");
+
+var data = {
+    users: [
+        { "name": "Kevin", "url": "http://localhost" },
+        { "name": "Daisy", "url": "http://localhost" },
+        { "name": "Kelly", "url": "http://localhost" }
+    ]
+}
+var precompile = _.template(document.getElementById("user_tmpl").innerHTML);
+
+var html = precompile(data);
+console.log(html)
+container.innerHTML = html;
+
+</script>
+</body>
+</html>
