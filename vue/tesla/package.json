@@ -1,0 +1,21 @@
+{
+  "name": "tesla",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.21",
+    "three": "^0.146.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "less": "^4.2.0",
+    "less-loader": "^11.1.0",
+    "vite": "^5.2.0"
+  }
+}

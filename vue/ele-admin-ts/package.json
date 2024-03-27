@@ -1,0 +1,27 @@
+{
+  "name": "ele-admin-ts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.21",
+    "element-plus": "^2.2.5",
+    "echarts": "^5.2.2",
+    "throttle-debounce": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/throttle-debounce": "^2.1.0",
+    "unplugin-auto-import": "^0.6.1",
+    "unplugin-vue-components": "^0.17.20",
+    "@types/node": "^16.11.13",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vue-tsc": "^2.0.6"
+  }
+}
