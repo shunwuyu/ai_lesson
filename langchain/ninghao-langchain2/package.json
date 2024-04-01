@@ -1,0 +1,19 @@
+{
+  "name": "ninghao-langchain2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/openai": "^0.0.25",
+    "dotenv": "^16.4.5",
+    "langchain": "^0.1.30",
+    "punycode": "^2.3.1"
+  },
+  "proxy": "http://127.0.0.1:7890/"
+}

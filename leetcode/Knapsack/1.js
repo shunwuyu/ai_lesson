@@ -20,3 +20,4 @@ function knapsack(bagWeight, weights, values) {
 }
 
 console.log(knapsack(3, [1, 3, 4], [15, 10, 30]));
+lodash    _.throttle()

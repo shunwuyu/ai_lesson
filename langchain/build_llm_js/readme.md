@@ -1,0 +1,1 @@
+[source](https://learn.deeplearning.ai/courses/build-llm-apps-with-langchain-js/lesson/2/building-blocks)
