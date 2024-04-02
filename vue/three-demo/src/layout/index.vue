@@ -12,6 +12,12 @@
           <PieChart></PieChart>
         </Panel>
       </div>
+      <div class="layout-content-right">
+        <Panel>
+          <LineCharts></LineCharts>
+        </Panel>
+      </div>
+      <Sence></Sence>
     </div>
   </div>
 </template>
@@ -19,6 +25,9 @@
 import Header from './Header.vue';
 import Panel from '@/components/Panel/index.vue';
 import PieChart from '@/components/Charts/PieChart.vue';
+import LineCharts from '@/components/Charts/LineChart.vue';
+import Sence from '@/components/Scene.vue';
+
 </script>
 <style scope>
 .layout {
