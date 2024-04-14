@@ -1,0 +1,15 @@
+{
+  "name": "js_webapp",
+  "version": "1.0.0",
+  "description": "[source](https://www.bilibili.com/video/BV1N1421D7dS/?spm_id_from=333.337.search-card.all.click&vd_source=3d50341f547faf8df242a214b04f2d86)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "llamaindex": "^0.2.8"
+  }
+}

@@ -1,0 +1,36 @@
+.post-list > div {
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.post-list > div > div {
+  margin-right: 16px;
+}
+
+.post-list > div > div > img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.post-list > div > div > div:nth-child(1) {
+  font-weight: bold;
+}
+
+.post-list > div > div > div:nth-child(3) {
+  font-size: 14px;
+}
+
+.post-list > div > div > div:last-child {
+  display: flex;
+  margin-top: 8px;
+}
+
+.post-list > div > div > div:last-child img {
+  width: 20px;
+}
+
+.post-list > div > div > div:last-child > div {
+  margin-right: 8px;
+}
