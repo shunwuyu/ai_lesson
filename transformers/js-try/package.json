@@ -1,0 +1,15 @@
+{
+  "name": "js-try",
+  "version": "1.0.0",
+  "description": "",
+  "main": "transformer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@xenova/transformers": "^2.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
