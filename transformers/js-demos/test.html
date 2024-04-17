@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    .container {
+        margin: 40px auto;
+        width: max(50vw, 400px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .custom-file-upload {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        gap:10px;
+        border: 2px solid black;
+        padding: 8px 16px;
+        border-radius: 6px;
+    }
+    #file-upload {
+        display: none;
+    }
+    #image-container {
+        width: 100%;
+        margin-top:20px;
+        position: relative;
+    }
+    #image-container>img {
+        width: 100%;
+    }
+    .bounding-box {
+        position: absolute;
+        box-sizing: border-box;
+    }
+    .bounding-box-label {
+        position: absolute;
+        color: white;
+        font-size: 12px;
+    }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <label for="file-upload" class="custom-file-upload">
+            <input type="file" accept="image/*" id="file-upload">
+            上传图片
+        </label>
+        <div id="image-container"></div>
+        <p id="status"></p>
+    </main>
+    <script src="./transformers.js" type="module"></script>
+</body>
+</html>

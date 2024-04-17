@@ -11,3 +11,7 @@
 - https://www.liblib.art/modelinfo/b5bf9fce324b79ddcedca71217740357
 - Ultra-realistic 8k CG,masterpiece,best quality,(photorealistic:1.4),HDR,absurdres,Professional,RAW photo,lens flare,(film grain:1.1),Bokeh,((Depth of field)),studio light,a young girl is sitting on a bed with a book and a flower in her hair,1girl,black_hair,bangs,long_hair,cosplay_photo,curtains,dress,flower,lips,looking_at_viewer,photo_medium,solo,water,Highly detailed,Professional,extreme detail description;,golf course,(play:1.1),(scenic views:1.2),relaxation,concentration,(challenge:1.1),blurry,,
 - ng_deepnegative_v1_75t,(badhandv4:1.4),(worst quality:1.4),(low quality:1.4),(normal quality:1.4),lowres,bad anatomy,normal quality,((monochrome)),((grayscale)) watermark,((face paint)),((freckles)),,
+
+
+
+ysw_fullstack_ai

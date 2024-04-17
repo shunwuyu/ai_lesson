@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <!-- Heading -->
+    <h1>Sentiment Analysis</h1>
+
+    <!-- for user input -->
+    <form id="myForm">
+        <input type="text" id="inputText">
+        <button type="submit" id="submitButton">Submit</button>
+    </form>
+
+    <!-- to show the result -->
+    <div id="outputDiv"></div>
+
+    <!-- to load the model -->
+    <script type="module">
+
+        // Imported the cdn of the transformers library
+        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.4.1';
+
+        // get input text
+        let inputText = document.getElementById('inputText');
+        // get output div
+        let outputDiv = document.getElementById('outputDiv');
+        // get submit button
+        let submitButton = document.getElementById('submitButton');
+
+        // on submit button click
+        submitButton.addEventListener('click', async (e) => {
+
+            // prevent default form submission
+            e.preventDefault();
+
+            // Specifying classifier task
+            let classifier = await pipeline('sentiment-analysis');
+
+            // classifying the input text
+            let result = await classifier(inputText.value);
+
+            // showing the result
+            outputDiv.innerHTML = result[0].label;
+        });
+    </script>
+
+</body>
+</html>
