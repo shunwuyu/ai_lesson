@@ -1,4 +1,5 @@
 # Logs
+.env
 logs
 *.zip
 *.log
