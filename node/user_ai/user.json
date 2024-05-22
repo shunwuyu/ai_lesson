@@ -1,0 +1,19 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "张三",
+            "hometown": "南昌"
+        },
+        {
+            "id": 2,
+            "name": "李四",
+            "hometown": "景德镇"
+        },
+        {
+            "id": 3,
+            "name": "王五",
+            "hometown": "南昌"
+        }
+    ]
+}
