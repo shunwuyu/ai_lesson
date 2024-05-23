@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge, chrome=1">
+    <title>debounce</title>
+    <style>
+        #container{
+            width: 100%; height: 200px; line-height: 200px; text-align: center; color: #fff; background-color: #444; font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <input type="text" id="searchInput" />
+    </div>
+    <script>
+    // function debounce(func, wait) {
+    //     var timeout;
+    //     return function () {
+    //         clearTimeout(timeout)
+    //         timeout = setTimeout(func, wait);
+    //     }
+    // }
+
+    function debounce(func, wait) {
+        var timeout;
+
+        return function () {
+            // 事件，指向事件发生的元素
+            var context = this;
+            console.log(context, '///');
+            clearTimeout(timeout)
+            timeout = setTimeout(function(){
+                func.apply(context)
+            }, wait);
+        }
+    }
+
+    class MyComponent {
+        constructor() {
+            this.input = document.getElementById('searchInput');
+            this.debouncedSearch = debounce(this.search, 300); // 使用debounce包装search方法
+
+            this.input.addEventListener('input', this.debouncedSearch.bind(this)); // 绑定输入事件
+        }
+
+        search() {
+            console.log("Searching for:", this.input.value);
+            // 这里的this应该是指向MyComponent实例，以便访问this.input等属性
+        }
+    }
+    new MyComponent()
+    </script>
+    
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge, chrome=1">
+    <title>debounce</title>
+    <style>
+        #container{
+            width: 100%; height: 200px; line-height: 200px; text-align: center; color: #fff; background-color: #444; font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <script>
+    var count = 1;
+    var container = document.getElementById('container');
+
+    function getUserAction() {
+        container.innerHTML = count++;
+    };
+    // 你尽管触发事件，但是我一定在事件触发 n 秒后
+    // 才执行，如果你在一个事件触发的 n 秒内
+    // 又触发了这个事件，那我就以新的事件的时间
+    // 为准，n 秒后才执行，总之，就是要等你触
+    // 发完事件 n 秒内不再触发事件，我才执行，
+    // 真是任性呐!
+    function debounce(func, wait) {
+        var timeout;
+        return function () {
+            clearTimeout(timeout)
+            timeout = setTimeout(func, wait);
+        }
+    }
+
+    container.onmousemove = debounce(getUserAction, 1000);
+    </script>
+    
+</body>
+
+</html>
