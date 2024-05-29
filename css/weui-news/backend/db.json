@@ -1,0 +1,27 @@
+{
+	"news_list": [
+		{
+			"id": "15",
+			"title": "抖音页面的制作实战，原来如此简单？-BEM命名规范介绍",
+			"text": "在当今快速迭代的Web开发领域，构建可维护、可扩展且适应性强的用户界面成为了每个前端工程师面临的挑战。随着项目规模的扩大和团队成员的增加，如何确保代码的一致性、提升组件的重用率，以及加快新成员的融入速度，成为提升开发效率的关键因素。",
+			"image": "https://p9-passport.byteacctimg.com/img/user-avatar/8135a20238a6c327bc519794a5ffca9a~180x180.awebp"
+		}, {
+			"id": "16",
+			"title": "BEM-CSS实战抖音团购模块",
+			"text": "BEM是一种前端开发中用于CSS类名命名的方法论。通过提供一种标准化的命名方式来解决CSS类名的可读性和可维护性问题。BEM三个字母拆分开来可视为独立的块（Block）、元素（Element）和修改器",
+			"image": "https://p26-passport.byteacctimg.com/img/user-avatar/6e229620ce003482fd4624f2b54e2851~180x180.awebp"
+		},
+        {
+			"id": "17",
+			"title": "害怕面试遇到闭包？看完这篇文章，闭包再也不在话下！",
+			"text": "作用域链是JavaScript中一种用于解析变量的方法。当一个函数被调用时，函数在执行前预编译，会创建一个执行上下文对象，这个对象包含了变量环境和函数的外部引用。变量环境中有一个特殊的属性outer，它指向外层作用域，outer的指向是根据词法作用域来定的。如下图所示",
+			"image": "https://p26-passport.byteacctimg.com/img/user-avatar/ca20d22dfa4324fe495fb7ee706925be~180x180.awebp"
+		},
+        {
+			"id": "18",
+			"title": "一键解锁微信WEUI秘籍：从“Button大侠”到“移动端界面高手”的飞跃",
+			"text": "在构建高质量的移动端页面时，选择合适的UI框架至关重要，而微信官方推出的WEUI框架正是其中的佼佼者，以其简洁优雅的界面风格和高效的开发体验赢得了众多开发者的青睐。",
+			"image": "https://p9-passport.byteacctimg.com/img/user-avatar/ad2047b0fac8da8a650ac6b88b71022f~180x180.awebp"
+		}
+	]
+}

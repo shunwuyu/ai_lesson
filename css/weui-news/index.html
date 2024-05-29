@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/weui/2.6.12/style/weui.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="weui-tab">
+		<div class="weui-navbar">
+			<!--weui-bar__item_on-->
+			<a href="#/index/recommend/6" class="weui-navbar__item weui-bar__item_on">
+				推荐
+			</a>
+			<a href="#/index/hot/7"  class="weui-navbar__item">
+				热点
+			</a>
+			<a href="#/index/entertainment/8" class="weui-navbar__item">
+				娱乐
+			</a>
+		</div>
+	</div>
+	<div class="weui-search-bar weui-search-bar_focusing" id="search_bar">
+		<form class="weui-search-bar__form">
+			<div class="weui-search-bar__box">
+				<i class="weui-icon-search"></i>
+				<input type="search" class="weui-search-bar__input" id="search_input" placeholder="搜索" />
+				<a href="javascript:" class="weui-icon-clear" id="search_clear"></a>
+			</div>
+			<label for="search_input" class="weui-search-bar__label" id="search_text">
+				<i class="weui-icon-search"></i>
+				<span>搜索</span>
+			</label>
+		</form>
+		<a href="javascript:"  class="weui-search-bar__cancel-btn" id="search_cancel">取消</a>
+	</div>
+	<div class="weui-panel weui-panel_access">
+		<div class="weui-panel__hd">
+			新闻列表
+		</div>
+		<div class="weui-panel__bd" id="news_list">
+			<!--注意不要用new，new为js的关键词-->
+			<!-- <a  class="weui-media-box weui-media-box_appmsg">
+				<div class="weui-media-box__hd">
+					<img class="weui-media-box__thumb" src="./images/075628326635.jpg" alt="">
+				</div>
+				<div class="weui-media-box__bd">
+					<h4 class="weui-media-box__title">抖音页面的制作实战，原来如此简单？-BEM命名规范介绍</h4>
+					<p class="weui-media-box__desc">在当今快速迭代的Web开发领域，构建可维护、可扩展且适应性强的用户界面成为了每个前端工程师面临的挑战。随着项目规模的扩大和团队成员的增加，如何确保代码的一致性、提升组件的重用率，以及加快新成员的融入速度，成为提升开发效率的关键因素。</p>
+				</div>
+			</a> -->
+		</div>
+		<div class="weui-panel__ft">
+			<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+				<div class="weui-cell__bd">查看更多</div>
+				<span class="weui-cell__ft"></span>
+			</a>
+		</div>
+	</div>
+	<!-- <img src="" alt=""> -->
+
+	<script>
+	const news_list = document.getElementById('news_list')
+	fetch('http://localhost:3000/news_list')
+		.then(data => data.json())
+		.then(news => {
+			// console.log(news);
+			news_list.innerHTML = news.map(item => `
+			<a  class="weui-media-box weui-media-box_appmsg">
+				<div class="weui-media-box__hd">
+					<img class="weui-media-box__thumb" src="${item.image}" alt="">
+				</div>
+				<div class="weui-media-box__bd">
+					<h4 class="weui-media-box__title">${item.title}</h4>
+					<p class="weui-media-box__desc">${item.text}</p>
+				</div>
+			</a>
+			`).join('')
+		})
+	</script>
+</body>
+</html>
