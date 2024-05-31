@@ -1,0 +1,40 @@
+<html>
+
+<head>
+  <script>
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Authorization", "Bearer sk-UgtZ6M4qw7Ycfzok0cC1E8C690A04b92B38e381c4c5661D5");
+
+    function getRequestBody(input) {
+      return JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: input }],
+      });
+    }
+
+    function chat() {
+      const input = document.getElementById("input").value;
+      const body = getRequestBody(input);
+      const requestOptions = { method: 'POST', headers, body };
+      fetch("https://ai98.vip/v1/chat/completions", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          document.getElementById("result").innerHTML = result.choices[0].message.content;
+        })
+        .catch(error => console.log('error', error));
+    }
+
+  </script>
+</head>
+
+<body>
+  <!-- 实现用户输入，点击按钮发送请求，获取响应结果，并显示在页面上 -->
+  <input type="text" id="input">
+  <button onclick="chat()">chat</button>
+  <div id="result"></div>
+
+</body>
+
+</html>

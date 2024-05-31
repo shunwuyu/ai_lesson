@@ -9,3 +9,6 @@ AI全栈工程师课程
     - 只能处理和心情相关的，如果不是的话，要提醒用户，“只能告诉我你的心情状态”
 - coze/gz/34.md
 - css/weui-news
+- css/sfq
+- coze/gz/13.md
+- coze/caiwu

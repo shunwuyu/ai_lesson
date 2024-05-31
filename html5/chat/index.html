@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Chat Application</title>
+  <style>
+    #conversation-history {
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+    }
+
+    .user-message {
+      color: #007BFF;
+    }
+
+    .assistant-message {
+      color: #28A745;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="conversation-history"></div>
+
+  <input type="text" id="input">
+  <button onclick="chat()">chat</button>
+
+  <script>
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Authorization", "Bearer sk-UgtZ6M4qw7Ycfzok0cC1E8C690A04b92B38e381c4c5661D5");
+
+    let conversationHistory = [{role: "system", content: "You are a helpful assistant."}];
+
+    function chat() {
+      const userInput = document.getElementById("input").value;
+      document.getElementById("input").value = ''
+      
+      appendToConversationHistory("user", userInput)
+
+      const requestOptions = {
+        method: 'POST', headers,
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: conversationHistory,
+        })
+      };
+
+      fetch("https://ai98.vip/v1/chat/completions", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          const aiResponse = result.choices[0].message.content;
+          console.log(conversationHistory);
+          appendToConversationHistory("assistant", aiResponse)
+        })
+        .catch(error => console.log('error', error));
+    }
+
+    function appendToConversationHistory(role, content) {
+      const historyContainer = document.getElementById("conversation-history");
+
+      conversationHistory.push({ role, content });
+
+      const messageElement = document.createElement("div");
+      messageElement.classList.add(`${role}-message`);
+
+      const contentElement = document.createElement("span");
+      contentElement.textContent = `${role}: ${content}`;
+      messageElement.appendChild(contentElement);
+
+      historyContainer.appendChild(messageElement);
+    };
+  </script>
+</body>
+
+</html>
