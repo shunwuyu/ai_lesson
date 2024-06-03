@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag N Drop</title>
+    <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: steelblue;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        overflow: hidden;
+        margin: 0;
+    }
+
+    .empty {
+        height: 150px;
+        width: 150px;
+        margin: 10px;
+        border: solid 3px black;
+        background: white;
+    }
+
+    .fill {
+        background-image: url('https://source.unsplash.com/random/150x150');
+        height: 145px;
+        width: 145px;
+        cursor: pointer;
+    }
+
+    .hold {
+        border: solid 5px #ccc;
+    }
+
+    .hovered {
+        background-color: #333;
+        border-color: white;
+        border-style: dashed;
+    }
+
+    @media (max-width: 800px) {
+        body {
+            flex-direction: column;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="empty">
+        <div class="fill" draggable="true"></div>
+    </div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <script>
+    const fill = document.querySelector('.fill')
+const empties = document.querySelectorAll('.empty')
+
+fill.addEventListener('dragstart', dragStart)
+fill.addEventListener('dragend', dragEnd)
+
+for(const empty of empties) {
+    // 反复触发的事件
+    empty.addEventListener('dragover', dragOver)
+    // 进入时刻的事件
+    empty.addEventListener('dragenter', dragEnter)
+    empty.addEventListener('dragleave', dragLeave)
+    empty.addEventListener('drop', dragDrop)
+}
+
+function dragStart() {
+    this.className += ' hold' 
+    setTimeout(() => this.className = 'invisible', 0)
+}
+
+function dragEnd() {
+    this.className = 'fill'
+}
+
+function dragOver(e) {
+    console.log('----------')
+    e.preventDefault()
+}
+
+function dragEnter(e) {
+    console.log('////')
+    e.preventDefault()
+    this.className += ' hovered'
+}
+
+function dragLeave() {
+    this.className = 'empty'
+}
+
+function dragDrop() {
+    this.className = 'empty'
+    this.append(fill)
+}
+    </script>
+</body>
+</html>
