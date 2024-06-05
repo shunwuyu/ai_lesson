@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drag & Drop Image Upload</title>
+    <style>
+        #drop-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        #drop-area.highlight {
+            border-color: #007bff;
+        }
+        .preview {
+            margin-top: 20px;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="drop-area">
+    <div>拖拽图片到这里，或<em>点击选择文件</em></div>
+    <input type="file" id="file-input" />
+</div>
+<div class="preview" id="preview"></div>
+
+<script>
+    document.getElementById('drop-area').addEventListener('dragenter', highlight, false);
+    document.getElementById('drop-area').addEventListener('dragleave', unhighlight, false);
+    document.getElementById('drop-area').addEventListener('dragover', preventDefault, false);
+    document.getElementById('drop-area').addEventListener('drop', handleDrop, false);
+    document.getElementById('file-input').addEventListener('change', (event) => {
+        // console.log(event.target.files);
+        handleFiles(event.target.files);
+
+    }, false);
+
+    function preventDefault(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function highlight() {
+        document.getElementById('drop-area').classList.add('highlight');
+    }
+
+    function unhighlight() {
+        document.getElementById('drop-area').classList.remove('highlight');
+    }
+
+    function handleDrop(e) {
+        console.log(e, '//////');
+        preventDefault(e);
+        handleFiles(e.dataTransfer.files);
+    }
+
+    function handleFiles(files) {
+
+        for (const file of files) {
+            if (!file.type.startsWith('image/')) continue;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('preview-img');
+                document.getElementById('preview').appendChild(img);
+            };
+            reader.readAsDataURL(file);
+            uploadFile(file);
+        }
+    }
+
+    function uploadFile(file) {
+        const formData = new FormData();
+        formData.append('image', file);
+        fetch('http://localhost:3000/upload', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.text())
+          .then(data => console.log(data))
+          .catch(error => console.error('Error uploading file:', error));
+    }
+</script>
+
+</body>
+</html>
