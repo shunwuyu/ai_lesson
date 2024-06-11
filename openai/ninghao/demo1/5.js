@@ -38,9 +38,15 @@ const client = new OpenAI({
 ;(async () => {
     try {
         const prompt = `
-        你是谁？
+        请编写一个JavaScript函数实现对数组求和。
+        要求: 函数名为sum_list,
+        接受一个数组作为参数 
+        使用内置的reduce()函数实现列表求和 
+        添加必要的注释,说明函数的输入输出 
+        在函数末尾添加几个测试用例,并打印结果
         `
-      const completion = await getCompletion(client, prompt);
+      const system = 'You are a helpful JavaScript programming assistant.'
+      const completion = await getCompletion(client, system, prompt);
       console.log(completion);
     } catch (error) {
       console.error("An error occurred during the request:", error);

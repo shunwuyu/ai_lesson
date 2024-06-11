@@ -33,3 +33,5 @@
     - hello everyone, today i'm going to talk about how to use openai api to build a app.
     转换大小写，专有名词大写，同时修正话语法问题
     
+
+- https://github.com/wesbos/es6.io/blob/df01f260a5f545bfdb03d0ad230af89a919dcd45/07%20-%20An%20Array%20of%20Improvements/Array-from-and-of.html#L25 sum 
