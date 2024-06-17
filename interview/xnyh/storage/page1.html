@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 1 - Set Message</title>
+</head>
+<body>
+
+<h2>页面1: 输入信息</h2>
+<label for="userInput">请输入一些信息:</label>
+<input type="text" id="userInput">
+<button onclick="storeAndRedirect()">提交并前往下一页</button>
+
+<script>
+    function storeAndRedirect() {
+        // 获取用户输入的信息
+        const userInput = document.getElementById("userInput").value;
+        
+        // 将信息存储到sessionStorage中
+        sessionStorage.setItem("sharedMessage", userInput);
+        
+        // 重定向到第二页
+        window.location.href = "page2.html";
+    }
+</script>
+
+</body>
+</html>

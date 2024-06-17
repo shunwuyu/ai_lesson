@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 2 - Retrieve Message</title>
+</head>
+<body>
+
+<h2>页面2: 显示来自上一页面的信息</h2>
+<p id="displayMessage"></p>
+
+<script>
+    // 页面加载时从sessionStorage获取信息并显示
+    window.onload = function() {
+        const message = sessionStorage.getItem("sharedMessage");
+        if (message) {
+            document.getElementById("displayMessage").innerText = "从上一页接收到的信息: " + message;
+        } else {
+            document.getElementById("displayMessage").innerText = "没有接收到任何信息。";
+        }
+    };
+</script>
+
+</body>
+</html>

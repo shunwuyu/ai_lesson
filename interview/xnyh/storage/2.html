@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+var db = null;
+var db_table = null;
+var databaseName = 'indexDB';
+var version = 1;
+var data = [{  
+      id:1,
+      name:'张一',
+      age:  1,
+      email:'zhangsan@example.com' 
+  },{  
+      id:2,
+      name:'张二',
+      age:  2,
+      email:'zhangsan@example.com' 
+  },{  
+      id:3,
+      name:'张三',
+      age:  3,
+      email:'zhangsan@example.com' 
+  },{  
+      id:4,
+      name:'张四',
+      age:  4,
+      email:'zhangsan@example.com' 
+  },{  
+      id:5,
+      name:'张五',
+      age:  5,
+      email:'zhangsan@example.com' 
+  }]
+  var request = window.indexedDB.open(databaseName, version);
+ 
+ /*
+ *数据仓库打开失败
+ */
+ request.onerror = function (error){
+      console.log('IndexDB打开失败',error);
+ }
+  
+ /*
+ *数据仓库打开成功
+ */
+ request.onsuccess = function (res){
+      console.log('IndexDB打开成功',res);
+      db = res.target.result;
+
+      /*
+*新建事务
+*@params 数据仓库的数组
+*@params 写入模式
+*/
+var store = db.transaction(['group'], 'readwrite').objectStore('group');
+
+// // /*
+// // *add方法添加数据
+// // *@params 需要添加的数据信息
+// // */
+// var request = store.add({
+//     id:new Date().getTime(),
+//     name:'王二',
+//     age:12,
+//     email:'XXXX@xxx.com'
+// });
+
+// // /*
+// // *添加成功
+// // */
+// request.onsuccess = function (event) {
+//     console.log('数据添加成功',event);
+// };
+
+// /*
+// *添加失败
+// */
+// request.onerror = function (event) {
+//     console.log('数据添加失败',event);
+// };
+
+// var request = store.get(1718585926332); 
+
+// /*
+// *获取成功
+// */
+// request.onsuccess = function (event) {
+//     if(event.target.result){
+//         console.log('数据获取成功',event);
+//     }
+//     else{
+//         console.log('未获取到数据');
+//     }
+// };
+
+// /*
+// *获取失败
+// */
+// request.onerror = function (event) {
+//     console.log('数据获取失败',event);
+// };
+
+// var request = store .put({  
+//                           id:1718585926332,
+//                           name:'张一'+Math.random(),
+//                           age:  24,
+//                           email:'zhangsan@example.com' 
+//                       });
+
+// /*
+// *更新成功
+// */
+// request.onsuccess = function (event) {
+//     console.log('数据更新成功',event);
+// };
+
+// /*
+// *更新失败
+// */
+// request.onerror = function (event) {
+//     console.log('数据更新失败',event);
+// };
+
+// var request = store.delete(1718585926332); 
+
+// /*
+// *删除成功
+// */
+// request.onsuccess = function (event) {
+//     console.log('数据删除成功',event);
+// };
+
+// /*
+// *删除失败
+// */
+// request.onerror = function (event) {
+//     console.log('数据删除失败',event);
+// };
+
+    /*
+*index方法获取索引对象
+*get方法获取数据
+*@params 数据的索引
+*/
+var request = store.index('indexName').get('张四'); 
+
+/*
+*获取成功
+*/
+request.onsuccess = function (event) {
+     console.log('通过索引获取数据成功',event);
+};
+
+/*
+*获取失败
+*/
+request.onerror = function (event) {
+    console.log('通过索引获取数据失败',event);
+};
+
+
+ }
+  
+ /*
+ *数据仓库升级事件(第一次新建库是也会触发，因为数据仓库从无到有算是升级了一次)
+ */
+ request.onupgradeneeded = function (res){
+      console.log('IndexDB升级成功',res);
+      db = res.target.result;
+      db_table = db.createObjectStore('group', { keyPath: 'id' });
+      db_table.createIndex('indexName', 'name', { unique: false });
+ }
+ 
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+let db
+  // 参数1位数据库名，参数2为版本号
+const request = window.indexedDB.open("xiaoceDB", 4)
+// 使用IndexedDB失败时的监听函数
+request.onerror = function(event) {
+    console.log('无法使用IndexedDB')
+}
+// 成功
+request.onsuccess  = function(event){
+    // 此处就可以获取到db实例
+    db = event.target.result
+    console.log("你打开了IndexedDB")
+
+    const transaction = db.transaction(["test"],"readwrite")
+  // 拿到Object Store对象
+  const objectStore = transaction.objectStore("test")
+  // 向表格写入数据
+  objectStore.add({id: 2, name: 'xiuyan'})
+  transaction.oncomplete = function(event) {
+    console.log("操作成功")
+  }
+  // 操作失败时的监听函数
+  transaction.onerror = function(event) {
+    console.log("这里有一个Error")
+  }
+}
+
+request.onupgradeneeded = function(event){
+  let objectStore
+  db = event.target.result
+  console.log(db, '////')
+  // 如果同名表未被创建过，则新建test表
+  if (!db.objectStoreNames.contains('test')) {
+    objectStore = db.createObjectStore('test', { keyPath: 'id' })
+  }
+}  
+
+</script>
+</body>
+</html>

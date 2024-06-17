@@ -18,3 +18,5 @@ AI全栈工程师课程
 - es6/defineProperty
 - css/login
 - ninghao/demo1/
+- es6/find_index
+- interview/xnyh
