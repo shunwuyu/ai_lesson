@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="container-canvas"></canvas>
+    
+    <script>
+    const data = [
+        { name: "questions", value: 17 },
+        { name: "schools", value: 25 },
+        { name: "philosophers", value: 35 },
+    ];
+
+    const chartWidth = 480;
+    const chartHeight = 300;
+    const margin = 15;
+
+    const containerWidth = chartWidth + margin * 2;
+    const containerHeight = chartHeight + margin * 2;
+
+    const names = Array.from(data, (d) => d.name);
+    const values = Array.from(data, (d) => d.value);
+    const indices = Array.from(data, (_, i) => i);
+
+    console.log(names, values, indices)
+
+    const step = chartWidth / names.length;
+    const barWidth = step * 0.8;
+    const xs = Array.from(indices, (i) => i * step);
+    console.log(xs)
+    // 计算每一个条左下顶点的纵坐标
+    // 因为所有条底部都是对齐的，所以就是图表的高度
+    const y = chartHeight;
+
+    const vmax = Math.max(...values);
+    const barHeights = Array.from(values, (v) => chartHeight * (v / vmax));
+    console.log(barHeights);
+    // 获得每一个条的颜色
+    const nameColor = {
+        questions: "#5B8FF9",
+        philosophers: "#61DDAA",
+        schools: "#65789B",
+    };
+
+    const colors = Array.from(names, (name) => nameColor[name]); 
+    </script>
+    <script src="./index.js">
+    </script>
+</body>
+</html>
