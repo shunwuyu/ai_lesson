@@ -1,0 +1,16 @@
+{
+  "name": "data_ana",
+  "version": "1.0.0",
+  "description": "https://time.geekbang.org/column/article/778871",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "openai": "^4.52.0"
+  }
+}
