@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章榜</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="article-list">
+        <header class="article-list__header">
+            <h1 class="article-list__title">文章榜</h1>
+            <button class="article-list__refresh-button">换一换</button>
+        </header>
+        <ol class="article-list__items">
+            <li class="article-list__item">
+                <span class="article-list__item-number article-list__item-number--top1">1</span>
+                <a href="#" class="article-list__item-link">一起走走this关键字走过的路...</a>
+            </li>
+            <li class="article-list__item">
+                <span class="article-list__item-number article-list__item-number--top2">2</span>
+                <a href="#" class="article-list__item-link">继续遥遥领先？华为全新编程...</a>
+            </li>
+            <li class="article-list__item">
+                <span class="article-list__item-number article-list__item-number--top3">3</span>
+                <a href="#" class="article-list__item-link">关于国企30岁老前端的自述</a>
+            </li>
+            <li class="article-list__item">
+                <span class="article-list__item-number">4</span>
+                <a href="#" class="article-list__item-link">Go语言配置管理库---Viper</a>
+            </li>
+            <li class="article-list__item">
+                <span class="article-list__item-number">5</span>
+                <a href="#" class="article-list__item-link">面试官：请你实现三栏布局并...</a>
+            </li>
+        </ol>
+        <footer class="article-list__footer">
+            <a href="#" class="article-list__more-link">查看更多</a>
+        </footer>
+    </main>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const articleList = document.getElementById('articleList');
+        const refreshButton = document.getElementById('refreshButton');
+        function fetchArticles() {
+        fetch('http://localhost:3001/articles')
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data, '////')
+                renderArticles(data);
+            })
+        }
+        function renderArticles(articles) {
+            console.log(articles, '///////')
+        articleList.innerHTML = ''; // Clear the current list
+
+        articles.forEach((article, index) => {
+            const articleItem = document.createElement('li');
+            articleItem.classList.add('article-list__item');
+
+            const articleNumber = document.createElement('span');
+            articleNumber.classList.add('article-list__item-number');
+            articleNumber.textContent = index + 1;
+
+            // Apply top article classes
+            if (index === 0) {
+                articleNumber.classList.add('article-list__item-number--top1');
+            } else if (index === 1) {
+                articleNumber.classList.add('article-list__item-number--top2');
+            } else if (index === 2) {
+                articleNumber.classList.add('article-list__item-number--top3');
+            }
+
+            const articleLink = document.createElement('a');
+            articleLink.classList.add('article-list__item-link');
+            articleLink.href = article.url || '#';
+            articleLink.textContent = article.title;
+
+            articleItem.appendChild(articleNumber);
+            articleItem.appendChild(articleLink);
+            articleList.appendChild(articleItem);
+        });
+    }
+        fetchArticles();
+    })
+
+
+    </script>
+</body>
+</html>
