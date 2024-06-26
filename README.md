@@ -21,3 +21,5 @@ AI全栈工程师课程
 - es6/find_index
 - interview/xnyh
 - canvas/vision/demo
+- js/todos
+- react/my-react
