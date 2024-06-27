@@ -47,3 +47,20 @@
     - app/header
 
 ## 属性
+
+## class component
+
+## 修改状态
+    class 
+
+## 生命周期
+
+## 样式
+
+## 事件监听
+
+## 条件渲染
+
+## 导入样式表
+
+## postIndex

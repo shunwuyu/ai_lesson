@@ -23,3 +23,4 @@ AI全栈工程师课程
 - canvas/vision/demo
 - js/todos
 - react/my-react
+- openai/gpt4o  
