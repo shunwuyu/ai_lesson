@@ -1,0 +1,31 @@
+.app-button {
+    border: none;
+    outline:none;
+    background: #ededed;
+    padding: 6px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    color: #666;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.app-button:hover {
+    color: #000;
+}
+
+.app-button.primary {
+    background: #000;
+    color: #ededed;
+}
+
+.app-button.primary:hover {
+    background: #000;
+    color: #fff;
+}
+
+.app-button.bordered {
+    background: none;
+    border: 1px solid #eaeaea;
+}
+

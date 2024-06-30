@@ -28,39 +28,64 @@
 
 ## 实战
 
--  index.js  删除
+-  index3.js  删除
 - render  h1  
     reactDOM + render  react 元素
 - 引入 react  +  createElement  创建element
-- index4.js   介绍  createElement   tag   属性  children 交给root
-- 再升级递归
-
-## jsx 写法
-    index5.js
-    - JSX
-    - 嵌入表达式
+- index5.js   介绍  createElement   tag   属性  children 交给root
+- 再升级递归  JSX 好
 
 ## 组件
-    - app
+    - app2.jsx
 
 ## 子组件
-    - app/header
+    - app3.jsx
+    - app/header2.jsx
 
 ## 属性
+    - app/header3.jsx
+    - app4.js
 
 ## class component
+    - app/header7.jsx
+
+## 状态
+    - app/header8.jsx
 
 ## 修改状态
-    class 
+    - app/header9.jsx
 
 ## 生命周期
+    - app/header10.jsx
+    - app/header10.jsx  行内样式
+
+## 登录推出组件
+    事件
+    - app/header12.jsx
 
 ## 样式
-
-## 事件监听
-
-## 条件渲染
-
-## 导入样式表
+    - app/header13.jsx
+    - app-header.css
 
 ## postIndex
+    - app.js
+    - post-index2.jsx
+
+
+## 列表渲染
+    - post-index2.jsx
+
+## 父子组件
+    app/components/app-card.jsx
+
+## children
+    app/components/app-card2.jsx
+    post/index/post-index2.jsx
+
+## 内容插槽
+    app/components/app-card3.jsx
+    post/index/post-index3.jsx
+    post/index/post-index.css
+    pp/components/app-card.css
+
+## button 组件

@@ -1,7 +1,5 @@
 import { Component } from 'react'
 import './app-header.css'
-import AppButton from './app-button'
-
 class AppHeader extends Component {
     
     constructor(props) {
@@ -43,9 +41,8 @@ class AppHeader extends Component {
     render() {
         const { name } = this.props
         const { emoji, isLoggedIn } = this.state
-        // ----
-        const loginAction = <AppButton variant="primary" onClick={this.login}>登录</AppButton>
-        const logoutAction = <AppButton variant="bordered" onClick={this.logout}>退出</AppButton>
+        const loginAction = <button onClick={this.login}>登录</button>
+        const logoutAction = <button onClick={this.logout}>退出</button>
 
 
         return (

@@ -1,0 +1,5 @@
+.post-index > .content {
+    display: grid;
+    gap: 16px;
+    grid-template-columns:repeat(auto-fit, minmax(360px, 1fr))
+}

@@ -1,0 +1,16 @@
+.app-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #eaeaea;
+}
+
+.app-card > .content {
+    flex-grow:1;
+    font-size: 18px;
+    font-weight: bold;
+}
+.app-card > .footer {
+    padding-top: 8px;
+}

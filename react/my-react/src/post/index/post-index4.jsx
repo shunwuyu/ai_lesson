@@ -1,6 +1,5 @@
 import React from 'react'
 import AppCard from '../../app/components/app-card'
-import './post-index.css' //-----
 
 class PostIndex extends React.Component {
   
@@ -42,12 +41,7 @@ class PostIndex extends React.Component {
     //     <h1>Post Index</h1>
     //   </div>
     // )
-    // ---
-    return (
-        <div className="post-index">
-            <div className="content">{posts}</div>
-        </div>
-    )
+    return <div>{posts}</div>
   }
 }
 
