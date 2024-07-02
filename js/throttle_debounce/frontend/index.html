@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        没有防抖的input 
+        <input 
+            type="text" 
+            id="unDebounce" 
+            placeholder="请输入您要搜索的用户名"
+        >
+    </div>
+    <div>
+        防抖后的input 
+        <input 
+            type="text" 
+            id="debounce" 
+            placeholder="请输入您要搜索的用户名"
+        >
+    </div>
+    <script>
+    // 不加防抖的
+    const inputa = document.getElementById('unDebounce');
+    const inputb = document.getElementById('debounce');
+
+    function handleNameSearch(e) {
+        // console.log(e.target.value)
+        const value = e.target.value;
+        fetch('http://localhost:3000/users')
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data)
+                const users = data;
+                // 数组上es6的新方法， map 转换， filter 过滤
+                // callback 
+                const filterUsers = users.filter(user => {
+                    // console.log(user);
+                    // 字符串中新方法 
+                    // 可读性更好 es6 字符串新增方法
+                    return user.name.includes(value)
+                    // return user.name.indexOf(value) !== -1
+                    // if (user.name)
+                })
+                console.log(filterUsers)
+            })
+    }
+    // 闭包
+    function debounce(func, delay) {
+        // 返回值必须得是函数 keyup  事件处理函数
+        // let id;
+        return  function(args) {
+            clearTimeout(func.id)
+            //函数是对象，  id 挂在func上 func 是闭包中的自由变量
+            func.id = setTimeout(function() {
+                func(args)
+            }, delay)
+        }
+    }
+    // 
+    const debounceNameSearch = debounce(handleNameSearch, 500)
+    
+    inputa.addEventListener('keyup', handleNameSearch)
+    inputb.addEventListener('keyup', debounceNameSearch)
+    </script>
+</body>
+</html>
