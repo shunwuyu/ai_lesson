@@ -1,0 +1,10 @@
+.todo-app {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+.todo-app__title {
+  font-size: 2em;
+  margin: 20px 0;
+}

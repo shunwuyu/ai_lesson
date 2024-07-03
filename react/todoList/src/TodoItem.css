@@ -1,0 +1,29 @@
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .todo-item--completed .todo-item__text {
+    text-decoration: line-through;
+    color: #888;
+  }
+  
+  .todo-item__text {
+    cursor: pointer;
+  }
+  
+  .todo-item__edit-input {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .todo-item__edit-btn,
+  .todo-item__delete-btn,
+  .todo-item__save-btn {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
