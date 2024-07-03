@@ -94,7 +94,7 @@
 ## app-form
     app/components/app-form2.jsx
     app/components/app-form.css
-    app/App6.jsx
+    app/App.jsx
 
 ## 阻止表单提交
     app/components/app-form3.jsx
@@ -106,3 +106,14 @@
     app/components/app-form5.jsx
 
 ## 复选框
+    app/components/app-form6.jsx
+
+## 单选框
+    app/components/app-form7.jsx
+## select
+    app/components/app-form8.jsx
+## File
+    app/components/app-form9.jsx
+## ref  文本框的焦点
+
+    

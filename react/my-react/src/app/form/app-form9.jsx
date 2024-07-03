@@ -1,4 +1,4 @@
-import { Component, createRef } from "react";
+import { Component } from "react";
 import './app-form.css';
 
 // 受控组件
@@ -7,7 +7,11 @@ import './app-form.css';
 class AppForm extends Component {
     
     state = {
+        content: '',
+        checked: false,
         content: ''
+        // item:"黑虎泉",
+        fileList:null
     }
 
     // parks = [
@@ -32,28 +36,11 @@ class AppForm extends Component {
     //     })
     // }
     // ----
-    onChange = ({currentTarget:{value}}) => {
+    onChange = ({currentTarget:{files}}) => {
         this.setState({
-            content: value
+            fileList: files
         })
     } 
-
-    contentFiled = createRef();
-
-    componentDidMount() {
-        window.addEventListener('keydown', this.onKeyDown)
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('keydown', this.onKeyDown)
-    }
-
-    onKeyDown = (e) => {
-        console.log('ddd')
-        if(e.key === 'b' && e.ctrlKey) {
-            this.contentFiled.current.focus()
-        }
-    }
 
     render() {
         console.log(this.state)
@@ -69,18 +56,9 @@ class AppForm extends Component {
 
                         {/* </textarea> */}
                     </div>
-
-                    <div>
-                        <input 
-                            type="text" 
-                            onChange={this.onChange}
-                            value={this.state.content}
-                            ref={this.contentFiled}
-                        />
-                    </div>
                    
                     <div>
-                    
+                        <input type="file" multiple onChange={this.onChange} />
                     </div>
                     <input type="submit" name="提交" />
                     <span> - Content: {this.state.content}</span>
