@@ -17,5 +17,8 @@ https://ninghao.net/video/9801
     }
 
 - sdk 调用
+    - create-embedding.mjs
 
 
+- semantic-search
+    写一个node.js 命令行工具，用标准esm, 使用箭头函数，包含注释，程序提示用户输入要搜索的内容，回车以后执行一个任务，完成以后继续提示用户输入要搜索的内容

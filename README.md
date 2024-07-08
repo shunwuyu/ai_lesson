@@ -26,3 +26,5 @@ AI全栈工程师课程
 - openai/gpt4o  
 - react/my-react
 - react/todoList
+- openai/embedding
+- react/hook-demo
