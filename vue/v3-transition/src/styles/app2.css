@@ -1,0 +1,26 @@
+input[type='text'],
+textarea,
+select {
+  padding: 4px 8px;
+  margin: 8px 0;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+label {
+  margin-left: 4px;
+}
+.page {
+  padding: 32px;
+  margin: 32px;
+}
+
+.emoji {
+  font-size: 80px;
+  transition: 0.5s;
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateX(30px);
+}

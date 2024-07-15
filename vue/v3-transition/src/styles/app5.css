@@ -1,0 +1,94 @@
+input[type='text'],
+textarea,
+select {
+  padding: 4px 8px;
+  margin: 8px 0;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+label {
+  margin-left: 4px;
+}
+.page {
+  padding: 32px;
+  margin: 32px;
+}
+
+.emoji {
+  font-size: 80px;
+  transition: 0.5s;
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.pulse {
+    animation-name: pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+  }
+  
+  @keyframes pulse {
+    from {
+      transform: scale3d(1, 1, 1);
+    }
+  
+    50% {
+      transform: scale3d(1.5, 1.5, 1.5);
+    }
+  
+    to {
+      transform: scale3d(1, 1, 1);
+    }
+  }
+/* 进入时 */
+.v-enter-from {
+    opacity: 0;
+}
+.v-enter-active {
+    transition: .3s;
+}
+.v-enter-to {
+    opacity: 1;
+}
+
+/* 离开时 */
+
+.v-leave-from {
+    opacity: 1;
+}
+.v-leave-active {
+    opacity: 0.3s;
+}
+.v-leave-to {
+    opacity: 0;
+}
+
+.slide-enter-from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  
+  .slide-enter-active {
+    transition: 0.3s;
+  }
+  
+  .slide-enter-to {
+    opacity: 1;
+  }
+  
+  .slide-leave-from {
+    opacity: 1;
+  }
+  
+  .slide-leave-active {
+    transition: 0.3s;
+  }
+  
+  .slide-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
