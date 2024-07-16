@@ -8,20 +8,29 @@
         <div class="card-subtitle">Transition & Animation</div>
       </div>
       <div class="card__content">
-        <!-- slide 后加-->
-        <transition-group name="slide">
-            <div class="emoji" v-for="emoji in emojiList" :key="emoji">
-            {{ emoji }}
-            </div>
-        </transition-group>
+       <!--
+       <transition name="slide">
+        <div v-if="isActive" class="emoji">🌳</div>
+       </transition> 
+       -->
+       <!--
+       <transition name="pulse">
+        <div v-if="isActive" class="emoji">🌳</div>
+       </transition>
+       --> 
+       <transition 
+        name="animate__tada"
+        enter-active-class="animate__animated animate__tada"
+        leave-active-class="animate__animated animate__bounce"
+        mode="out-in"
+        >
+        <component :is="currentEmoji"/>
+       </transition>
       </div>
       
       <div class="card__action">
       <!--///-->
-        <button type="button" @click="shuffle" :class="{active: isActive}">
-          请按这里
-        </button>
-        <button type="button" @click="pop">
+        <button type="button" @click="toggleEmoji" :class="{active: isActive}">
           请按这里
         </button>
       </div>
@@ -32,7 +41,6 @@
   </div>
 </template>
 <script setup>
-import _ from 'lodash'
 import { ref, computed } from 'vue'
 import 'animate.css'
 import GhostEmoji from './components/ghost-emoji.vue'
@@ -40,22 +48,13 @@ import RobotEmoji from './components/robot-emoji.vue'
 
 const name = "旅梦开发团"
 const isActive = ref(true)
-const emojiList = ref(['❤️', '💀', '🔥'])
+const emoji = ref(null)
 const currentEmoji = computed(() => {
   return isActive.value ? (GhostEmoji)  : (RobotEmoji)
 })
 const toggleEmoji = () => {
   console.log('ddd')
   isActive.value = !isActive.value
-}
-
-const shuffle = () => {
-    emojiList.value = _.shuffle(emojiList.value)
-}
-
-const pop = () => {
-    emojiList.value.pop();
-    console.log(emojiList.value)
 }
 </script>
 <style scoped>

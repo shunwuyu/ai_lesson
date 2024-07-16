@@ -102,8 +102,3 @@ label {
 .pulse-leave-active {
   animation: pulse 1s;
 }
-
-.v-move {
-  /*transition: transform 3s;*/
-  transition: 0.5s;
-}

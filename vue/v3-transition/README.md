@@ -19,5 +19,8 @@
 - animate.css
     - App7.vue
     - npm i animate.css
--  余下留下
+-  transition-group
+    emojiList
+    lodash
+    
     
