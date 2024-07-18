@@ -1,9 +1,57 @@
 <template>
     <div class="wrapper">
         <v-header />
-        <router-view/>
+        <v-sidebar />
+        <div class="content-box" :class="{ 'content-collapse': sidebar.collapse }">
+            <router-view/>
+        </div>
     </div>
 </template>
 <script setup>
+import { useSidebarStore } from '../store/sidebar';
 import vHeader from '../components/header.vue';
+import vSidebar from '../components/sidebar.vue';
+import { fetchData } from '../api/index.js'
+import { onMounted } from 'vue'
+
+const sidebar = useSidebarStore()
+
+onMounted(async () => {
+    const data = await fetchData()
+    console.log(data)
+})
 </script>
+<style>
+.wrapper {
+    height: 100vh;
+    overflow: hidden;
+}
+.content-box {
+    position: absolute;
+    left: 250px;
+    right: 0;
+    top: 70px;
+    bottom: 0;
+    padding-bottom: 30px;
+    -webkit-transition: left 0.3s ease-in-out;
+    transition: left 0.3s ease-in-out;
+    background: #eef0fc;
+    overflow: hidden;
+}
+
+.content {
+    width: auto;
+    height: 100%;
+    padding: 20px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+
+.content::-webkit-scrollbar {
+    width: 0;
+}
+
+.content-collapse {
+    left: 65px;
+}
+</style>

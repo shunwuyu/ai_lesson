@@ -5,7 +5,7 @@
             <img class="logo" src="../assets/img/logo.svg" alt="" />
             <div class="web-title">后台管理系统</div>
             <div class="collapse-btn" @click="collapseChage">
-                <el-icon v-if="collapse">
+                <el-icon v-if="sidebar.collapse">
                     <Expand />
                 </el-icon>
                 <el-icon v-else>
@@ -31,7 +31,7 @@
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
                 <div class="btn-icon">
-                    <el-tooltip effect="dark" content="全屏" placement="bottom">
+                    <el-tooltip effect="dark" content="全屏" placement="bottom" @click="setFullScreen">
                         <i class="el-icon-lx-full"></i>
                     </el-tooltip>
                 </div>
@@ -62,14 +62,25 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-const collapse = ref(false)
+import { useSidebarStore } from '../store/sidebar'
+
+const sidebar = useSidebarStore()
+
 const collapseChage = () => {
-   collapse.value = !collapse.value
+  sidebar.handleCollapse();
 };
 
 const imgurl = ref('https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png')
-const username = ref('admin')
+const username = localStorage.getItem('vuems_name')
 const message = ref(10)
+
+const setFullScreen = () => {
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    } else {
+        document.body.requestFullscreen.call(document.body);
+    }
+};
 </script>
 <style>
 .header {
