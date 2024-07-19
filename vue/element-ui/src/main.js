@@ -7,8 +7,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import router from './router/'
 import './assets/css/main.css'
 import './assets/css/icon.css';
-
-
+import { usePermissStore } from './store/permiss';
 
 const app = createApp(App)
 // 注册elementplus图标
@@ -20,4 +19,14 @@ app
     .use(router)
     .use(ElementPlus)
     .use(createPinia())
+
+const permiss = usePermissStore();
+app.directive('permiss', {
+    mounted(el, binding) {
+        if (binding.value && !permiss.key.includes(String(binding.value))) {
+            el['hidden'] = true;
+        }
+    },
+});
+app
     .mount('#app')

@@ -61,7 +61,8 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useSidebarStore } from '../store/sidebar'
 
 const sidebar = useSidebarStore()
@@ -81,6 +82,23 @@ const setFullScreen = () => {
         document.body.requestFullscreen.call(document.body);
     }
 };
+
+const router = useRouter();
+
+const handleCommand = (command) => {
+    if (command == 'loginout') {
+        localStorage.removeItem('vuems_name');
+        router.push('/login');
+    } else if (command == 'user') {
+        router.push('/ucenter');
+    }
+}
+
+onMounted(() => {
+    if (document.body.clientWidth < 1500) {
+        collapseChage();
+    }
+})
 </script>
 <style>
 .header {
