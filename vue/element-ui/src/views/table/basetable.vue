@@ -1,12 +1,24 @@
 <template>
 	<div>
         <div class="container">
-            <el-table class="mgb20" :style="{ width: '100%' }" border :data="tableData"
-            @selection-change="handleSelectionChange" table-layout="auto">
+            <el-table class="mgb20" :style="{ width: '100%' }" border :data="tableData" table-layout="auto">
                 <template v-for="item in columns" :key="item.prop">
                     <el-table-column :prop="item.prop" :label="item.prop">
                     </el-table-column>
-                </template>
+                </template> 
+                <el-table-column fixed="right" label="Operations" min-width="120">
+                    <template #default="scope">
+                        <el-button type="warning" size="small" :icon="View" @click="viewFunc(row)">
+                            查看
+                        </el-button>
+                        <el-button type="primary" size="small" :icon="Edit" @click="editFunc(row)">
+                            编辑
+                        </el-button>
+                        <el-button type="danger" size="small" :icon="Delete" @click="handleDelete(row)">
+                            删除
+                        </el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
     </div>

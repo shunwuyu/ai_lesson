@@ -28,3 +28,4 @@ AI全栈工程师课程
 - react/todoList
 - openai/embedding
 - react/hook-demo
+- uniapp
