@@ -29,3 +29,5 @@ AI全栈工程师课程
 - openai/embedding
 - react/hook-demo
 - uniapp
+- react-router-demo
+- langchain-demo
