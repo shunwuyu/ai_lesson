@@ -14,5 +14,5 @@ const messages = [
   new SystemMessage("Translate the following from English into Italian"),
   new HumanMessage("hi!"),
 ];
-
-console.log(await model.invoke(messages));
+const result = await model.invoke(messages);
+console.log(result.content);
