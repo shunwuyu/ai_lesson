@@ -1,0 +1,16 @@
+{
+  "name": "demo1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "@langchain/core": "^0.2.18",
+    "@langchain/openai": "^0.2.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/openai": "^0.2.5"
+  }
+}

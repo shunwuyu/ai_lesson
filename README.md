@@ -31,3 +31,5 @@ AI全栈工程师课程
 - uniapp
 - react-router-demo
 - langchain-demo
+- langchain/flower-js
+- three
