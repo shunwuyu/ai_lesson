@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 3 Lifecycle Example</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <button @click="toggleComponent">Toggle Component</button>
+    <button @click="incrementCount">Increment Count</button>
+    <p>Count: {{ count }}</p>
+    <lifecycle-component v-if="showComponent" :count="count"></lifecycle-component>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue;
+
+    const LifecycleComponent = {
+      props: ['count'],
+      template: `<div>
+                  <p>Lifecycle Component - Count: {{ count }}</p>
+                </div>`,
+      data() {
+        return {
+          interval: null,
+        };
+      },
+      beforeCreate() {
+        console.log('beforeCreate');
+      },
+      created() {
+        console.log('created');
+      },
+      beforeMount() {
+        console.log('beforeMount');
+      },
+      mounted() {
+        console.log('mounted');
+        this.interval = setInterval(() => {
+          console.log('Component is alive');
+        }, 1000);
+      },
+      beforeUpdate() {
+        console.log('beforeUpdate');
+      },
+      updated() {
+        console.log('updated');
+      },
+      beforeUnmount() {
+        console.log('beforeUnmount');
+      },
+      unmounted() {
+        console.log('unmounted');
+        clearInterval(this.interval);
+      }
+    };
+
+    const App = {
+      data() {
+        return {
+          showComponent: true,
+          count: 0
+        };
+      },
+      components: {
+        LifecycleComponent
+      },
+      methods: {
+        toggleComponent() {
+          this.showComponent = !this.showComponent;
+        },
+        incrementCount() {
+          this.count++;
+        }
+      }
+    };
+
+    createApp(App).mount('#app');
+  </script>
+</body>
+</html>
