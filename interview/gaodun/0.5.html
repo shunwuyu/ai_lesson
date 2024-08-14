@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    .box {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        background-color: #f0f0f0;
+    }
+
+    .box:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        border: 1px solid #000; /* 设置1px边框 */
+        transform: scaleY(0.5); /* 缩小到50%大小 */
+        transform-origin: bottom center;
+        pointer-events: none; /* 确保伪元素不会影响鼠标事件 */
+        box-sizing: border-box; /* 确保边框在盒子内计算 */
+    }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Article Page</title>
+</head>
+<body>
+    <header class="header">
+        <h1>Responsive Article Page</h1>
+    </header>
+
+    <main class="content">
+        <article class="article">
+            <h2>Article Title</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vehicula ultricies libero, sit amet commodo erat facilisis a. Phasellus et ligula magna. Integer vitae enim metus. Cras at erat ut lectus hendrerit venenatis.</p>
+            <p>Ut gravida, massa at efficitur facilisis, eros metus tincidunt dui, at tempor velit metus sit amet nulla. Quisque efficitur tristique urna non auctor.</p>
+        </article>
+
+        <aside class="sidebar">
+            <div class="author">
+                <h3>Author Info</h3>
+                <p>John Doe is a writer and blogger who covers technology and innovation. He has been writing for over a decade and has a keen interest in web development.</p>
+            </div>
+
+            <div class="related">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="#">Understanding CSS Grid</a></li>
+                    <li><a href="#">Introduction to Flexbox</a></li>
+                    <li><a href="#">Building Responsive Websites</a></li>
+                </ul>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Responsive Design. All rights reserved.</p>
+    </footer>
+    <style>
+    /* Base Styles */
+html {
+    font-size: 16px; /* 1rem = 16px */
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.header, .footer {
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+}
+
+.article {
+    flex: 1;
+    margin-bottom: 2rem;
+}
+
+.sidebar {
+    background-color: #f4f4f4;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.author, .related {
+    margin-bottom: 2rem;
+}
+
+.author h3, .related h3 {
+    margin-bottom: 1rem;
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+    .content {
+        flex-direction: row;
+    }
+
+    .article {
+        flex: 3;
+        margin-right: 2rem;
+    }
+
+    .sidebar {
+        flex: 1;
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 1024px) {
+    html {
+        font-size: 18px; /* 1rem = 18px */
+    }
+
+    .content {
+        margin: 2rem auto;
+        max-width: 1200px;
+    }
+
+    .article {
+        margin-bottom: 0;
+    }
+
+    .sidebar {
+        position: sticky;
+        top: 2rem;
+    }
+}
+
+    </style>
+</body>
+</html>
