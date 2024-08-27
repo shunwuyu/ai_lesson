@@ -1,0 +1,21 @@
+{
+  "name": "xb2_koa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "tsc-watch --onSuccess \"node dist/main.js\""
+  },
+  "devDependencies": {
+    "@types/node": "^13.13.52",
+    "dotenv": "^8.6.0",
+    "tsc-watch": "^4.6.2",
+    "typescript": "^3.9.10"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.15.3"
+  }
+}

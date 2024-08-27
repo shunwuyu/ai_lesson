@@ -1,0 +1,33 @@
+{
+  "name": "ajax-field-change",
+  "version": "1.0.0",
+  "description": "[source](https://github.com/Lemoncode/react-hooks-by-example/blob/master/06-ajax-field-change/src/demo.tsx)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack serve --open"
+  },
+  "devDependencies": {
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "@types/react": "^17.0.32",
+    "@types/react-dom": "^17.0.10",
+    "@babel/core":"^7.15.0",
+    "@babel/preset-env":"^7.15.0",
+    "babel-loader": "^8.2.2",
+    "typescript": "^4.4.4",
+    "css-loader": "^6.4.0",
+    "style-loader": "^3.3.1",
+    "html-webpack-plugin": "^5.3.2",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "use-debounce": "^7.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
