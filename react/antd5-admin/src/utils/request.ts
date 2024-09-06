@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import { getToken } from '../utils/auth'
+import { getToken } from './auth'
 
 const BASE_URL = '' //请求接口url 如果不配置 则默认访问链接地址
 const TIME_OUT = 20000 // 接口超时时间
