@@ -1,0 +1,29 @@
+{
+  "name": "ailemente",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "test": "jest",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "scss": "^0.2.4",
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.6",
+    "@types/jest": "^27.0.3",
+    "vue-jest": "^5.0.0-alpha.10",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "sass-embedded": "^1.78.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vue-tsc": "^2.0.6",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-typescript": "^7.16.0"
+  }
+}
