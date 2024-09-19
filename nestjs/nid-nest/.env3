@@ -1,0 +1,8 @@
+APP_AUTHOR=宁晧网
+
+# 数据库
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=123456
+DB_DATABASE=nid_nest
