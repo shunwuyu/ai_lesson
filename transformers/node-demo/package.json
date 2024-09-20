@@ -1,0 +1,12 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "@xenova/transformers": "^2.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
