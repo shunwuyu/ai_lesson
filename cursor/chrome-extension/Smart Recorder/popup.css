@@ -1,0 +1,44 @@
+body {
+  width: 300px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  text-align: center;
+}
+
+#prompt {
+  margin-bottom: 10px;
+}
+
+#recordButton {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+#recordButton.recording {
+  background-color: #f44336;
+}
+
+#result {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  min-height: 50px;
+}
+
+.button-group {
+  margin-top: 10px;
+}
+
+#copyButton, #rerecordButton {
+  margin: 0 5px;
+  padding: 5px 10px;
+}
