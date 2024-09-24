@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lazyload</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    .gallery {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .lazy {
+        width: 600px;
+        height: 600px;
+        background-color: #eee;
+        margin: 10px;
+    }
+    .lazy[data-src] {
+        background-image: url("https://img.36krcdn.com/hsossms/20240722/v2_4e58611ea2804647a9e6cf98f6676928@5689903_oswg73902oswg1053oswg495_img_jpg?x-oss-process=image/resize,m_mfit,w_960,h_400,limit_0/crop,w_960,h_400,g_center/format,webp");
+        background-size: cover;
+        background-position: center;
+    }
+    </style>
+</head>
+<body>
+    <div class="gallery">
+        <img class="lazy" data-src="https://img.36krcdn.com/hsossms/20240722/v2_4e58611ea2804647a9e6cf98f6676928@5689903_oswg73902oswg1053oswg495_img_jpg?x-oss-process=image/resize,m_mfit,w_960,h_400,limit_0/crop,w_960,h_400,g_center/format,webp" alt="Image 1">
+        <img class="lazy" data-src="https://img.36krcdn.com/hsossms/20240712/v2_ea0b096a66474200962d776772cbbfbf@000000_oswg36338oswg503oswg503_img_000?x-oss-process=image/resize,m_mfit,w_960,h_400,limit_0/crop,w_960,h_400,g_center" alt="Image 2">
+        <img class="lazy" data-src="https://img.36krcdn.com/hsossms/20240719/v2_75a198c51e634a68a58adaefaae74223@000000_oswg199535oswg432oswg288_img_jpg?x-oss-process=image/format,webp" alt="Image 2">
+        <img class="lazy" data-src="https://img.36krcdn.com/hsossms/20240722/v2_f09934fb22cd468cb6683bc6cf1f8b56@5888275_oswg1002452oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_600,h_400,limit_0/crop,w_600,h_400,g_center/format,webp" />
+        <img class="lazy" data-src="https://img.36krcdn.com/hsossms/20240722/v2_79638a0dbb0140b6b14ca96bc479456a@5888275_oswg633813oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_600,h_400,limit_0/crop,w_600,h_400,g_center/format,webp"/>
+        <img class="lazy" data-src="https://img.36krcdn.com/hsossms/20240722/v2_5b7c31cf000c4e80874e7a8f8e539a76@5888275_oswg1150789oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_600,h_400,limit_0/crop,w_600,h_400,g_center/format,webp"/>
+        <img class="lazy" data-src="https://img.36krcdn.com/hsossms/20240722/v2_f1c8c63177d449cf92412120198bdceb@5888275_oswg741252oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_600,h_400,limit_0/crop,w_600,h_400,g_center/format,webp"/>
+        <img class="lazy" data-src="https://img.36krcdn.com/hsossms/20240722/v2_b4acb4d77d28416c926560369ea9bbb4@5888275_oswg576270oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_600,h_400,limit_0/crop,w_600,h_400,g_center/format,webp"/>
+        <!-- 更多图片 -->
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const images = document.querySelectorAll('.lazy');
+
+        const loadImg = (image) => {
+            image.src = image.dataset.src;
+            image.classList.remove('.lazy')
+        }
+        // 在不在可视区
+        const observer = new IntersectionObserver((entries) => {
+            // console.log(entries);
+            entries.forEach(entry => {
+                // 出现在了可视区
+                if (entry.isIntersecting) {
+                    loadImg(entry.target)
+                    observer.unobserve(entry.target);
+                }
+            })
+        }, {
+            rootMargin: '0px',
+            threshold: 0.5
+        })
+        // 观察者模式 
+        images.forEach(image => {
+            // 添加一个image 监听 
+            observer.observe(image);
+        })
+    })
+    </script>
+</body>
+</html>
