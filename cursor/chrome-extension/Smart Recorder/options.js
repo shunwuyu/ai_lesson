@@ -1,23 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const apiKeyInput = document.getElementById('apiKey');
-  const saveButton = document.getElementById('saveButton');
-  const status = document.getElementById('status');
+document.addEventListener("DOMContentLoaded", () => {
+  const transcriptionList = document.getElementById("transcriptionList");
+  const clearButton = document.getElementById("clearTranscriptions");
 
-  // 加载保存的 API Key
-  chrome.storage.sync.get(['apiKey'], function(data) {
-    if (data.apiKey) {
-      apiKeyInput.value = data.apiKey;
-    }
-  });
+  function loadTranscriptions() {
+    chrome.storage.local.get("transcriptions", (result) => {
+      const transcriptions = result.transcriptions || [];
+      transcriptionList.innerHTML = "";
+      transcriptions.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.textContent = `${index + 1}. ${new Date(item.date).toLocaleString()}: ${item.text}`;
+        transcriptionList.appendChild(div);
+      });
+    });
+  }
 
-  // 保存 API Key
-  saveButton.addEventListener('click', () => {
-    const apiKey = apiKeyInput.value;
-    chrome.storage.sync.set({apiKey: apiKey}, function() {
-      status.textContent = 'API Key 已保存';
-      setTimeout(() => {
-        status.textContent = '';
-      }, 3000);
+  clearButton.addEventListener("click", () => {
+    chrome.storage.local.set({ transcriptions: [] }, () => {
+      loadTranscriptions();
     });
   });
+
+  loadTranscriptions();
 });

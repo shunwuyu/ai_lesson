@@ -1,0 +1,1 @@
+console.log("Smart Recorder content script loaded");
