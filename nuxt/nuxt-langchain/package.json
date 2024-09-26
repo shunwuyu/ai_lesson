@@ -1,0 +1,27 @@
+{
+  "name": "nuxt-langchain",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nuxt dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@langchain/core": "^0.3.3",
+    "@langchain/openai": "^0.3.2",
+    "@nuxt/ui": "^2.8.1",
+    "@types/node": "^22.7.2",
+    "langchain": "^0.3.2",
+    "nuxt": "^3.13.2",
+    "nuxt-icon": "^0.5.0",
+    "nuxt-windicss": "^2.6.0",
+    "vue3-markdown-it": "^1.0.10"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.33.2",
+    "sse.js": "^1.0.0"
+  }
+}

@@ -1,0 +1,1 @@
+https://github.com/Flowko/nuxt-ui-ai/blob/main/pages/index.vue
