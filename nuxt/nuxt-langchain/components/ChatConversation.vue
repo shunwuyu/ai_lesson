@@ -1,30 +1,20 @@
 <script setup lang="ts">
 import Markdown from 'vue3-markdown-it'
-import type { AttachmentType } from '../types/chat'
 
 defineProps({
   messages: {
     type: Array as PropType<any[]>,
     required: true,
-  },
-  searching: {
-    type: Boolean as PropType<boolean>,
-    required: false,
-    default: false,
-  },
+  }
 })
 
-function convertAttachmentType(data: any) {
-  return data as AttachmentType[]
-}
-
 function changeCode(message: string) {
-  return `\`\`\`vue\n${message}\n\`\`\`\n`
+  return `${message}`
 }
 </script>
 
 <template>
-  <ul role="list" class="space-y-6 relative">
+  <ul  class="space-y-6 relative">
     <li v-for="(message, index) in messages" :key="index" class="relative flex gap-x-4">
       <Icon
         name="ion:sparkles"

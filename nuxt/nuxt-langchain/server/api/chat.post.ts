@@ -1,16 +1,6 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
-const model = new ChatOpenAI({ 
-    model: "gpt-3.5-turbo",
-    apiKey: "sk-X0elCqFwBaSuKkLwmcvMKGMlacmRAwmb2hjaKm4MxBu2cdIY",
-    configuration: {
-        baseURL: 'https://api.302.ai/v1/'
-    }
-});
-
-
-
 export default defineEventHandler(async (event) => {
     const { question, history } = (await readBody(event)) as {
         question: string
@@ -40,6 +30,22 @@ export default defineEventHandler(async (event) => {
 
     sendData(JSON.stringify({ data: '' }))
 
+    const model = new ChatOpenAI({ 
+        model: "gpt-3.5-turbo",
+        apiKey: "sk-X0elCqFwBaSuKkLwmcvMKGMlacmRAwmb2hjaKm4MxBu2cdIY",
+        configuration: {
+            baseURL: 'https://api.302.ai/v1/'
+        },
+        streaming: true,
+        callbacks: [
+            {
+                handleLLMNewToken(output) {
+                    sendData(JSON.stringify({ data: output }))
+                }
+            },
+        ]
+    });
+
     try {
         console.log('/////')
         const messages = [
@@ -47,7 +53,7 @@ export default defineEventHandler(async (event) => {
         ];
 
         const response = await model.invoke(messages);
-        sendData(JSON.stringify({ content: response.content }))
+        // sendData(JSON.stringify({ content: response.content }))
     } catch (error) {
         console.error('error', error)
     } finally {

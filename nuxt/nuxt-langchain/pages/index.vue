@@ -22,7 +22,7 @@ onMounted(() => {
 
 const messageState = ref({
   messages: [] as any[],
-  pending: undefined as string | undefined,
+  pending: '' ,
   history: [] as any[],
 })
 
@@ -67,16 +67,18 @@ async function search() {
           message: messageState.value.pending ?? '',
           dateTime: new Date().toISOString(),
         })
-        messageState.value.pending = undefined
+        messageState.value.pending = ''
         loading.value = false
         ctrl.abort()
       }
       else {
         const data = JSON.parse(event.data)
         console.log(data);
-        if (data.data !== '' && searching.value)
+        if (data.content !== '' && searching.value) {
           searching.value = false
-          messageState.value.pending += data.content
+          
+        }
+        messageState.value.pending += data.data
       }
     })
 
