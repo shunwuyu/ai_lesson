@@ -165,4 +165,8 @@ const chatMessages = computed(() => {
       </div>
     </div>
 </main>
+
+function ref() {
+  throw new Error('Function not implemented.')
+}
 </template>

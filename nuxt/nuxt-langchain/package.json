@@ -21,7 +21,10 @@
     "vue3-markdown-it": "^1.0.10"
   },
   "devDependencies": {
+    "@nuxt/types": "^2.18.1",
     "@supabase/supabase-js": "^2.33.2",
-    "sse.js": "^1.0.0"
+    "@vue/runtime-dom": "^3.5.9",
+    "sse.js": "^1.0.0",
+    "typescript": "^5.6.2"
   }
 }
