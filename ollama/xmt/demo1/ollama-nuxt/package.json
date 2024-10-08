@@ -1,0 +1,22 @@
+{
+  "name": "ollama-nuxt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nuxt dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "nuxt": "^3.13.2",
+    "@nuxt/ui": "^2.13.0",
+    "ollama": "^0.4.5",
+    "@nuxtjs/i18n": "^8.3.0",
+    "@sidebase/nuxt-auth": "^0.7.1"
+  },
+  "devDependencies": {
+    "nuxt-windicss": "^2.6.0"
+  }
+}

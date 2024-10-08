@@ -40,3 +40,7 @@ AI全栈工程师课程
 - react/antd5
 - design-components/ailemente
 - dify
+- xmt/demo1/ollama-nuxt
+- xmt/chat-ollama
+- vite/hand_vite
+- leetcode/del_max_sum
