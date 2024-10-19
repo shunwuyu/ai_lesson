@@ -44,3 +44,4 @@ AI全栈工程师课程
 - xmt/chat-ollama
 - vite/hand_vite
 - leetcode/del_max_sum
+- geekbang/front_ai

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+console.log(1);
+setTimeout(() => {
+  console.log(2);
+}, 0);
+
+const myPromise = new Promise(() => {
+  console.log(3);
+  Promise.resolve();
+});
+
+myPromise.then(console.log(4));
+
+// 插入一个已经定义过的p 标签
+</script>
+</body>
+</html>
