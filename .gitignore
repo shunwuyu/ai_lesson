@@ -1,4 +1,6 @@
 # Logs
+__pycache__/
+llama_cache/
 .env
 logs
 *.zip

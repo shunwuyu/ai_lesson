@@ -45,3 +45,8 @@ AI全栈工程师课程
 - vite/hand_vite
 - leetcode/del_max_sum
 - geekbang/front_ai
+- vanna/nba
+- ollama/chensheng
+- llama/3.2
+- /coze/halloween
+- node/x-crawl-demo
