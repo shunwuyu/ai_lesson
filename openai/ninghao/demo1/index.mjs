@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
     apiKey: '', // This is the default and can be omitted
-    baseURL: 'https://api.chatanywhere.tech/v1'
+    baseURL: 'https://api.302.ai/v1'
 });
 
 async function main() {
