@@ -50,3 +50,5 @@ AI全栈工程师课程
 - llama/3.2
 - /coze/halloween
 - node/x-crawl-demo
+- coze/bzfree
+- coze/gx/07.md
