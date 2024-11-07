@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  /* div {
+    width: 350px;
+    height: 350px;
+  } */
+  /* div {
+    width: 350px;
+    height: 350px;
+    background-color: burlywood;
+    border: 3px solid black;
+    margin-top: 30px;
+    margin-left: 30px;
+    border-radius: 20px;
+    box-shadow: gray 0px 8px 20px;
+    font-size: 40px;
+    color: aquamarine;
+    text-align: center;
+    line-height: 350px;
+  }  */
+  .box {
+    width: 350px;
+    height: 350px;
+    background-color: burlywood;
+    border: 3px solid black;
+    margin-top: 30px;
+    margin-left: 30px;
+    border-radius: 20px;
+    box-shadow: gray 0px 8px 20px;
+    font-size: 40px;
+    color: aquamarine;
+    text-align: center;
+    line-height: 350px;
+  }
+  .container {
+    display: flex;
+  }
+  /* input{
+    width: 300px;
+    height: 50px;
+    margin: 100px 0 0 100px;
+    border-radius: 25px;
+  } */
+  body {
+    background:linear-gradient(
+      to right,
+      rgb(113, 65, 168),
+      rgba(44, 114, 251, 1)
+    );
+  }
+  .todo-app {
+    width: 98%;
+    height: 500px;
+    background: #fff;
+    box-sizing: border-box;
+    margin-top: 40px;
+    margin-left: 1%;
+    padding-top: 30px;
+    border-radius: 5px;
+  }
+  .title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+  }
+  .todo-form {
+    display: flex;
+    margin: 20px 0 30px 20px;
+  }
+  .todo-button {
+    width: 100px;
+    height: 52px;
+    border-radius: 0 20px 20px 0;
+    line-height: 52px;
+    text-align: center;
+    background: linear-gradient(
+      to right,
+      rgb(113, 65, 168),
+      rgba(44, 114, 251, 1)
+    );
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+  }
+  .todo-input {
+    padding: 0px 15px 0px 15px;
+    border-radius: 20px 0 0 20px;
+    border: 1px solid #dfe1e5;
+    width: 60%;
+    height: 50px;
+  }
+  </style>
+</head>
+<body>
+  <!-- <div></div> -->
+  <!-- <div>hello world</div> -->
+  <!-- <div>hello world</div>
+  <div>hi</div>
+  <div>hello world</div> -->
+  <!-- <div class="container">
+    <div class="box">hello world</div>
+    <div class="box">hi</div>
+    <div class="box">hello world</div>
+  </div> -->
+  <!-- <input type="text" placeholder="hello"> -->
+  <div class="todo-app">
+    <div class="title">Todo App</div>
+    <div class="todo-form">
+      <input type="text" class="todo-input" placeholder="Add a todo">
+      <div class="todo-button">Add Todo</div>
+    </div>
+  </div>
+</body>
+</html>

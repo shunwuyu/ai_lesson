@@ -52,3 +52,5 @@ AI全栈工程师课程
 - node/x-crawl-demo
 - coze/bzfree
 - coze/gx/07.md
+- fullstack/demo 
+- 50projects/movies
