@@ -54,3 +54,5 @@ AI全栈工程师课程
 - coze/gx/07.md
 - fullstack/demo 
 - 50projects/movies
+- groq/demo/main.mjs
+- next/ninghao/ninghao-next
