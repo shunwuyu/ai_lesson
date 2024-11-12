@@ -1,72 +1,89 @@
 [source](https://ninghao.net/package/git)
-
+- 说出你了解的git 命令
 - git help 
     命令和解释
     - git help -a 所有的命令
-    - git help -g 文档和教程
     - git help add  具体命令
+        F 健向下  B健向上
+    
 - 配置
-    git config --global user.name ''
-    git config --global user.email ''
+    git config --unset --global user.name 去除
+    git config --global user.name '' 我们是谁？
+    git config --global user.email '' 
     git config --list
-    git config --global color.ui true
+    git config --global color.ui true 输出带颜色
 
 - git init 
-    movietalk
+   mkdir movietalk
     git init 
-    cd .git   打开  ls 
+    cd .git  仓库   打开  ls 
     通过情况下，我们不会动这个目录里面的东西，
     如果你不想再让 Git 跟踪 movietalk 这个项目了.. 直接就可以把这个目录下面的 .git 目录删除掉就行了。
+    删除再做
+    存的是文件的版本
 
 - git commit
-    index.html
-    git status
-    git add index.html
-    git status
-    changes to be commited 
-    git commit -m '添加 index.html文件'
-    git status
+    git status 
+    index.html 基本html结构
+    git status  unchecked files    未跟踪的文件
+    git add index.html  添加具体的文件   货车  把文件添加到暂存区
+    git status changes to be commited 
+    git commit -m '添加 index.html文件'   提交到仓库
+    git status working directory clean 
     git log 
 
 - git diff
     lang="zh-hans"
-    git diff index.html
+    git status  
+    git diff index.html 提交前修改
     git add index.html
     git status  暂存区
     git diff 暂存区 和工作目录比较  没有差异
-    user-scalable=no,
-    git status
-    git diff index.html
-    git diff index.html --staged  暂存区的修改
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,mnimum-scale=1.0"> 移动优化
+    git status 暂存区有些修改 两次修改
+    git diff index.html 
+    git diff index.html --staged  暂存区的修改 repo 暂存区
     git commit -m '修改了index.html的lang属性值为zh-hans'
     git add index.html
     git commit -m '修改了index.html viewport meta 标签'
+    git log 三个提交的信息
 
 - 重命名文件
     style.css 新建
     h1{
         font-size:30px;
     }
+    git status 未跟踪的文件
     git add .
     git commit -m '添加style.css 文件'
-    右键重命民 style.css
+    右键重命名 style.css
+    git status  删除了， 还有一个未跟踪
     git rm style.css
-    git status
-    git add .
+    git add theme.css
+    git status  renamed style.css -> theme.css
     git commit -m '将style.css 重命名为theme.css'
 
-- 重命民二
-    git commit -m '把theme.css 重命名为 lm-theme.css'
-    新建 css 文件夹
-    git status 没效果 不会跟踪空白目录
-    git mv lm-theme.css css/  
-    git commit -m '把theme.css 移动到css目录下'
-    目录移动
+- 重命名二
+    git mv theme.css ninghao-theme.css
+    git status renamed theme.css->ninghao-theme.css
+    git commit -m '把theme.css 重命名为 ninghao-theme.css'
+
+- 移动
+    mkdir css 
+    git status  clean  git 不会跟踪空目录
+    git mv ninghao-theme.css css/  
+    git status  renamed ninghao-theme.css -> css/theme.css
+    git commit -m '把ninghao-theme.css 移动到css目录下'
+    目录移动 
     mkdir asset
     git mv css asset/
+    git status  renamed css/theme.css -> asset/css/theme.css
     git commit -m '把css目录移动到asset目录下'
-    git rm .\asset\css\lm-theme.css
-    git commit -m '删除了lm-theme文件'
+
+- 删除
+    git rm .\asset\css\ninghao-theme.css
+    git status  deleted  asset/css/ninghao-theme.css
+    git commit -m '删除了ninghao-theme文件'
 
 - 删除文件恢复过来
     git rm index.html

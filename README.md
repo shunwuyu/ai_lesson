@@ -57,3 +57,4 @@ AI全栈工程师课程
 - groq/demo/main.mjs
 - next/ninghao/ninghao-next
 - js/youdontkonw/chatper1
+- git/readme.md
