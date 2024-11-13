@@ -12,3 +12,8 @@ https://www.bilibili.com/video/BV1zFypY7E6X/?spm_id_from=333.1007.tianma.4-2-12.
   cat requirements.txt 可以看到所有依赖
 
   安装pytorch https://download.pytorch.org/whl/torch_stable.html
+
+- 下载1.8b模型
+  git clone https://www.modelscope.cn/qwen/Qwen-1_8B-Chat.git
+
+- 
