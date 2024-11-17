@@ -58,3 +58,4 @@ AI全栈工程师课程
 - next/ninghao/ninghao-next
 - js/youdontkonw/chatper1
 - git/readme.md
+- geektime/front_ai/06/demo1
