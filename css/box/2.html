@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* css的盒模型由content(内容)、padding(内边距)、border(边框)、
+    margin(外边距)组成。但盒子的大小由content+padding+border这几部分决定， */
+    /* 把margin算进去的那是盒子占据的位置，而不是盒子的大小！ */
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .box{
+        width:200px;
+        height:200px;
+        background-color:pink;
+        padding:20px;
+        border:10px solid black;
+        margin-bottom:10px;
+  }
+  .box1{
+        width: 100px;
+        height: 100px;
+        background: green;
+  }
+  </style>
+</head>
+<body>
+  <div class="box"></div>
+  <div class="box1"></div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  #box1 {
+    margin: 20px;
+    width: 200px;
+    height: 200px;
+    background-color: yellow;
+    /* 这意味着，即使该元素被移动了，它原来占据的空间仍然会被保留，不会影响到其他元素的布局。 */
+    position: relative;
+    /* position: absolute; */
+    left: 100px;
+    top: 100px;
+  }
+  #box2 {
+    margin: 20px;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    
+  }
+  </style>
+</head>
+<body>
+  <div id="box1"></div>
+  <div id="box2"></div>
+</body>
+</html>

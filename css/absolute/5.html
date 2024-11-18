@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* 在这种情况下，参考物就是最近的祖先元素。 */
+  #orange {
+    width: 400px;
+    height: 400px;
+    background-color: orange;
+    position: relative;
+    /* position: absolute; */
+  }
+  #box1 {
+      width: 150px;
+      height: 150px;
+      margin-left: 20px;
+      margin-bottom: 20px;
+      background-color: yellow;
+      position: absolute;
+      /* 在没设置left/right、top/bottom的情况下，absolute元素的位置就是该元素在文档流里的位置 */
+  }
+
+  </style>
+</head>
+<body>
+  <div id="orange">
+    <div id="box1"></div>
+    121212212
+  </div>
+</body>
+</html>
