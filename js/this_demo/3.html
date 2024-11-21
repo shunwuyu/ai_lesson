@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+var name = "windowsName";
+    var a = {
+        name: "Cherry",
+        fn : function () {
+            console.log(this.name);      // Cherry
+        }
+    }
+    window.a.fn();
+    // this 永远指向最后调用它的那个对象
+</script>
+</body>
+</html>

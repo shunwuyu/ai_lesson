@@ -4,8 +4,8 @@ import OpenAI from 'openai';
 dotenv.config({path: '.env'});
 
 const client = new OpenAI({
-    apiKey:process.env.OPENAI_KEY,
-    baseURL:'https://api.gptsapi.net/v1'
+    apiKey:'sk-EotDnSmaUpIchUFfXMOpmx0QBHUPe43c2Rr8UOUiEzBwCYUJ',
+    baseURL:''
 })
 
 const main = async () => {

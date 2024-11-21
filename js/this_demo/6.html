@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+    var name = "windowsName";
+
+function fn() {
+    var name = 'Cherry';
+    // 调用方式 普通的函数调用 this -> window
+    innerFunction();
+    function innerFunction() {
+        console.log(this.name);      // windowsName
+    }
+}
+
+fn()
+
+</script>
+</body>
+</html>

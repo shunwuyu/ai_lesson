@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+    // 函数 fn 是对象 a 调用的，所以打印的值就是 a 中的 name 的值
+    var name = "windowsName";
+    var a = {
+        name: "Cherry",
+        fn : function () {
+            console.log(this.name);      // Cherry
+        }
+    }
+    a.fn();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// 箭头函数没有自己的 this， 箭头函数的 this 指向的是它所在的作用域的 this -->
+const arrowFunc = () => {
+    console.log(this);
+};
+arrowFunc(); 
+</script>
+</body>
+</html>

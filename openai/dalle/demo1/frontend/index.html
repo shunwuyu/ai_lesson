@@ -32,7 +32,7 @@
     <script>
     const oForm = document.forms["appForm"];
     oForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+        event.preventDefault(); 
         const title = this["title"].value;
         const desc = this["desc"].value;
         console.log(name, desc);
@@ -61,7 +61,6 @@
                     document.querySelector('#logo').appendChild(img)
                 }
                 img.src = url
-                
             }
         })
         .catch((error) => {

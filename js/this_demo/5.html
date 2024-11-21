@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+var name = "windowsName";
+var a = {
+    name : null,
+    // name: "Cherry",
+    fn : function () {
+        console.log(this.name);      // windowsName
+    }
+}
+// 由于刚刚的 f 并没有调用，所以 fn() 最后仍然是被 window 调用的。
+// this 永远指向最后调用它的那个对象
+var f = a.fn;
+f(); 
+
+</script>
+</body>
+</html>
