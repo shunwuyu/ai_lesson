@@ -76,6 +76,10 @@
 
         11.js
 
+    
+
+    - Object.prototype.toString.call()
+
     - isString 判断
 
     new Number(3) + new Number(4) // 7

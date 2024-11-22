@@ -65,3 +65,6 @@ AI全栈工程师课程
 - js/by_zx
 - js/this_demo
 - prompt/ml_prompt/03
+- html5/yuyi
+- js/higher/03
+- js/higher/08
