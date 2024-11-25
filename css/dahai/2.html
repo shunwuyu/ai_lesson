@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  /* 选择紧跟在 h1 后面的 p 元素 */
+  h1 + p {
+    color: red;
+  }
+  /* 选择所有位于 h1 之后的 p 元素 */
+  h1 ~ p {
+    color: blue;
+  }
+  /* 选择 .container 的直接子元素 p */
+  .container > p {
+    font-weight: bold;
+  }
+  /* 选择 .container 内的所有 p 元素 */
+  .container p {
+    text-decoration: underline;
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>标题</h1>
+    <p>这是第一段文字。</p>
+    <p>这是第二段文字。</p>
+    <a href="#">链接</a>
+    <span>这是一个span元素。</span>
+    <div class="inner">
+      <p>这是内部段落。</p>
+    </div>
+  </div>
+</body>
+</html>

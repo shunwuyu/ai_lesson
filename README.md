@@ -68,3 +68,5 @@ AI全栈工程师课程
 - html5/yuyi
 - js/higher/03
 - js/higher/08
+- js/yayu/prototype
+- css/dahai/

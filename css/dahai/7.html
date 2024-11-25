@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>:root Example</title>
+  <style>
+  :root {
+    --primary-color: #007BFF;
+    --secondary-color: #6c757d;
+    --font-size: 16px;
+    --line-height: 1.6;
+
+    /* 直接对 <html> 元素应用样式 */
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    background-color: #f8f9fa;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    color: var(--secondary-color);
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    color: var(--primary-color);
+  }
+
+  p {
+    margin-bottom: 1em;
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>示例标题</h1>
+    <p>这是一个段落。</p>
+  </div>
+</body>
+</html>

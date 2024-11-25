@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>::before and ::after Demo</title>
+  <style>
+    /* 基本样式 */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    /* 更多按钮样式 */
+    .more {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    /* 使用 ::before 创建下划线效果 */
+    .more::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: white;
+      transform: scaleX(0);
+      transform-origin: bottom right;
+      transition: transform 0.3s ease;
+    }
+
+    /* 鼠标悬浮时显示下划线 */
+    .more:hover::before {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+
+    /* 使用 ::after 创建查看更多图标 */
+    .more::after {
+      content: '\2192';
+      margin-left: 5px;
+      transition: transform 0.3s ease;
+    }
+
+    /* 鼠标悬浮时旋转图标 */
+    .more:hover::after {
+      transform: translateX(5px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>示例标题</h1>
+    <p>这是一个段落。这是一个段落。这是一个段落。这是一个段落。这是一个段落。</p>
+    <a href="#" class="more">查看更多</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inheritance Example</title>
+  <style>
+  .parent {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border: 2px solid #ccc;
+  cursor: pointer;
+}
+
+.child {
+  padding: 10px;
+  background-color: white;
+  border: 1px solid transparent;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.parent:hover .child {
+  background-color: inherit;
+  border-color: inherit;
+}
+  </style>
+</head>
+<body>
+  <div class="parent">
+    <p class="child">这是一个段落。</p>
+  </div>
+</body>
+</html>

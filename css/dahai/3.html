@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Pseudo-classes Demo</title>
+  <style>
+  /* 行为伪类 */
+button:active {
+  background-color: red;
+  color: white;
+}
+
+p:hover {
+  background-color: yellow;
+}
+
+::selection {
+  background-color: blue;
+  color: white;
+}
+
+/* 状态伪类 */
+input:focus {
+  border: 2px solid blue;
+}
+
+input:checked + label {
+  font-weight: bold;
+}
+
+/* 条件伪类 */
+li:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+/* 结构伪类 */
+li:nth-child(odd) {
+  background-color: lightgray;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>伪类选择器示例</h1>
+    <button>点击我</button>
+    <p>鼠标悬浮在这里</p>
+    <input type="text" placeholder="输入框">
+    <input type="checkbox" id="option1">
+    <label for="option1">选项1</label>
+    <input type="checkbox" id="option2" checked>
+    <label for="option2">选项2</label>
+    <ul>
+      <li>列表项1</li>
+      <li>列表项2</li>
+      <li>列表项3</li>
+      <li>列表项4</li>
+    </ul>
+  </div>
+</body>
+</html>
