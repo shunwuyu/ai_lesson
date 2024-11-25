@@ -70,3 +70,4 @@ AI全栈工程师课程
 - js/higher/08
 - js/yayu/prototype
 - css/dahai/
+- js/shouxie/new
