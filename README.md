@@ -73,3 +73,4 @@ AI全栈工程师课程
 - js/shouxie/new
 - js/es6/yayu/mb
 - js/js30/click_drag
+- prompt/ml_prompt/04
