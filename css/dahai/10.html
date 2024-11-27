@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .container {
+    border: 1px solid #000;
+    overflow: auto; /* 清除浮动影响 BFC 开始不写 */
+  }
+
+  .floated {
+      float: left;
+      width: 150px;  /* 设置宽度以便观察效果 */
+      height: 100px; /* 设置高度以便观察效果 */
+      background-color: lightblue; /* 背景颜色便于区分 */
+  }
+  .box {
+    height: 200px;
+    background-color: green;
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="floated">这是一个左浮动的元素</div>
+    <div class="box"></div>
+  </div>
+</body>
+</html>

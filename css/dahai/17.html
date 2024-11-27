@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    background-color: lightgray;
+    padding: 10px;
+  }
+
+  .grid-container > div {
+      background-color: lightblue;
+      padding: 10px;
+  }
+  </style>
+</head>
+<body>
+  <div class="grid-container">
+    <div>Grid Item 1</div>
+    <div>Grid Item 2</div>
+    <div>Grid Item 3</div>
+    <div>Grid Item 4</div>
+  </div>
+</body>
+</html>
