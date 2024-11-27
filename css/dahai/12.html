@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .inline {
+    display: inline;
+    background-color: lightblue;
+    padding: 5px;
+    /* 它们的外在显示类型为内联，这意味着它们会根据内容的尺寸来适应文本流中的空间，而不是由开发者直接指定的固定宽度和高度。这确保了内联元素能够自然地与周围的文本和其他内联元素一起流动，保持行内的布局特性。 */
+    width: 200px; /* 内联元素不能直接设置宽度和高度，因为它们的尺寸由其内容决定，旨在适应文本流中的空间，保持行内布局特性。*/
+    height: 200px;
+  }
+  </style>
+</head>
+<body>
+  <span class="inline">这是一个内联元素</span>
+</body>
+</html>

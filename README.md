@@ -71,3 +71,5 @@ AI全栈工程师课程
 - js/yayu/prototype
 - css/dahai/
 - js/shouxie/new
+- js/es6/yayu/mb
+- js/js30/click_drag

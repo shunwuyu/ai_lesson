@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .box {
+    width: 200px;  /* 设置宽度 */
+    height: 100px; /* 设置高度 */
+    padding: 20px; /* 内边距 */
+    border: 5px solid black; /* 边框 */
+    margin: 20px;  /* 外边距，不影响盒子大小 */
+  }
+
+  .border-box {
+      box-sizing: border-box; /*切换一下*/
+      background-color: lightblue; /* 背景颜色便于区分 */
+  }
+
+  .content-box {
+      box-sizing: content-box;
+      background-color: lightgreen; /* 背景颜色便于区分 */
+  }
+  </style>
+</head>
+<body>
+  <div class="box border-box">Box with border-box</div>
+  <div class="box content-box">Box with content-box</div>
+</body>
+</html>

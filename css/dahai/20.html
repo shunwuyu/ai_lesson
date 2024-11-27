@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .container {
+    border: 2px solid black;
+    padding: 10px;
+  }
+
+  .float-box {
+      float: left;
+      width: 150px;
+      height: 100px;
+      background-color: lightblue;
+      margin: 10px;
+  }
+
+  .bfc-box {
+      width: 300px;
+      height: 100px;
+      background-color: lightgreen;
+      overflow: auto; /* 创建 BFC */
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="float-box">这是一个左浮动的盒子</div>
+    <div class="bfc-box">这是一个创建了 BFC 的盒子</div>
+</div>
+</body>
+</html>

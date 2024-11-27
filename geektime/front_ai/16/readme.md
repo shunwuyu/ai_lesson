@@ -17,3 +17,7 @@ https://time.geekbang.org/column/article/824413
 
 - 生成随机用户ID
   4.js
+
+- 生成随机点击时间
+  5.js
+    
