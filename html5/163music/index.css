@@ -19,7 +19,7 @@ html, body {
   width: 40px;height: 40px;
   background: url(./assert/close.png)
   no-repeat center / cover;
-}
+} 
 .music-btn.off {
   background-image: url(./assert/music.png);
 }
@@ -27,7 +27,7 @@ html, body {
 .next-view-c {
   z-index: 99999;
   background: url(http://s5.music.126.net/static_public/5c21db8d4684556c72180904/gx.4ae36e08269404412ecdb99e9453ca17.svg);
-  background-size: 100%;
+ 
   left: 50%;
   bottom: 10px;
   width: 13px;
@@ -44,7 +44,7 @@ html, body {
   background: url(http://s5.music.126.net/static_public/5c21db8d4684556c72180904/bgg.d78404cec29e5275598b87d1716f0592.png);
   background-size: cover;
   position: absolute;
-}
+ 
 .logo-c{
   position: absolute;
     top: 5.6%;

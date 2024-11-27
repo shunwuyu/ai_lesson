@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <audio id="j-bgm" src="./bgm.mp3"></audio>
+  <audio id="j-bgm" src="./bgm.mp3"></audio> 
   <div class="music-btn off"></div>
   <div class="next-view-c"></div>
   <div class="swiper-container">
@@ -96,8 +96,7 @@
       </div>
     </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
-  <script>
+   <script>
     const viewSpecial = document.querySelector('.view .paras');
     const musicBtn = document.querySelector('.music-btn');
     // let defaultMusicPlay = true;
@@ -112,7 +111,7 @@
     musicBtn.addEventListener('click', () => {
       if (bgMusic.pause) {
         bgMusic.play();
-      } else {
+      } else { 
         bgMusic.pause();
       }
       // defaultMusicPlay = !defaultMusicPlay;
