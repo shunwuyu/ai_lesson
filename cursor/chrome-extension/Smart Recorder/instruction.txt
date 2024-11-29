@@ -8,6 +8,6 @@ Step 4：显示翻译成功的英语文本，并提供“复制文本” 和“�
 
 注意以下两点：
 
-我会调用Groq上的whisper-large-vv3来实现相关功能。
+我会调用Groq上的whisper-large-v3来实现相关功能。
 请不要把api key写死在代码中，而是让用户通过extension options来输入，确保不同用户可以使用自己提供的api key。
 请使用icons文件夹的图标作为应用程序的图标

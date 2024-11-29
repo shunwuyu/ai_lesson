@@ -32,6 +32,7 @@ https://juejin.cn/post/6941206439624966152?searchId=2024112511124973ED988B233B9A
     [attr$=val]：属性以指定值结尾的元素；
     [attr~=val]：属性包含指定值(完整单词)的元素(不推荐使用)；
     [attr|=val]：属性以指定值(完整单词)开头的元素(不推荐使用)；
+    1.1.html
   - 组合选择器 2.html
     相邻兄弟选择器：A + B
     普通兄弟选择器：A ~ B
@@ -226,6 +227,19 @@ https://juejin.cn/post/6941206439624966152?searchId=2024112511124973ED988B233B9A
     设置浮动：float 属性不为 none
     设置定位：position 为 absolute 或 fixed
     定义成块级的非块级元素：display: inline-block/table-cell/table-caption/flex/inline-flex/grid/inline-grid
+
+    - BFC 应用场景
+      - 自适应两栏布局 22.html
+      BFC 的区域不会和浮动区域重叠，所以就可以把侧边栏固定宽度且左浮动，而对右侧内容触发 BFC，使得它的宽度自适应该行剩余宽度。
+      - 清楚内部浮动 23.html
+      而用 BFC 清除浮动的原理就是：计算 BFC 的高度时，浮动元素也参与计算。只要触发父元素的 BFC 即可。
+      - 防止垂直margin 合并
+        24.html
+
+  - IFC
+
+
+
 
   
 

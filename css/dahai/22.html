@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* BFC 的区域不会和浮动区域重叠，所以就可以把侧边栏固定宽度且左浮动，而对右侧内容触发 BFC，使得它的宽度自适应该行剩余宽度。 */
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .aside {
+    float: left;
+    width: 100px;
+  }
+
+  .main {
+    /* <!-- 触发 BFC --> */
+    overflow: auto;
+  }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="aside">aside</div>
+    <div class="main">main</div>
+  </div>
+</body>
+</html>

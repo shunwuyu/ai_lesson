@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>在线书店</title>
+<style>
+/* 基础样式 */
+.book {
+    margin: 10px;
+    padding: 15px;
+    border: 1px solid #ccc;
+}
+
+/* 科幻类书籍 */
+[data-category="科幻"] {
+    background-color: #007bff; /* 蓝色背景 */
+    color: white;              /* 白色字体 */
+}
+
+/* 历史类书籍 */
+[data-category="历史"] {
+    background-color: #8b4513; /* 棕色背景 */
+    color: #fffdd0;            /* 奶油色字体 */
+}
+
+[title^="入门"] h2::before {
+    content: '🌟'; /* 添加星星图标 */
+    margin-right: 5px;
+    font-size: 1.2em;
+}
+</style>
+</head>
+<body>
+    <div class="book" data-category="科幻">
+        <h2>三体</h2>
+        <p>作者：刘慈欣</p>
+    </div>
+    
+    <div class="book" data-category="历史">
+        <h2>明朝那些事儿</h2>
+        <p>作者：当年明月</p>
+    </div>
+    
+    <div class="book" data-category="小说">
+        <h2>活着</h2>
+        <p>作者：余华</p>
+    </div>
+    <div class="book" data-type="语言学习" title="入门西班牙语初级课程">
+      <h2>西班牙语初级课程</h2>
+      <p>学习日常对话和基本语法。</p>
+  </div>
+</body>
+</html>

@@ -4,11 +4,8 @@
   "version": "1.0",
   "description": "A smart recorder for Chrome that captures audio and transcribes it.",
   "permissions": [
-    "http://*/*",
     "tabs",
     "contextMenus",
-    "https://*/*",
-    "chrome://favicon/*",
     "unlimitedStorage",
     "storage",
     "activeTab",
