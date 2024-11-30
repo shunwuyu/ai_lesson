@@ -10,8 +10,8 @@ console.log(openaiApiKey, '////');
 
 const client = new OpenAI({
     // 凭证 密钥  算力收费  token
-    apiKey: openaiApiKey,
-    baseURL: 'https://api.chatanywhere.tech/v1'
+    apiKey: 'sk-DQyFVvlYDkVEcwRy1uY6WOkEz0AUhGeQRdSQ0mXKA4JgCp8M',
+    baseURL: 'https://api.302.ai/v1'
 })
 
 const server = http.createServer(async(req, res) => {

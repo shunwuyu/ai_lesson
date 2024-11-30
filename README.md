@@ -78,3 +78,4 @@ AI全栈工程师课程
 - cursor/crawl
 - qwen/coder
 - cursor/chrome-extension
+- prompt/ml_prompt/06
