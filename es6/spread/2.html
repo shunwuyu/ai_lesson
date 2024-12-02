@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <p>这是第1个段落</p>
+  <p>这是第2个段落</p>
+  <p>这是第3个段落</p>
+  <p>这是第4个段落</p>
+  <p>这是第5个段落</p>
+  <p>这是第6个段落</p>
+  <p>这是第7个段落</p>
+  <p>这是第8个段落</p>
+  <p>这是第9个段落</p>
+  <p>这是第10个段落</p>
+  <script>
+  let nodeList = document.querySelectorAll('p');
+  // let nodeList = document.getElementsByTagName('p');
+  // 拥有一个 length 属性和若干索引属性的任意对象
+  // console.log(nodeList.length);
+  // for (let i = 0; i < nodeList.length; i++) {
+  //   console.log(nodeList[i]);
+  // }
+  // nodeList.forEach((item, index) => {
+  //   console.log(item, index);
+  // })
+  // nodeList.join(',')
+  // [1,2,3].join('1')
+  console.log(nodeList instanceof NodeList) // true
+  // 将一个 NodeList（一种类数组对象）转换成一个真正的数组，
+  // 使得可以使用数组的所有方法来操作 nodeList 中的元素
+  let arr3 = Array.from(nodeList)
+  console.log(arr3 instanceof Array) 
+  let arr = [...nodeList]
+  console.log(arr instanceof Array)
+  console.log(Array.isArray(arr));
+  </script>
+</body>
+</html>
