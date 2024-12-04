@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>静态瀑布流布局</title>
+<style>
+/* 设置页面的基础样式 */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* 网格容器 */
+.grid-container {
+  display: grid;
+  /* 尽可能多的填充列，最小值，和最大宽度  */
+  grid-template-columns: repeat(3, minmax(250px, 1fr));
+  gap: 16px; /* 卡片之间的间距 */
+  padding: 16px;  
+}
+
+/* 卡片样式 */
+.card {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* 模拟不同高度 */
+.card:nth-child(odd) {
+  height: 200px;
+}
+
+.card:nth-child(even) {
+  height: 250px;
+}
+
+/* 对于不同屏幕尺寸进行响应式调整 */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); /* 在小屏幕上每个卡片占据整行 */
+  }
+}
+</style>
+</head>
+<body>
+<div class="grid-container">
+  <div class="card">内容1</div>
+  <div class="card">内容2</div>
+  <div class="card">内容3</div>
+  <div class="card">内容4</div>
+  <div class="card">内容5</div>
+  <div class="card">内容6</div>
+  <!-- 继续添加更多的卡片 -->
+</div>
+</body>
+</html>

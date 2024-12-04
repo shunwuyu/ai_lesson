@@ -17,4 +17,3 @@ const climbStairs = function(n) {
   return f[n]
 };
 
-以上这种在递归的过程中，不断保存已经计算出的结果，从而避免重复计算的手法，叫做记忆化搜索。

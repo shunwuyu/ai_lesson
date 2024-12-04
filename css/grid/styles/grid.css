@@ -1,0 +1,50 @@
+/* .container {
+  display: grid;
+  /* grid-template-columns: 200px 200px 200px; */
+  /* grid-template-columns:1fr 5fr 1fr;  fr 的意思是 fraction 分数 */
+  /* grid-template-rows: 200px 200px 200px; */
+  /* height: 100vh; */
+  /* grid-auto-rows: 200px;自动生成的行的高度。 */
+  /* grid-auto-rows: 1fr; */
+/* }  */
+
+/* .container {
+  display: grid;
+  grid-template-columns:1fr 5fr 1fr;
+  height: 100vh;
+  grid-auto-rows: 1fr;
+  column-gap: 4px;
+  row-gap: 4px;
+} */
+
+/* .container {
+  display: grid;
+  grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns:repeat(9, 1fr);
+  grid-template-columns:repeat(2, 1fr 2fr);
+  grid-template-columns: 80px repeat(2, 1fr);
+  height: 100vh;
+  grid-auto-rows: 1fr;
+  column-gap: 4px;
+  row-gap: 4px;
+}  */
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 100vh;
+  grid-auto-rows: 1fr;
+  column-gap: 4px;
+  row-gap: 4px;
+} 
+
+.item__1 {
+  grid-column-start: 1;
+  grid-column-end: 4;  /*4号线*/
+  grid-row-start: 1; /*切换成2 在看一下, 再换回来*/
+  grid-row-end: 3;
+}
+.item__2 {
+  grid-row-start: 3;
+  grid-row-end: 5;
+}
