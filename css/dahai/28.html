@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <style>
+    div {  
+      position: relative;  
+      width: 100px;  
+      height: 100px;  
+    }  
+    p {  
+      position: absolute;  
+      font-size: 20px;  
+      width: 100px;  
+      height: 100px;  
+    }  
+    .a {  
+      background-color: blue;  
+      z-index: 1;  
+    }  
+    .b {  
+      background-color: green;  
+      z-index: 2;  
+      top: 20px;  
+      left: 20px;  
+    }  
+    .c {  
+      background-color: red;  
+      z-index: 3;  
+      top: -20px;  
+      left: 40px;  
+    }
+  </style>
+  
+  <body>  
+    <div>  
+      <p class="a">a</p>  
+      <p class="b">b</p>  
+    </div> 
+  
+    <div>  
+      <p class="c">c</p>  
+    </div>  
+  </body>   
+</body>
+</html>

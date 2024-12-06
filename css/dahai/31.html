@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+  (function (doc, win) {
+    var docEl = doc.documentElement,
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+        psdWidth = 750,  // 设计图宽度
+        recalc = function () {
+            var clientWidth = docEl.clientWidth;
+            if ( !clientWidth ) return;
+            if ( clientWidth >= 640 ) {
+                docEl.style.fontSize = 200 * ( 640 / psdWidth ) + 'px';
+            } else {
+                docEl.style.fontSize = 200 * ( clientWidth / psdWidth ) + 'px';
+            }
+        };
+
+  if ( !doc.addEventListener ) return;
+  // 绑定事件的时候最好配合防抖函数
+  win.addEventListener( resizeEvt, debounce(recalc, 1000), false );
+  doc.addEventListener( 'DOMContentLoaded', recalc, false );
+    
+  function debounce(func, wait) {
+      var timeout;
+      return function () {
+          var context = this;
+          var args = arguments;
+          clearTimeout(timeout)
+          timeout = setTimeout(function(){
+              func.apply(context, args)
+          }, wait);
+      }
+  }
+})(document, window);
+
+  </script>
+  <style>
+  .header {
+    height: 0.5rem;
+    background-color: red;
+  }
+  </style>
+</head>
+<body>
+  <div class="header"></div>
+</body>
+</html>

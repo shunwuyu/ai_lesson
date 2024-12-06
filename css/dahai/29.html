@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <style>
+    div {
+      width: 100px;
+      height: 100px;
+      position: relative;
+    }
+    .box1 {
+      z-index: 2;
+    }
+    .box2 {
+      z-index: 1;
+    }
+    p {
+      position: absolute;
+      font-size: 20px;
+      width: 100px;
+      height: 100px;
+    }
+    .a {
+      background-color: blue;
+      z-index: 100;
+    }
+    .b {
+      background-color: green;
+      top: 20px;
+      left: 20px;
+      z-index: 200;
+    }
+    .c {
+      background-color: red;
+      top: -20px;
+      left: 40px;
+      z-index: 9999;
+    }
+  </style>
+  
+  <body>
+    <div class="box1">
+      <p class="a">a</p>
+      <p class="b">b</p>
+    </div>
+  
+    <div class="box2">
+      <p class="c">c</p>
+    </div>
+  </body>
+  
+</body>
+</html>

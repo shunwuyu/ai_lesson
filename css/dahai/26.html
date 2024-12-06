@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .container {
+    text-align: center; /* 使行内元素水平居中 */
+    border: 1px solid black; /* 边框仅用于可视化容器 */
+    padding: 20px;
+    font-size: 0; /* 消除行内块元素间的空白间隙 */
+  }
+
+  .stretch-element {
+    display: inline-block; /* 设置为行内块级元素 */
+    height: 300px; /* 固定高度，用于撑开父容器 */
+    width: 0; /* 宽度为0，因为只是用来撑高 */
+    vertical-align: middle; /* 垂直对齐方式设置为middle */
+  }
+
+  .centered-block {
+    display: inline-block; /* 设置为行内块级元素 */
+    vertical-align: middle; /* 与.stretch-element对齐 */
+    background-color: lightgreen; /* 背景颜色 */
+    padding: 20px;
+    font-size: 16px; /* 重置字体大小 */
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="stretch-element"></div> <!-- 用于撑开父容器高度 -->
+  <div class="centered-block">
+    我是垂直居中的块级元素。
+  </div>
+</div>
+
+</body>
+</html>

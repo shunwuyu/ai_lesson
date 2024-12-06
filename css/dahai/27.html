@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .box1 {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    z-index: 1; /* 设置较低的z-index, 可以切到3试试 */
+  }
+
+  .box2 {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    z-index: 2; /* 设置较高的z-index */
+  }
+</style>
+</head>
+<body>
+
+<div class="box1"></div>
+<div class="box2"></div>
+
+</body>
+</html>

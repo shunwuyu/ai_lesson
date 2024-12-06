@@ -121,6 +121,11 @@ https://juejin.cn/post/6941206439624966152?searchId=2024112511124973ED988B233B9A
   文档流就像水一样，能够自适应所在的容器。
   - 块级元素默认会占满整行，所以多个块级盒子之间是从上到下排列的
   - 内联元素默认会在一行里一列一列的排布，当一行放不下的时候，会自动切换到下一行继续按照列排布；
+  - 为何要脱离文档流？
+    - 精确控制位置 定位
+    - 避免影响其他元素 浮动元素 创建多列布局
+    - 创建层叠上下文 
+    - 动画和交互 
 
   - 如何脱离文档流 9.html
     脱流文档流指节点脱流正常文档流后，在正常文档流中的其他节点将忽略该节点并填补其原先空间。文档一旦脱流，计算其父节点高度时不会将其高度纳入，脱流节点不占据空间。有两种方式可以让元素脱离文档流：浮动和定位。
@@ -155,7 +160,7 @@ https://juejin.cn/post/6941206439624966152?searchId=2024112511124973ED988B233B9A
   ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c4b9dddb310540f78a19ea0f7da92938~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
 
   IE 盒模型认为：盒子的实际尺寸 = 设置的宽/高 = 内容 + 内边距 + 边框
-
+  Microsoft Edge 浏览器使用标准盒模型。Edge 基于 Chromium 开发，继承了 Chromium 的渲染引擎 Blink，
   现在高版本的浏览器基本上默认都是使用标准盒模型，而像 IE6 这种老古董才是默认使用 IE 盒模型的。
 
   box-sizing content-box：标准盒模型；  border-box：IE 盒模型；
@@ -212,7 +217,6 @@ https://juejin.cn/post/6941206439624966152?searchId=2024112511124973ED988B233B9A
     ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4a73e2276d8b41f0a905361f151157e2~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
 
   - BFC 渲染规则
-
     - 内部的盒子会在垂直方向，一个接一个地放置；
     - 盒子垂直方向的距离由 margin 决定，属于同一个 BFC 的两个相邻盒子的 margin 会发生重叠；
     - 每个元素的 margin 的左边，与包含块 border 的左边相接触(对于从左往右的格式化，否则相反)，即使存在浮动也是如此；
@@ -236,11 +240,76 @@ https://juejin.cn/post/6941206439624966152?searchId=2024112511124973ED988B233B9A
       - 防止垂直margin 合并
         24.html
 
-  - IFC
+- IFC
+  - 水平居中：当一个块要在环境中水平居中时，设置其为 inline-block 则会在外层产生 IFC，通过 text-align 则可以使其水平居中。25.html
+  - 垂直居中：创建一个 IFC，用其中一个元素撑开父元素的高度，然后设置其 vertical-align: middle，其他行内元素则可以在此父元素下垂直居中。 26.html
 
+- 层叠上下文
 
+  - 从图中看到什么？ ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9fe12ffcbbe547dbbabc0c74488c30c9~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+  HTML元素在屏幕三维空间（X, Y, Z轴）中，按属性优先级沿Z轴排列，形成层叠上下文。是HTML中一个三维的概念.
+  一般情况下，元素在页面上沿X轴Y轴平铺，我们察觉不到它们在Z轴上的层叠关系。而一旦元素发生堆叠，这时就能发现某个元素可能覆盖了另一个元素或者被另一个元素覆盖。
 
+  如果一个元素含有层叠上下文，(也就是说它是层叠上下文元素)，我们可以理解为这个元素在Z轴上就“高人一等”，最终表现就是它离屏幕观察者更近。
 
+  - z-index
+    层叠等级值越大，在上面  27.html
   
+  - 层叠上下文生成 28.html 和 29.html 对比
+    由于p.a、p.b的父元素div.box1产生的层叠上下文的z-index的值为2，p.c的父元素div.box2所产生的层叠上下文的z-index值为1，所以p.c永远在p.a和p.b下面。
+    子元素的高 z-index 值不能超越其父元素的层叠上下文所限定的层级
+  - 如何创建层叠上下文 ？
+    - html 文档根元素
+    - 声明 position: absolute/relative 且 z-index 值不为 auto 的元素；
+    - 声明 position: fixed/sticky 的元素；
+    - flex 容器的子元素，且 z-index 值不为 auto；
+    - grid 容器的子元素，且 z-index 值不为 auto；
+    - opacity 属性值小于 1 的元素；
+
+  如何比较两个元素的层叠等级？
+
+- 值和单位
+  css的值有哪些？
+  - 数值 长度值 ，用于指定例如元素 width、border-width、font-size 等属性的值；
+  - 百分比：可以用于指定尺寸或长度，例如取决于父容器的 width、height 或默认的 font-size；
+  - 颜色：用于指定 background-color、color 等；
+  - 坐标位置 background-position、top、right、bottom 和 left 等属性；
+  - 函数 url()、linear-gradient() 
+
+  - 单位
+    - px
+    屏幕分辨率是指在屏幕的横纵方向上的像素点数量
+    分辨率 1920×1080 意味着水平方向含有 1920 个像素数，垂直方向含有 1080 个像素数。
+    - em
+      相对长度单位， 相对谁呢？
+      - 在 font-size 中使用是相对于父元素的 font-size 大小
+      - 在其他属性中使用是相对于自身的字体大小 width/height/padding/margin 
+      30.html
+    - rem
+      root em  相对的是 HTML 的根元素 html
+      用于自适应网站或者 H5 中
+
+      前端开发中，为了实现响应式设计，通常会根据设计稿的宽度（例如750px）和目标设备的视口宽度（如iPhone X 的375px）来动态调整页面的基础字体大小。这可以通过JavaScript根据当前页面视口宽度自动计算并设置HTML根元素的font-size，从而确保页面元素按比例缩放，适应不同屏幕尺寸。
+
+      31.html
+
+    - vw/vh 
+      vw 和 vh 分别是相对于屏幕视口宽度和高度而言的长度单位：
+
+      1vw = 视口宽度均分成 100 份中 1 份的长度；
+      1vh = 视口高度均分成 100 份中 1 份的长度；
+      vmin：取 vw 和 vh 中值较小的；
+      vmax：取 vw 和 vh 中值较大的；
+
+      32.html
+
+- transparent
+  33.html
+
+
+
+  - 下图是啥意思？
+    ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7469f30a44fb4211bb7860eb82787819~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
 
 
