@@ -9,7 +9,7 @@ const crawlApp = createCrawl({
 //Create AI application
 const crawlOpenAIApp = createCrawlOpenAI({
   clientOptions: { 
-    apiKey: 'sk-rFBoE5GHTLgyCfOqOxkS1VItX3yu1a1D2oN8RwrlHIhqmGdo',
+    apiKey: '',
     baseURL: 'https://api.302.ai/v1/' 
   
   },
@@ -24,6 +24,7 @@ crawlApp.crawlPage('https://movie.douban.com/chart').then(async (res) => {
   const targetSelector = '.indent'
   await page.waitForSelector(targetSelector)
   const highlyHTML = await page.$eval(targetSelector, (el) => el.innerHTML)
+  // console.log()
 
   // Let the AI get the image link and de-duplicate it (the more detailed the description, the better)
   const srcResult = await crawlOpenAIApp.parseElements(

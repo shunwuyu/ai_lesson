@@ -1,0 +1,3 @@
+- git clone https://github.com/comfyanonymous/ComfyUI.git
+- pip install -r requirements.txt
+- python main.py 
