@@ -90,3 +90,4 @@ AI全栈工程师课程
 - js/dahai
 - algorithm/backtracking/
 - algorithm/toTree
+- node/text2sql

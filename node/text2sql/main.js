@@ -6,24 +6,50 @@ const db = new sqlite3.Database('./mydatabase.db', async (err) => {
     return console.error(err.message);
   }
   console.log('Connected to the SQLite database.');
-//   await db.run(`CREATE TABLE IF NOT EXISTS employees
-//    ( id INTEGER PRIMARY KEY, 
-//     name TEXT, 
-//     department TEXT, 
-//     salary INTEGER )`)
+  await db.run(`CREATE TABLE IF NOT EXISTS employees (
+    id INTEGER PRIMARY KEY, 
+    name TEXT NOT NULL, 
+    department TEXT NOT NULL, 
+    salary INTEGER NOT NULL
+);`)
 
-    const sample_data = [ (6, "黄佳", "销售", 50000), (7, "宁宁", "工程", 75000), (8, "谦谦", "销售", 60000), (9, "悦悦", "工程", 80000), (10, "黄仁勋", "市场", 55000)]
-    // 插入数据
-    const stmt = db.prepare(`INSERT INTO employees VALUES (?,?,?,?)`);
+    const sample_data = [ 
+      {
+        id: 6, 
+        name: "黄佳",
+        department: "销售",
+        salary: 50000
+      },
+      {
+        id: 7, 
+        name: "宁宁",
+        department: "工程",
+        salary: 75000
+      },
+      {
+        id: 8, 
+        name: "谦谦",
+        department: "销售",
+        salary: 60000
+      },
+      {
+        id: 9, 
+        name: "悦悦",
+        department: "工程",
+        salary: 80000
+      },
+      {
+        id: 10, 
+        name: "黄仁勋",
+        department: "市场",
+        salary: 55000
+      }
+    ];
+  
+
     for (let item of sample_data) {
-      await stmt.run(`${item[0]}`,`${item[1]}`, `${item[2]}`, `${item[3]}`);
+        db.run('INSERT INTO employees VALUES (?, ?, ?, ?)', [item.id, item.name, item.department, item.salary])
     }
-
-    console.log(await db.all(`SELECT *FROM employees`))
-
-    // for (let item of sample_data) {
-    //     db.run('INSERT INTO employees VALUES (?, ?, ?, ?)', item)
-    // }
     // db.run('INSERT INTO employees VALUES (?, ?, ?, ?)')
     // console.log(db.run('select * from employees'))
 })
