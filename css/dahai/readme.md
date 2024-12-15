@@ -258,13 +258,6 @@ https://juejin.cn/post/6941206439624966152?searchId=2024112511124973ED988B233B9A
   - 层叠上下文生成 28.html 和 29.html 对比
     由于p.a、p.b的父元素div.box1产生的层叠上下文的z-index的值为2，p.c的父元素div.box2所产生的层叠上下文的z-index值为1，所以p.c永远在p.a和p.b下面。
     子元素的高 z-index 值不能超越其父元素的层叠上下文所限定的层级
-  - 如何创建层叠上下文 ？
-    - html 文档根元素
-    - 声明 position: absolute/relative 且 z-index 值不为 auto 的元素；
-    - 声明 position: fixed/sticky 的元素；
-    - flex 容器的子元素，且 z-index 值不为 auto；
-    - grid 容器的子元素，且 z-index 值不为 auto；
-    - opacity 属性值小于 1 的元素；
 
   如何比较两个元素的层叠等级？
 
@@ -310,6 +303,15 @@ https://juejin.cn/post/6941206439624966152?searchId=2024112511124973ED988B233B9A
 
   - 下图是啥意思？
     ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7469f30a44fb4211bb7860eb82787819~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+## 常用布局
+- 两栏布局 边栏定宽主栏自适应
+  80.html 
+  - 方法一：float + overflow（BFC 原理） BFC 的区域不会与 float 盒子重叠；
+  - 方法二：float + margin margin-left
+  - 方法三：flex 
+  - 方法四：grid
+
 
 
 

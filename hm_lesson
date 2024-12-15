@@ -33,3 +33,8 @@
 - 全栈防抖 js/throttle_debounce
 - AI 爬虫 node/x-crawl-demo
 - es6.io/Symbol bind call apply https://juejin.cn/post/6844903496253177863?searchId=20241210102518B7E0FE4CA7D03CCF7AA6
+- symobl https://github.com/wesbos/es6.io/blob/master/11%20-%20Symbols/symbols.html
+- js 串讲 /lesson_hm/symbol
+- 树/回溯 algorithm/backtracing  /toTree
+- 手写 new https://juejin.cn/post/6946022649768181774#heading-30
+- localStorage https://github.com/shunwuyu/lesson_md/blob/3821da6ccfb915f4f74e4f75f239e458ca45b2a9/html5/js30-localstorage/index.html
