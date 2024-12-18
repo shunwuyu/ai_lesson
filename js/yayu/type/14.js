@@ -1,3 +1,8 @@
+// 如果 obj 为 基本类型，直接返回
+// 否则，调用 valueOf 方法，如果返回一个原始值，则 JavaScript 将其返回。
+// 否则，调用 toString 方法，如果返回一个原始值，则 JavaScript 将其返回。
+// 否则，JavaScript 抛出一个类型错误异常。
+
 // 定义一个带有自定义 valueOf 和 toString 方法的对象
 let specialObj = {
   valueOf: function() {

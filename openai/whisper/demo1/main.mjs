@@ -8,7 +8,7 @@ import OpenAI from 'openai';
 // });
 
 const client = new OpenAI({
-    apiKey: 'sk-X0elCqFwBaSuKkLwmcvMKGMlacmRAwmb2hjaKm4MxBu2cdIY',
+    apiKey: 'sk-Gl1ASRfqtsM8Y89sWlInTrElCDUja0M2X7B4lIQrY1oThSkV',
     baseUrl:'https://api.302.ai/v1'
 });
 
