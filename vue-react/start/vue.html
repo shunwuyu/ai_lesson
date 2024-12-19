@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 3 Counter Example</title>
+    <!-- 引入 Vue 3 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.4.9/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+      <div id="app">
+        <!-- 显示 count 的值 -->
+        <p>Count: {{ count }}</p>
+        <!-- 按钮，点击后调用 increment 方法 -->
+        <button @click="increment">+1</button>
+      </div>
+    </div>
+
+    <script type="module">
+      // 创建Vue应用程序并定义组件逻辑
+      const { createApp, ref } = Vue;
+
+      createApp({
+          setup() {
+              // 定义响应式数据
+              const count = ref(0);
+
+              // 定义方法
+              const increment = () => {
+                  count.value++;
+              };
+
+              // 返回需要暴露给模板的对象
+              return {
+                  count,
+                  increment
+              };
+          }
+      }).mount('#app'); // 挂载应用到具有id="app"的DOM元素上
+  </script>
+</body>
+</html>

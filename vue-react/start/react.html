@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React Counter Example</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/react/17.0.2/umd/react.development.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/17.0.2/umd/react-dom.development.js"></script>
+    <!-- 引入 Babel 编译 JSX 使用 BootCDN -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+</head>
+<body>
+    <!-- 应用程序挂载点 -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // 定义一个名为 Counter 的 React 组件
+        function Counter() {
+            // 使用 useState 钩子定义响应式数据
+            const [count, setCount] = React.useState(0);
+
+            // 定义方法
+            const increment = () => {
+                setCount(count + 1);
+            };
+
+            return (
+                <div>
+                    {/* 显示 count 的值 */}
+                    <p>Count: {count}</p>
+                    {/* 按钮，点击后调用 increment 方法 */}
+                    <button onClick={increment}>+1</button>
+                </div>
+            );
+        }
+
+        // 将 Counter 组件挂载到具有 id="root" 的 DOM 元素上
+        ReactDOM.render(<Counter />, document.getElementById('root'));
+    </script>
+</body>
+</html>
