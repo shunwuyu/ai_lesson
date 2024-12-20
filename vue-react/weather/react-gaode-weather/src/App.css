@@ -1,0 +1,36 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+.container {
+  min-height: 100vh;
+  background-color: #000;
+  opacity: 0.6;
+  color: #fff;
+}
+
+.nav {
+  overflow: auto;
+  padding: 10px;
+}
+
+.time {
+  float: left;
+}
+
+.city {
+  float: right;
+}
+
+.city-info {
+  text-align: center;
+}
+
+.temp {
+  font-size: 26px;
+}
+
+.temp em {
+  font-style: normal;
+  font-size: 34px;
+}
