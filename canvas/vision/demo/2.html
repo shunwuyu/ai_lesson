@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+function foo() {
+    console.log(this.a);
+}
+
+var a = 2;
+
+var obj = {
+    a: 3,
+    foo: foo
+};
+
+foo(); // 调用全局函数foo
+obj.foo(); // 调用obj对象的foo方法
+</script>
+</body>
+</html>
