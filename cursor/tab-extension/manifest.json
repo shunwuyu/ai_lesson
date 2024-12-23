@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "Tab Grouping Plugin",
+    "version": "1.0",
+    "description": "Automatically groups tabs based on domain.",
+    "permissions": [
+      "tabs",
+      "storage"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }

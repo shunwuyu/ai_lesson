@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "谷歌翻译插件",
+    "version": "1.0",
+    "description": "选中文字后右键点击，使用谷歌进行翻译。",
+    "permissions": [
+      "contextMenus",
+      "activeTab"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    }
+  }

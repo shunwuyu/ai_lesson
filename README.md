@@ -99,3 +99,6 @@ AI全栈工程师课程
 - algorithm/stack
 - vue-react/
 - vue-react/weather
+- react/ninghao-react2
+- cursor/tubiao
+- cursor/translate
