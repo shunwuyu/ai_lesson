@@ -102,3 +102,5 @@ AI全栈工程师课程
 - react/ninghao-react2
 - cursor/tubiao
 - cursor/translate
+- algorithm/hello-algo/queue
+- vue/v3-login
