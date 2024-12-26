@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/3.2.31/vue.global.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1 @click="add">{{state.count}} * 2 = {{double}}</h1>
+  </div>
+ 
+  <script>
+  const {reactive,computed} = Vue
+  let App = {
+    setup(){
+      const state = reactive({
+        count:1
+      })
+      function add(){
+        state.count++
+      }
+      const double = computed(()=>state.count*2)
+      return {state,add,double}
+    }
+  }
+  Vue.createApp(App).mount('#app')
+  </script>
+</body>
+</html>
