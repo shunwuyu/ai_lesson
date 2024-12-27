@@ -48,4 +48,9 @@
 - react/vue react-vue/weather
 - 滑动窗口  algorithm/scroll-window
 - 用栈实现队列 algorithm/stack_queue
-
+- react repos react-vue/react_repos 
+- 直播预测 https://github.com/huangjia2019/ai-in-practice/tree/main/%E7%AC%AC1%E8%AF%BE_%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80
+- 3D 地球  three.js 
+- AI 数据分析 openai/data_ana/main.mjs
+- ajax 封装 https://juejin.cn/post/6946022649768181774#heading-19
+- vue 专注业务开发  vue-react/dasheng/todos

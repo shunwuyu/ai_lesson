@@ -33,3 +33,11 @@ https://time.geekbang.org/column/article/428106
 
 
   https://github.com/course-dasheng/geektime-vue-course/blob/main/08-001%E8%AF%84%E4%BA%94%E6%98%9F%E4%BE%8B%E5%AD%90/src/components/Rate0.vue
+
+  - App3.vue
+    import { ref,computed } from "vue";
+    composition api
+
+  - App.vue 
+    其实你可以把组件内部的任何一段代码，从组件文件里抽离出一个独立的文件进行维护。
+    
