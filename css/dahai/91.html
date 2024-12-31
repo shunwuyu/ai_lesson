@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  h4 {
+    position: relative;
+    color: #333;
+    margin: 20px 0 10px;
+  }
+  h4::before {
+    content: '#';
+    position: absolute;
+    left: -20px;
+    top: -1px;
+    font-size: 18px;
+    color: #38ab89;
+  }
+
+  section {
+    margin-bottom: 50px;
+  }
+  .w150 {
+    width: 150px;
+    height: 50px;
+  }
+  .wings main {
+  float: left;
+  width: 100%;
+  }
+  .wings .inner {
+    margin: 0 150px;
+    height: 100px;
+  }
+  .wings .left {
+    margin-left: -100%;
+  }
+  .wings .right {
+    float: left;
+    margin-left: -150px;
+  }
+  .left {
+    float: left;
+  }
+  .right {
+    float: right;
+  }
+  .orange {
+  background-color: orange;
+}
+.green {
+  background-color: #38ab89;
+}
+main {
+  height: 100px;
+}
+
+  </style>
+</head>
+<body>
+  <h4>方法二：双飞翼布局</h4>
+  <section class="wings clearfix">
+    <main><div class="green inner">main</div></main>
+    <aside class="w150 left orange">aside</aside>
+    <aside class="w150 right orange">aside</aside>
+  </section>
+</body>
+</html>

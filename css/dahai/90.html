@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .layout {
+    color: #fff;
+    padding: 0 100px;
+    min-width: 500px;
+  }
+  h4 {
+  position: relative;
+  color: #333;
+  margin: 20px 0 10px;
+}
+h4::before {
+  content: '#';
+  position: absolute;
+  left: -20px;
+  top: -1px;
+  font-size: 18px;
+  color: #38ab89;
+}
+section {
+  margin-bottom: 50px;
+}
+.w150 {
+  width: 150px;
+  height: 50px;
+}
+main {
+  height: 100px;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+.orange {
+  background-color: orange;
+}
+.green {
+  background-color: #38ab89;
+}
+.grail {
+  padding: 0 150px;
+}
+.grail main {
+  width: 100%;
+  float: left;
+}
+.grail .left {
+  position: relative;
+  left: -150px;
+  margin-left: -100%;
+}
+.grail .right {
+  float: left;
+  position: relative;
+  right: -150px;
+  margin-left: -150px;
+}
+.clearfix {
+  zoom: 1;
+}
+.clearfix::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <h4>方法一：圣杯布局</h4>
+    <section class="grail clearfix">
+      <main class="green">main</main>
+      <aside class="w150 left orange">aside</aside>
+      <aside class="w150 right orange">asideasideasideasideasideasideaside</aside>
+    </section>
+  </div>
+</body>
+</html>

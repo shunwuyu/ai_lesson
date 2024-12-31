@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  h4 {
+    position: relative;
+    color: #333;
+    margin: 20px 0 10px;
+  }
+  h4::before {
+    content: '#';
+    position: absolute;
+    left: -20px;
+    top: -1px;
+    font-size: 18px;
+    color: #38ab89;
+  }
+
+  section {
+    margin-bottom: 50px;
+  }
+  .w150 {
+    width: 150px;
+    height: 50px;
+  }
+  .left {
+    float: left;
+  }
+  .right {
+    float: right;
+  }
+  .orange {
+  background-color: orange;
+}
+.green {
+  background-color: #38ab89;
+}
+
+.flex {
+  display: flex;
+}
+.flex main {
+  flex: 1;
+}
+
+  </style>
+</head>
+<body>
+  <h4>方法四：flex</h4>
+  <section class="flex">
+    <aside class="w150  orange">aside</aside>
+    <main class="green">main</main>
+    <aside class="w150  orange">aside</aside>
+  </section>
+
+</body>
+</html>
