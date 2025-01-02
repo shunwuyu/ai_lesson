@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "hello",
+      "hometown": "抚州"
+    },
+    {
+      "id": "75a3",
+      "username": "喻顺武",
+      "hometown": "南昌"
+    }
+  ]
+}

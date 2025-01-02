@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>用户新增</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>添加新用户</h2>
+        <form id="userForm">
+            <label for="username">用户名:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="hometown">家乡:</label>
+            <input type="text" id="hometown" name="hometown" required>
+
+            <button type="submit">提交</button>
+        </form>
+        <p id="responseMessage"></p>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
