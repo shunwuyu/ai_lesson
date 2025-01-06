@@ -44,31 +44,30 @@ label {
     transform: scale3d(1, 1, 1);
   }
 }
-
+/* 在元素被插入之前生效，在元素被插入之后的下一帧移除。 */
 .v-enter-from {
   opacity: 0;
 }
-
+/* 在整个进入过渡期间应用，从元素被插入开始直到过渡结束。 */
 .v-enter-active {
   transition: 0.3s;
 }
-
+/* 在元素被插入之后下一帧生效（确保在此时它已经在 DOM 中），在过渡结束之后移除。 */
 .v-enter-to {
   opacity: 1;
 }
-
+/* 在离开过渡开始时生效，在下一帧中被移除 */
 .v-leave-from {
   opacity: 1;
 }
-
+/* 在整个离开过渡期间应用，从过渡开始直到过渡结束。 */
 .v-leave-active {
   transition: 0.3s;
 }
-
+/* 在下一帧中生效（确保在此时它已经在 DOM 中），在过渡结束之后移除。 */
 .v-leave-to {
   opacity: 0;
 }
-
 .slide-enter-from {
   opacity: 0;
   transform: translateX(30px);
