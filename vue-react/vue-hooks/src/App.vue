@@ -1,29 +1,30 @@
 <template>
   <div>
-    <input type="text" v-model="title" @keydown.enter="addTodo" />
-    <button v-if="active < all" @click="clear">清理</button>
-    <ul v-if="todos.length">
-      <li v-for="todo in todos">
-        <input type="checkbox" v-model="todo.done" />
-        <span :class="{ done: todo.done }"> {{ todo.title }}</span>
-      </li>
-    </ul>
-    <div v-else>暂无数据</div>
-    <div>
-      全选<input type="checkbox" v-model="allDone" />
-      <span> {{ active }} / {{ all }} </span>
-    </div>
+    <p>Mouse X: {{ x }}</p>
+    <p>Mouse Y: {{ y }}</p>
   </div>
 </template>
 
 <script setup>
-import  useTodos  from "./hooks/useTodo";
+import { ref, onMounted, onUnmounted } from 'vue';
 
-let { title, todos, addTodo, clear, active, all, allDone } = useTodos();
+// 定义响应式的 x 和 y 坐标
+const x = ref(0);
+const y = ref(0);
+
+// 更新鼠标位置的函数
+const updateMousePosition = (event) => {
+  x.value = event.clientX;
+  y.value = event.clientY;
+};
+
+// 在组件挂载后添加事件监听
+onMounted(() => {
+  window.addEventListener('mousemove', updateMousePosition);
+});
+
+// 在组件卸载时移除事件监听
+onUnmounted(() => {
+  window.removeEventListener('mousemove', updateMousePosition);
+});
 </script>
-<style>
-.done{
-  color:gray;
-  text-decoration: line-through;
-}
-</style>

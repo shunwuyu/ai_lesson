@@ -110,3 +110,5 @@ AI全栈工程师课程
 - algorithm/sort/quick
 - vue-react/router-demo
 - vue-react/tongxing
+- vue-react/vue-hooks
+- vue-react/pinia-demo
