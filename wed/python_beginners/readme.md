@@ -70,3 +70,6 @@ https://www.bilibili.com/video/BV1wfkFYQEmR/?spm_id_from=333.1387.upload.video_c
 - type("hello world")
 
 ## f string
+- to recap 回顾一下
+- 
+

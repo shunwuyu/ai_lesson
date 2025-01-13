@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSX</title>
+</head>
+<body>
+  <div id="example"></div>
+  <script>
+  // 报错
+  // let myTitle = <h1>Hello, world!</h1>;
+  
+  </script>
+  <script src="./react.js"></script>
+  <script src="./react-dom.js"></script>
+  <script src="./babel.min.js"></script>
+  <script type="text/babel">
+  // 要先注释
+  // ReactDOM.render(
+  //   <span>Hello World!</span>,
+  //   document.getElementById('example')
+  // );
+  </script>
+  <script>
+  // 允许你在 JavaScript 中直接编写类似 HTML 的标记，使得组件模板更加直观和易于理解，同时将结构、样式和逻辑紧密结合，提高了开发效率和代码可维护性
+  let myTitle = React.createElement('h1', {}, 'Hello, world222!');
+  console.log(myTitle)
+  ReactDOM.render(
+    myTitle,
+    document.getElementById('example')
+  );
+  </script>
+</body>
+</html>

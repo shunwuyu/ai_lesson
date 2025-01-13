@@ -1,0 +1,6 @@
+/* src/components/TodoInput/styles.css */
+.todo-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}

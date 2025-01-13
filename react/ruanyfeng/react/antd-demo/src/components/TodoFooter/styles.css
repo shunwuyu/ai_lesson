@@ -1,0 +1,7 @@
+/* src/components/TodoFooter/styles.css */
+.todo-footer {
+  padding: 8px;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+}
