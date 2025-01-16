@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 function App() {
   // JSX 语法，JavaScript 代码中可以写 HTML 代码
   // let myTitle = <h1>Hello, world!</h1>;
@@ -12,6 +13,7 @@ function App() {
   return (
     <>
       {myTitle}
+      {createElement('p', {className: 'title'}, 'Hello World!!!')}
     </>
   )
 }

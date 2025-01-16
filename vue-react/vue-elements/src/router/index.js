@@ -21,7 +21,6 @@ router.beforeEach((to, from, next) => {
   const { fullPath } = to
   if (fullPath === '/login') {
     next()
-    return 
   }
   if (!token) { next('/login') }
   next()

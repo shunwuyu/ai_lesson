@@ -113,3 +113,4 @@ AI全栈工程师课程
 - vue-react/vue-hooks
 - vue-react/pinia-demo
 - react/ruanyfeng/
+- vue-react/v3-slot-watch-effect-demos

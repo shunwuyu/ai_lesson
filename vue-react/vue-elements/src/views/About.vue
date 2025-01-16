@@ -1,5 +1,5 @@
 <template>
-  <Heading :level="3">
+  <Heading :level="2">
     点击验证token <el-button type="primary" @click="invoke">Click</el-button>
     Your Name: {{name}}
   </Heading>
