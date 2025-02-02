@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Kimi Translation & Summary</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Kimi Translation</h1>
+        </header>
+        
+        <div class="mode-switcher">
+            <button class="mode-btn active" data-mode="translate">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+                </svg>
+                翻译模式
+            </button>
+            <button class="mode-btn" data-mode="summary">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/>
+                </svg>
+                总结模式
+            </button>
+        </div>
+
+        <div class="language-selector" id="language-selector">
+            <div class="language-pair">
+                <select id="source-language" class="language-select">
+                    <option value="auto">自动检测</option>
+                    <option value="zh">中文</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                </select>
+                <div class="language-arrow">→</div>
+                <select id="target-language" class="language-select">
+                    <option value="zh">中文</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="content-area">
+            <textarea id="input-area" placeholder="在这里显示选中的文本或页面内容..."></textarea>
+            <div id="result-area" class="result"></div>
+        </div>
+        
+        <div class="action-area">
+            <button id="action-btn" class="primary-btn">翻译</button>
+        </div>
+    </div>
+    <script src="config.js"></script>
+    <script src="sidepanel.js"></script>
+</body>
+</html> 

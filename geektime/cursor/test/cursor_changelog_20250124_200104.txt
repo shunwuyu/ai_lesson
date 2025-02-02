@@ -1,0 +1,1836 @@
+PricingFeaturesEnterpriseBlogForumCareers
+
+Changelog
+
+New updates and improvements
+
+0.44
+
+Dec 17, 2024
+
+Agent Improvements, Yolo Mode, Cursor Tab Update
+
+Agent sees terminal exit codes, can run commands in the background, and commands are now editable
+Agent reads linter errors to automatically fix issues
+With Yolo Mode, the agent can auto-run terminal commands
+@docs, @git, @web, and @folder are now available in the agent
+Agent auto-saves changes to disk
+Agent can decide to edit multiple locations in parallel
+Agent can reapply edits with a smarter apply model
+Composer changes and checkpoints are now persisted across reloads
+Cursor Tab can make larger edits at a time
+Better UX to review changes in Composer
+4o Support for Agent
+Cheaper and faster Bug Finding Model
+
+Bug Fixes
+
+Fixed edge case where Cursor Tab crashed
+Fixed stuck on generating bug in chat/composer
+Composer no longer looks at files that were deleted
+Fixed code selection edge-case for chat/apply
+Cursor starts up faster
+
+UPDATE (0.44.1-0.44.11): Fixes and improvements to dev containers, chat codeblocks on windows, and the agent. Decreases Cursor Tab Latency on Remote SSH. Fixes bug that prematurely triggered the free trial ended popup. Better observability for errors and crashes.
+
+0.43
+
+Nov 24, 2024
+
+New Composer UI, Agent, Commit Messages
+
+Composer UI in the sidebar with inline diffs
+Early version of an agent in composer that can pick its own context and use the terminal
+Generation of git commit messages
+File pill recommendations in chat/composer
+@Recommended in chat/composer to semantically search for context
+Nicer image-dropping experience
+Several performance improvements
+Beta: Sneak peek at an upcoming bug finder feature
+
+0.42
+
+Oct 9, 2024
+
+Composer History, @Lint Errors, VS Code 1.93.1
+
+Composer history lets you access previous composer sessions after restart. You can also edit and resubmit from previous messages within a session.
+We have made slight improvements to Debug with AI and added back @Lint Errors in Chat.
+VS Code 1.93.1: Cursor is now based on VS Code 1.93.1.
+Python auto import for Cursor Tab is much more stable in this release.
+Switching models is a lot easier with model search (Cmd-option-/) in the chat, composer, and cmd-k input boxes.
+Composer now only applies files that are in context to prevent hallucinations.
+Using cursor . with WSL should now be more stable.
+
+UPDATE (0.42.1 - 0.42.5): Fixes the following upstream security issue: CVE-2024-43601. Also fixes a few composer bugs and a bug with Cursor Tab. Allows composer to auto apply to files not in its context. Also includes additional mitigations to CVE-2024-48919. Reduces a few long-tail connection errors. Adds escape hatch when Claude predicts the wrong filepath in chat.
+
+0.41
+
+Sep 17, 2024
+
+Cursor Tab Python Auto Import, Composer Improvements, Remote SSH to Mac Support
+
+This update fixes the following security issue: CVE-2024-45599.
+
+Cursor Tab now auto-imports symbols in Python files! We've also significantly improved the Cursor Tab stability.
+Composer Notepads (previously called Projects) can now include tagged files and be referenced in chat, as well as composer.
+Composer can now be added to the AI pane. This release also includes many stability fixes and image support!
+Apply and Composer are slightly faster in this release.
+We've added support for using Cursor on Macs over Remote SSH.
+
+UPDATE (0.41.1 - 0.41.3): Improves onboarding UX, fixes a bug with composer cancellation, fixes the Apply button not working on some codeblocks, and fixes a bug where Cursor Tab sees malformed edits.
+
+0.40
+
+Aug 22, 2024
+
+New Chat UX, Default-On Composer, New Cursor Tab Model
+
+We have a new chat UX! Excited for you to try it out and share your thoughts.
+Composer is now default-on and available to all Pro/Business users by hitting cmd+I. We've added Composer Projects (beta), which allows you to share instructions among several composers.
+We've also trained a new Cursor Tab model that's smarter and more context-aware.
+Auto imports (beta) for Cursor Tab for TypeScript files - when Tab suggests an unimported symbol, we'll now auto-import it to your current file. You can enable it in Settings > Features > Cursor Tab!
+
+UPDATE (0.40.1 - 0.40.4): Fixes a bug with apply on remote ssh, a few chat bugs, speeds up Cursor Tab for Europe/Asia users, fixes some outstanding Cursor Tab bugs and notifications hiding the chat input, and includes a fix for Cursor asking for permissions for files in your ~/Library folder on MacOS (upstream issue: microsoft/vscode#208105)
+
+0.39
+
+Aug 2, 2024
+
+Faster Cursor Tab, More Composer improvements
+
+Cursor Tab (previously called Copilot++) defaults to chunked streaming. This build also includes several Cursor Tab speedups. More to come in future builds!
+Concurrent composers support, composer control panel, and various bug fixes such as accepted files being deleted.
+
+UPDATE (0.39.1 - 0.39.6): Fixes several Cursor Tab rendering bugs, a bug where the file explorer was not responsive, and a bug where Cursor Tab would hang.
+
+0.38
+
+Jul 23, 2024
+
+Copilot++ Chunked Streaming (beta), Composer improvements
+
+Copilot++ now has chunked streaming (currently in Beta)! It will surface edits faster in smaller chunks. To enable it, click the settings gear and enable "Chunked Streaming" under Features > Copilot++.
+We've also added a file picker, arrow key navigation, and a model toggle to Composer. This release also patches a few outstanding Composer bugs.
+VS Code 1.91.1: Cursor is now based on VS Code 1.91.1.
+New Default Model: We've made Claude 3.5 Sonnet the default model for users.
+
+UPDATE (0.38.1): Fixes a bug where OpenAI API Key users would be migrated to Claude 3.5 Sonnet
+
+0.37
+
+Jul 13, 2024
+
+Composer (beta)
+
+This build comes with a new experimental multi-file editing feature. To enable it, click the settings gear, head to Beta, and activate "Composer." To use it, hit Cmd+I. We'd love to hear your thoughts.
+
+0.36
+
+Jul 3, 2024
+
+Instant Applies, Docs Management
+
+When the chat suggests a code block, click "Apply" to instantly see the change to the file (small enough files only).
+Docs management! Go to Cursor Settings > Features > Docs to re-index your docs.
+Bug fixes when using your own API key for Claude.
+
+UPDATE (0.36.1-0.36.2): Fixes #1526, cmd-shift-F on macOS x64 devices. Also fixes official docs taking a long time to show up, and cmd-K stickiness being buggy.
+
+0.35
+
+Jun 8, 2024
+
+Default-on Cursor Prediction, Remote Tunnels & More Robust SSH
+
+Default-on Cursor Prediction with a new UI
+Remote tunnels are now supported! Remote SSH support is also more robust (now supports multiple proxy jumps, among other things).
+Adds context pills to chat messages, so you can see what will be/was used
+Cmd K context-building improvements
+Fixes partial completions with Copilot++ on Windows/Linux
+
+UPDATE (0.35.1): Disables Copilot++ partial accepts by default and makes the keybinding configurable (go to Cursor Settings > Features > Cpp to re-enable). Makes gpt-4o the default model.
+
+0.34
+
+May 26, 2024
+
+VS Code 1.89, New Cursor Prediction UI, Gemini 1.5 Flash, Copilot++ partial completion
+
+Merges VS Code 1.89 into Cursor
+New Cursor Prediction UI
+Gemini 1.5 Flash is available in long-context mode
+Accept partial completions with Copilot++
+Better performance of Copilot++ on linter errors
+Toggleable rerankers on codebase search
+GPT-4o in Interpreter Mode
+
+UPDATE (0.34.1-0.34.6): Fixes long context models in the model toggle, an empty AI Review tab, Copilot++ preview bugs, the Mac icon size, and remote ssh fixes.
+
+0.33
+
+May 3, 2024
+
+Networking Stability, Command-K Autoselect
+
+Stability: This build fixes a connection error problem that was consistently affecting some users. It should also improve the performance of Cursor on spotty internet.
+Command-K Autoselect: We've also added automatic selection for Command-K! This means you can now press Command-K, and it will automatically select the region you're working on, though you can still select manually if you prefer.
+
+UPDATE (0.33.1-0.33.3): Fix to settings toggles, fix to Copilot++ diffbox performance, onboarding tweaks.
+
+0.32
+
+Apr 12, 2024
+
+Improved Copilot++ UX, New GPT-4 Model
+
+Copilot++ UX: Suggestion previews now have syntax highlighting, which we find makes it much easier to quickly understand the changes.
+Cursor Help Pane (Beta): You can also ask Cursor about Cursor! The Cursor Help Pane has information about features, keyboard shortcuts, and much more. You can enable it in Settings > Beta.
+New GPT-4 model: As of a couple of days ago, you can try out gpt-4-turbo-2024-04-09 in Cursor by toggling it on in Settings > Models.
+.cursorrules: You can write down repo-level rules for the AI by creating a .cursorrules file in the root of your repository. You might use this to give for context on what you're building, style guidelines, or info on commonly-used methods.
+
+UPDATE (0.32.1-0.32.7): Fixes a performance issue with the new Copilot++ syntax highlighting, changes AI Notes to be default disabled, changes the naming of the main Copilot++ model to legacy, fixes Copilot++ being slower over SSH, fixes to the Copilot++ preview box.
+
+0.31
+
+Apr 1, 2024
+
+Long Context Chat Beta
+
+Long Context Chat (Beta): This is a new experimental feature that lets you talk with lots of files! To enable it, head to Settings > Beta. Then, select "Long Context Chat" in the top right of a new chat and try @'ing a folder or the entire codebase.
+Fixes: This release patches a bug where empty / partial responses are shown in chat.
+
+UPDATE (0.31.1 - 0.31.3): Adds back in AI Review (alpha), fixes the "Cursor Settings" menu item, and fixes a bug where @web doesn't return a response.
+
+0.30
+
+Mar 20, 2024
+
+Faster Copilot++, Claude
+
+Faster Copilot++: We've made Copilot++ ~2x faster! This speed bump comes from a new model / faster inference. ~50% of users are already on this model, and it will roll out to everyone over a few days. If you'd like to enable the model immediately, you can control your model in the bottom bar of the editor.
+Stable Claude Support: All the newest Claude models are available for Pro and API key users. Head to Settings > Models to toggle them on. Pro users get 10 requests / day for free and can keep using Claude at API-key prices for subsequent requests.
+Team invites: We made it a bit easier for you to invite your colleagues to your Cursor team. You can send these from the editor's settings or at cursor.com/settings.
+Admin improvements: Team admins can now mark themselves as unpaid users and can see the last time team members used the product.
+New Settings: We moved all our settings to be accessible by the gear in the top right. No more "More" tab!
+
+Mar 12, 2024
+
+Claude Support
+
+If you’re a Pro or Business user, you can add "claude-3-opus" as a custom model in the Settings page and use 10 fast requests per day for free (unlimited slow, but the delay increases exponentially).
+
+We expect to roll out a more permanent solution (including API key users) very soon.
+
+0.29
+
+Mar 1, 2024
+
+Polish
+
+AI Notes enabled by default (hold shift on any symbol), better in-editor chat, auto-execute interpreter mode, better onboarding styling, nicer feedback modal, and a few stability fixes.
+
+UPDATE (0.29.1): Fixes a bug where the Copilot++ sometimes would not show a suggestion even if one existed, a bug where the hint line would sometimes cover the ghost text, and a bug where AI Notes would not work on Windows.
+
+0.28
+
+Feb 23, 2024
+
+VS Code 1.86.2
+
+Cursor is now based on VS Code 1.86.2! Among other things, this adds sticky scroll support to tree views. Also, cmdk prompt bars are now sticky.
+
+UPDATE (0.28.1): Fixes spacing issue with codebase chat, fixes getcursor/cursor#1236.
+
+0.27
+
+Feb 15, 2024
+
+Linter, Interpreter Mode Updates
+
+Two new updates to experimental features:
+
+Linter: You can now turn on an AI linter in the "More" tab beside Chat. It'll scan your file for small bugs every time you save.
+Interpreter Mode: We've made some big improvements to the backend powering interpreter mode! It should now be much better at using tools and understanding your project.
+
+UPDATE (0.27.1-0.27.4): Fixes to Windows build, chat context UI, onboarding.
+
+0.26
+
+Feb 9, 2024
+
+AI Previews Beta
+
+AI Previews: this is an experimental new code reading feature. After enabling in the "More" tab beside Chat, just hold shift to see a generate some quick notes about the symbol you're on. If you'd like us to dedicate more time to this direction, please let us know.
+
+Other changes:
+
+Fine-grained chat replies (start by hovering over the area of the response you want to reply to)
+Copilot++ quality of life improvements (show ghost text more often, toggle on/off on the status bar, make it easier to see the suggestion box)
+Smoother onboarding (fix Windows settings import, option to import folder/window state)
+
+0.25.0-nightly
+
+Feb 2, 2024
+
+Cmd-I to Heal
+
+Hold down cmd-I over a selection to heal the code with GPT-4. Useful for writing pseudocode and having the AI convert it into correct code. Please let us know if you find it useful!
+
+0.25
+
+Feb 2, 2024
+
+Command-K Vision Support
+
+You can now drag images into the Command-K prompt bar!
+
+Other changes:
+
+You can now search through past chats.
+"Apply Diffs" from chat should be a bit faster.
+
+UPDATES:
+
+0.25.2: Copilot++ performance improvements
+0.25.3: Fix for a cmd-K bug: getcursor/cursor#1226.
+
+0.24
+
+Jan 25, 2024
+
+@Web, gpt-4-0125-preview
+
+Using @Web in chat will give the AI the ability to crawl the web! The tools it can use include a search engine and a documentation site crawler.
+
+This feature is still experimental. We're very interested in improving the ability of the AI to understand external libraries, and your thoughts will help us improve :).
+
+Both pro and API key users can also try out gpt-4-0125-preview by configuring the model under Settings > OpenAI API > Configure Models. We’re testing the new model right now for pro users to see if it performs better than all older versions of gpt-4. If so, will roll out as the default experience.
+
+UPDATE (0.24.3-0.24.4): Adds ability to configure OpenAI base URL, fixes getcursor/cursor#1202.
+
+0.23
+
+Jan 18, 2024
+
+New Model, Apply Button v2
+
+"cursor-fast": This is a new model available in command-k and chat. Expect it to be a bit smarter than gpt-3.5, and with many fewer formatting errors.
+Apply button: We've added some polish to the "apply codeblock" experience in chat.
+Chat lints: If the AI suggests a code change in chat that involves a made up code symbol, we'll underline it. Availble for Python, Typescript, Rust.
+More chat symbol links: When the chat references a code symbol, you'll often be able to click directly to it.
+
+UPDATE (0.23.3-0.23.9): Fixes to Command-K, changelog auto-opening, editing very long lines with Copilot++, the "delete index" button, connection errors being silenced, and proxied authentication.
+
+0.22.1-nightly
+
+Jan 15, 2024
+
+Cursor-Fast Model
+
+Cursor-Fast is a newly trained model between gpt-3.5 and gpt-4 coding capabilities, with very fast response times (~3.5 speed).
+We'll be working to improve its performance over the coming weeks. Counts the same as 3.5 usage.
+
+Try using it for Cmd+k!
+
+Bug fixes:
+
+Working WSL codebase search
+Supports newer version of python extension
+
+0.22.0
+
+Jan 6, 2024
+
+Dev Containers
+
+Dev containers are now supported! This build also:
+
+Upgrades Cursor to VS Code 1.85, which comes with support for dragging out tabs into a new window.
+Improves the stability of WSL.
+
+0.21.6-nightly
+
+Jan 6, 2024
+
+Better Remote Support
+
+WSL and Dev Containers should now work properly.
+
+0.21.5-nightly
+
+Jan 3, 2024
+
+Early Preview: Hold-cmd-tap-shift to Trigger AI Rewrite
+
+Hold down command, press and release shift, and continue holding down command. This will trigger tha AI to rewrite code around your Cursor — you can think of it as a manually triggered GPT-4-powered Copilot++. You can use it to write pseudocode and have the AI correct it, or for tedious refactors where Copilot++ doesn't quite suffice.
+
+0.21.4-nightly
+
+Dec 31, 2023
+
+Aux Window Fixes
+
+You can now use chat and cmd-k in the aux window without too many problems.
+
+0.21.3-nightly
+
+Dec 30, 2023
+
+VS Code 1.85.1
+
+Cursor is now based on VS Code 1.85.1, which, among other things, includes floating editor windows. Just drag and drop an editor onto your desktop to try it out.
+
+0.21.0
+
+Dec 29, 2023
+
+Multiple Command-K, Copilot++ UI
+
+You can now run multiple Command-K's in parallel! Also, it should now be easier to see change Copilot++ is suggesting.
+
+0.20.0
+
+Dec 16, 2023
+
+Copilot++, @ previews, AI Review
+
+@ previews: We made it easier to see what codeblock you're @'ing.
+Copilot++: We've contined to improve the Copilot++ ghost text experience. Surprisingly, many of us now enjoy using Copilot++ without any other autocomplete plugin installed.
+AI Review (beta): This is a new experimental feature that let's GPT-4 scan your git diff or PR for bugs. You can enable it in the "More" tab beside chat. Feedback is much appreciated.
+
+UPDATE (0.20.1-0.20.2): We added TLDRs to make it easier to sort through the bugs flagged by the AI review and fixed a bug with "Diff with Main."
+
+0.19.1
+
+Dec 14, 2023
+
+Interpreter Mode Windows Bug
+
+Fixes a CRLF bug in interpreter mode: getcursor/cursor#1131.
+
+0.19.0
+
+Dec 14, 2023
+
+Copilot++ Improvements
+
+We made Copilot++ faster, smarter, more constrained, and switched to a ghost-text + hit-Tab-to-accept UI. Would love your feedback.
+
+0.18.11-nightly
+
+Dec 13, 2023
+
+Make SSH Work on Xon.sh
+
+Make ssh work on xon.sh
+
+0.18.10-nightly
+
+Dec 12, 2023
+
+Minor Bug Fixes
+
+Mino bug fixes.
+
+0.18.9-nightly
+
+Dec 10, 2023
+
+Fix Onboarding for Option Edits
+
+Minor onboarding fixes.
+
+0.18.4
+
+Dec 6, 2023
+
+0.18.5 - Onboarding & Feedback
+
+Minor onboarding changes.
+Allows users to provide feedback on the chat response.
+
+0.18.3-nightly
+
+Dec 2, 2023
+
+Smarter Followups
+
+Running Cmd+enter on followups should result in much better codebase results.
+
+0.18.2
+
+Dec 2, 2023
+
+Lowercase @ Folders Fix
+
+Fixes the bug where all folders are switched to lowercase when using @ folder in chat.
+
+0.18.0
+
+Nov 30, 2023
+
+Better Context Chat, Faster Copilot++
+
+0.17.0
+
+Nov 27, 2023
+
+Image Support, Interpreter Mode Beta, @ Folders
+
+Image Support in Chat: You can now drag and drop images into the chat to send them to the AI.
+Interpeter Mode Beta: You can now enable Interpreter Mode in the "More" tab. This gives the chat access to a Python notebook, semantic search, and more tools.
+@ folders: You can now use the @ symbol to reference specific folders! We'll try to pick out the most relevant code snippets to show the AI.
+Copilot++ Improvements: We've spent some time improving the latency of Copilot++, and you can change the Copilot++ keybinding to not be Option/Alt. More to come here soon, especially on the model itself!
+
+0.16.6-nightly
+
+Nov 26, 2023
+
+0.16.9-nightly - Interpreter Mode Windows Bug Fixes
+
+Fixes a bug where the interpreter mode just wouldn't run at all on Windows.
+
+0.16.5-nightly
+
+Nov 24, 2023
+
+GPT-V Windows Bug-fixes
+
+Fixes the bug where images weren't showing up or being sent to server on Windows.
+
+0.16.4-nightly
+
+Nov 24, 2023
+
+@folder
+
+You can now @folder in the chat to chat with a folder. Let us know what you think!
+
+0.16.3-nightly
+
+Nov 22, 2023
+
+Interpreter Mode Beta
+
+Experimental feature: go to "More" > "Interpreter Mode" to enable it. Gives the model access to a Python notebook where it can take actions in the editor. Please give us feedback in the Discord! We'd love to know if you find it useful.
+
+0.16.2-nightly
+
+Nov 21, 2023
+
+GPT-V Support
+
+Integrates GPT-V into chat for the editor. This means you can take screenshots/images and drag it into the chat inputbox to have Cursor use them as context.
+This is an experimental feature and very limited by capacity, so you may see errors during traffic spikes.
+
+0.16.0
+
+Nov 15, 2023
+
+Copilot++ improvements and VS Code 1.84.2
+
+Copilot++ improvements:
+
+Cursor is now based on VS Code 1.84.2. Notably, this fixes a few notebook bugs, and ensures that all of the most recent extensions work.
+
+0.15.6-nightly
+
+Nov 15, 2023
+
+New upstream
+
+Now based on VS Code 1.84.2. Notably, this fixes a few notebook bugs, and ensures that all of the most recent extensions work.
+
+0.15.2
+
+Nov 12, 2023
+
+0.15.5 - Copilot++ improvements, Bug fixes
+
+Copilot++ improvements: Includes green highlights to see what Copilot++ has added, the ability to accept multiple Copilot++ suggestions immediately one after another, support for Copilot++ on SSH, and fixes to how Copilot++ UI interacts with autocomplete plugins.
+Bug fixes: Fixed a bug where Cmd-k could get into a bad state when removing at the top of a file. And another that was causing some files to not be indexed.
+
+0.15.0
+
+Nov 10, 2023
+
+0.15.1 - New models, Copilot++ beta
+
+Command-dot: you can now use the Command-dot menu to have Command-K fix lint errors inline.
+New models: you can plug in your API key to try out the newest gpt-4 and gpt-3 turbo models. We're evaluating the coding skills of these models before rolling out to pro users.
+Apply chat suggestions: click on the play button on any code block to have the AI apply in-chat suggestions to your current file.
+Copilot++ (beta): this is an "add-on" to Copilot that suggests diffs around your cursor, using your recent edits as context. To enable it, go to the "More" tab in the right chat bar. Note: to cover the costs of the AI, this is only available for pro users.
+
+This is very experimental, so don't expect too much yet! Your feedback will decide which direction we take this.
+
+This is very experimental, so don't expect too much yet! Your feedback will decide which direction we take this.
+
+0.14.1
+
+Nov 9, 2023
+
+Indexing fixes
+
+Fixes a problem where indexing got stuck. Indexing capacity is now also allocated by-user, so it should be more fair and faster for most users.
+
+0.14.0
+
+Nov 3, 2023
+
+Pro++, Word-wrapping diffs, and more
+
+Pro++ plan: if you hit your fast request limit and prefer to purchase more, you now can.
+Chat scroll: we got rid of sticky scroll to make the chat easier to read.
+Cmd-K diffs: these now obey word-wrap! You can also copy from the red text.
+Fixed the bug where you can't use chat on a diff view.
+Shipped better error logging, which should help us improve stability.
+Styling tweaks: some buttons and hints should look nicer!
+Screen flickering: made a change that should reduce screen flickering on monitors.
+
+0.13.0
+
+Oct 20, 2023
+
+0.13.4 - New VS Code version
+
+Cursor is now based on VS Code 1.83.1. This ensures that the newest versions of all extensions will work without problem in Cursor. Thank you to everyone who urged us to do this on the forum!
+
+Also, there's an experimental bash mode: enable it in the settings, and let the chat answer questions with the help of running bash commands. If you find it useful, please let us know, and we will spend more time on making it production-ready!
+
+Update: this change resulted in a problem with SSHing into old Linux distros. This has now been fixed!
+
+0.12.1
+
+Oct 5, 2023
+
+0.12.3 - Small fixes
+
+Bug fixes: (1) .cursorignore now completely respects .gitignore syntax, (2) codebase queries use the embeddings index if >= 80% of it is indexed, instead of requiring the entire thing to be indexed, (3) removed fade-in animation on startup, (4) no longer overrides cmd-delete in the terminal, (5) fixes problem where cmd-F randomly has the case-sensitive option enabled, (6) inline gpt-4 is turned off until we figure out a better UX, (7) even more stable and fast indexing, (8) progress indicator in search and extensions, (9) bug where an incorrect bearer token is passed to the server.
+
+0.12.9-nightly
+
+Oct 3, 2023
+
+Jupyter Import Fix
+
+Fixes a bug that prevents importing the jupyter extension from VS Code.
+
+0.12.0
+
+Oct 1, 2023
+
+Indexing, cmd-k in terminal, @git, /edit, bugfixes
+
+0.11.15-nightly
+
+Sep 27, 2023
+
+/edit in chat
+
+You can now use an early preview of /edit in the chat! It's significantly faster at editing entire files than just using cmd-k. The /edit feature is currently only supported if you do not use your own API key, since it relies on non-public models.
+
+0.11.13-nightly
+
+Sep 23, 2023
+
+gitignore and search hotfix
+
+0.11.5-nightly
+
+Sep 22, 2023
+
+Stable Indexing v0.1
+
+Stable version of indexing. this should be much more stable than previous versions.
+
+0.11.3-nightly
+
+Sep 21, 2023
+
+Cmd-K in the terminal!
+
+Hacky first version of cmd-K in the terminal! Let us know what you think.
+
+0.11.1
+
+Sep 20, 2023
+
+0.11.8 - Patches
+
+Fixes issues with Cmd-k, SSH, Python support, Vim (rolling back to 1.25.2 until this issue is fixed: VSCodeVim/Vim#8603), and other extensions.
+
+0.11.2-nightly
+
+Sep 20, 2023
+
+More Stable Codebase Indexing
+
+We ship a new version of indexing which should be significantly more stable than previous versions
+
+0.11.0
+
+Sep 19, 2023
+
+Inline Chat
+
+You can now alternate between diffs and texts responses in Cmd-K. This can be helpful for clarifying the models thinking behind a diff or for getting quick inline answers to questions about a file.
+
+0.11.1-nightly
+
+Sep 17, 2023
+
+Cursor Python and Cursor Marketplace
+
+We point to a different marketplace for downloading extensions, and use a fork of ms-python and pyright to provide python support.
+
+0.10.7-nightly
+
+Sep 11, 2023
+
+Re-enable Cursor Python
+
+We re-enable cursor python in nightly, this time with defaults that more closely resemble pylance.
+
+0.10.6-nightly
+
+Sep 11, 2023
+
+Cursor Marketplace
+
+We serve extensions now using Cursor's Extension Marketplace
+
+0.10.5-nightly
+
+Sep 10, 2023
+
+Fix bug in @ symbol ranking
+
+Fixes a bug where the @ symbol would rank suboptimally.
+
+0.10.4-nightly
+
+Sep 10, 2023
+
+Quick question and @chat in cmd+k
+
+Ask a question about an edit that the model with option+enter, or bring in context from the chat with @chat! An early preview, so please let us know what you think.
+
+0.10.4
+
+Sep 10, 2023
+
+Fixed builtin cursor-python defaults
+
+The defaults for cursor python are different than pylance, which has affected several users. We make them
+closer to the pylance defaults in this update.
+
+0.10.2
+
+Sep 9, 2023
+
+0.10.3 - Reduce extension recommendations
+
+Fixes an issue where some users were getting extension popup recommendations too often.
+
+0.10.1-nightly
+
+Sep 8, 2023
+
+Styling tweaks
+
+Updated some css!
+
+0.10.1
+
+Sep 8, 2023
+
+Styling
+
+Updated some css!
+
+0.10.0
+
+Sep 8, 2023
+
+Better Docs Management, Staged Rollouts
+
+Docs
+
+The main addition in this update is better docs support. This means you can add and remove docs and inspect the urls
+that are actually being used for each doc you have uploaded. You'll also be able to see what webpages end up being shown to GPT-4 to provide you an answer.
+
+You can also paste a url into the chat and the model will automatically include it in the context being used.
+Teams can also share private docs.
+
+Staged Rollouts
+
+Following this update, future updates should come as staged rollouts. This will mean greater guarantees of stability and more frequent updates.
+
+Long files in chat
+
+We continued to improve the experience of chatting with large files. If you @ multiple files that are too large to fit in GPT-4's context window, we'll intelligently pick the most relevant chunks of code to show to show the model.
+
+Bug fixes:
+
+Copy Paste chat text form Jupyter
+Some chat focus issues
+UI tweaks
+Better state management - prevents crashes from editor using too much memory
+
+0.9.5
+
+Sep 7, 2023
+
+Hotfix for indexing
+
+Fixes a bug with indexing if you had turned off indexing by default.
+
+0.9.9-nightly
+
+Sep 8, 2023
+
+@definitions in cmd+k
+
+Also fixes a few cmd+k bugs, as well as introduces new cmd+k bugs! Please report all cmd+k bugs you find to us in the Discord channel.
+
+0.9.8-nightly
+
+Sep 7, 2023
+
+New AI Project
+
+We release an improved New AI Project feature to nightly users. This is a more robust chain and cleaner
+UX for producing a project end-to-end.
+
+It still struggles with coherently producing large complex projects, but produces much better first drafts than previously
+
+0.9.7-nightly
+
+Sep 7, 2023
+
+Better State Management
+
+We no longer store any full files in memory and prevent users from @'ing very large files (> 2MB)
+This should reduce any significant memory issues that users have been experiencing.
+
+0.9.4
+
+Sep 5, 2023
+
+Hotfix Cmd-K unexpectedly outputting backticks
+
+Cmd-K will no longer output backticks if you do @file.
+
+0.9.6-nightly
+
+Sep 5, 2023
+
+Docs updates
+
+Updates to docs (try pasting a link in chat, you can delete/edit docs, you can see citations), @ symbol performance on long files in chat should improve, and more.
+
+0.9.5-nightly
+
+Sep 5, 2023
+
+Cursor-Python LSP
+
+Ships with cursor-python, a Language-Server fork of pyright built for Cursor
+
+0.9.4-nightly
+
+Sep 2, 2023
+
+Staged Rollouts
+
+We can push an update to a randomly sampled small fraction of our users before rolling out to everyone.
+
+0.9.3
+
+Sep 1, 2023
+
+Hotfix Github Auth
+
+You should now be able to sign in with GitHub again.
+
+0.9.2-nightly
+
+Sep 1, 2023
+
+Hotfix for large persisted state
+
+Could cause getcursor/cursor#843.
+
+0.9.2
+
+Aug 31, 2023
+
+Hotfix large persisted state
+
+Could cause getcursor/cursor#843.
+
+0.9.1
+
+Aug 30, 2023
+
+Hotfix SSH
+
+Hotfixes a problem with SSH.
+
+0.9.0
+
+Aug 30, 2023
+
+Auditable codebase context, VS Code left bar
+
+You can now switch to the VS Code sidebar orientation
+For "with codebase" chats, you can now see the codebase context that Cursor shows GPT-4. We hope this will make it easier to prompt codebase answers.
+API Key input box is now a password type
+Fixed a bug where code was being indexed right after turning off the indexing option
+A new icon! Thank you so much to the amazing Atanas Mahony who made it.
+
+0.8.4-nightly
+
+Aug 29, 2023
+
+Small refactor
+
+Small refactor that we want to make sure doesn't break! Please report bugs if you find them.
+
+0.8.6
+
+Aug 27, 2023
+
+Email in settings
+
+The email under the logout button in Cursor settings was not updating.
+
+0.8.5
+
+Aug 26, 2023
+
+Advanced Button
+
+Have the advanced context button show up for non git repos.
+
+0.8.3-nightly
+
+Aug 26, 2023
+
+Bug fix for people on language packs
+
+We had a big bug for people on language packs. Thank you to all who helped us debug! This should now be fixed, and should not happen again.
+
+0.8.4
+
+Aug 22, 2023
+
+WSL Fixes
+
+Applies the patch from Github across all your WSL (Windows Subsystem for Linux) distros, either automatically or through the "Fix WSL" command palette command.
+
+0.8.3
+
+Aug 22, 2023
+
+Codebase indexing controls
+
+Fixes a bug were codebase indexing controls where inadvertently removed.
+
+0.8.2
+
+Aug 22, 2023
+
+Cmd-k Followups, chat with large files, and more
+
+You can now reply to Cmd-K outputs, making it much easier to have the model revise its work.
+If you @ reference a long file that will be cutoff by the context limit, you'll be given the option to automatically chunk the file and scan it with many GPTs.
+Codeblocks and code symbols in "with codebase" responses will now often be clickable.
+Follow-up chat messages to "with codebase" will keep the codebase context.
+Nicer error messages in the chat! Fewer annoying popups.
+Activity bar elements can now be reordered with drag-and-drop.
+SSH support is now more robust! Please continue to let us know if you are experiencing any SSH problems.
+
+0.8.1-nightly
+
+Aug 21, 2023
+
+Activity bar can now be vertical
+
+Set workbench.activityBar.orientation to vertical, and restart Cursor, to see the vertical activity bar that you're used to from VS Code.
+
+0.7.18-nightly
+
+Aug 21, 2023
+
+Small fixes
+
+0.7.16-nightly
+
+Aug 20, 2023
+
+More robust SSH support
+
+SSH support is now more robust! Please continue to let us know if you are experiencing any SSH problems.
+
+0.7.14-nightly
+
+Aug 17, 2023
+
+Small improvements
+
+Small things!
+
+The cursor-nightly command now works on Mac.
+
+Keychords now use Cmd+R/Ctrl+R.
+
+0.7.3
+
+Aug 15, 2023
+
+Patch cursor command on Windows
+
+Fixes a bug with installing the cursor command on Windows.
+
+0.7.9-nightly
+
+Aug 13, 2023
+
+0.7.10-nightly - Long-file experience
+
+Better experience for long files!
+
+0.7.8-nightly
+
+Aug 12, 2023
+
+Followups in edits
+
+The cmd-k edits now support followups! This is an early preview — please let us know of any annoyances or bugs, or if you preferred the no-followup mode. Please please send all feedback you have in the Discord channel!
+
+0.7.2
+
+Aug 11, 2023
+
+& 0.7.6-nightly - Fix cmd-k generate with large file
+
+No more cognitive computing!
+
+0.7.1
+
+Aug 10, 2023
+
+& 0.7.5-nightly - Fix: Cursor in the wrong place
+
+0.7.0
+
+Aug 10, 2023
+
+In-editor chat
+
+For those who don't want the chat side-by-side, you can now pop it into your editor! We've also fixed a number of bugs.
+
+0.7.1-nightly
+
+Aug 10, 2023
+
+Cmd-K fast mode
+
+Cmd-K now has a fast mode! It is about 1 second faster, and we're working on making it even faster. Let us know what you think!
+
+0.6.5-nightly
+
+Aug 7, 2023
+
+0.6.6-nightly - New cmd-K keybindings
+
+And a few other quality-of-life updates.
+
+0.6.3-nightly
+
+Aug 3, 2023
+
+0.6.4-nightly - In-editor chat is back!
+
+Also, the linter is slightly improved.
+
+0.6.1-nightly
+
+Aug 1, 2023
+
+0.6.2-nightly - Improved linter
+
+Improved linter! Please give us feedback on the linter suggestions using the smiley faces. If you would like, you can make it more aggressive by going to the More tab and then clicking on "Advanced linter settings" at the bottom. Let us know what you think in the Discord.
+
+0.6.0
+
+Jul 28, 2023
+
+A copilot experience powered by gpt-4
+
+Long AI completions
+
+If you press ⌘/^+↩️ on any line, you will now get gpt-4 powering fast-completions for you!
+We know that sometimes all of us want copilot to write an entire function or a big chunk of code.
+But copilot can be slow and sometimes just not smart enough :(. So we're trying to solve this with a
+new completion experience powered by gpt-4. Just press ⌘/^+↩️ and you'll get a long completion from gpt-4.
+
+Better support for remote-ssh
+
+Remote-ssh is now built-in to cursor. You do not need to edit the behavior, it should just work :)
+We know this has been a big blocker for many users that rely on remote machines for development.
+If you are still running into issues, please let us know and we will fix it ASAP.
+
+AI linter
+
+The AI linter is now enabled for everyone in pro! The AI will highlight suspicious parts of your code in blue. You can also add your own lint rules that you want that are easy to express in natural language but aren't covered by traditional linters.
+
+0.5.1
+
+Jul 28, 2023
+
+Performance hotfix
+
+Fixes a performance bug that would happen if you use cmd-k a lot.
+
+0.5.2-nightly
+
+Jul 28, 2023
+
+Performance hotfix
+
+Fixes a performance bug that would happen if you use cmd-k a lot.
+
+0.5.1-nightly
+
+Jul 28, 2023
+
+More robust extension handling
+
+More robust extension handling. You can now use pre-release extensions again.
+
+0.5.0
+
+Jul 27, 2023
+
+Enterprise subscription support & misc fixes
+
+0.4.1
+
+Jul 26, 2023
+
+& 0.4.2 - Hotfixes
+
+Removes a check in the chat that slows the chat down in certain cases.
+
+0.4.0
+
+Jul 25, 2023
+
+"with codebase" for all codebases!
+
+You can now chat with any codebase. No need to have a Github repo / login through Github.
+
+0.3.1
+
+Jul 22, 2023
+
+Jupyter CMD-k Context Building
+
+Cmd-K can again see all of your cells in Jupyter!
+
+0.3.0
+
+Jul 21, 2023
+
+SSH and WSL fixes
+
+SSH and WSL should work again
+Can see recent folders on the new window screen
+Empty message in chat with codebase context no longer loads forever
+
+0.2.52
+
+Jul 21, 2023
+
+Bug fix
+
+Fixes a bug with CMD-k prompt history that would freeze the input box.
+
+0.2.53-nightly
+
+Jul 20, 2023
+
+Inline GPT-4 and full-file edits
+
+Let us know what you think!
+
+0.2.51
+
+Jul 19, 2023
+
+Bug fixes
+
+Fixes a bug that resulted in green-lines staying around after cancelling CMD-K.
+
+0.2.52-nightly
+
+Jul 19, 2023
+
+Updates
+
+Hotfixes etc.
+
+0.2.50
+
+Jul 19, 2023
+
+Hotfixes
+
+Cmd-L now properly focuses the chat again
+Advanced context controls only show up if you have indexed your codebase
+
+0.2.49
+
+Jul 19, 2023
+
+Advanced context for codebase-wide chat
+
+This build includes:
+
+More control of context building abilities for codebase-wide chat
+A better flow for getting CMD-k to produce code with no linter errors (you should see a "Try lint-fix" button when relevant)
+Some UI/UX tweaks to CMD-K
+Bug fixes
+
+0.2.51-nightly
+
+Jul 16, 2023
+
+hanging chat hotfix
+
+This update fixes the bug where we hang on chat for up to 20s when not in a git repo
+
+0.2.48
+
+Jul 15, 2023
+
+infinite chat loop hotfix
+
+This update fixes the infinite loop bug in the chat pane.
+
+0.2.49-nightly
+
+Jul 15, 2023
+
+Patches
+
+0.2.47
+
+Jul 12, 2023
+
+Patch for WSL/SSH (Search and Extensions)
+
+This update patches search (Cmd/Win+Shift+F) and many extensions for and WSL and SSH users.
+
+0.2.48-nightly
+
+Jul 12, 2023
+
+Small things!
+
+0.2.46
+
+Jul 11, 2023
+
+Patch for Cmd-k Generates
+
+This update improves the prompt for Cmd-k when you don't have any code selected.
+
+0.2.45
+
+Jul 10, 2023
+
+ARM Windows Cmd-Shift-F
+
+This update contains an optimistic patch to Ctrl+Shift+F for ARM Windows computers.
+
+0.2.46-nightly
+
+Jul 10, 2023
+
+Experimental: interface agent!
+
+This nightly build comes with experimental interface agent support!
+
+The goal: you write an interface specification, and an agent writes both the tests and the implementation for you. It makes sure that the tests pass, so you don't even need to look at the implementation at all.
+
+We think this may enable a new kind of programming, that's kind of different to what we're all used to. Please experiment with it and let us know your thoughts in the Discord channel.
+
+How to use it:
+
+0.2.44
+
+Jul 7, 2023
+
+Improvements to many features, Fixes to Python
+
+Improved the "@Add new doc" experience
+Python/Pylance support has been restored
+Better @ symbol keyboard ergonomics
+Makes it clearer which docs are being looked at by the AI
+AI will respond with citations when you refernce docs
+Fixes Cmd-K for Jupyter
+Chat/Edit tooltip blocks less code
+Improves Cursor's appearance when custom themes are on
+Importing VS Code extensions now takes into account enabled/disabled
+Cmd-k should work better for long diffs (greater than 100 lines of code)
+
+0.2.44-nightly.3
+
+Jul 6, 2023
+
+Agents, new docs
+
+Welcome to the first nightly release! It comes with agents, which we aren't releasing to the general public yet because we aren't convinced that they are useful. If you like them, please let us know what you use them for!
+
+0.2.43
+
+Jul 4, 2023
+
+Fix for Cmd+K
+
+Patches a few edgecases with Cmd+K.
+
+0.2.42
+
+Jul 4, 2023
+
+Fix for Cmd+Shift+F (Mac ARM)
+
+Fixes the VS Code codebase wide search for Mac ARM users without Rosetta.
+
+0.2.41
+
+Jul 4, 2023
+
+Hotfix for "with codebase"
+
+Includes a fix for the chat "with codebase" feature.
+
+0.2.40
+
+Jul 4, 2023
+
+Release for Linux
+
+This build has no changes for Mac and Windows, but fixes a problem for Linux users who can now upgrade to the latest version.
+
+0.2.39
+
+Jul 3, 2023
+
+New inline edits
+
+Cmd+K's UI has been changed: it's in-editor, "sticky," and @-symbol-compatible.
+We hope it helps you stay in flow and more quickly iterate on your prompts.
+(Also, you can now use up/down arrows for history in chat.)
+
+Also, Cursor's AI will now use popular documentation to improve the answers to your questions. For example, if you ask it "how do I grab all s3 buckets with boto3?" it will search over the boto3 docs to find the answer. To add your own documentation or explicitly reference existing docs, type '@library_name' in chat.
+
+Bug fixes:
+
+0.2.37
+
+Jun 27, 2023
+
+More fixes
+
+Better @ symbol keyboard ergonomics
+Fixes a bug where Cmd+K turned off for some users.
+Better support for extensions (specifically re-enables the welcomeView)
+
+0.2.36
+
+Jun 27, 2023
+
+Hotfixes
+
+0.2.35
+
+Jun 24, 2023
+
+Hotfix for Chat
+
+Chat was failing on some non-git folders. That is now fixed.
+
+0.2.34
+
+Jun 24, 2023
+
+Chat v2
+
+The chat has been revamped! You can now use @ symbols to show files/code/docs to the AI. The chat history is improved, it's easier to see what the AI can see, and codeblocks auto-format on paste.
+
+0.2.34-nightly.1
+
+Jun 17, 2023
+
+Diffs in AI linter feedback
+
+The AI linter now shows diffs!
+
+0.2.33
+
+Jun 16, 2023
+
+Azure Support
+
+We've added support for using your Azure OpenAI credentials. Also, small improvements / fixes.
+
+0.2.32
+
+Jun 14, 2023
+
+Small improvements
+
+Small fix for a format-on-save bug that was introduced in the last release. Some small improvements to the AI linter and codebase-wide chat.
+
+0.2.31
+
+Jun 11, 2023
+
+Hotfix for chat focus
+
+Chat should not steal your focus away! This is now fixed.
+
+0.2.30
+
+Jun 9, 2023
+
+Show the AI documentation
+
+You can now have the AI read documentation on your behalf! This will improve it's ability to answer questions about your favorite libraries. To use this feature, simply press the "Docs" button in the top right of the chat pane.
+
+0.2.28
+
+Jun 6, 2023
+
+& 0.2.29 - Codebase Context fixes
+
+Hotfixes to v1 of Codebase Context
+
+0.2.27
+
+Jun 6, 2023
+
+Codebase Context v2
+
+We've improved codebase context!
+
+In order to take full advantage, navigate to Settings (top right button), then "Sync the current codebase"
+
+Login via github, then add the repo you wish to sync!
+
+Following this, you'll be able to see an improved version of codebase context in the search pane, and in chat (by pressing cmd+enter).
+
+0.2.26
+
+Jun 6, 2023
+
+Codebase Context v1
+
+Codebase Context v1
+
+Introducing v1 of codebase-wide context! We'll be shipping major improvements to this in the next few days, but we'd love to hear your feedback.
+
+Go to the "Search" pane in order to see the new context.
+
+Or, on chat, press Cmd+Enter in order to get a response that uses context from the full codebase.
+
+Jun 3, 2023
+
+v0.2.25 - Hot-fix for extensions (2023-06-03)
+
+Also potentially fixes the Jupyter problem that many people are experiencing.
+
+Jun 2, 2023
+
+v0.2.24 - Minor fixes (2023-06-02)
+
+Small fixes for the toolformer and the AI linter.
+
+Jun 1, 2023
+
+v0.2.23 - AI Linting (2023-06-01)
+
+Check out the "more" tab to have GPT-3.5 or GPT-4 review your code periodically for any problems.
+
+May 20, 2023
+
+v0.2.18 - Upgrades to GPT-4 and Please give us feedback!! (2023-05-20)
+
+Upgrades to GPT-4
+
+All users get 10 free gpt-4 requests !!!
+Switching between models is a lot more easy, and the transition to gpt-4 is a lot smoother
+
+Please give us feedback!!
+
+We've added a new feedback button at the top right of the app. - We really do
+listen to your feedback, and your bug reports! We've fixed a lot of bugs in the
+last few weeks, and we're excited to keep improving the product. - We made this
+modal to make it easier to report feedback. Please keep the feedback coming!
+
+May 18, 2023
+
+v0.2.17 - Fixes! (2023-05-018)
+
+Bug Fixes
+
+Fixes the "infinite loading" bug
+Reintroduces the "New AI Project"
+
+May 17, 2023
+
+v0.2.16 - Terminal Debugger, and our biggest bug bash yet (v0.2.12)
+
+In-terminal Debugging
+
+Press Cmd+D to auto-debug a terminal error
+
+
+Press Cmd+Shift+L, and the model will add the terminal context to chat
+
+Activity Bar pinning
+
+You can Pin custom extensions to your activity bar in the top left
+Here I've pinned File Explorer, Search, Source Control, and Extensions
+
+You can Pin custom extensions to your activity bar in the top left
+
+Better Jupyter Support
+
+Context ingestion across a full notebook
+Small bug fixes
+
+Diff/Generate improvements
+
+Partial diff accent/reject
+Pressing Cmd+Y/Cmd+N lets you accept/reject subdiffs!
+
+
+Generates work when you click elsewhere!
+
+
+Fixed diff bug where it edits outside selected region
+
+Partial diff accent/reject
+
+Generates work when you click elsewhere!
+
+Fixed diff bug where it edits outside selected region
+
+️ Quality of Life Improvements
+
+Press ESC to exit the chat
+Fixed the bug that shrinks code blocks in the chat!
+Remote SSH is easier to use!
+A better Cursor Tutor onboarding!
+Better prompting for Toolformer
+
+May 9, 2023
+
+v0.2.11 - Enhanced Chat Experience (2023-05-09)
+
+Bug Fixes
+
+Fixes the "More" tab
+Includes some updates to "Option+Enter" in the chat
+
+May 6, 2023
+
+v0.2.10 - Crucial Bug Fixes (2023-05-06)
+
+Bug Fixes
+
+Hotfix for 2 long-standing bugs:
+
+Broken chat that persists for a workspace
+Rarely, pressing Enter in the editor does nothing
+
+Broken chat that persists for a workspace
+Rarely, pressing Enter in the editor does nothing
+
+May 4, 2023
+
+v0.2.9 - Enhanced Features & Improvements (2023-05-04)
+
+New Features
+
+One-Click Extension Import from VS Code (beta). As a highly requested feature, we're excited to present the beta version of one-click extension imports!
+Alpha feature: 🧠 Alpha feature: Ask questions about your entire repo 🛠️. We are experimenting with ⌥+enter in the chat! The feature allows the model to think deeply about your response, search through files, and deliver a well-crafted answer. While it's in alpha, we're working hard to enhance this feature in the coming weeks. We'd love to hear your feedback!
+
+Bug Fixes
+
+Improved prompting for edits and generates
+Fixed login bugs
+Added the ability to hide the tooltip (Cursor config > Advanced > Chat/Edit Tooltip)
+Extended prompt length for project generation
+GPT-4 support now available for project generation
+
+Apr 29, 2023
+
+v0.2.8 - Multi-File Diffs & Remote SSH (2023-04-29)
+
+New Features
+
+Experimental support for multi-file diffs
+🌐 Working remote ssh support through the "OpenRemote - SSH" extension
+
+Apr 19, 2023
+
+v0.2.6 - GPT-4 & Project Generation (2023-04-19)
+
+New Features
+
+GPT-4 now available for Pro users
+
+150k GPT-4 tokens included
+Switch models in settings gear
+Better quality for all AI features
+
+
+New experimental feature: Generate entire projects from a single prompt
+
+150k GPT-4 tokens included
+Switch models in settings gear
+Better quality for all AI features
+
+Apr 17, 2023
+
+v0.2.5 - Scroll Bar Hotfix (2023-04-17)
+
+Bug Fixes
+
+Hotfix for scroll bars
+
+Apr 16, 2023
+
+v0.2.4 - Chat Scrolling & Ghost Mode (2023-04-16)
+
+New Features
+
+Fixes to scrolling in chat
+Ghost mode for opting out of storing any kind of data on our servers
+
+Bug Fixes
+
+Nicer edits, now work with cmd-Z
+Various bugs squashed in the streaming diffs
+
+Apr 14, 2023
+
+v0.2.3 - Enhanced Error Handling (2023-04-14)
+
+New Features
+
+Hover over an error to have the AI explain it/fix it
+
+Bug Fixes
+
+Settings icon on Linux
+Don't install "cursor" command on startup
+
+Coming soon
+
+GPT-4 support
+
+Apr 7, 2023
+
+v0.2.2 - Bug Fixes Galore (2023-04-07)
+
+Bug Fixes
+
+Fixes the Mac autoupdating experience
+"Undefined uri" issue fixed
+Turns off the auto-install of the "cursor ." command (and fixes its install altogether)
+
+Apr 6, 2023
+
+v0.2.1 - More Bug Fixes (2023-04-06)
+
+Bug Fixes
+
+Just includes bug fixes
+
+Apr 6, 2023
+
+v0.2.0 - Introducing Cursor 0.2.0! (2023-04-06)
+
+We've transitioned to building Cursor on top of a fork of VSCodium, moving away from our previous Codemirror-based approach.
+This allows us to focus on AI features while leveraging VSCode's mature text editing capabilities.
+Our goal is to create an IDE optimized for pair-programming with AI.
+While currently similar to a standard code editor with AI features, we plan to evolve the programming experience significantly over time.
+
+New Features
+
+Transitioned to building Cursor on top of a fork of VSCodium
+Focus on enhancing the AI for pair-programming
+
+Mar 30, 2023
+
+v0.1.12 (2023-03-30)
+
+New Features
+
+AI now requires login
+Use an OpenAI API key for unlimited requests at cost (GPT-4 access if available)
+
+Bug Fixes
+
+Cleaned up chat styling
+Other small changes
+
+Mar 28, 2023
+
+v0.1.11 (2023-03-28)
+
+Bug Fixes
+
+Tiny bug fix for terminal
+
+Mar 28, 2023
+
+v0.1.10 (2023-03-28)
+
+Bug Fixes
+
+Tiny fix for some keyboard shortcut problems
+Other bits of polish
+
+Mar 27, 2023
+
+v0.1.9 (2023-03-27)
+
+New Features
+
+Opens the terminal in your current folder
+Adds an optional paid plan if you'd like to avoid the server capacity rate limits
+
+Bug Fixes
+
+Changes autoupdate to notify you when there's a new version
+Other fixes
+
+Mar 25, 2023
+
+v0.1.7 (2023-03-25)
+
+New Features
+
+Fuzzy search for file names
+
+Bug Fixes
+
+Fixes glitches with the terminal
+Scrollbars work
+Other fixes (many from PRs 🙂)
+
+Mar 24, 2023
+
+v0.1.6 (2023-03-24)
+
+Bug Fixes
+
+Fix to the hotkeys
+
+Mar 23, 2023
+
+v0.1.5 (2023-03-23)
+
+New Features
+
+Automatically apply chat suggestion
+Ask AI to "fix" language errors
+Chat history saved between sessions
+
+Bug Fixes
+
+Easy to select and copy from chat
+Resizable sidebar
+Terminal no longer interferes with chat
+
+Coming soon
+
+Fixes to all the language servers/copilot
+
+Mar 18, 2023
+
+v0.1.2-0.1.3 (2023-03-18)
+
+New Features
+
+Built-in terminal
+Diffs automatically continue
+
+Bug Fixes
+
+More diff fixes
+Up and down arrow in prompt bar have been mapped to less annoying keybindings
+Can open chat history from the prompt bar
+
+Coming soon
+
+Have chat auto-insert suggested changes into editor
+
+Mar 14, 2023
+
+v0.0.37 (2023-03-14)
+
+New Features
+
+Windows and Linux support 🥳
+Edits can be as long as you'd like
+
+Bug Fixes
+
+Diffs shouldn't disappear anymore
+Editing works for same file on multiple tabs
+
+Coming soon
+
+Instant fix all lint errors with AI 😎
+
+Try Cursor Now
+
+SOC 2 Certified
+
+Made by Anysphere
+
+Pricing
+
+Downloads
+
+Docs
+
+Forum
+
+Careers
+
+Company
+
+Security
+
+Privacy
+
+Terms
+
+Changelog
+
+Twitter
+
+GitHub
+

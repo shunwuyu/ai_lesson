@@ -1,0 +1,37 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.title {
+  text-align: center;
+  color: #1890ff;
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+
+.content {
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.formatSelection {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.formatSelection span {
+  margin-right: 12px;
+  font-size: 16px;
+}
+
+.convertButton {
+  display: block;
+  width: 200px;
+  height: 40px;
+  margin: 32px auto 0;
+  font-size: 16px;
+} 

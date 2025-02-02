@@ -115,3 +115,6 @@ AI全栈工程师课程
 - react/ruanyfeng/
 - vue-react/v3-slot-watch-effect-demos
 - tailwindcss/base-demo
+- geekbang/cursor/chrome-extension
+- react/tongguan/hook-test 一网打尽组件常用 Hook
+- react/tongguan/react-ts React 组件如何写 TypeScript 类型

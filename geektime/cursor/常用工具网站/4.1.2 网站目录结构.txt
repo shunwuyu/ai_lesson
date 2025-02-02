@@ -1,0 +1,29 @@
+src/
+├── components/                # 公共组件
+│   ├── Layout/               # 布局组件
+│   │   ├── Header.tsx       # 顶部导航
+│   │   └── Footer.tsx       # 页脚组件
+│   ├── FileUpload/          # 文件上传组件
+│   └── DownloadButton/      # 下载按钮组件
+│
+├── pages/                    # 页面组件
+│   ├── Home/                # 首页
+│   ├── FileConverter/       # 文件转换
+│   ├── ImageCompressor/     # 图片压缩
+│   ├── ImageCropper/       # 图片裁剪
+│   ├── ImageConverter/     # 图片格式转换
+│   └── ImageWatermark/     # 图片水印
+│
+├── services/                # 服务
+│   └── api.ts              # API接口
+│
+├── utils/                   # 工具函数
+│   ├── file.ts             # 文件处理
+│   └── image.ts            # 图片处理
+│
+├── types/                   # 类型定义
+│   └── index.ts
+│
+├── App.tsx                  # 应用入口
+├── main.tsx                # 主入口
+└── vite-env.d.ts           # 环境定义 

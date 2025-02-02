@@ -1,0 +1,80 @@
+.watermark-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.watermark-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1890ff;
+}
+
+.upload-section {
+  margin-bottom: 30px;
+}
+
+.ant-upload-drag {
+  background: #fafafa;
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.ant-upload-drag:hover {
+  border-color: #1890ff;
+}
+
+.image-preview {
+  text-align: center;
+  margin-bottom: 20px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.image-preview img,
+.image-preview canvas {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  object-fit: contain;
+}
+
+.controls-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.control-item {
+  margin-bottom: 20px;
+}
+
+.control-item label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.ant-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ant-slider {
+  width: 100%;
+  max-width: 300px;
+} 
