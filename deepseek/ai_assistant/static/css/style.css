@@ -1,0 +1,345 @@
+/* 全局样式 */
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background-color: #f0f4f8;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  color: #333;
+}
+
+/* 聊天容器 */
+.chat-container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 24px;
+  margin: 20px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .chat-container {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+}
+
+/* 标题 */
+h1 {
+  text-align: center;
+  color: #0056b3;
+  margin-bottom: 24px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* 按钮样式 */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #0056b3;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 9px #999;
+  transition: all 0.3s ease;
+}
+
+.button:hover {background-color: #004a8c}
+
+.button:active {
+  background-color: #004a8c;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.button.secondary {
+  background-color: #e0f7fa;
+  color: #0056b3;
+  border: 1px solid #0056b3;
+}
+
+.button.secondary:hover {
+  background-color: #d4f0f7;
+}
+
+.button.secondary:active {
+  background-color: #c8e9f4;
+}
+
+/* 顶部导航栏 */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+/* 输入组样式 */
+.input-group {
+  margin-bottom: 16px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.input-group input, .input-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.input-group input:focus, .input-group select:focus {
+  border-color: #0056b3;
+  outline: none;
+}
+
+/* 聊天记录 */
+.chat-left {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 2px); /* 减去标题和其他元素占用的空间 */
+  position: relative; /* 为绝对定位的子元素提供参考 */
+}
+
+.chat-log {
+  flex-grow: 1; /* 让聊天记录占据可用空间 */
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  background: #ffffff;
+  margin-bottom: 65px; /* 为输入区域留出足够的空间 */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word; /* 确保长单词可以换行 */
+  height: 750px;
+}
+
+/* 占位内容样式 */
+.placeholder-content {
+  text-align: center;
+  color: #888;
+  padding: 20px;
+  display: block; /* 默认情况下显示 */
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.chat-log.has-messages .placeholder-content {
+  display: none;
+}
+
+/* 加载指示器 */
+.loading-indicator {
+  text-align: center;
+  color: #aaa;
+  margin-top: 20px;
+  display: none;
+}
+
+/* 输入区域 */
+.input-area {
+  position: absolute;
+  bottom: 70px; /* 固定在底部并留出20px的距离 */
+  left: 0;
+  right: 0;
+  padding: 0 10px;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 1; /* 确保输入区域不会被滚动的内容覆盖 */
+  border-radius: 10px;
+}
+
+/* 包含输入框和图标的容器 */
+.input-with-icon {
+  display: flex;
+  align-items: center; /* 确保图标和输入框垂直居中 */
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* 输入框 */
+.input-with-icon textarea {
+  flex-grow: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 12px 0 0 12px; /* 调整边框圆角 */
+  font-size: 16px;
+  box-sizing: border-box;
+  resize: none;
+  outline: none;
+  transition: all 0.3s ease;
+  height: 48px; /* 设置一个固定高度，以确保和按钮对齐 */
+}
+
+/* 发送图标按钮 */
+.send-icon {
+  background: transparent;
+  border: none;
+  padding: 12px 16px; /* 增加内边距以使图标看起来更舒适 */
+  cursor: pointer;
+  color: #0056b3;
+  font-size: 20px;
+  transition: color 0.3s ease;
+  height: 48px; /* 与输入框相同的高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 12px 12px 0; /* 只对右侧应用圆角 */
+}
+
+.send-icon:hover {
+  color: #004a8c;
+}
+
+.send-icon:focus {
+  outline: none;
+}
+
+/* 消息气泡 */
+.message {
+  display: flex;
+  margin-bottom: 12px;
+  position: relative; /* 确保子元素可以使用绝对定位 */
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.assistant {
+  justify-content: flex-start;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.bubble {
+  max-width: 70%; /* 限制气泡的最大宽度 */
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 16px;
+  word-wrap: break-word; /* 确保文本能够换行 */
+  white-space: pre-wrap; /* 保留空白符序列，并允许文本换行 */
+  position: relative; /* 为复制按钮提供参考 */
+}
+
+.user-bubble {
+  background-color: #e0f7fa;
+  color: #0056b3;
+}
+
+.assistant-bubble {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.copy-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #0056b3;
+  transition: color 0.3s ease;
+  z-index: 1; /* 确保按钮在气泡之上 */
+}
+
+.copy-button:hover {
+  color: #004a8c;
+}
+
+.copy-button:focus {
+  outline: none;
+}
+
+/* 对话历史列表 */
+.conversation-list {
+  height: 280px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.conversation-list button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+.conversation-list button:hover {
+  background-color: #e0e0e0;
+}
+
+.conversation-list .delete-btn {
+  float: right;
+  color: #ff4444;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.conversation-list .delete-btn:hover {
+  color: #cc0000;
+}
+
+/* 回到顶部按钮 */
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: none; /* 默认隐藏 */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.back-to-top:hover {
+  background-color: #004a8c;
+  transform: translateY(-5px);
+}
+
+/* 终止回复按钮样式 */
+#stop-reply {
+  margin-left: 10px;
+}

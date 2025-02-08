@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT智能助手</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="chat-container">
+    <!-- 左侧：聊天记录 -->
+    <div class="chat-left">
+        <h1><i class="fas fa-comment-alt"></i> IT智能助手</h1>
+        <div id="chat-log" class="chat-log has-messages">
+            <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+            <!-- 占位内容 -->
+            <div id="placeholder-content" class="placeholder-content">
+                <p>欢迎来到小匠IT智能助手！</p>
+                <p>您可以在这里输入问题或请求帮助。</p>
+                <p>尝试发送您的第一条消息吧！</p>
+            </div>
+            <!-- 加载指示器 -->
+            <div class="loading-indicator">加载中...</div>
+             <!-- 输入区域 -->
+        <div class="input-area">
+            <div class="input-with-icon">
+                <textarea id="message" rows="4" placeholder="在这里输入您的消息..."></textarea>
+                <button class="send-icon"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        </div>
+        <!-- 回到顶部按钮 -->
+        <button id="back-to-top" class="back-to-top"><i class="fas fa-arrow-up"></i></button>
+    </div>
+
+    <!-- 右侧：对话历史和设置 -->
+    <div class="chat-right">
+        <div class="top-nav">
+            <button class="button secondary" onclick="startNewConversation()">新对话 <i class="fas fa-redo-alt"></i></button>
+            <button class="button secondary" onclick="saveCurrentConversation()">保存对话 <i class="fas fa-save"></i></button>
+        </div>
+        <div id="conversation-list" class="conversation-list"></div>
+        <div class="input-group">
+            <label for="temperature">创意度 (0-1.5):</label>
+            <input type="number" id="temperature" placeholder="请输入创意度值" step="0.1" min="0" max="1.5">
+        </div>
+        <div class="input-group">
+            <label for="model">模式选择:</label>
+            <select id="model">
+                <option value="deepseek-chat">对话模式</option>
+                <option value="deepseek-coder">编码模式</option>
+            </select>
+        </div>
+    </div>
+</div>
+<script src="js/js.js"></script>
+</body>
+</html>
