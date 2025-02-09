@@ -94,5 +94,7 @@ print(response.choices[0].message.content)
 
 
 - js 
-  scroll 效果
-  打字机效果
+  scroll 效果 <br/><br/>
+  打字机效果 调用函数
+  appendMessage 测试 复制黏贴
+  loadChatLog 
