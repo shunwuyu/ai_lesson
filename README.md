@@ -123,3 +123,4 @@ AI全栈工程师课程
 - deepseek/
 - react/mobx-demo
 - algorithm/edit-distance
+- react/deepseek-r1-webgpu 
