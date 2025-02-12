@@ -124,3 +124,5 @@ AI全栈工程师课程
 - react/mobx-demo
 - algorithm/edit-distance
 - react/deepseek-r1-webgpu 
+- redux/redux-demo
+- zustand/zustand-demo
