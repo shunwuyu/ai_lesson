@@ -1,0 +1,34 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>白屏时间测量</title> 
+    <link rel="stylesheet" href="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-assets/ionicons/2.0.1/css/ionicons.min.css~tplv-t2oaga2asx-image.image">
+    <link rel="stylesheet" href="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-assets/asset/fw-icon/1.0.9/iconfont.css~tplv-t2oaga2asx-image.image">
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.5.13/vue.global.js"></script>
+</head> 
+<body> 
+<h1>Hello, World!</h1> 
+<img src="https://img.36krcdn.com/hsossms/20250217/v2_61ae954a0c4c41dba37b189a20423722@000000_oswg66502oswg900oswg600_img_000?x-oss-process=image/format,jpg/interlace,1" alt="">
+<img src="https://img.36krcdn.com/hsossms/20250217/v2_9e1df42e783841e79ff021cda5fc6ed4@000000_oswg41322oswg1026oswg435_img_000?x-oss-process=image/format,jpg/interlace,1" alt="">
+<img src="https://img.36krcdn.com/hsossms/20250217/v2_0376475b9a6a4dcab3f7b06a1b339cfc@5888275_oswg287301oswg729oswg545_img_000?x-oss-process=image/format,jpg/interlace,1" alt="">
+<img src="https://img.36krcdn.com/hsossms/20250217/v2_e3213623ab5c46da8a6f9c339e1bd781@5888275_oswg1251766oswg1080oswg810_img_000?x-oss-process=image/format,jpg/interlace,1" alt="">
+<img src="https://img.36krcdn.com/hsossms/20250217/v2_919d4445116f4efda326f651619b4c69@5888275_oswg169476oswg598oswg622_img_000?x-oss-process=image/format,jpg/interlace,1" alt="">
+<img src="https://img.36krcdn.com/hsossms/20250217/v2_0457ccbedb984e2897c6d94815954aae@5888275_oswg383406oswg544oswg648_img_000?x-oss-process=image/format,jpg/interlace,1" alt="">
+<script> 
+  // 监听首次内容绘制事件 
+  const observer = new PerformanceObserver(
+  (list) => { 
+      const entries = list.getEntries(); 
+      for (const entry of entries) { 
+          if (entry.name === 'first-paint') { 
+              const whiteScreenTime = entry.startTime; 
+              console.log('白屏时间:', whiteScreenTime, 'ms'); 
+          } 
+       } 
+  });
+  // 开始观察 first-contentful-paint 事件 
+  observer.observe({ type: 'paint', buffered: true }); // 确保在页面加载完成后执行 window.addEventListener('load', () => { console.log('页面加载完成'); }); 
+  </script> 
+</body> 

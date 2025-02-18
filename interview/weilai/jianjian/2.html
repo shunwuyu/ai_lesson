@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首屏渲染时间 Demo</title>
+    <style>
+        /* 样式只是为了模拟页面布局 */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .above-the-fold {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="above-the-fold">
+        <h1>欢迎来到我的网站</h1>
+        <p>这是首屏内容的一部分。</p>
+        <img src="https://img.36krcdn.com/hsossms/20250217/v2_61ae954a0c4c41dba37b189a20423722@000000_oswg66502oswg900oswg600_img_000?x-oss-process=image/format,jpg/interlace,1" alt="占位图片">
+    </div>
+
+    <div class="below-the-fold">
+        <h2>这是非首屏内容</h2>
+        <p>这部分内容在首屏之外。</p>
+        <img src="https://img.36krcdn.com/hsossms/20250217/v2_9e1df42e783841e79ff021cda5fc6ed4@000000_oswg41322oswg1026oswg435_img_000?x-oss-process=image/format,jpg/interlace,1" alt="占位图片">
+    </div>
+
+    <script>
+        // 监听 Largest Contentful Paint (LCP) 事件
+        const observer = new PerformanceObserver((list) => {
+            list.getEntries().forEach(entry => {
+                console.log('最大内容绘制时间:', entry.startTime, 'ms');
+                // 记录 LCP 时间作为首屏渲染时间的一个参考点
+                const lcpTime = entry.startTime;
+
+                // 自定义逻辑：检查首屏内的所有资源是否已加载完成
+                checkAboveTheFoldResourcesLoaded(lcpTime);
+            });
+        });
+
+        observer.observe({ type: 'largest-contentful-paint', buffered: true });
+
+        // 检查首屏内的所有资源是否已加载完成
+        function checkAboveTheFoldResourcesLoaded(lcpTime) {
+            const aboveTheFoldElements = document.querySelectorAll('.above-the-fold img');
+            let allResourcesLoaded = true;
+
+            aboveTheFoldElements.forEach(element => {
+                if (!element.complete || element.naturalHeight === 0) {
+                    allResourcesLoaded = false;
+                }
+            });
+
+            if (allResourcesLoaded) {
+                console.log('首屏渲染时间:', lcpTime, 'ms');
+            } else {
+                setTimeout(() => checkAboveTheFoldResourcesLoaded(lcpTime), 100); // 轮询检查
+            }
+        }
+
+    </script>
+</body>
+</html>
