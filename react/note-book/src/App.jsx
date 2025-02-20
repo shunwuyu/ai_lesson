@@ -16,7 +16,7 @@ import NavBar from '@/components/NavBar';
 function App() {
   const location = useLocation() 
   const { pathname } = location
-  const needNav = ['/', '/data'] // 需要底部导航栏的路径
+  const needNav = ['/', '/data', '/user'] // 需要底部导航栏的路径
   const [showNav, setShowNav] = useState(false)
   useEffect(() => {
     setShowNav(needNav.includes(pathname))
