@@ -6,4 +6,5 @@ module.exports = app => {
   router.get('/', controller.home.index);
   router.get('/user/:id', controller.home.user);
   router.post('/add', controller.home.add);
+  router.post('/api/user/register', controller.user.register);
 };
