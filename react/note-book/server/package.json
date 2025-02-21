@@ -7,9 +7,10 @@
     "declarations": true
   },
   "dependencies": {
+    "@babel/runtime": "^7.26.9",
+    "bcrypt": "^5.1.1",
     "egg": "^3.17.5",
     "egg-jwt": "^3.1.7",
-    "egg-mysql": "^3.0.0",
     "egg-scripts": "2",
     "egg-view-ejs": "^3.0.0",
     "mysql2": "^3.12.0"

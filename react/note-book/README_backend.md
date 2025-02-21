@@ -127,3 +127,21 @@
 - Token 令牌
 token 可以运用在如网页、客户端、小程序、浏览器插件等等领域。如果选用 cookie 的形式鉴权，在客户端和小程序就无法使用这套接口，因为它们没有域的概念，而 cookie 是需要存在某个域下。
 - OAuth(开放授权)
+### 注册
+  - npm install --save egg-sequelize mysql2
+  - exports.sequelize = {
+  enable: true,
+  package: 'egg-sequelize',
+};
+  - exports.sequelize = {
+  dialect: 'mysql',
+  host: '127.0.0.1',
+  port: 3306,
+  database: 'egg-sequelize-doc-default',
+};
+  - model/user.js
+  - controler/user.js
+  - service/user.js
+
+### 注册
+

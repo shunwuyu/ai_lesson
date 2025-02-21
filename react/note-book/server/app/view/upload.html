@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片上传<%-title%></title>
+</head>
+<body>
+    <input type="file" id='upload' />
+    <script>
+      // 获取 input 标签的 dom
+      var input = document.getElementById('upload')
+      // 监听它的变化
+      input.addEventListener('change', function(e) {
+        // 获取到上传的 file 对象
+        var file = input.files[0]
+        // 声明 FormData 实例 formData
+        let formData = new FormData()
+        // 添加实例属性 file
+        formData.append('file', file)
+        console.log('formData', formData)
+        // 调用服务端上传接口。
+        fetch('http://localhost:7001/api/upload', {
+          method: 'POST',
+          body: formData
+        }).then(res => {
+          if(res.ok) {
+            console.log('success')
+            return res.json();
+          } else {
+            console.log('error')
+          }
+        }).then(res => {
+          console.log('res is', res);
+        })
+      })
+    </script>
+</body>
+</html>
