@@ -18,3 +18,11 @@
 - 首页 + 假数据
   - dayjs 日期处理 相比moment 更小
 - 用户信息
+
+##  首页
+- index.html user-scalable=no
+- BillItem
+  bill 的更新
+  dayjs
+- 拉下刷新
+  
