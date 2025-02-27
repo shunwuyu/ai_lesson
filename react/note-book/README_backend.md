@@ -146,3 +146,9 @@ token 可以运用在如网页、客户端、小程序、浏览器插件等等�
 
 ### 注册
 
+## 文件上传
+config.multipart = {
+    mode: 'file',
+    fileSize: '50kb'
+  };
+

@@ -31,10 +31,15 @@ module.exports = appInfo => {
   config.jwt = {
     secret: 'Nick',
   };
-
+  
+  config.multipart = {
+    mode: 'file',
+    fileSize: '500kb'
+  };
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
+    uploadDir: 'app/public/upload'
   };
 
   exports.sequelize = {
@@ -43,7 +48,8 @@ module.exports = appInfo => {
     port: 3306,
     database: 'juejue_cost',
     username: 'root',
-    password: '!Codingdream2021',
+    password: 'Codingdream123',
+    
     define: {
       timestamps: false, // 是否自动添加时间戳 (createdAt, updatedAt)
       underscored: true, // 是否将驼峰命名转换为下划线命名

@@ -23,6 +23,9 @@
         // 调用服务端上传接口。
         fetch('http://localhost:7001/api/upload', {
           method: 'POST',
+          headers: {
+            'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImV4cCI6MTc0MDcwMzg5NCwiaWF0IjoxNzQwNjE3NDk0fQ.oX7iuW4925vQ0z1xVZ7hYkrH23v3Vr11EBGpvQev5ys'
+          },
           body: formData
         }).then(res => {
           if(res.ok) {
