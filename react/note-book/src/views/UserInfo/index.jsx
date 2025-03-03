@@ -3,7 +3,7 @@ import { Button, FilePicker, Input, Toast } from 'zarm';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import axios from 'axios';
-import { get, post } from '@/utils'
+import { get, post, imgUrlTrans } from '@/utils'
 // import { baseUrl } from 'config'
 import s from './style.module.less';
 
@@ -20,7 +20,7 @@ const UserInfo = () => {
 
   // 获取用户信息
   const getUserInfo = async () => {
-    const { data } = await get('/api/user/get_userinfo');
+    const { data } = await get('/user/get_userinfo');
     setUser(data);
     setAvatar(imgUrlTrans(data.avatar))
     setSignature(data.signature)
@@ -36,25 +36,28 @@ const UserInfo = () => {
     formData.append('file', file.file)
     axios({
       method: 'post',
-      url: `/api/upload`,
+      url: `/upload`,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': token
       }
     }).then(res => {
-      // setAvatar(imgUrlTrans(res.data))
+      console.log(res.data)
+      setAvatar(imgUrlTrans(res.data))
     })
   }
 
   const save = async () => {
-    const { data } = await post('/api/user/edit_userinfo', {
+    const { data } = await post('/user/edit_userinfo', {
       signature,
       avatar
     });
 
+    // console.log(data, '////////')
+
     Toast.show('修改成功')
-    navigate.go(-1)
+    navigate(-1)
   }
 
   return <>

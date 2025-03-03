@@ -3,7 +3,6 @@ import { Cell, Input, Button, Checkbox, Toast } from 'zarm';
 import cx from 'classnames';
 import CustomIcon from '@/components/CustomIcon';
 import { post } from '@/utils'
-
 import s from './style.module.less';
 
 const Login = () => {
@@ -21,9 +20,11 @@ const Login = () => {
       Toast.show('请输入密码')
       return
     }
+
+
     try {
       if (type == 'login') {
-        const { data } = await post('/api/user/login', {
+        const { data } = await post('/user/login', {
           username,
           password
         });
@@ -31,13 +32,14 @@ const Login = () => {
         localStorage.setItem('token', data.token);
         window.location.href = '/';
       } else {
-        const { data } = await post('/api/user/register', {
+        const { code } = await post('/user/register', {
           username,
           password
         });
-        
-        Toast.show('注册成功');
-         setType('login');
+        if (code === 200) {
+          Toast.show('注册成功');
+          setType('login');
+        }
       }
     } catch (err) {
       Toast.show(err.msg);
@@ -70,16 +72,6 @@ const Login = () => {
           onChange={(value) => setPassword(value)}
         />
       </Cell>
-      {
-        type == 'register' ? <Cell icon={<CustomIcon type="mima" />}>
-          <Input
-            clearable
-            type="text"
-            placeholder="请输入验证码"
-            onChange={(value) => setVerify(value)}
-          />
-        </Cell> : null
-      }
     </div>
     <div className={s.operation}>
       {

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .clearfix {
+    zoom: 1;
+}
+.clearfix:after {
+    content: '';
+    display: block;
+    visibility: hidden;
+    width: 100%;
+    height: 0;
+    clear: both;
+}
+h5 {
+  font-size: 14px;
+}
+ul, li {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+.layout {
+    color: #666;
+    margin: 0 auto;
+}
+.section {
+    margin: 25px auto;
+    width: 600px;
+}
+.section h4 {
+    margin: 15px 0;
+    color: #4e4a4a;
+    position: relative;
+}
+.section h4:before {
+    content: '#';
+    display: block;
+    color: #41b883;
+    position: absolute;
+    font-size: 20px;
+    line-height: 22px;
+    left: -18px;
+    top: 0;
+}
+
+.section-horizontally {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px 0;
+}
+.section-inline-block span {
+    display: inline-block;
+    padding:0 5px;
+}
+.section-block div {
+    width: 300px;
+    background-color: #ddd;
+    margin: 0 auto;
+}
+.section-more-block div, .section-more-block2 div {
+    width: 150px;
+    background-color: #ddd;
+    display: inline-block;
+    margin: 5px;
+}
+.section-more-block2 {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+.single-line div {
+    border: 1px solid #ddd;
+}
+.single-line .padding {
+    padding: 20px 0;
+}
+.single-line .line-height {
+    height: 60px;
+    line-height: 60px;
+}
+.multiple-line div, .multiple-line table {
+    float: left;
+    width: 180px;
+    height: 180px;
+    margin-right: 50px;
+    border: 1px solid #ddd;
+}
+.multiple-line .vertical-align {
+    display: table;
+}
+.multiple-line .vertical-align p {
+    display: table-cell;
+    vertical-align: middle;
+}
+.multiple-line .flex-vertical {
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+}
+.block-vertically div {
+    float: left;
+    width: 120px;
+    height: 120px;
+    margin-right: 50px;
+    border: 1px solid #ddd;
+    position: relative;
+}
+.block-vertically p {
+    background-color: #ddd;
+}
+.know-height p {
+    position: absolute;
+    top: 50%;
+    height: 50px;
+    margin-top: -25px;
+}
+.unknow-height p {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.block-vertically .flexbox {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.block-vertically .unset {
+    position: relative;
+}
+.block-vertically .unset p {
+    position: absolute;
+    top: 30%;
+    bottom: 30%;
+}
+.horizontally-vertically-box div {
+    width: 150px;
+    height: 150px;
+    margin-right: 50px;
+    border: 1px solid #ddd;
+    float: left;
+}
+.horizontally-vertically-box div p {
+    background-color: #ddd;
+}
+.horizontally-vertically-box .know-size {
+    position: relative;
+}
+.horizontally-vertically-box .know-size p {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -50px 0 0 -50px;
+}
+.horizontally-vertically-box .unknow-size {
+    position: relative;
+}
+.horizontally-vertically-box .unknow-size p {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.horizontally-vertically-box .flexbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bg-ddd {
+  background-color: #ddd;
+}
+.box {
+  height: 150px;
+  border: 1px solid #ddd;
+}
+.demo1 {
+  position: relative;
+}
+.demo1 div {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100px;
+  height: 100px;
+  margin: -50px 0 0 -50px;
+}
+.demo2 {
+  position: relative;
+}
+.demo2 div {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+.demo3 {
+  position: relative;
+}
+.demo3 div {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: calc(50% - 50px);
+  top: calc(50% - 50px);
+}
+.demo4 {
+  position: relative;
+}
+.demo4 div {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.demo5 {
+  line-height: 150px;
+  text-align: center;
+}
+.demo5 div {
+  display: inline-block;
+  line-height: initial;
+  vertical-align: middle;
+}
+.demo6 {
+  width: 600px;
+  writing-mode: vertical-lr;
+  text-align: center;
+}
+.demo6 .middle {
+  display: inline-block;
+  writing-mode: horizontal-tb;
+  text-align: center;
+  width: 100%;
+}
+.demo6 .child {
+  display: inline-block;
+}
+.demo7 {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: 600px;
+}
+.demo7 div {
+  display: inline-block;
+}
+.demo8 {
+  display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.demo9 {
+  display: grid;
+}
+.demo9 div {
+  align-self: center;
+  justify-self: center;
+}
+  </style>
+</head>
+<body>
+  <div class="layout" id="layout">
+    <div class="section clearfix">
+      <h4 id="单行 inline 或 inline-block 元素">
+        <a href="#单行 inline 或 inline-block 元素" class="headerlink" title="单行 inline 或 inline-block 元素"></a>
+        单行文本、inline 或 inline-block 元素
+      </h4>
+      <h5>水平居中</h5>
+      <div class="section-horizontally section-inline">
+        这是水平居中的文本
+      </div>
+      <div class="section-horizontally section-inline-block">
+        <span>星期一</span>
+        <span>星期二</span>
+        <span>星期三</span>
+        <span>星期四</span>
+      </div>
+      <h5>垂直居中</h5>
+      <div class="section-vertically single-line">
+        <div class="padding">我是单行文本padding: 20px 0;</div>
+        <div class="line-height">我是单行文本height: 63px;line-height: 63px;</div>
+      </div>
+    </div>
+    <div class="section clearfix">
+      <h4 id="固定宽高块级盒子水平垂直居中">
+        <a href="#固定宽高块级盒子水平垂直居中" class="headerlink" title="固定宽高块级盒子水平垂直居中"></a>
+        固定宽高块级盒子水平垂直居中
+      </h4>
+      <h5>方法一：absolute + 负 margin</h5>
+      <div class="demo1 box">
+        <div class="bg-ddd">absolute + 负 margin</div>
+      </div>
+      <h5>方法二：absolute + margin auto</h5>
+      <div class="demo2 box">
+        <div class="bg-ddd">absolute + margin auto</div>
+      </div>
+      <h5>方法三：absolute + calc</h5>
+      <div class="demo3 box">
+        <div class="bg-ddd">absolute + calc</div>
+      </div>
+    </div>
+    
+    
+    <div class="section clearfix">
+      <h4 id="不固定宽高块级盒子水平垂直居中">
+        <a href="#不固定宽高块级盒子水平垂直居中" class="headerlink" title="不固定宽高块级盒子水平垂直居中"></a>
+        不固定宽高块级盒子水平垂直居中
+      </h4>
+      <h5>方法一：absolute + transform</h5>
+      <div class="demo4 box">
+        <div class="bg-ddd">absolute + transform</div>
+      </div>
+      <h5>方法二：line-height + vertical-align</h5>
+      <div class="demo5 box">
+        <div class="bg-ddd">line-height + vertical-align</div>
+      </div>
+      <h5>方法三：writing-mode</h5>
+      <div class="demo6 box">
+        <div class="middle">
+          <div class="child bg-ddd">writing-mode</div>
+        </div>
+      </div>
+      <h5>方法四：table-cell</h5>
+      <div class="demo7 box">
+        <div class="bg-ddd">table-cell</div>
+      </div>
+      <h5>方法五：flex</h5>
+      <div class="demo8 box">
+        <div class="bg-ddd">flex</div>
+      </div>
+      <h5>方法六：grid</h5>
+      <div class="demo9 box">
+        <div class="bg-ddd">grid</div>
+      </div>
+    </div>  
+</body>
+</html>

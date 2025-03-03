@@ -23,4 +23,5 @@ module.exports = app => {
   router.get('/api/bill/list', _jwt, controller.bill.list); // 获取账单列表
   router.post('/api/upload', _jwt, controller.upload.upload); // 上传图片
   router.get('/upload', _jwt, controller.upload.index); // 上传图片
+  router.get('/api/type/list', _jwt, controller.type.list); // 获取消费类型列表
 };

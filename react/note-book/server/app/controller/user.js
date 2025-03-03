@@ -7,6 +7,7 @@ const defaultAvatar = 'http://s.yezgea02.com/1615973940679/WeChat77d6d2ac093e247
 
 class UserController extends Controller {
   async register() {
+    console.log('////////////////////')
     const { ctx } = this;
     const { username, password } = ctx.request.body; // 获取注册需要的参数
     // console.log(username, password, '//////////////////');

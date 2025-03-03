@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .truncate {
+    white-space: nowrap; /* 防止文本换行 */
+    overflow: hidden;    /* 隐藏超出容器的内容 */
+    text-overflow: ellipsis; /* 使用省略号表示被截断的文本 */
+    width: 200px;        /* 设置容器的宽度 */
+  }
+  .truncate-multiline {
+    display: -webkit-box;          /* 使用 Webkit 的 box 布局模型 */
+    -webkit-line-clamp: 3;         /* 设置显示的最大行数 */
+    -webkit-box-orient: vertical;  /* 设置盒子的方向为垂直 */
+    overflow: hidden;              /* 隐藏超出容器的内容 */
+    text-overflow: ellipsis;       /* 使用省略号表示被截断的文本 */
+    width: 200px;                  /* 设置容器的宽度 */
+  }
+  </style>
+</head>
+<body>
+  <div class="truncate">
+    这是一个很长的文本示例，它将被截断并用省略号表示。
+</div>
+<div class="truncate-multiline">
+  这是一个很长的文本示例，它将被截断并用省略号表示。这是一个很长的文本示例，它将被截断并用省略号表示。
+</div>
+</body>
+</html>

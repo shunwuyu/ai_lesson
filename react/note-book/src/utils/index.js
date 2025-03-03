@@ -73,3 +73,12 @@ export const LOAD_STATE = {
   failure: 4, // 加载失败
   complete: 5, // 加载完成（无新数据）
 };
+
+export const imgUrlTrans = (url) => {
+  if (url && url.startsWith('http')) {
+    return url
+  } else {
+    url = `http://localhost:7001${url}`
+    return url
+  }
+}
