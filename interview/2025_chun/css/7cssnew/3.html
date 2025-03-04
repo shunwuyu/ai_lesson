@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Flip Example</title>
+    <style>
+        /* 设置容器样式 */
+        .scene {
+            width: 200px;
+            height: 300px;
+            perspective: 1000px; 添加透视效果
+            margin: 50px auto;
+        }
+
+        /* 设置卡片容器样式 */
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d; /* 保留3D转换 */
+            transition: transform 1s; /* 翻转动画 */
+        }
+
+        /* 设置卡片正面和背面样式 */
+        .card__face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* 隐藏背面 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .card__face--front {
+            background-color: #3498db;
+        }
+
+        .card__face--back {
+            background-color: #e74c3c;
+            transform: rotateY(180deg); /* 初始状态为背面朝前 */
+        }
+
+        /* 当卡片被悬停时触发翻转 */
+        .scene:hover .card {
+            transform: rotateY(180deg); /* 翻转180度 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="scene">
+    <div class="card">
+        <div class="card__face card__face--front">正面</div>
+        <div class="card__face card__face--back">背面</div>
+    </div>
+</div>
+
+</body>
+</html>

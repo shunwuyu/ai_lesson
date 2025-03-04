@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      font-size: 0; /* 设置父容器的字体大小为 0 */
+    }
+  .inline-block {
+    display: inline-block;
+    width: 50%;
+    font-size: 16px; 恢复子元素的字体大小
+  }
+  </style>
+</head>
+<body>
+  <!-- 在使用 inline-block 布局时，相邻的两个元素之间有时会出现间隔，
+  这是由于 HTML 中的空白字符（如空格、换行符等）引起的。具体来说，
+  浏览器会将这些空白字符渲染为一个空格宽度的间隔。 
+  解决方法
+  移除 HTML 中的空白字符：将元素写在同一行。
+  设置父容器的字体大小为 0：并在子元素上恢复字体大小。
+  使用负的 margin：通过设置负的 margin 抵消间隔。
+  使用 float：如果适用，可以用 float 替代 inline-block。
+  使用 Flexbox 或 Grid 布局：利用现代布局方式，彻底解决间隔问题。
+  -->
+  <div class="container">
+    <span class="inline-block">Item 1</span>
+    <span class="inline-block">Item 2</span>
+    <!-- <span class="inline-block">Item 1</span><span class="inline-block">Item 2</span> -->
+  
+  </div>
+</body>
+</html>

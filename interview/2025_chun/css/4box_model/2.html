@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Model Comparison</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .box {
+            padding: 10px;
+            border: 5px solid black;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .standard-box {
+            width: 200px;
+            height: 100px;
+            background-color: lightblue;
+            box-sizing: content-box; /* 标准盒子模型 */
+        }
+
+        .ie-box {
+            width: 200px;
+            height: 100px;
+            background-color: lightcoral;
+            box-sizing: border-box; /* IE 盒子模型 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="box standard-box">标准盒子模型 (content-box)<br>总宽度: 230px<br>总高度: 130px</div>
+    <div class="box ie-box">IE 盒子模型 (border-box)<br>总宽度: 200px<br>总高度: 10/XMLSchema
+</div>
+</div>
+
+</body>
+</html>

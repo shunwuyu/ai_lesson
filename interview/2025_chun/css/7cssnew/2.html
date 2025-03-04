@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Query Example</title>
+    <style>
+        /* 默认样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            padding: 20px;
+            background-color: lightgray;
+        }
+
+        .box {
+            background-color: lightblue;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* 手机设备 (小于等于 600px) */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .box {
+                font-size: 14px;
+                background-color: red;
+            }
+        }
+
+        /* 平板设备 (大于 600px 且小于等于 1024px) */
+        @media (min-width: 601px) and (max-width: 1024px) {
+            .container {
+                padding: 15px;
+            }
+
+            .box {
+                font-size: 16px;
+                background-color: green;
+            }
+        }
+
+        /* 电脑设备 (大于 1024px) */
+        @media (min-width: 1025px) {
+            .container {
+                padding: 20px;
+            }
+
+            .box {
+                font-size: 18px;
+                background-color: yellow;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="box">这是一个响应式盒子</div>
+    <div class="box">这是另一个响应式盒子</div>
+</div>
+
+</body>
+</html>

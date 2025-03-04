@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calc Example</title>
+    <style>
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid black;
+            padding: 20px;
+        }
+
+        .dynamic-width {
+            background-color: lightblue;
+            width: calc(50% - 20px); /* 宽度为父容器的50%减去20像素 */
+            height: 100px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 宽度的动态计算 
+单位兼容性
+空格要求
+-->
+<div class="container">
+    <div class="dynamic-width">动态宽度</div>
+</div>
+
+</body>
+</html>

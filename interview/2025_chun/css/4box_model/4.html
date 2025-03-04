@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Box Model</title>
+    <style>
+      /* 在响应式设计中，盒子模型的灵活调整非常重要。可以使用媒体查询来根据屏幕大小调整盒子的样式。 */
+        .responsive-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            margin: 10px auto;
+            background-color: lightcoral;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 600px) {
+            .responsive-box {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="responsive-box">响应式盒子模型示例</div>
+
+</body>
+</html>

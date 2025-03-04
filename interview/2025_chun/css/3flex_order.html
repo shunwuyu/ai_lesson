@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .flex-container {
+    display: flex;
+    border: 2px solid #333;
+    padding: 10px;
+}
+
+.item {
+    padding: 20px;
+    margin: 5px;
+    background-color: lightblue;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+/* 默认顺序 */
+#item1 {
+    order: 2; /* 将 Item 1 的顺序设置为 2 */
+}
+
+#item2 {
+    order: 3; /* 将 Item 2 的顺序设置为 3 */
+}
+
+#item3 {
+    order: 1; /* 将 Item 3 的顺序设置为 1 */
+}
+  </style>
+</head>
+<body>
+  <!-- 默认情况下，所有子元素的 order 值为 0，这意味着它们会按照 HTML 文档中的顺序排列。
+  通过调整 order 属性的值，可以重新定义这些子元素的排列顺序。 -->
+  <div class="flex-container">
+    <div class="item" id="item1">Item 1</div>
+    <div class="item" id="item2">Item 2</div>
+    <div class="item" id="item3">Item 3</div>
+  </div>
+</body>
+</html>

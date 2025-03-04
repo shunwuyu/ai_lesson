@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .flex-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .flex-item {
+        width: 100px;
+        height: 100px;
+        padding: 10px;
+        margin: 5px;
+        background-color: lightblue;
+        text-align: center;
+        box-sizing: border-box;
+    }
+    .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .grid-item {
+            width: 100px;
+            height: 100px;
+            padding: 10px;
+            margin: 5px;
+            background-color: lightgreen;
+            text-align: center;
+            box-sizing: border-box;
+        }
+</style>
+</head>
+<body>
+  <!-- 通常更倾向于使用 border-box 模型，因为它更容易控制元素的实际尺寸。
+  inline 不能设置宽高 
+  布局能力
+  Flexbox 和 Grid 布局提供了更强大的布局能力，但它们仍然基于盒子模型。
+  -->
+  <div class="flex-container">
+    <div class="flex-item">Item 1</div>
+    <div class="flex-item">Item 2</div>
+    <div class="flex-item">Item 3</div>
+</div>
+<div class="grid-container">
+  <div class="grid-item">Item 1</div>
+  <div class="grid-item">Item 2</div>
+  <div class="grid-item">Item 3</div>
+</div>
+</body>
+</html>
