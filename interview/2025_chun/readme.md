@@ -29,8 +29,20 @@
 - shouxie/2map
 
 ## vue 
+https://juejin.cn/post/6844903918753808398?searchId=20250305144621E2370431263632F93357
 - 组件通信
   1vue-communicate
 - v-for  key 有什么用？
   2v-for-key
 - 3vue 的路由传参
+- 4vif
+
+## React
+https://juejin.cn/post/6950063294270930980?searchId=202503051140069F734788547703F78530
+
+https://juejin.cn/post/6941546135827775525?searchId=202503051140069F734788547703F78530
+
+- 1介绍react 事件机制
+
+## 算法 
+https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A1307F2F6
