@@ -8,6 +8,7 @@
   https://codepen.io/bulandent/pen/ymaKoM
 
 ## css
+- css 倒三角或正三角 8csstriangle
 - flex 布局 改变顺序  3flex_order.html
 - 盒模型的理解
   4box_model
@@ -21,3 +22,15 @@
 
 ## html5
 - websocket
+
+## JS 
+- 如何取出对象上的键值对 es6/3entries
+- 1str_reverse
+- shouxie/2map
+
+## vue 
+- 组件通信
+  1vue-communicate
+- v-for  key 有什么用？
+  2v-for-key
+- 3vue 的路由传参
