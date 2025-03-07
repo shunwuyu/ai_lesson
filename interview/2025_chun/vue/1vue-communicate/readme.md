@@ -18,3 +18,8 @@
 - 6. provide / inject
   provide：可以让我们指定想要提供给后代组件的数据或
   inject：在任何后代组件中接收想要添加在这个组件上的数据，不管组件嵌套多深都可以直接拿来用
+
+- 7. vuex/pinia
+
+- 8.  EventBus
+  

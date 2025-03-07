@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
+
 defineProps(["value"])
 const emit = defineEmits(["value"])
 const handlerClick = () => {

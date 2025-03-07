@@ -27,6 +27,7 @@
 - 如何取出对象上的键值对 es6/3entries
 - 1str_reverse
 - shouxie/2map
+- 执行顺序eventloop/sx1
 
 ## vue 
 https://juejin.cn/post/6844903918753808398?searchId=20250305144621E2370431263632F93357
@@ -44,5 +45,13 @@ https://juejin.cn/post/6941546135827775525?searchId=202503051140069F734788547703
 
 - 1介绍react 事件机制
 
+
 ## 算法 
 https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A1307F2F6
+
+## 408
+- dns
+  
+## 场景题目
+- case/react/demo1
+- case/js/arr_type

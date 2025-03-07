@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// E G I F J H
+async function async1() {
+  console.log('E'); // 1 
+  await async2(); // 执行权交给async2
+  // async2 是异步函数 await 后面的代码会安排在微任务队列中
+  // 等当前的调用栈清空后才会执行。
+  console.log('F'); // 4
+}
+
+async function async2() {
+  console.log('G'); // 2 
+}
+
+setTimeout(() => console.log('H'), 0);// 宏任务 6
+async1(); // 同步代码执行
+
+new Promise((res) => {
+  console.log('I'); // 3  首次的同步执行栈
+  res();
+}).then(() => console.log('J')); // 假如微任务队列 5
+</script>
+</body>
+</html>
