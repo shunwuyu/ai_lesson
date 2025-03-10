@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// 设置一个名为 'username' 的 localStorage 项
+localStorage.setItem('username', 'JohnDoe');
+localStorage.removeItem('username');
+// 或者清空所有 localStorage 数据
+localStorage.clear();
+
+// 设置一个名为 'username' 的 sessionStorage 项
+sessionStorage.setItem('username', 'JaneDoe');
+// 删除名为 'username' 的 sessionStorage 项
+sessionStorage.removeItem('username');
+// 关闭就没有
+// 或者清空所有 sessionStorage 数据
+sessionStorage.clear();
+
+const setCookie = (name, value, days) => {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = `${name}=${value};${expires};path=/`;
+};
+
+// 读取名为 'username' 的 Cookie
+const getCookie = (name) => {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+};
+
+console.log(getCookie('username')); // 输出: AliceSmith
+
+setCookie('username', 'AliceSmith', 7);
+
+// 删除名为 'username' 的 Cookie
+const deleteCookie = (name) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+};
+
+deleteCookie('username');
+</script>
+</body>
+</html>

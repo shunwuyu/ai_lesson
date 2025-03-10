@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page 1</title>
+</head>
+<body>
+    <h2>Page 1</h2>
+    <label for="username">Enter your name:</label>
+    <input type="text" id="username" placeholder="Your name">
+    <button onclick="saveToSession()">Save to Session Storage</button>
+    <a href="http://127.0.0.1:5501/interview/chunzhao/html5/localStorage_demo/session_demo/2.html">2.html</a>
+    <script>
+        function saveToSession() {
+            const username = document.getElementById('username').value;
+            sessionStorage.setItem('username', username);
+            alert('Username saved to session storage!');
+        }
+    </script>
+</body>
+</html>

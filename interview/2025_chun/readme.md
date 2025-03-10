@@ -37,6 +37,7 @@ https://juejin.cn/post/6844903918753808398?searchId=20250305144621E2370431263632
   2v-for-key
 - 3vue 的路由传参
 - 4vif
+- 5vue ref reactive 源码
 
 ## React
 https://juejin.cn/post/6950063294270930980?searchId=202503051140069F734788547703F78530
@@ -51,7 +52,15 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 
 ## 408
 - dns
+- seo
+- abccookie
+- http 与 https 有什么区别?
   
 ## 场景题目
 - case/react/demo1
 - case/js/arr_type
+
+## git
+- git冲突 diff1
+- branch demo1
+- stash demo1

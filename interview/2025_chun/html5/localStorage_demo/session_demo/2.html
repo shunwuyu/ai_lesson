@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page 2</title>
+</head>
+<body>
+    <h2>Page 2</h2>
+    <button onclick="getFromSession()">Get Username from Session Storage</button>
+    <p id="displayUsername"></p>
+
+    <script>
+        function getFromSession() {
+            const username = sessionStorage.getItem('username');
+            if (username) {
+                document.getElementById('displayUsername').innerText = `Hello, ${username}!`;
+            } else {
+                document.getElementById('displayUsername').innerText = 'No username found in session storage.';
+            }
+        }
+    </script>
+</body>
+</html>
