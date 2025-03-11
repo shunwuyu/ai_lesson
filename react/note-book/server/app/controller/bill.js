@@ -308,6 +308,37 @@ class BillController extends Controller {
       }
     }
   }
+
+  async detail() {
+    const { ctx } = this;
+    const { id = '' } = ctx.params
+    let user_id = ctx.user.id;
+
+    if (!id) {
+      ctx.body = {
+        code: 500,
+        msg: '订单id不能为空',
+        data: null
+      }
+      return
+    }
+    console.log('///////////////// ', id)
+
+    try {
+      const detail = await ctx.service.bill.detail(id, user_id)
+      ctx.body = {
+        code: 200,
+        msg: '请求成功',
+        data: detail
+      }
+    } catch(error) {
+      ctx.body = {
+        code: 500,
+        msg: '系统错误',
+        data: null
+      }
+    }
+  }
 }
 
 module.exports = BillController;

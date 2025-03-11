@@ -66,6 +66,22 @@ class BillService extends Service {
       return null;
     }
   }
+
+  async detail(id, user_id) {
+    const { app } = this;
+    try {
+      const result = await app.model.Bill.findOne({
+        where: {
+          id,
+          user_id
+        }
+      })
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
 }
 
 module.exports = BillService;

@@ -28,6 +28,7 @@
 - 1str_reverse
 - shouxie/2map
 - 执行顺序eventloop/sx1
+- js/es6/definePro_proxy
 
 ## vue 
 https://juejin.cn/post/6844903918753808398?searchId=20250305144621E2370431263632F93357
