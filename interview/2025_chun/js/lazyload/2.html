@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .list-item{
+      height: 400px; 
+      margin: 5px; 
+      list-style: none;
+    }
+    .list-item-img{
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+    <li class="list-item"><img src="" class="list-item-img" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250313/v2_15ad8ef9eca34830b4a2e081bbc7f57a@000000_oswg172644oswg1536oswg722_img_000?x-oss-process=image/resize,m_mfit,w_960,h_400,limit_0/crop,w_960,h_400,g_center" /></li>
+    <li class="list-item"><img src="" class="list-item-img" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_aeaa7a1d51e74c3a8f909c96cd73a687@000000_oswg169950oswg1440oswg600_img_jpeg?x-oss-process=image/format,webp" /></li>
+    <li class="list-item"><img src="" class="list-item-img" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_1c88dc26ff9341cf8738d670896ce3a8@5284654_oswg847922oswg1440oswg600_img_png?x-oss-process=image/resize,m_mfit,w_960,h_400,limit_0/crop,w_960,h_400,g_center/format,webp" /></li>
+    <li class="list-item"><img src="" class="list-item-img" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_e1d92f43af2c4f47b8852ea8786e606f@6100851_oswg635095oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_960,h_400,limit_0/crop,w_960,h_400,g_center/format,webp" />
+    </li>
+    <li class="list-item"><img src="" class="list-item-img" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250307/v2_9295b22d4a1b4b55ac4c3379b2da80cc@6100851_oswg781048oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_600,h_400,limit_0/crop,w_600,h_400,g_center/format,webp" /></li>
+    <li class="list-item"><img src="" class="list-item-img" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250313/v2_0f70e0a75a8d4736a050e846cd6ab3e5@1743780481_oswg183216oswg1080oswg629_img_000?x-oss-process=image/format,jpg/interlace,1" /></li>
+
+    <script>
+    // IntersectionObserver 是一个用于异步观察目标元素与其祖先元素或顶级文档视口交叉状态的浏览
+    // 器接口。简而言之，它允许你监听某个元素是否进入了浏览器的可视区域或者与其他元素发生了重叠，
+    // 从而实现高效的懒加载、无限滚动等用户体验优化功能。
+        var observer = new IntersectionObserver(function(changes) {
+            console.log(changes);
+            changes.forEach(function(element, index) {
+                // statements
+                if (element.intersectionRatio > 0 && element.intersectionRatio <= 1) {
+                    element.target.src = element.target.dataset.original;
+                }
+            });
+        });
+
+
+        function addObserver() {
+            var listItems = document.querySelectorAll('.list-item-img');
+            listItems.forEach((item) => {
+                observer.observe(item);
+            });
+        }
+
+        addObserver();
+    </script>
+  <!-- <script>
+    function LazyLoad (images, options = {}) {
+      if (!(this instanceof LazyLoad)) {
+        return new LazyLoad(images, options)
+      }
+      this.setting = Object.assign({}, { src: 'data-src', srcset: 'data-srcset', selector: '.lazyload' }, options)
+      this.images = images || document.querySelectorAll(this.setting.selector)
+      this.observer = null
+      this.init()
+    }
+
+    LazyLoad.prototype.init = function () {
+      let self = this
+      let observerConfig = {
+        root: null,
+        rootMargin: '0px',
+        threshold: [0]
+      }
+      this.observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const target = entry.target
+          if (entry.intersectionRatio > 0) {
+            this.observer.unobserve(target)
+            const src = target.getAttribute(this.setting.src)
+            const srcset = target.getAttribute(this.setting.srcset)
+            if ('img' === target.tagName.toLowerCase()) {
+              if (src) {
+                target.src = src
+              }
+              if (srcset) {
+                target.srcset = srcset
+              }
+            } else {
+              target.style.backgroundImage = `url(${src})`
+            }
+          }
+        })
+      }, observerConfig)
+
+      this.images.forEach(image => this.observer.observe(image))
+    }
+  </script> -->
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IndexedDB 示例</title>
+</head>
+<body>
+<script>
+    // 打开或创建数据库
+    const request = indexedDB.open('MyTestDB', 1);
+
+    request.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        // 创建对象存储空间（表）
+        const objectStore = db.createObjectStore('storeName', { keyPath: 'id' });
+        objectStore.createIndex('name', 'name', { unique: false });
+    };
+
+    request.onsuccess = function(event) {
+        const db = event.target.result;
+
+        // 添加数据
+        const transaction = db.transaction(['storeName'], 'readwrite');
+        const objectStore = transaction.objectStore('storeName');
+        objectStore.add({ id: 1, name: '测试数据' });
+
+        // 读取数据
+        const transaction2 = db.transaction(['storeName'], 'readonly');
+        const request2 = transaction2.objectStore('storeName').get(1);
+        request2.onsuccess = function(event) {
+            console.log(request2.result ? request2.result.name : '未找到数据');
+        };
+    };
+</script>
+</body>
+</html>

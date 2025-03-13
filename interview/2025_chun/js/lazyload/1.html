@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .image-item {
+      display: block;
+      margin-bottom: 50px;
+      height: 200px;
+      /* 一定记得设置图片高度 */
+    }
+  </style>
+</head>
+
+<body>
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250313/v2_15ad8ef9eca34830b4a2e081bbc7f57a@000000_oswg172644oswg1536oswg722_img_000?x-oss-process=image/resize,m_mfit,w_960,h_400,limit_0/crop,w_960,h_400,g_center" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_aeaa7a1d51e74c3a8f909c96cd73a687@000000_oswg169950oswg1440oswg600_img_jpeg?x-oss-process=image/format,webp" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_1c88dc26ff9341cf8738d670896ce3a8@5284654_oswg847922oswg1440oswg600_img_png?x-oss-process=image/resize,m_mfit,w_960,h_400,limit_0/crop,w_960,h_400,g_center/format,webp" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_e1d92f43af2c4f47b8852ea8786e606f@6100851_oswg635095oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_960,h_400,limit_0/crop,w_960,h_400,g_center/format,webp" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250307/v2_9295b22d4a1b4b55ac4c3379b2da80cc@6100851_oswg781048oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_600,h_400,limit_0/crop,w_600,h_400,g_center/format,webp" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250306/v2_6ea048ac01c3408a9ed6ebe79a8fc8a2@5888275_oswg849213oswg1053oswg495_img_png?x-oss-process=image/resize,m_mfit,w_600,h_400,limit_0/crop,w_600,h_400,g_center/format,webp" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_e4c73b024bcc409fba427adb2d7fb2fa@000000_oswg1251602oswg1080oswg559_img_000?x-oss-process=image/format,jpg/interlace,1" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_9f21750bb37243128b6b1790f9072649@000000_oswg1219724oswg1080oswg601_img_000?x-oss-process=image/format,jpg/interlace,1" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_2acf9b228cd940c1b5fdb5691c0b6e4c@000000_oswg1402679oswg1080oswg527_img_000?x-oss-process=image/format,jpg/interlace,1" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250312/v2_af4dd443d261445d8e903c473cac074c@000000_oswg1118331oswg1080oswg497_img_000?x-oss-process=image/format,jpg/interlace,1" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250313/v2_e7de1cc8e8014122ba303ea036eea532@1743780481_oswg58583oswg1080oswg257_img_000?x-oss-process=image/format,jpg/interlace,1" />
+  <img src="" class="image-item" lazyload="true" data-original="https://img.36krcdn.com/hsossms/20250313/v2_0f70e0a75a8d4736a050e846cd6ab3e5@1743780481_oswg183216oswg1080oswg629_img_000?x-oss-process=image/format,jpg/interlace,1" />
+  <script>
+
+    // fn是我们需要包装的事件回调, interval是时间间隔的阈值
+function throttle(fn, interval) {
+  // last为上一次触发回调的时间
+  let last = 0
+  
+  // 将throttle处理结果当作函数返回
+  return function () {
+      // 保留调用时的this上下文
+      let context = this
+      // 保留调用时传入的参数
+      let args = arguments
+      // 记录本次触发回调的时间
+      let now = +new Date()
+      
+      // 判断上次触发的时间和本次触发的时间差是否小于时间间隔的阈值
+      if (now - last >= interval) {
+      // 如果时间间隔大于我们设定的时间间隔阈值，则执行回调
+          last = now;
+          fn.apply(context, args);
+      }
+    }
+}
+
+    var viewHeight = document.documentElement.clientHeight//获取可视区高度
+    function lazyload() {
+      var eles = document.querySelectorAll('img[data-original][lazyload]')
+      Array.prototype.forEach.call(eles, function (item, index) {
+        var rect
+        if (item.dataset.original === "")return
+        rect = item.getBoundingClientRect()// 用于获得页面中某个元素的左，上，右和下分别相对浏览器视窗的位置
+        // 返回值是一个 DOMRect 对象，这个对象是由该元素的 getClientRects() 方法返回的一组矩形的集合, 即：是与该元素相关的CSS 边框集合 。
+        if (rect.bottom >= 0 && rect.top < viewHeight) {
+          !function () {
+            var img = new Image() // 这样做就相当于给浏览器缓存了一张图片。
+            img.src = item.dataset.original
+            img.onload = function () {
+              item.src = img.src
+            }
+            item.removeAttribute("data-original")//移除属性，下次不再遍历
+            item.removeAttribute("lazyload")
+          }()
+        }
+      })
+    }
+    lazyload()//刚开始还没滚动屏幕时，要先触发一次函数，初始化首页的页面图片
+    window.addEventListener('scroll', throttle(lazyload, 500), false);
+    // document.addEventListener("scroll",lazyload)
+  </script>
+</body>
+
+</html>
