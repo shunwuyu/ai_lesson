@@ -20,7 +20,8 @@
   7css3_new
 - perspective+ backface-visibility 卡片翻转
 - iconfont 原理
-  
+- css 三栏式布局  
+  9css_3column
 
 ## html5
 - websocket
@@ -71,6 +72,8 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - abccookie
 - http 与 https 有什么区别?
 - cookie 适合那种场景 cookie_jwt
+- http_version
+
 
   
 ## 场景题目
@@ -81,3 +84,6 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - git冲突 diff1
 - branch demo1
 - stash demo1
+
+## ai
+- 流式输出

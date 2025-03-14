@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <ul>
+    <li id="one">1</li>
+    <li id="two">2</li></ul>
+  <script>
+  const ul = document.querySelector('ul')
+  const two = document.querySelector('#two')
+  console.log(two.nextSibling);
+  const one = document.querySelector('#one')
+  ul.insertBefore(one, two.nextSibling)
+  </script>
+</body>
+</html>
