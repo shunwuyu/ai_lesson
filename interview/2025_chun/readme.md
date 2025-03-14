@@ -48,6 +48,9 @@ https://juejin.cn/post/6844903918753808398?searchId=20250305144621E2370431263632
 - 6 watch and watchEffect
 - 虚拟DOM 是什么 7Virtual-DOM
 - diff 算法 8diff
+- ssr 9ssr
+- vuex 
+  
 
 ## React
 https://juejin.cn/post/6950063294270930980?searchId=202503051140069F734788547703F78530

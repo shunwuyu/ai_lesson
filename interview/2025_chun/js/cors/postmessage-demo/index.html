@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>This is parent window</h1>
+  <input type="text" class="inp">
+  <button class="send">发送信息到iframe</button>
+  <div class="contents">
+    <p>接收到的信息</p>
+    <ul class="messages">
+
+    </ul>
+  </div>
+  <iframe src="child.html" frameborder="3" class="child-iframe" height="600" width="800"></iframe>
+  <script>
+    // 父页面监听message事件，接受iframe发送的消息
+    window.addEventListener('message', e => {
+      if (e.origin !== 'http://127.0.0.1:5500') { // 验证对方的身份
+        return
+      }
+      const box = document.querySelector('.messages')
+      box.innerHTML += `<li> 收到新的信息：${e.data}, 来自于${e.origin}</li>`;
+    });
+    // iframe的引用
+    const win = document.querySelector('.child-iframe').contentWindow
+    document.querySelector('.send').addEventListener('click', () => {
+      const msg = document.querySelector('.inp').value
+      win.postMessage(msg, '*') // 这里使用*，也可以是iframe的URL地址
+      document.querySelector('.inp').value = ''
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CORS Preflight Example</title>
+</head>
+<body>
+    <script>
+        var xhr = new XMLHttpRequest();
+        
+        // 配置PUT请求
+        xhr.open('PUT', 'http://localhost:3000/data', true);
+        
+        // 设置自定义头部信息
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        // xhr.setRequestHeader('X-Custom-Header', 'custom-value');
+        
+        // 发送JSON数据
+        xhr.send(JSON.stringify({key: "value"}));
+        
+        // 监听请求完成事件
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                console.log('请求成功:', xhr.response);
+            } else {
+                console.error('请求出错:', xhr.status, xhr.statusText);
+            }
+        };
+        
+        // 监听错误事件
+        xhr.onerror = function() {
+            console.error('请求发生错误');
+        };
+    </script>
+</body>
+</html>

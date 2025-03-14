@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>This is iframe child page</h1>
+  <input type="text" class="inp">
+  <button class="send">发送信息到夫窗口</button>
+  <div class="contents">
+    <p>接收到的信息</p>
+    <ul class="messages">
+
+    </ul>
+  </div>
+  <script>
+    let parentWin
+    // 监听父页面的消息
+    window.addEventListener('message', e => {
+      if (e.origin !== 'http://127.0.0.1:5500') { // 验证对方的身份
+        return
+      }
+      // 发送详细窗口的window对象引用，调用对象postMessage方法实现父子页面的通信，当然也可以使用window.parent来通信
+      parentWin = e.source
+      const box = document.querySelector('.messages')
+      box.innerHTML += `<li>接收到新的信息：${e.data}, 来自于${e.origin}</li>`
+    })
+    console.log(window.parent.location)
+
+    document.querySelector('.send').addEventListener('click', () => {
+      const msg = document.querySelector('.inp').value
+      window.parent.postMessage(msg, '*') // 
+      document.querySelector('.inp').value = ''
+    })
+  </script>
+</body>
+
+</html>
