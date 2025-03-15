@@ -36,6 +36,7 @@
 - js/es6/definePro_proxy
 - js/cors
 - js/lazyload
+- axios 的底层是？
 
 ## vue 
 https://juejin.cn/post/6844903918753808398?searchId=20250305144621E2370431263632F93357
@@ -87,3 +88,6 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 
 ## ai
 - 流式输出
+
+## ngnix 
+  nginx反向代理是什么
