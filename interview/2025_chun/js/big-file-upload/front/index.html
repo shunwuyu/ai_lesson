@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+  <input type="file" id="input">
+  <button id="upload">上传</button>
+  <!-- 上传进度 -->
+  <div style="width: 300px" id="progress"></div>
+  <script>
+  let input = document.getElementById('input')
+  let upload = document.getElementById('upload')
+  let files = {}//创建一个文件对象
+  let chunkList = []//存放切片的数组
+
+  // 创建切片
+  function createChunk(file, size = 2 * 1024 * 1024) {//两个形参：file是大文件，size是切片的大小
+      const chunkList = []
+      let cur = 0
+      while (cur < file.size) {
+        chunkList.push({
+          file: file.slice(cur, cur + size)//使用slice()进行切片
+        })
+        cur += size
+      }
+      return chunkList
+  }
+
+
+  // 读取文件
+  input.addEventListener('change', (e) => {
+      files = e.target.files[0]
+      // Blob 二进制大对象 slice 
+      console.log(files, files.__proto__);
+      
+      chunkList = createChunk(files)
+      // console.log(chunkList, '???????/');
+  })
+
+  // 文件上传
+  upload.addEventListener('click', () => {
+    // console.log(chunkList, '???????????');
+      // 上传切片
+      const uploadList = chunkList.map(({file}, index) => {
+        console.log(file, '--------')
+        return {
+          file,
+          size: file.size,
+          percent: 0,
+          chunkName: `${files.name}-${index}`,
+          fileName: files.name,
+          index
+        }
+      })
+      // console.log(uploadList, '/////')
+      // //发请求，调用函数
+      uploadFile(uploadList)
+  })
+
+  //数据处理
+async function uploadFile(list) {
+  const requestList = list.map(({file,fileName,index,chunkName}) => {
+      const formData = new FormData() // 创建表单类型数据
+      formData.append('file', file)//该文件
+      formData.append('fileName', fileName)//文件名
+      formData.append('chunkName', chunkName)//切片名
+      console.log(fileName, chunkName, '////')
+      return {formData,index}
+  })
+  .map(({formData,index}) =>axiosRequest({
+      method: 'post',
+      url: 'http://localhost:3000/upload',//请求接口，要与后端一一一对应
+      data: formData
+  })
+  .then(res => {
+    console.log(res);
+    //显示每个切片上传进度
+    
+    let p = document.createElement('p')
+    p.innerHTML = `${list[index].chunkName}--${res.data.message}`
+    document.getElementById('progress').appendChild(p)
+    })
+  )
+  await Promise.all(requestList)//保证所有的切片都已经传输完毕
+  // alert('/////')
+  merge(files.size, files.name)
+}
+
+function merge(size, fileName) {
+    axiosRequest({
+        method: 'post',
+        url: 'http://localhost:3000/merge',//后端合并请求
+        data: JSON.stringify({
+            size,
+            fileName
+        }),
+    })
+}
+
+
+function axiosRequest({method = "post",url,data}) {
+  return new Promise((resolve, reject) => {
+        const config = {//设置请求头
+            headers: 'Content-Type:application/x-www-form-urlencoded',
+        }
+        //默认是post请求，可更改
+        axios[method](url,data,config).then((res) => {
+            resolve(res)
+        }).catch(err => {
+          console.log(err)
+          reject(err)
+        })
+    })
+}
+  </script>
+</body>
+</html>
