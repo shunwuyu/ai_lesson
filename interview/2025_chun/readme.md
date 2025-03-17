@@ -52,6 +52,7 @@ https://juejin.cn/post/6844903918753808398?searchId=20250305144621E2370431263632
 - diff 算法 8diff
 - ssr 9ssr
 - vuex 
+- computed vue 6watchEffect
   
 
 ## React
