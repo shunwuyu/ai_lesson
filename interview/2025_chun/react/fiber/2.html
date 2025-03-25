@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>requestIdleCallback 示例</title>
+  <style>
+    #status {
+      font-family: monospace;
+      margin: 20px 0;
+    }
+    #progress {
+      width: 100%;
+      height: 20px;
+      border: 1px solid #ccc;
+    }
+    #bar {
+      height: 100%;
+      width: 0%;
+      background-color: #4CAF50;
+      transition: width 0.1s;
+    }
+    button {
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>requestIdleCallback 演示</h1>
+  
+  <div id="controls">
+    <button id="startBtn">开始处理10000个数据项</button>
+    <button id="animateBtn">开始动画</button>
+  </div>
+  
+  <div id="status">准备就绪</div>
+  <div id="progress"><div id="bar"></div></div>
+  
+  <div id="animation" style="width:50px; height:50px; background:red; position:relative;"></div>
+  
+  <script>
+    // 获取DOM元素
+    const statusEl = document.getElementById('status');
+    const progressBar = document.getElementById('bar');
+    const startBtn = document.getElementById('startBtn');
+    const animateBtn = document.getElementById('animateBtn');
+    const animation = document.getElementById('animation');
+    
+    // 创建数据
+    let dataItems = [];
+    for (let i = 0; i < 1000000; i++) {
+      dataItems.push({
+        id: i,
+        value: Math.random() * 1000
+      });
+    }
+    
+    let processedItems = 0;
+    let isProcessing = false;
+    let startTime;
+    
+    // 处理单个数据项的函数
+    function processItem(item) {
+      // 模拟耗时计算
+      let result = 0;
+      for (let i = 0; i < 5000; i++) {
+        result += Math.sqrt(item.value) * Math.sin(i);
+      }
+      return result;
+    }
+    
+    // 使用requestIdleCallback处理数据
+    function processDataChunk(deadline) {
+      // 如果有剩余时间且还有数据要处理
+      while (deadline.timeRemaining() > 0 && processedItems < dataItems.length && isProcessing) {
+        processItem(dataItems[processedItems]);
+        processedItems++;
+        
+        // 更新进度
+        const progress = Math.floor((processedItems / dataItems.length) * 100);
+        progressBar.style.width = progress + '%';
+        statusEl.textContent = `已处理: ${processedItems}/${dataItems.length} (${progress}%)`;
+      }
+      console.log('//////')
+      // 如果还有数据要处理，继续请求空闲回调
+      if (processedItems < dataItems.length && isProcessing) {
+        requestIdleCallback(processDataChunk);
+      } else if (isProcessing) {
+        const endTime = performance.now();
+        const totalTime = (endTime - startTime).toFixed(2);
+        statusEl.textContent = `完成! 处理了${processedItems}个项目，耗时${totalTime}ms`;
+        isProcessing = false;
+      }
+    }
+    
+    // 开始处理按钮
+    startBtn.addEventListener('click', () => {
+      if (!isProcessing) {
+        isProcessing = true;
+        processedItems = 0;
+        startTime = performance.now();
+        statusEl.textContent = '处理中...';
+        
+        // 开始在空闲时间处理数据
+        requestIdleCallback(processDataChunk, { timeout: 5000 });
+      }
+    });
+    
+    // 动画按钮 - 用于测试主线程是否被阻塞
+    let animating = false;
+    let position = 0;
+    
+    function moveBox() {
+      if (!animating) return;
+      
+      position = (position + 5) % 350;
+      animation.style.left = position + 'px';
+      requestAnimationFrame(moveBox);
+    }
+    
+    animateBtn.addEventListener('click', () => {
+      animating = !animating;
+      animateBtn.textContent = animating ? '停止动画' : '开始动画';
+      if (animating) {
+        moveBox();
+      }
+    });
+  </script>
+</body>
+</html>

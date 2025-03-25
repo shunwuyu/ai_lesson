@@ -97,3 +97,5 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 
 - workflow/webpack-demo
 - llm/rag/
+- react/fiber
+- vue/dynamic_component

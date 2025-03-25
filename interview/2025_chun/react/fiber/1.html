@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiber 机制</title>
+    <style>
+    .progress-bar {
+        background-color: green;
+    }
+    </style>
+</head>
+<body>
+    <div id="div" class="progress-bar"></div>
+    <button id="start">开始动画</button>
+    <script>
+    let btn = document.getElementById('start')
+  let div = document.getElementById('div')
+  let start = 0
+  let allInterval = []
+
+  const progress = () => {
+    div.style.width = div.offsetWidth + 1 + 'px'
+    div.innerHTML = (div.offsetWidth) + '%'
+    if (div.offsetWidth < 100) {
+      let current = Date.now()
+      allInterval.push(current - start)
+      start = current
+      requestAnimationFrame(progress)
+    } else {
+      console.log(allInterval) // 打印requestAnimationFrame的全部时间间隔
+    }
+  }
+
+  btn.addEventListener('click', () => {
+    div.style.width = 0
+    let currrent = Date.now()
+    start = currrent
+    requestAnimationFrame(progress)
+    console.log(allInterval)
+  })
+
+    </script>
+</body>
+</html>
