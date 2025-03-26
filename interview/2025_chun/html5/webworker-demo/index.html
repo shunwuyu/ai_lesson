@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Image Compression with Web Workers</title>
+</head>
+<body>
+
+
+<script>
+const myWorker = new Worker('./worker.js'); // 创建worker
+
+myWorker.addEventListener('error', err => {
+    console.log(err.message);
+});
+myWorker.addEventListener('message', e => {
+    console.log(e.data)
+});
+myWorker.postMessage('hello');
+</script>
+</body>
+</html>

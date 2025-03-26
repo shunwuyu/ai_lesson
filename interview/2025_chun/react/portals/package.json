@@ -1,0 +1,12 @@
+{
+  "name": "portals",
+  "version": "1.0.0",
+  "description": "React Portals 是 ReactDOM 提供的一个功能，允许你将子组件渲染到父组件 DOM 层次结构之外的 DOM 节点中。这在创建模态框、弹出窗口等需要\"逃离\"父组件 CSS 限制的场景中特别有用。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

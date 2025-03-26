@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    #child {
+        background-color: red;
+        width: 100px;
+        height: 100px;
+    }
+    #parent {
+        background-color: blue;
+        width: 200px;
+        height: 200px;
+    }
+    </style>
+    
+</head>
+<body>
+    <div id="parent">
+        <div id="child">
+            
+        </div>
+    </div>
+    <script >
+        // 捕获阶段处理事件的例子
+        document.getElementById("parent").addEventListener("click", function(event) {
+        console.log("父元素捕获阶段被触发");
+        }, true); // 第三个参数为 true，表示在捕获阶段处理事件
+    
+        document.getElementById("child").addEventListener("click", function(event) {
+        console.log("子元素冒泡阶段被触发");
+        }, false); // 默认为 false，表示在冒泡阶段处理事件
+        </script>
+</body>
+</html>

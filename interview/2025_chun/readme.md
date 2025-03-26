@@ -99,3 +99,13 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - llm/rag/
 - react/fiber
 - vue/dynamic_component
+- react 和react-dom 是什么关系？react/react-react-dom
+- react portals  react/portals
+- react/fiber/vue-react-fiber
+- 不会冒泡的事件有哪些？ js/bubble_event
+- webworker html5/webworker
+- async/await 实现原理 es6/async_await/demo1
+- proxy 能够监听到对象的对象的引用吗？ es6/proxy/deep_proxy
+- var [a, b] = {a: 1, b: 2} 解构赋值成功 es6/destructuring/demo1
+- bind call apply 有啥区别 js/bind_call_apply
+- js/big_file_new 
