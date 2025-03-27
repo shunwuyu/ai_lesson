@@ -36,7 +36,7 @@ server.on('request', async (req, res) => {
     }
 
     if (req.url === '/merge') { // 该去合并切片了
-      const data = await resolvePost(req)
+      const data = await resolvePost(req) // 请求体-》json 
       const {
           fileName,
           size
@@ -54,9 +54,12 @@ server.on('request', async (req, res) => {
 
 async function mergeFileChunk(filePath, fileName, size) {
   const chunkDir = path.resolve(UPLOAD_DIR, `${fileName}-chunks`)
-  let chunkPaths = await fse.readdir(chunkDir)
+  let chunkPaths = await fse.readdir(chunkDir) // 所有的切片
+  // index 
   chunkPaths.sort((a, b) => a.split('-')[1] - b.split('-')[1])
   const arr = chunkPaths.map((chunkPath, index) => {
+    // node 的stream 操作 
+    // 水管
       return pipeStream(
           path.resolve(chunkDir, chunkPath),
           // 在指定的位置创建可写流
@@ -83,9 +86,11 @@ function pipeStream(path, writeStream) {
 
 
 function resolvePost(req) {
+    // 二进制 
   // 解析参数
   return new Promise(resolve => {
       let chunk = ''
+      // eventemitter 
       req.on('data', data => { //req接收到了前端的数据
           chunk += data //将接收到的所有参数进行拼接
       })

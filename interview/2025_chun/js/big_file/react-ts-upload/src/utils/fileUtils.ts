@@ -1,6 +1,6 @@
 export const calculateHash = async (file: File): Promise<string> => {
     return new Promise((resolve) => {
-      const reader = new FileReader();
+      const reader = new FileReader();//html5 
       reader.readAsArrayBuffer(file);
       reader.onload = (e) => {
         const buffer = e.target?.result as ArrayBuffer;

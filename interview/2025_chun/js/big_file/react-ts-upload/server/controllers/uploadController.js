@@ -33,6 +33,7 @@ const getChunkDir = (fileHash) => {
 exports.uploadController = {
   // Verify if file already exists or get uploaded chunks
   async verifyFile(ctx) {
+    // 前端怎么做hash?
     const { fileHash, fileName, fileSize } = ctx.request.body;
     console.log(fileHash,fileName,fileSize,'///')
     const filePath = path.join(UPLOAD_DIR, fileName);
@@ -48,7 +49,7 @@ exports.uploadController = {
         if (existingFileHash === fileHash) {
           // File already exists and is identical
           ctx.body = {
-            shouldUpload: false,
+            shouldUpload: false, // 快传
             url: `/uploads/${fileName}`
           };
           return;
