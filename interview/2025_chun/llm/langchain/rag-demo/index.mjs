@@ -33,21 +33,21 @@ await vectorstore.addDocuments(splitDocs);
 console.log('Stored documents:', vectorstore.memoryVectors);
 
 // // 一是从向量存储中创建一个检索器
-// const retriever = vectorstore.asRetriever(2)
+const retriever = vectorstore.asRetriever(2)
 // // console.log(retriever., '????');
 // // 二是使用该检索器根据给定的查询语句进行检索，并打印检索结果
 // // const res = await retriever.invoke("我是谁？")
 // // console.log(res);
 
 // // 创建聊天模型实例
-// const chatModel = new ChatOpenAI({ temperature: 0 });
+const chatModel = new ChatOpenAI({ temperature: 0 });
 
-// const qaChain = ConversationalRetrievalQAChain.fromLLM(chatModel, retriever);
-// // const question = "我是谁？";
+const qaChain = ConversationalRetrievalQAChain.fromLLM(chatModel, retriever);
+const question = "我是谁？";
 // const question = "原文中，谁提出了宏原子的假设？"
 
-// const chatHistory = [];
+const chatHistory = [];
 // // 调用问答链获取回答
-// const response = await qaChain.call({ question, chat_history:chatHistory });
+const response = await qaChain.call({ question, chat_history:chatHistory });
 // // 打印回答
-// console.log(response.text);
+console.log(response.text);

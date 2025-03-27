@@ -134,3 +134,4 @@ AI全栈工程师课程
 - zustand/repos
 - interview/2025_chun/
 - react/my-next-todo-app
+- react/next/next-demo
