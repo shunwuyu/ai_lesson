@@ -1,0 +1,27 @@
+# POST http://localhost:3000/api/chat
+# Content-Type: application/json
+
+# {
+#     "messages": [
+#         {
+#             "role": "user",
+#             "content": "who are you?"
+#         }
+#     ]
+# }
+
+# POST https://api.deepseek.com/v1/chat/completions
+# Content-Type: application/json
+# Authorization: Bearer sk-2d37c5f6549c4e33b0ff6eaa7bdf6a04
+
+# {
+#     "model": "deepseek-chat",
+#     "messages": [
+#         {
+#             "role": "user",
+#             "content": "who are you?"
+#         }
+#     ]
+# }
+
+POST http://localhost:3000/api/playground/tools
