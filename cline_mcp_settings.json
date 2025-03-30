@@ -1,0 +1,10 @@
+{
+    "mcpServers": {
+        "weather-mcp": {
+            "command": "node",
+            "args": [
+                "/Users/shunwuyu/workspace/lesson/ai_lesson/mcp/weather-mcp-server/weather.js"
+            ]
+        }
+    }
+} 

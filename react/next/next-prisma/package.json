@@ -1,0 +1,19 @@
+{
+  "name": "next-prisma",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "mysql2": "^3.14.0",
+    "next": "15.2.4",
+    "prisma": "^6.5.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

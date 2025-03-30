@@ -135,3 +135,4 @@ AI全栈工程师课程
 - interview/2025_chun/
 - react/my-next-todo-app
 - react/next/next-demo
+- next/next-app-manual
