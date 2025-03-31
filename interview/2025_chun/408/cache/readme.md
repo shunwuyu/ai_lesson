@@ -19,3 +19,4 @@ https://juejin.cn/post/6844903810393964551
         - Etag 和 If-None-Match
 
         
+我会从浏览器缓存和HTTP缓存两方面回答：使用localStorage/sessionStorage存储数据，配置Cache-Control/ETag控制资源缓存策略，对静态资源使用强缓存，动态接口使用协商缓存，提升访问性能。
