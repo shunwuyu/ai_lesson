@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- MutationObserver 是一个用于监听 DOM 树变化的接口
+    ，它能够在节点被添加、删除或属性被修改时异步地通知你。
+    关于任务类型，MutationObserver 的回调执行是基于微
+    任务机制的，具体来说，它会在当前执行栈为空且在下一个
+    宏任务开始之前被触发，因此可以认为它是微任务的一部分。 -->
+</head>
+<body>
+    <div id="sample-div" class="test"> Simple div </div>
+    <script>
+    var mutationObserver = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+            console.log(mutation);
+        });
+    });
+
+    mutationObserver.observe(document.documentElement, {
+  attributes: true,
+  characterData: true,
+  childList: true,
+  subtree: true,
+  attributeOldValue: true,
+  characterDataOldValue: true
+});
+
+    setTimeout(() => {
+        document.getElementById('sample-div').classList.remove('test')
+    }, 5000)
+
+    </script>
+</body>
+</html>

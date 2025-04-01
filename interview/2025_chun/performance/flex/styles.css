@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap; /* 允许换行 */
+    justify-content: space-between; /* 元素之间均匀分布 */
+}
+
+.flex-item {
+    background-color: #4CAF50; /* 绿色背景 */
+    color: white; /* 白色文字 */
+    padding: 20px;
+    margin: 10px;
+    flex: 1 1 calc(25% - 20px); /* 每个元素占容器的25%宽度，减去边距 */
+    box-sizing: border-box; /* 包含内边距和边框在内的宽度计算 */
+    text-align: center; /* 文字居中 */
+}
