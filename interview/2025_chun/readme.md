@@ -130,8 +130,11 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - 408/http/http2_limit
 - performance/flex
 - mutation observer js/mutationObserver
-- 懒加载 js/lazyload
 - 异步同步 js/async_sync
 - 闭包 js/closure
 - 深拷贝/浅拷贝  https://juejin.cn/post/6844903929705136141?searchId=202504021133106305549D45D88A155248#heading-8
 - 回文 algorithm/huiwen
+- css动画和js动画的区别  css/animation/js_css
+- prompt_engineering llm/prompt
+- http中tcp 和udp 的区别， http3.0 408/tcp_udp
+- 懒加载 js/lazyload
