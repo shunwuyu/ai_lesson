@@ -138,3 +138,16 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - prompt_engineering llm/prompt
 - http中tcp 和udp 的区别， http3.0 408/tcp_udp
 - 懒加载 js/lazyload
+- 字符串常用方法 js/str_methods
+- 数组常用方法  js/arr_methods
+- 数组扁平化  js/arr_flatten
+- 版本号判断 algorithm/version
+- js/es6/var_let_const
+- 状态码 408/status_code
+- 跨站脚本注入、跨站请求伪造，如何预防 408/gj
+- 反转二叉树 algorithm/invert_binary_tree
+- 虚拟DOM的作用 vue/virtualdom/demo1
+- diff 算法  vue/diff/vue23-react
+- vuex https://github.com/vuejs/vuex/tree/main/examples/composition/counter
+- vue和react数据流的区别 vue/dataflow
+- 受控组件 非受控组件 react/control_com

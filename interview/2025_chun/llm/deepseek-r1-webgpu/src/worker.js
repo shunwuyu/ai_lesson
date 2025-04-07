@@ -10,9 +10,13 @@
 // } from "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0";
 
 import {
+    // AutoTokenizer 用于自动选择和加载适合特定预训练模型的分词器，将文本转换为模型可处理的 token 格式。
     AutoTokenizer,
+    // AutoModelForCausalLM 用于自动加载适合因果语言建模任务的预训练模型，支持文本生成和上下文理解。
     AutoModelForCausalLM,
+    // 用于处理文本流输出的类，通常在生成文本时使用。
     TextStreamer,
+    // 用于定义文本生成过程中的停止条件，允许在满足特定条件时中断生成
     InterruptableStoppingCriteria,
 } from "@huggingface/transformers";
 
