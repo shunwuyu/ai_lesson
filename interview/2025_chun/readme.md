@@ -119,9 +119,7 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - 算法 cake 
 - 双token 408/double_token
 - js/setTimeout_setInterval
-- js/es6/promise/hand
 - js/es6/promise/hld
-- js/es6/promise/control
 - js/es6/promise/allSettled
 - llm/cursor
 - algorithm/dashu
@@ -131,7 +129,6 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - performance/flex
 - mutation observer js/mutationObserver
 - 异步同步 js/async_sync
-- 闭包 js/closure
 - 深拷贝/浅拷贝  https://juejin.cn/post/6844903929705136141?searchId=202504021133106305549D45D88A155248#heading-8
 - 回文 algorithm/huiwen
 - css动画和js动画的区别  css/animation/js_css
@@ -151,3 +148,12 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - vuex https://github.com/vuejs/vuex/tree/main/examples/composition/counter
 - vue和react数据流的区别 vue/dataflow
 - 受控组件 非受控组件 react/control_com
+- polling js/polling
+- 闭包 js/closure
+- fetch js/fetch
+- js/es6/promise/hand
+- js/es6/promise/control
+- js/es6/promise/abort
+- react中实现keep-alive  react/keep-alive
+- react中怎么实现 懒加载组件 react/cache-component
+- ts/types
