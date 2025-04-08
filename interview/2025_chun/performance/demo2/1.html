@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance API Example</title>
+    <style>
+        #myList {
+            margin: 20px;
+            padding: 0;
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <ul id="myList">
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+    </ul>
+
+    <script>
+        // 在 DOMContentLoaded 事件中开始测量
+        document.addEventListener('DOMContentLoaded', function() {
+            // 标记开始时间
+            performance.mark('start');
+
+            // 获取第一个 li 元素
+            const firstLi = document.querySelector('#myList li');
+
+            // 确保第一个 li 元素存在
+            if (firstLi) {
+                // 标记第一个 li 渲染完成的时间
+                performance.mark('firstLiRendered');
+            }
+
+            // 标记结束时间
+            performance.mark('end');
+
+            // 测量第一个 li 渲染的时间
+            performance.measure('First LI Render Time', 'start', 'firstLiRendered');
+
+            // 获取测量结果
+            const measures = performance.getEntriesByName('First LI Render Time');
+            if (measures.length > 0) {
+                console.log('第一个 li 渲染的时间: ', measures[0].duration, '毫秒');
+            }
+
+            // 清理标记和测量数据
+            performance.clearMarks();
+            performance.clearMeasures();
+        });
+    </script>
+</body>
+</html>
