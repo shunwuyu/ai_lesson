@@ -103,7 +103,6 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - react portals  react/portals
 - react/fiber/vue-react-fiber
 - 不会冒泡的事件有哪些？ js/bubble_event
-- webworker html5/webworker
 - async/await 实现原理 es6/async_await/demo1
 - proxy 能够监听到对象的对象的引用吗？ es6/proxy/deep_proxy
 - var [a, b] = {a: 1, b: 2} 解构赋值成功 es6/destructuring/demo1
@@ -165,3 +164,10 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - addEventListener js/event_args
 - http2.0和3.0 区别 408/http23
 - performance/demo2 
+- js/garbage 垃圾回收
+- vue/lifecycle 生命周期
+- 408/thread
+- es6/weakmap https://juejin.cn/post/6844903646623186958?searchId=20250409095205F4E8FC6DED7FAA9ECAF5
+- node/koa/demo1
+- webworker html5/webworker
+- algorithm/list2tree
