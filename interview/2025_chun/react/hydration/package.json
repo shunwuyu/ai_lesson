@@ -1,0 +1,18 @@
+{
+  "name": "hydration",
+  "version": "1.0.0",
+  "description": "哪吒之魔童降世之吐泡泡的水怪",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.16.1",
+    "koa-static": "^5.0.0",
+    "vue": "^3.5.13"
+  }
+}
