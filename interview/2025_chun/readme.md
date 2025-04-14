@@ -121,7 +121,6 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - js/es6/promise/hld
 - js/es6/promise/allSettled
 - llm/cursor
-- algorithm/dashu
 - algorithm/hongbao
 - algorithm/three-digit
 - 408/http/http2_limit
@@ -193,3 +192,5 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - oop/decorator
 - workflow/webpack-demo
 - 单例模式 https://juejin.cn/book/6844733790204461070/section/6844733790267375630
+- vue/hand_keepalive
+- algorithm/dashu
