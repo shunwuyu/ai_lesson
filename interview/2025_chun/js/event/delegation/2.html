@@ -1,0 +1,19 @@
+<ul id="itemList">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+    <li>Item 4</li>
+    <li>Item 5</li>
+</ul>
+
+<script>
+    const itemList = document.getElementById('itemList');
+
+    itemList.addEventListener('click', (event) => {
+        // 确保点击的是 li 元素
+        if (event.target.tagName === 'LI') {
+            const index = Array.from(itemList.children).indexOf(event.target);
+            alert('Clicked index: ' + index);
+        }
+    });
+</script>

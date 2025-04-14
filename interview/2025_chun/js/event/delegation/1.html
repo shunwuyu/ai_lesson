@@ -1,0 +1,24 @@
+<ul id="itemList">
+    <li>
+        <img src="image1.jpg" alt="Image 1">
+        <span>Text 1</span>
+    </li>
+    <li>
+        <img src="image2.jpg" alt="Image 2">
+        <span>Text 2</span>
+    </li>
+</ul>
+
+<script>
+    const itemList = document.getElementById('itemList');
+
+    itemList.addEventListener('click', (event) => {
+        if (event.target.tagName === 'IMG') {
+            console.log('Image clicked:', event.target.src);
+            // 处理 img 点击事件
+        } else if (event.target.tagName === 'SPAN') {
+            console.log('Text clicked:', event.target.innerText);
+            // 处理文本点击事件
+        }
+    });
+</script>

@@ -1,0 +1,18 @@
+<ul id="itemList">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+    <li>Item 4</li>
+    <li>Item 5</li>
+</ul>
+
+<script>
+    const itemList = document.getElementById('itemList');
+
+    // 遍历每个 li 元素并为其绑定点击事件
+    Array.from(itemList.children).forEach((li, index) => {
+        li.addEventListener('click', () => {
+            alert('Clicked index: ' + index);
+        });
+    });
+</script>

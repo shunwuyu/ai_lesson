@@ -1,0 +1,18 @@
+<ul id="itemList">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+    <li>Item 4</li>
+    <li>Item 5</li>
+</ul>
+
+<script>
+    const itemList = document.getElementById('itemList');
+    const items = itemList.children;
+
+    for (let i = 0; i < items.length; i++) {
+        items[i].addEventListener('click', () => {
+            alert('Clicked index: ' + i);
+        });
+    }
+</script>

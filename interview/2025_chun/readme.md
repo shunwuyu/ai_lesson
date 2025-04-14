@@ -95,7 +95,7 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 
 ## webpack 
 
-- workflow/webpack-demo
+
 - llm/rag/
 - react/fiber
 - vue/dynamic_component
@@ -134,8 +134,6 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - prompt_engineering llm/prompt
 - http中tcp 和udp 的区别， http3.0 408/tcp_udp
 - 懒加载 js/lazyload
-- 字符串常用方法 js/str_methods
-- 数组常用方法  js/arr_methods
 - 数组扁平化  js/arr_flatten
 - 版本号判断 algorithm/version
 - js/es6/var_let_const
@@ -150,8 +148,6 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - polling js/polling
 - 闭包 js/closure
 - fetch js/fetch
-- js/es6/promise/hand
-- js/es6/promise/control
 - js/es6/promise/abort
 - react中实现keep-alive  react/keep-alive
 - react中怎么实现 懒加载组件 react/cache-component
@@ -171,13 +167,29 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - node/koa/demo1
 - webworker html5/webworker
 - algorithm/list2tree
-- js/async
 - js/event_bubble_capture 
 - 408/process_thread
-- js/prototype
-- js/scope
 - algorithm/20
 - fiber/hand-fiber
 - react/hydration
 - performance/yxj
 - vue/compile-gc
+- html5/storage
+- algorithm/stock
+- js/prototype
+- js/scope
+- js/async
+
+- 字符串常用方法 js/str_methods
+- 数组常用方法  js/arr_methods
+- 数组为什么是从下标0开始的 algorithm/arr0
+- js/eventloop/hw
+- js/event/delegation
+- 408/tcp-34
+- 408/https
+- 虚拟列表 https://github.com/chenqf/vue-virtual-listview/blob/master/src/components/VirtualList.vue
+- js/es6/promise/control
+- js/es6/promise/hand
+- oop/decorator
+- workflow/webpack-demo
+- 单例模式 https://juejin.cn/book/6844733790204461070/section/6844733790267375630
