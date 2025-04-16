@@ -1,4 +1,21 @@
-import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
+
+⌘K to generate a command
+568465684+45457878等于多少？
+
+{
+    "mcpServers": {
+      "calculator-mcp": {
+        "command": "node",
+        "args": [
+            "/Users/shunwuyu/workspace/lesson/ai_lesson/mcp/xmt/mcp-client/index.mjs"
+        ]
+      }
+    }
+  }
+
+
+
+  import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 

@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "@playwright/mcp": "^0.0.10"
+    "@modelcontextprotocol/sdk": "^1.9.0",
+    "@playwright/mcp": "^0.0.10",
+    "axios": "^1.8.4",
+    "zod": "^3.24.2"
   }
 }
