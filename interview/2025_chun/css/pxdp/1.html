@@ -1,0 +1,27 @@
+<style>
+    /* 默认1x图片 */
+    .logo {
+      width: 100px;
+      height: 100px;
+      background-image: url('logo@1x.png');
+      background-size: cover;
+    }
+    
+    /* 针对2倍像素密度的设备（如Retina屏） */
+    @media only screen and (-webkit-min-device-pixel-ratio: 2), 
+           only screen and (min-resolution: 192dpi) {
+      .logo {
+        background-image: url('logo@2x.png');
+      }
+    }
+    
+    /* 针对3倍像素密度的设备 */
+    @media only screen and (-webkit-min-device-pixel-ratio: 3), 
+           only screen and (min-resolution: 288dpi) {
+      .logo {
+        background-image: url('logo@3x.png');
+      }
+    }
+    </style>
+    
+    <div class="logo"></div>
