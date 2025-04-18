@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .bottom, .top {
+      position: absolute;
+      will-change: transform;
+    }
+    .bottom {
+      width: 100px;
+      height: 100px;
+      top: 20px;
+      left: 20px;
+      z-index: 3;
+      background: rosybrown;
+    }
+    /* 浏览器只需要为一个很小的图形分配像素（10x10），内存中只存储这小块的像素数据。
+放大是由 GPU（显卡）通过变换实现的，不需要为每个像素都分配内存，只是把已有像素“拉伸”显示。
+   */
+    .top { 
+      width: 10px;
+      height: 10px;
+      transform: scale(10);
+      top: 200px;
+      left: 200px;
+      z-index: 5;
+      background: indianred;
+    }
+    
+</style>
+  <body>
+    <div class="bottom ani"></div>
+    <div class="top ani"></div>
+  </body>  
+</html>
