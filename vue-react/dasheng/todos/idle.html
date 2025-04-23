@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script>
+      function myIdleTask(deadline) {
+        // 记录本次空闲回调开始时的剩余时间
+        console.log('Idle callback start, timeRemaining:', deadline.timeRemaining());
+
+        // 模拟一个大任务被分成很多小步
+        while (deadline.timeRemaining() > 0 && tasks.length > 0) {
+          const task = tasks.shift();
+          console.log('Processing:', task);
+        }
+
+        // 如果还有任务没做完，继续注册下一个空闲回调
+        if (tasks.length > 0) {
+          requestIdleCallback(myIdleTask);
+        } else {
+          console.log('All tasks done!');
+        }
+      }
+
+      // 假设有一堆任务
+      const tasks = Array.from({ length: 200000 }, (_, i) => `Task ${i + 1}`);
+
+      // 启动空闲任务处理
+      requestIdleCallback(myIdleTask);
+    </script>
+  </body>
+</html>

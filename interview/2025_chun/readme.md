@@ -185,8 +185,7 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - js/event/delegation
 - 408/tcp-34
 - 408/https
-- 虚拟列表 https://github.com/chenqf/vue-virtual-listview/blob/master/src/components/VirtualList.vue
-- js/es6/promise/control
+
 - js/es6/promise/hand
 - oop/decorator
 - workflow/webpack-demo
@@ -208,3 +207,6 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - css/tailwindcss_yl
 - js/promisify
 - hot_articles/sanyuan
+
+- js/es6/promise/control
+- 虚拟列表 https://github.com/chenqf/vue-virtual-listview/blob/master/src/components/VirtualList.vue

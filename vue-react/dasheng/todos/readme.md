@@ -41,3 +41,7 @@ https://time.geekbang.org/column/article/428106
   - App.vue 
     其实你可以把组件内部的任何一段代码，从组件文件里抽离出一个独立的文件进行维护。
     
+
+- requestIdleCallback 的每个回调（即你说的“一个轮回”）没有固定的执行时间，而是由浏览器根据当前主线程的空闲程度动态分配。
+
+  idle.html

@@ -1,0 +1,1 @@
+   npx babel src/app.js --out-file dist/app.js
