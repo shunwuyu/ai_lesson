@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+    // ES2022 表示生成符合 ECMAScript 2022 规范的代码。
+      "target": "ES2022",
+    //   Node16 表示使用 Node.js 16 的模块系统，支持 ES 模块和 CommonJS。
+      "module": "Node16",
+      "moduleResolution": "Node16",
+      "outDir": "./build",
+      "rootDir": "./src",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
+  }

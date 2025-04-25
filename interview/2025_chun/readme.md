@@ -197,9 +197,7 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 - algorithm/tiantian
 - js/ttjs
 - 神三元 https://juejin.cn/post/6844904021308735502
-- css/pxdp
 - css/absolute
-- css/1center
 - css/9gg
 - 闭包 js/closure
 - 闭包应用 js/closure_use
@@ -210,3 +208,17 @@ https://juejin.cn/post/6947842412102287373?searchId=2025030514480896E7135DEC5A13
 
 - js/es6/promise/control
 - 虚拟列表 https://github.com/chenqf/vue-virtual-listview/blob/master/src/components/VirtualList.vue
+- react/form-com
+- react/suspense
+- 408/restful 
+- js/equal3
+- js/closure_xj
+- algorithm/189
+- ai/mcp/weather
+- js/bignumber
+- css/img_center
+- css/pxdp
+- css/1center
+- react/com_prop_design
+- ref  https://github.com/shunwuyu/ai_lesson/blob/7a2959676ea4e210ba5d209f9dce272afbc65d68/react/tongguan/react-course-code-main/hook-test/src/App4-3.tsx#L4
+- js/bigfile_upload_cast
