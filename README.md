@@ -137,3 +137,5 @@ AI全栈工程师课程
 - react/next/next-demo
 - next/next-app-manual
 - react/build-your-own-react
+- mastra
+- trae/

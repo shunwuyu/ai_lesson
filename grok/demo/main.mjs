@@ -1,12 +1,12 @@
 import OpenAI from "openai";
 const openai = new OpenAI({
-  apiKey:'sk-pWKWQSROz2c8Ccx2jU4xUIOC0WVFn1zkcaSKHTUwWZRTQAKK',
+  apiKey:'',
   // 国内转发
-  baseURL: 'https://api.302.ai/v1'
+  baseURL: 'https://api.siliconflow.cn/v1'
 });
 
 const response = await openai.completions.create({
-  model: 'grok-beta',
+  model: 'Qwen/QwQ-32B',
   max_tokens:256,
   prompt: `Consideration product : 工厂现货PVC充气青蛙夜市地摊热卖充气玩具发光蛙儿童水上玩具
 

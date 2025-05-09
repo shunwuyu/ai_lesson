@@ -1,0 +1,10 @@
+POST http://localhost:4111/api/agents/weatherAgent/generate
+
+{
+    "messages": [
+        {
+            "role": "user",
+            "content": "What is the weather in Beijing?"
+        }
+    ]
+}
