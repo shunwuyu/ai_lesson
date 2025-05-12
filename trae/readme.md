@@ -1,6 +1,6 @@
 [source](https://www.trae.com.cn/?utm_source=juejin&utm_medium=juejin_resources&utm_campaign=all_header_17)
 
-## AI 工程师
+## AI应用开发 工程师
 https://www.trae.com.cn/
 - 不是传统程序员 
 - 以智能生产力为核心(LLM DeepSeek)
