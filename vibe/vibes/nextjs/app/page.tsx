@@ -80,11 +80,36 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#ffe7e5' }} className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div style={{ backgroundColor: '#ffe7e5' }} className="grid grid-rows-[auto_auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      {/* Logo */}
+      <div className="w-full flex justify-center mb-2">
+        <Image 
+          src="https://www.peachpup.com/cdn/shop/files/Peach_Pup_Logo_160x160@2x.png?v=1613698923"
+          alt="Peach Pup Logo"
+          width={120}
+          height={120}
+          priority
+        />
+      </div>
+
       <div className="text-center w-full">
         <h1 className="text-xl font-bold">Swipe Left or Right</h1>
         <p className="text-sm">Image {currentIndex + 1} of {IMAGES.length}</p>
       </div>
+      
+      {/* Direction indicator circles */}
+      <div className="absolute top-1/2 left-0 right-0 flex justify-between items-center px-8 pointer-events-none">
+        {/* X Circle on left */}
+        <div className={`h-16 w-16 rounded-full flex items-center justify-center bg-white border-4 border-red-500 shadow-lg transition-opacity ${dragOffset < -20 ? 'opacity-80' : 'opacity-30'}`}>
+          <span className="text-red-500 text-3xl font-bold">✕</span>
+        </div>
+        
+        {/* Heart Circle on right */}
+        <div className={`h-16 w-16 rounded-full flex items-center justify-center bg-white border-4 border-green-500 shadow-lg transition-opacity ${dragOffset > 20 ? 'opacity-80' : 'opacity-30'}`}>
+          <span className="text-green-500 text-3xl">❤</span>
+        </div>
+      </div>
+      
       <div 
         style={{
           backgroundColor: '#f8faf8',
@@ -141,30 +166,43 @@ export default function Home() {
         )}
       </div>
       
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 items-center">
+        <div className="flex gap-6">
+          <button 
+            onClick={() => {
+              setDirection("left");
+              setTimeout(() => {
+                setCurrentIndex((prevIndex) => (prevIndex === IMAGES.length - 1 ? 0 : prevIndex + 1));
+                setDirection("");
+              }, 300);
+            }}
+            className="bg-red-500 text-white px-6 py-3 rounded-full"
+          >
+            Dislike
+          </button>
+          <button 
+            onClick={() => {
+              setDirection("right");
+              setTimeout(() => {
+                setCurrentIndex((prevIndex) => (prevIndex === 0 ? IMAGES.length - 1 : prevIndex - 1));
+                setDirection("");
+              }, 300);
+            }}
+            className="bg-green-500 text-white px-6 py-3 rounded-full"
+          >
+            Like
+          </button>
+        </div>
+        
+        {/* Show Cart button */}
         <button 
           onClick={() => {
-            setDirection("left");
-            setTimeout(() => {
-              setCurrentIndex((prevIndex) => (prevIndex === IMAGES.length - 1 ? 0 : prevIndex + 1));
-              setDirection("");
-            }, 300);
+            // Add cart functionality here
+            alert("Show Cart clicked!");
           }}
-          className="bg-red-500 text-white px-6 py-3 rounded-full"
+          className="mt-4 bg-white text-blue-500 px-6 py-3 rounded-full border-4 border-blue-500 font-bold shadow-lg hover:bg-blue-50 transition-colors"
         >
-          Dislike
-        </button>
-        <button 
-          onClick={() => {
-            setDirection("right");
-            setTimeout(() => {
-              setCurrentIndex((prevIndex) => (prevIndex === 0 ? IMAGES.length - 1 : prevIndex - 1));
-              setDirection("");
-            }, 300);
-          }}
-          className="bg-green-500 text-white px-6 py-3 rounded-full"
-        >
-          Like
+          Show Cart
         </button>
       </div>
     </div>

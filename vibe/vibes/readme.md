@@ -41,3 +41,14 @@ want you to load them all in, and then create
 a tinder like swipe left/right
 experience to swipe through all of the
 images.
+
+- 添加左右按钮
+
+  I want to add two circles with a x on the left and a heart on the right to show which direction is good or bad
+
+- 显示购物车
+  finally i want a button at the bottom that says 'Show Cart'. And I want this button to be in the same style as the heart and x buttons
+
+- 在头部添加logo
+  add this image to the top above the card component
+https://www.peachpup.com/cdn/shop/files/Peach_Pup_Logo_160x160@2x.png?v=1613698923
