@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <table class="table table-striped">
+        
+        <thead>
+          <tr>
+            <th>名字</th>
+            <th>家乡</th>
+            <th>梦想公司</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+<script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js"></script>
+<script>
+const friends = [
+    {
+        name: '黄新天',
+        hometown: '山东临沂',
+        company: '字节'
+    },
+    {
+        name: '曾欣',
+        hometown: '抚州',
+        company: '字节'
+    }
+];
+
+const tbody = $('tbody').first(); // 获取第一个 tbody 元素
+
+friends.forEach(function(friend) {
+    const row = '<tr>' +
+        '<td>' + friend['name'] + '</td>' +
+        '<td>' + friend['hometown'] + '</td>' +
+        '<td>' + friend['company'] + '</td>' +
+        '</tr>';
+    tbody.append(row);
+});
+</script>
+</body>
+</html>

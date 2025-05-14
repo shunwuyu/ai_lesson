@@ -139,3 +139,6 @@ AI全栈工程师课程
 - react/build-your-own-react
 - mastra
 - trae/
+- vibe/
+- sendflower
+- js/history

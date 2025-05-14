@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/3.2.31/vue.global.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{title}}</h1>
+        <table class="table table-striped"> 
+            <thead>
+                <tr>
+                <th>名字</th>
+                <th>家乡</th>
+                <th>梦想公司</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="friend in friends">
+                    <td>{{friend.name}}</td>
+                    <td>{{friend.hometown}}</td>
+                    <td>{{friend.company}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+    const App = {
+        data() {
+          return {
+            title: '旅梦朋友们',
+            friends: [
+                {
+                    name: '黄新天',
+                    hometown: '山东临沂',
+                    company: '字节'
+                },
+                {
+                    name: '曾欣',
+                    hometown: '抚州',
+                    company: '字节'
+                }
+            ]
+          }
+        }
+      }
+      Vue.createApp(App).mount('#app')
+      </script>    
+</body>
+</html>

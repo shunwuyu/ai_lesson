@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>名字</th>
+                <th>家乡</th>
+                <th>梦想公司</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <script>
+    const friends = [
+        {
+            name: '黄新天',
+            hometown: '山东临沂',
+            company: '字节'
+        },
+        {
+            name: '曾欣',
+            hometown: '抚州',
+            company: '字节'
+        }
+    ];
+
+    const oBody = document.getElementsByTagName('tbody')[0]
+    for (let i = 0; i < friends.length; i++) {
+        const friend = friends[i];
+        oBody.innerHTML += '<tr><td>'+friend['name']+'</td><td>'+friend['hometown']+'</td><td>'+friend['company']+'</td></tr>'
+    }
+    </script>
+</body>
+</html>
