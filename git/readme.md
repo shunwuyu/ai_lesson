@@ -46,12 +46,14 @@
     lang="zh-hans" 修改index.html 
     git status  
     git diff index.html 提交前修改  repo  和工作目录的 区别
+    git diff 比较的是工作目录与暂存区之间的差异，或两个提交之间的差异。
     git add index.html
     git status  暂存区
     git diff 暂存区 和工作目录比较  没有差异
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,mnimum-scale=1.0"> 移动优化
     git status 暂存区有些修改 两次修改
     git diff index.html 
+    --staged 的意思是比较暂存区（staged area）中 与上一个提交之间的差异。
     git diff index.html --staged  暂存区的修改 repo 暂存区
     git commit -m '修改了index.html的lang属性值为zh-hans'
     git add index.html
@@ -68,6 +70,7 @@
     git commit -m '添加style.css 文件'
     右键重命名 style.css
     git status  删除了， 还有一个未跟踪
+    Git 认为文件已被删除，需明确告知 Git 删除旧文件并跟踪新文件。
     git rm style.css
     git add theme.css
     git status  renamed style.css -> theme.css
@@ -93,12 +96,15 @@
 - 删除
     git rm .\asset\css\ninghao-theme.css
     git status  deleted  asset/css/ninghao-theme.css
+    git rm 命令已经将文件标记为删除，并自动将其状态更新到暂存区。执行 git rm 后，文件的删除操作会被 Git 跟踪，因此可以直接提交。
     git commit -m '删除了ninghao-theme文件'
 
 - 删除文件恢复过来
     git rm index.html
     git status
     不想删除 未提交
+    恢复文件 旧船票能否登上你的客船
+    HEAD 是一个指针，指向当前分支的最新提交
     git checkout HEAD -- index.html   将index.html 恢复过来  最近一次的提交
 
     不想删除 已提交

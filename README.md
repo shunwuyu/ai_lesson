@@ -143,3 +143,4 @@ AI全栈工程师课程
 - sendflower
 - js/history
 - es6/yayu/let_const/readme.md
+- js/str
