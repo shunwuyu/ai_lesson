@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>旅梦朋友们</title>
+  <!-- React & ReactDOM from 华为云 CDN -->
+  <script  src="./node_modules/react/index.js"></script>
+  <script  src="./node_modules/react-dom/index.js"></script>
+  <!-- Babel CDN 用于转译 JSX -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/7.26.5/babel.min.js"></script>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+    .table-striped tr:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React 代码使用 JSX -->
+  <script type="text/babel">
+    function App() {
+      const title = '旅梦朋友们';
+      const friends = [
+        { name: '黄新天', hometown: '山东临沂', company: '字节' },
+        { name: '曾欣', hometown: '抚州', company: '字节' }
+      ];
+
+      return (
+        <div>
+          <h1>{title}</h1>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>名字</th>
+                <th>家乡</th>
+                <th>梦想公司</th>
+              </tr>
+            </thead>
+            <tbody>
+              {friends.map((friend, index) => (
+                <tr key={index}>
+                  <td>{friend.name}</td>
+                  <td>{friend.hometown}</td>
+                  <td>{friend.company}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>

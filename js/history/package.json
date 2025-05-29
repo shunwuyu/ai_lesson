@@ -1,0 +1,16 @@
+{
+  "name": "history",
+  "version": "1.0.0",
+  "description": "- 刀耕火种     http 协议 HyperText Transfer Protocol     分布式、协作性信息系统（分享文档、交流想法 点评、共同编辑内容以及协调工作任务）和万维网（World Wide Web）的应用层协议。",
+  "main": "8.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
