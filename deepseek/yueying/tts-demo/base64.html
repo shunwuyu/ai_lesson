@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blob & ObjectURL Example</title>
+</head>
+<body>
+
+  <h2>Base64 图片预览示例</h2>
+  <img id="preview" alt="预览图" style="max-width: 300px;width:100px;height:100px;" />
+
+  <script>
+    // 一个 base64 格式的图片数据（比如 PNG）
+    const base64String = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAHESMIAAAAABJRU5ErkJggg==";
+
+    // 1. 将 base64 转换为二进制 Blob 对象
+    const byteString = atob(base64String); // 解码 base64 字符串
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+
+    // 创建 Blob 对象，指定类型为 image/png
+    const blob = new Blob([uint8Array], { type: 'image/png' });
+
+    // 2. 使用 URL.createObjectURL 创建临时访问地址
+    const imageUrl = URL.createObjectURL(blob);
+
+    // 3. 把生成的 URL 设置给 img 标签
+    document.getElementById('preview').src = imageUrl;
+  </script>
+
+</body>
+</html>
