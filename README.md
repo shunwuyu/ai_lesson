@@ -148,3 +148,4 @@ AI全栈工程师课程
 - css/transform-kiss
 - js/browser_js/10
 - deepseek/yueying/tts-demo
+- deepseek/kimi-vision

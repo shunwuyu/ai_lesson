@@ -24,7 +24,7 @@ function App() {
 // 语音合成的声音类型
 // zh: 中文, female: 女声, shuangkuaisisi: 声音名称, moon_bigtts: 模型类型
     // zh_male_sunwukong_mars_bigtts 猴哥
-    const voiceName = "zh_female_shuangkuaisisi_moon_bigtts";
+    const voiceName = "zh_male_sunwukong_mars_bigtts";
     const endpoint = '/tts/api/v1/tts';
 
     const headers = { 

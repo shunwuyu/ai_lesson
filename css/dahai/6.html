@@ -3,13 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>:root Example</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Document</title>
+  <style>
+  .text p {
+    color: red;
+  }
+  div p {
+    color: blue;
+  }
+  #main p {
+  color: green;
+}
+
+.container #main p {
+  color: orange;
+}
+.btn {
+  background: black;
+}
+
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>示例标题</h1>
-    <p>这是一个段落。</p>
+  <div class="text">
+    <p>Hello</p>
   </div>
+  
+  <div class="container">
+    <div id="main">
+      <p>Hello</p>
+    </div>
+  </div>
+
+  <button class="btn" style="background: pink;">Click</button>
 </body>
 </html>
