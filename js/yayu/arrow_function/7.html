@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+var obj = {
+  i: 10,
+//   箭头函数更适合 non-method 
+  b: () => console.log(this.i, this),
+  // method
+  c: function() {
+    console.log( this.i, this)
+  }
+}
+obj.b();
+// undefined Window
+obj.c();
+// 10, Object {...}
+</script>
+</body>
+</html>

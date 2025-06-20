@@ -18,8 +18,26 @@ make it MCP compatiable.
 how mcp addresses this.
 
 ## why-mcp
-how mcp makes AI development less fragmented（碎片）.
-the model are only as good as the context provided to them.
+how mcp makes AI development **less fragmented（碎片）**.
+how it standardizes **connections** between AI applications and external data sources.
+the model are only as good as the **context** provided to them.
 incredibly intelligent model  as the frontiner
-reinvent the wheel 
+It is not useful as it can possibly be.
+REST APIs standardize how web applications interact with the backend。
+LSP standardize how IDEs interact with language-specific tools 
+MCP srtandarizes how AI applicaiton interact with external systems
+reinvent the wheel in how we do things like tool use,
 novel 新颖 原始数据类型
+can be done without mcp 
+build once and use everywhere.
+triage particular issues and assign tickes in 
+
+## 
+- MCP is based on a client-server architecture.
+- 给模型提供上下文
+- This client live inside a host.
+- The host is responsible for storing and maintaining all of the clients and connections to MCP servers.
+- host are LLM applications that want to access data through MCP
+- The server are lightweight programs that expose the specific capabilities through the protocol.
+- under the hood
+- tools are functions that can be invoked by the client  

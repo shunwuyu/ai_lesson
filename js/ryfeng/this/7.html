@@ -1,0 +1,22 @@
+<html>
+    <body>
+<script>
+var name = "The Window";
+
+var object = {
+    name : "My Object",
+
+    getNameFunc : function(){
+        console.log(this, '///')
+        return function(){
+            console.log(this)
+            return this.name;
+        };
+    }
+
+};
+// 普通函数， 调用方式决定
+console.log(object.getNameFunc()());
+</script>
+<body>
+</html>

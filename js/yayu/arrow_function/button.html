@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+<button id="button">点击变色</button>
+<script>
+function Button(id) {
+    this.element = document.querySelector("#" + id);
+    this.bindEvent();
+}
+Button.prototype.bindEvent = function() {
+    // this.element.addEventListener("click", this.setBgColor, false);
+    // 使用 bind 强制绑定 setBgColor() 的 this 为实例对象
+    // this.element.addEventListener("click", this.setBgColor.bind(this), false);
+    // es6 箭头函数
+    // this 指向实例对象，所以可以正确的调用 this.setBgColor 方法， 而 this.setBgColor 中的 this 也会正确指向实例对象
+    this.element.addEventListener("click", event => this.setBgColor(event), false);
+};
+
+Button.prototype.setBgColor = function() {
+    this.element.style.backgroundColor = '#1abc9c'
+    // this 都指向了按钮元素，那我们直接修改 setBgColor 函数为
+    // this.style.backgroundColor = '#1abc9c'
+    // 但是在实际的开发中，我们可能会在 setBgColor 中还调用其他的函数
+    // this.setElementColor();
+    // this.setOtherElementColor();
+    // setBgColor 中的 this 是指向实例对象的，这样就可以调用其他的函数。
+
+};
+
+var button = new Button("button");
+// Uncaught TypeError: Cannot read property 'style' of undefined
+// this 值是该元素的引用
+
+</script>
+</body>
+</html>
