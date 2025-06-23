@@ -1,0 +1,24 @@
+<html>
+<head>
+    <style>
+    .box {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  background: red;
+  transition: left 1s ease-out;
+}
+.box.move {
+  left:300px;
+}
+    </style>
+</head>
+<body>
+    <div class="box" />
+    <script>
+    document.querySelector('.box').classList.add('move');
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<html>
+<body>
+<input id="nickname" maxLength oninput="limitLength(this)" />
+<script>
+function limitLength(input) {
+    if (input.value.length > 10) {
+        input.value = input.value.slice(0, 10);
+        console.log(input.value);
+    }
+}
+</script>
+</body>
+</html>

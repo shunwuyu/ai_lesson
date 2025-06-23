@@ -12,6 +12,7 @@ function App() {
       <label htmlFor="selecteImage" class="upload">
         <img src={imgPreview} alt="" />
       </label>
+      <div className='word'>{{}}</div>
     </div>
   )
 }

@@ -1,0 +1,32 @@
+<html>
+<head>
+    <style>
+    .box {
+        width:100px;
+        height:100px;
+        position: relative;
+        left: 0;
+        top: 0;
+        background-color: red;
+    }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <script>
+    const box = document.querySelector('.box');
+
+    let left = 0;
+    function move() {
+        left += 2;
+        box.style.left = left + 'px';
+
+        if (left < 300) {
+            requestAnimationFrame(move);
+        }
+    }
+    move();
+
+    </script>
+</body>
+</html>

@@ -152,3 +152,6 @@ AI全栈工程师课程
 - algorithm/xiuyan/12 单调栈
 - deepseek/yueying/coze_gushi
 - js/ryfeng/this
+- js/jinjie/04
+- html5/form
+- css/animate

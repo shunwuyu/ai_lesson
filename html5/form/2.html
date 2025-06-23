@@ -1,0 +1,87 @@
+<h1>HTML5 Input 标签</h1>
+ <form action="https://juejin.cn/form.action" method="post">
+  <label for="firstname">first name: </label>
+  <input type="text" id="firstname"><br />
+  <label for="lastname">last name: </label>
+  <input type="text" id="lastname"><br />
+  <label for="age">Age:</label>
+  <input type="number" id="age" name="age"><br>
+  <label for="email">email: </label>
+  <input type="email" id="email"><br>
+  <label for="favorite-color">Favorite color:</label>
+  <input type="color" id="favorite-color" name="favorite-color"><br>
+  <label for="datetime">datetime: </label>
+  <input type="datetime-local" id="datetime"><br>
+  <label for="website">Website:</label>
+  <input type="url" id="website" name="website"><br>
+  <label for="volume">Volume:</label>
+  <input type="range" id="volume" name="volume" min="0" max="100"><br>
+  <label for="sex">Sex: </label>
+  <input type="radio" name="sex" value="male">Male
+  <input type="radio" name="sex" value="female">Female<br>
+  <input type="submit" value="send"> <input type="reset">
+</form>
+
+<!-- 用于显示计算结果或用户输入的内容。它可以在表单中显示计算结果，也可以在表单外显示。
+<output> 标签可以用 JavaScript 更新，以便显示新的计算结果。 -->
+<h1>HTML5 Output 标签</h1>
+<p style="color: red">点击下方输入框进行输入变更，Output 会自动计算结果：</p>
+<form oninput="result.value=parseInt(num1.value)+parseInt(num2.value)">
+    <input type="number" id="num1" value="0"> +
+    <input type="number" id="num2" value="0"> =
+    <output name="result" for="num1 num2"></output>
+  </form>
+
+  <!-- 用于提供输入建议。<datalist> 元素包含一个或多个 option 元素，这些元素定义了输入框中可以选择的值。
+    用户在输入框中输入时，可以从预定义的选项中进行选择。 -->
+
+    <h1>HTML5 Datalist 标签</h1>
+    <p style="color: red">HTML5 Datalist 原生实现 Select Filter 功能，可以从预定义的选项中进行筛选。</p>
+    <form>
+      <input list="lessons">
+      <datalist id="lessons">
+        <option value="HTML基础课">
+        <option value="HTML5基础课">
+        <option value="JavaScript基础课">
+        <option value="CSS基础课">
+        <option value="React.js基础课">
+        <option value="Vue.js基础课">
+      </datalist>
+    </form>
+
+    <!-- autocomplete 的日常例子，一般登陆页面除了用户名和密码之外还可能会有验证码的输入，而用户名和密码可以自动填充，
+    因为很少变更，而验证码就不需要自动填充，因此每次输入都是不同的。 -->
+    <h1>HTML5 Form Autocompelete</h1>
+    <form action="result.html" autocomplete="on">
+      <p>用户名: <input type="text" name="username" /></p>
+      <p>密码: <input type="text" name="password" /></p>
+      <p>验证码: <input type="text" name="captcha" autocomplete="off" /></p>
+      <input type="submit" value="Submit" />
+    </form>
+    <!-- <input> placeholder 属性 -->
+    <form>
+        <label for="username">用户名:</label>
+        <input type="text" id="username" name="username" placeholder="请输入用户名">
+        <label for="username">密码:</label><input type="text" id="password" name="password" placeholder="请输入密码">
+    </form>
+    <!-- <input> required 属性 -->
+    <form>
+        <label for="username">用户名:</label>
+        <input type="text" id="username" name="username" placeholder="请输入用户名" required>
+        <label for="username">密码:</label>
+        <input type="text" id="password" name="password" placeholder="请输入密码" required>
+    </form>
+    
+    <!-- <input> autofocus 属性 -->
+    <form>
+        <label for="username">用户名:</label>
+        <input type="text" id="username" name="username" placeholder="请输入用户名" aotofocus>
+        <label for="username">密码:</label>
+        <input type="text" id="password" name="password" placeholder="请输入密码">
+    </form>
+    <input> pattren 属性
+    <form>
+        <label for="username">手机号:</label>
+        <input type="tel" name="" required="required" maxlength="11"
+    pattern="1[3456789]\d{9}" placeholder="请输入手机号" oninvalid="setCustomValidity('请输入 1 开头的 11 位手机号码')" >
+    </form>    

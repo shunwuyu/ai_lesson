@@ -41,3 +41,11 @@ triage particular issues and assign tickes in
 - The server are lightweight programs that expose the specific capabilities through the protocol.
 - under the hood
 - tools are functions that can be invoked by the client  
+
+## 手把手教《用MCP构建AI Apps》（附代码）Deeplearning.AI——大模型/LLM/Langchain
+- And before we hop into building MCP servers.
+
+## MCP Server
+- standard io transport.
+- FastMCP high-level interface to build an MCP server
+- MCP inspector to test your server
