@@ -15,4 +15,14 @@
 // 如果需要直接返回一个对象：
 // 为了防止大括号被解析为函数体，而不是对象字面量
 // () 是表达式分组符
-let func = (value, num) => ({total: value * num});
+// let func = (value, num) => ({total: value * num});
+// 与变量解构结合：
+// let func = ({value, num}) => ({total: value * num})
+
+// // 使用
+// var result = func({
+//     value: 10,
+//     num: 10
+// })
+
+// console.log(result); // {total: 100}
