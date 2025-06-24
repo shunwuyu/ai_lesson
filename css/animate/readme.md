@@ -71,3 +71,98 @@ getComputedStyle(el);
     // 此时浏览器被迫立即重新计算布局
   }
 </script>
+
+## 变换 
+
+2D变换在平面中操作，3D变换在空间中操作，2D与3D的概念相信很多同学都知道。变换可理解为将节点复制一份并生成新图层，原节点隐藏，在新图层中使用新节点进行变换操作。
+
+transform-style可实现2D变换与3D变换间的切换
+
+transform-style在父节点中声明，即发生变换的节点的父节点。
+
+flat：所有变换效果在平面中呈现(默认)
+preserve-3d：所有变换效果在空间中呈现 3.html
+
+translate
+scale
+skew
+rotate
+
+为节点声明transform:translate3d()或transform:translateZ()，它们都能开启GPU硬件加速模式
+
+## 3D
+
+
+https://juejin.cn/post/6935232082482298911?searchId=202506241050383A797A082E42D447B9F3#heading-36
+
+<div class="container">
+    <h1>Hello, World!</h1>
+</div>
+
+{
+    "type": "element",
+    "tagName": "div",
+    "attributes": {
+        "class": "container"
+    },
+    "children": [
+        {
+            "type": "element",
+            "tagName": "h1",
+            "attributes": {},
+            "children": [
+                {
+                    "type": "text",
+                    "content": "Hello, World!"
+                }
+            ]
+        }
+    ]
+}
+
+DOM 构建:  最后，由于 HTML 标记定义不同标记之间的关系（一些标记包含在其他标记内），创建的对象链接在一个树数据结构内，此结构也会捕获原始标记中定义的父项-子项关系: HTML 对象是 body 对象的父项，body 是 paragraph 对象的父项，依此类推。
+
+
+构建 DOM 树对象的意义在于提供文档结构的层次化表示，使浏览器能够高效地渲染、更新和操作网页内容。
+
+是的，DOM 树对象使 JavaScript 能够方便地访问和修改网页元素，实现动态交互和响应用户操作。
+
+cssom 
+{
+    "type": "stylesheet",
+    "rules": [
+        {
+            "type": "rule",
+            "selector": "body",
+            "declarations": [
+                {
+                    "property": "font-size",
+                    "value": "16px"
+                }
+            ]
+        }
+    ]
+}
+
+渲染树
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dd08d03c593c41ffbc618d0316c7c871~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+布局阶段以渲染树为入参，从根节点开始遍历，先通过渲染树的 styles 属性获取盒模型，再结合元素定位属性（如 position ）和展示属性（如 display ）计算元素的位置和尺寸，从而创建布局树
+
+.will-change	will-change: transform	✅ 是	will-change 明确告诉浏览器未来会更改 transform，浏览器提前分配一个独立图层。
+
+.transform	transform: skew(...)	❌ 否（视浏览器而定）	普通的 2D transform（如 skew）可能不会单独创建图层，除非结合动画、opacity 或其它性能敏感的属性。
+
+<iframe>	-	✅ 是	所有 iframe 默认就是独立图层（安全隔离 + 性能），属于浏览器合成层的一部分。
+
+主文档的主图层（用于渲染未提到的其它普通元素）
+
+.transform（合成到主图层中）
+
+.will-change（单独图层）
+
+.box_3d（单独图层）
+
+.position_（固定定位 + z-index 提升 + 独立图层）
+
+<iframe>（系统自动创建的独立图层，通常在顶层或者 z-index 控制下）

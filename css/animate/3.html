@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Transform 示例</title>
+  <style>
+    .box {
+      width: 100px;
+      height: 100px;
+      margin: 40px;
+      background-color: #4CAF50;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+
+    .box:hover {
+      /* 同时使用 translate、scale、skew、rotate */
+      transform: 
+        translate(50px, 20px)  /* 位移 */
+        scale(1.2, 1.2)        /* 缩放 */
+        skew(10deg, 5deg)      /* 倾斜 */
+        rotate(15deg);         /* 旋转 */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">变换</div>
+
+</body>
+</html>

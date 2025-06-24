@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .heart-shape {
+	position: relative;
+	width: 200px;
+	height: 200px;
+	background-color: #f66;
+	transform: rotate(45deg);
+  }
+
+	.heart-shape::before,
+	.heart-shape::after {
+		position: absolute;
+		left: 0;
+		top: 0;
+		border-radius: 100%;
+		width: 100%;
+		height: 100%;
+		background-color: #f66;
+		content: "";
+	}
+	.heart-shape::before {
+    transform: translateX(-50%);
+	}
+	.heart-shape::after {
+		transform: translateY(-50%);
+	}
+
+
+  </style>
+</head>
+<body>
+  <div class="heart-shape"></div>
+</body>
+</html>

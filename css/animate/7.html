@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 100px solid red;
+  }
+  .triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-top: 100px solid blue;
+  }
+  .trapezoid {
+    width: 100px;
+    height: 0;
+    border-bottom: 60px solid green;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+  }
+  .diamond {
+    width: 80px;
+    height: 80px;
+    background: skyblue;
+    transform: rotate(45deg);
+  }
+  /* .sector {
+    width: 100px;
+    height: 0;
+    border-top: 60px solid green;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+  } */
+  .circle {
+    width: 100px;
+    height: 100px;
+    background: orange;
+    border-radius: 50%;
+  }
+  .diamond {
+    width: 80px;
+    height: 80px;
+    background: skyblue;
+    transform: rotate(45deg);
+  }
+  .sector {
+    width: 100px;
+    height: 100px;
+    background: red;
+    border-radius: 100% 0 0 0;
+    transform: rotate(45deg); /* 可选：旋转角度调整方向 */
+  }
+  </style>
+</head>
+<body>
+  <div class="triangle"></div>
+  <div class="triangle-down"></div>
+  <div class="trapezoid"></div>
+  <div class="sector"></div>
+  <div class="diamond"></div>
+  <div class="circle"></div>
+</body>
+</html>
