@@ -157,3 +157,4 @@ AI全栈工程师课程
 - css/animate
 - nid-agent-node/demo
 - daihai/call
+- html5/sse-demo

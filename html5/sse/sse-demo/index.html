@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>SSE Example</title>
+  </head>
+  <body>
+    <h1>SSE Example</h1>
+    <img src="" alt="">
+    <div id="messages"></div>
+    <script>
+      // 创建一个 EventSource 对象，连接到服务器端点
+      const source = new EventSource('/sse');
+
+      source.onopen = function(event) {
+        console.log("Connection opened.");
+      };
+
+      // 监听服务器发送的消息
+      source.onmessage = function(event) {
+        // 将消息添加到页面上的消息区域
+        const messages = document.getElementById('messages');
+        messages.innerHTML += event.data + '<br>';
+      };
+    </script>
+  </body>
+</html>
