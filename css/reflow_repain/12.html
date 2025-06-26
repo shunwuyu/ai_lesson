@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- opacity + visibility	不会触发回流	✅ 平滑	✅ 推荐 -->
+
+    <!-- 优化方式是先 opacity: 0 + visibility: hidden 保留布局，再用动画控制透明度 -->
+    <style>
+        #box {
+          position: absolute;
+          top: 100px;
+          left: 100px;
+          width: 150px;
+          height: 150px;
+          background: red;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.5s ease;
+        }
+        #box.show {
+          opacity: 1;
+          visibility: visible;
+        }
+        </style>
+        
+        <button onclick="toggle()">Toggle</button>
+        <div id="box"></div>
+        
+        <script>
+        let visible = false;
+        function toggle() {
+          const box = document.getElementById('box');
+          if (visible) {
+            box.classList.remove('show');
+            // 等待透明度动画完成后再隐藏（完全移除）
+            setTimeout(() => {
+              box.style.display = 'none';
+            }, 500);
+          } else {
+            box.style.display = 'block'; // 提前挂载
+            requestAnimationFrame(() => {
+              box.classList.add('show'); // 等下一帧再触发动画
+            });
+          }
+          visible = !visible;
+        }
+        </script>
+        
+</body>
+</html>

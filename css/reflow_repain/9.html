@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #box {
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      width: 100px;
+      height: 100px;
+      background: red;
+      transition: left 0.5s ease; /* 动画用 left 属性，会触发回流 */
+    }
+  </style>
+</head>
+<body>
+  <button onclick="move()">Move</button>
+  <div id="box"></div>
+
+  <script>
+    function move() {
+        // 浏览器需要重新计算布局，触发回流（Reflow），性能较差
+      const box = document.getElementById('box');
+      box.style.left = '300px';
+    }
+  </script>
+</body>
+</html>

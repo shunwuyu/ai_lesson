@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+    /* #box 的 width: calc(100% - 50px) 就必须重新计算 → 触发回流。
+        calc() 本身不是罪魁祸首；
+
+是因为使用了相对单位（如 %）或动态依赖其他元素 → 一旦这些依赖发生变化，就必须重新布局 → reflow；
+
+尤其是在动画或频繁操作中使用，会有性能影响。
+    */
+    #box {
+        width: calc(100% - 50px);
+        height: 100px;
+        background: red;
+    }
+    </style>
+        
+    <div id="container" style="width: 400px;">
+        <div id="box"></div>
+    </div>
+        
+</body>
+</html>

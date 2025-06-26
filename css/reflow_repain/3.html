@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid 三列式布局示例</title>
+    <style> 
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 三列，每列宽度相等 */
+        grid-template-rows: repeat(3, 1fr); /* 三行，每行高度相等 */
+        gap: 10px; /* 格子之间的间距 */
+    }
+
+    .grid-item {
+        background-color: #2196F3; /* 格子背景颜色 */
+        color: white; /* 文字颜色 */
+        border: 1px solid #ccc; /* 格子边框 */
+        padding: 20px; /* 内边距 */
+        text-align: center; /* 文本居中 */
+    }  
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="grid-item">1</div>
+        <div class="grid-item">2</div>
+        <div class="grid-item">3</div>
+        <div class="grid-item">4</div>
+        <div class="grid-item">5</div>
+        <div class="grid-item">6</div>
+        <div class="grid-item">7</div>
+        <div class="grid-item">8</div>
+        <div class="grid-item">9</div>
+    </div>
+</body>
+</html>

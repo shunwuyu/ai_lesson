@@ -1,0 +1,31 @@
+<style>
+    #box {
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      width: 150px;
+      height: 150px;
+      background: red;
+      transition: opacity 0.5s ease;
+    }
+    .hidden {
+      display: none;
+    }
+    </style>
+    
+    <button onclick="toggle()">Toggle</button>
+    <div id="box" class="hidden"></div>
+    
+    <script>
+    let visible = false;
+    function toggle() {
+      const box = document.getElementById('box');
+      if (visible) {
+        box.classList.add('hidden'); // 直接 display:none → 回流
+      } else {
+        box.classList.remove('hidden'); // 直接 display:block → 回流
+      }
+      visible = !visible;
+    }
+    </script>
+    

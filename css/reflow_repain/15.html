@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .enhanced-box {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            color: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        </style>
+</head>
+<body>
+<div id="myElement"></div>
+<script>
+const element = document.getElementById('myElement');
+element.classList.add('enhanced-box');
+
+element.style.cssText = `
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+`;
+
+</script>
+</body>
+</html>

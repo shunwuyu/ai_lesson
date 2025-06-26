@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 父元素影响：
+如果修改 .child 的高度
+父元素 .parent 的高度会自动调整
+这会触发父元素的回流
+兄弟元素影响：
+由于 .sibling 的位置依赖于 .child 的位置
+.child 的任何位置变化都会影响 .sibling 的位置
+导致 .sibling 也需要重新计算位置 -->
+    <style>
+        .parent {
+            width: 300px;
+            padding: 10px;
+        }
+        .child {
+            width: 50%;
+            margin-bottom: 10px;
+        }
+        .sibling {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="child">子元素</div>
+        <div class="sibling">兄弟元素</div>
+    </div>
+    
+   
+</body>
+</html>

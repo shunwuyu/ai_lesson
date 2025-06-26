@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+ ru he 
+  <style>
+  body {
+    padding-top: 300px;
+    height: 200vh;
+  }
+  </style>
+  </head>
+  <body>
+    <div id="box" style="width:100px; height:100px; background:red;"></div>
+    <script>
+      const box = document.getElementById('box');
+      const rect = box.getBoundingClientRect();
+    //   console.log(rect);
+      window.addEventListener('scroll', () => {
+        console.log(box.getBoundingClientRect())
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid 三列式布局示例</title>
+    <style>
+        .container {
+            display: grid; /* 启用 Grid 布局 格式化上下分 GFC */
+            grid-template-columns: 1fr 2fr 1fr; /* 定义三列，比例为 1:2:1 */
+            gap: 10px; /* 列间距 */
+            padding: 10px; /* 容器内边距 */
+        }
+        .item {
+            background-color: #e0e0e0; /* 背景色 */
+            padding: 20px; /* 内边距 */
+            text-align: center; /* 文本居中 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="item">左侧栏</div>
+        <div class="item">主内容区</div>
+        <div class="item">右侧栏</div>
+    </div>
+</body>
+</html>

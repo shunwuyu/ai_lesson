@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    .parent.highlight .child .price {
+        color: red;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+/* 正确做法：直接在目标元素上设置样式 */
+    .price.highlight {
+        color: red;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="parent">
+        <div class="child">
+            <span>价格: </span>
+            <span class="price">100</span>
+            <span>元</span>
+        </div>
+        <div class="child">
+            <p>其他内容</p>
+            <ul>
+                <li>项目1</li>
+                <li>项目2</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+// 错误做法 父元素影响子元素 导致所有子元素重新计算样式和布局
+// document.querySelector('.parent').classList.add('highlight');
+document.querySelector('.price').classList.add('highlight');
+</script>
+</body>
+</html>

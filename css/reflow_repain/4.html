@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scrollTo 示例</title>
+    <style>
+        body {
+            height: 2000px; /* 增加页面高度以便滚动 */
+            background: linear-gradient(to bottom, #f0f0f0, #ccc);
+        }
+        #target {
+            margin-top: 1500px; /* 目标元素位置 */
+            padding: 20px;
+            background-color: #ffcc00;
+            text-align: center;
+            font-size: 24px;
+        }
+        button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<button id="scrollButton">滚动到目标</button>
+
+<div id="target">目标元素</div>
+
+<script>
+    document.getElementById('scrollButton').addEventListener('click', function() {
+        // 使用 scrollTo 方法平滑滚动到目标元素
+        document.getElementById('target').scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>
