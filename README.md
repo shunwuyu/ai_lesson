@@ -163,3 +163,4 @@ AI全栈工程师课程
 - deepseek/yueying/ai-streaming
 - deepseek/yueying/prompt-one
 - nid-agent-node/demo/agent-react
+- react/basic/jsx

@@ -1,0 +1,1 @@
+const element = <h1 className="greeting">Hello</h1>;
