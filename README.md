@@ -159,3 +159,7 @@ AI全栈工程师课程
 - daihai/call
 - html5/sse-demo
 - css/reflow-repaint
+- deepseek/yueying/shotword
+- deepseek/yueying/ai-streaming
+- deepseek/yueying/prompt-one
+- nid-agent-node/demo/agent-react
