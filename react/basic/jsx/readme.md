@@ -26,4 +26,4 @@ const element = <h1>Hello, world!</h1>;
 5. babel 转译
     npm install --save-dev @babel/core @babel/preset-react @babel/cli
     ./node_modules/.bin/babel 1.jsx -o 2.jsx
-    
+
