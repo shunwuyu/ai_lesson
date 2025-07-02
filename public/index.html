@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Demo</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="loginSection" style="display: none;">
+            <form id="loginForm">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        <div id="welcomeSection" style="display: none;">
+            <p>Welcome, <span id="userDisplay"></span>!</p>
+            <button id="logoutBtn">Logout</button>
+        </div>
+        <button id="loginBtn">Login</button>
+    </div>
+    <script src="/script.js"></script>
+</body>
+</html> 
