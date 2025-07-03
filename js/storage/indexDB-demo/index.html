@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>离线任务列表</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background-color: #f7f7f7;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: white;
+      padding: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .delete-btn {
+      background: #ef4444;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>📋 离线任务列表</h1>
+
+  <form id="taskForm">
+    <input type="text" id="taskInput" placeholder="输入任务..." required />
+    <button type="submit">添加</button>
+  </form>
+
+  <ul id="taskList"></ul>
+
+  <script>
+    let db;
+    // 创建或打开一个 IndexedDB 数据库
+    // 数据库版本号
+    // 若要修改数据库结构（如创建或删除对象存储空间），则要提升版本号
+    const request = indexedDB.open("todoDB", 1);
+    // 当数据库创建或版本升级时会触发该事件，常用来初始化数据库结构
+    request.onupgradeneeded = function (event) {
+      db = event.target.result;
+      // 创建一个名为 tasks 的对象存储区（类似关系型数据库中的表），
+      // 指定 id 作为键路径，并设置键值自动递增。
+      const objectStore = db.createObjectStore("tasks", {
+        keyPath: "id",
+        autoIncrement: true
+      });
+      // 对象存储区的 title 字段创建一个非唯一索引，方便后续根据 title 字段进行查询
+      objectStore.createIndex("title", "title", { unique: false });
+    };
+    // 当数据库成功打开时触发。
+    request.onsuccess = function (event) {
+      db = event.target.result;
+      console.log("✅ 数据库连接成功");
+      renderTasks();
+    };
+    // 打开失败
+    request.onerror = function () {
+      console.error("❌ 数据库连接失败");
+    };
+
+    function addTask(title) {
+      // 确保数据操作的原子性和一致性
+      // 创建了一个新的事务
+      // 在 IndexedDB 里，所有的数据操作（增、删、改、查）都必须在事务中完成
+      const transaction = db.transaction(["tasks"], "readwrite");
+      const store = transaction.objectStore("tasks");
+      const task = {
+        title,
+        done: false,
+        createdAt: new Date()
+      };
+      const request = store.add(task);
+      request.onsuccess = renderTasks;
+    }
+
+    function deleteTask(id) {
+      const transaction = db.transaction(["tasks"], "readwrite");
+      const store = transaction.objectStore("tasks");
+      const request = store.delete(id);
+      request.onsuccess = renderTasks;
+    }
+
+    function renderTasks() {
+      const transaction = db.transaction(["tasks"], "readonly");
+      const store = transaction.objectStore("tasks");
+      const request = store.getAll();
+
+      request.onsuccess = function () {
+        const tasks = request.result;
+        const taskList = document.getElementById("taskList");
+        taskList.innerHTML = "";
+
+        tasks.forEach(task => {
+          const li = document.createElement("li");
+          li.textContent = task.title;
+
+          const btn = document.createElement("button");
+          btn.textContent = "删除";
+          btn.className = "delete-btn";
+          btn.onclick = () => deleteTask(task.id);
+
+          li.appendChild(btn);
+          taskList.appendChild(li);
+        });
+      };
+    }
+
+    // 表单提交处理
+    document.getElementById("taskForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const input = document.getElementById("taskInput");
+      const title = input.value.trim();
+      if (title) {
+        addTask(title);
+        input.value = "";
+      }
+    });
+  </script>
+</body>
+</html>

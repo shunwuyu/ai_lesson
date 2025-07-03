@@ -164,4 +164,7 @@ AI全栈工程师课程
 - deepseek/yueying/prompt-one
 - nid-agent-node/demo/agent-react
 - react/basic/jsx
-- storage/session-demo
+- js/storage/session-demo
+- js/storage/indexDB-demo
+- https://github.com/shunwuyu/ai_lesson/blob/main/interview/2025_chun/js/bubble_event/readme.md
+- react/basic/event

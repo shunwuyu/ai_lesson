@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      padding: 20px;
+      background: #f2f2f2;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+<button id="toggleBtn">Toggle Menu</button>
+
+<div id="menu">
+  <p>Menu Content</p>
+  <button id="closeInside">Don't Close</button>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('toggleBtn');
+  const menu = document.getElementById('menu');
+  const closeInside = document.getElementById('closeInside');
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // 防止冒泡触发 document 的关闭逻辑
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // 点击页面其他地方关闭菜单
+  document.addEventListener('click', () => {
+    menu.style.display = 'none';
+  });
+
+  // 点击菜单内部的按钮不关闭菜单
+  closeInside.addEventListener('click', (e) => {
+    e.stopPropagation(); // 阻止冒泡，防止触发 document 的关闭逻辑
+    alert('Menu button clicked');
+  });
+</script>
+
+</body>
+</html>

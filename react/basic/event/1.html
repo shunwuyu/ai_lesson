@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <ul id="myList">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+    <li>Item 4</li>
+  </ul>
+  <button id="btn" type="button">addItem</button>
+  <script>
+  document.getElementById("myList").addEventListener("click", function (e) {
+  // 确保点击的是 li 元素
+    if (e.target.tagName === "LI") {
+      console.log("Clicked on:", e.target.textContent);
+    }
+  });
+  // 支持动态的内容
+  document.getElementById('btn').addEventListener('click', () => {
+    const list = document.getElementById('myList');
+    const li = document.createElement('li');
+    li.textContent = 'Item 5';
+    list.appendChild(li);
+  })
+  </script>
+</body>
+</html>

@@ -39,4 +39,9 @@ document.cookie = "username=John Doe";
     永久，除非主动清除 只能存储字符串
     sessionStorage 当前标签页会话 关闭自动清除 **每个 tab 独立**
 
+localStorage 的最大容量有限，通常在 5MB 到 10MB 左右；而 IndexedDB 不受此限制，适合存储大型数据集，支持存储几十 MB 甚至 GB 级别的数据，例如复杂的 JSON 对象、图像等
+
+localStorage 仅保存字符串键值对，不支持复杂的数据结构；IndexedDB 是真正的数据库系统，可以存储索引过的键值对、数组甚至嵌套对象，支持更高级的数据查询操作
+
+localStorage 是同步的， indexDB 是异步的。
 
