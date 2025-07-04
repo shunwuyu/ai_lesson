@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { generateAudio } from './lib/audio.js';
 
 function App() {
+  
   // 分析中 不同的状态
   const [word, setWord] = useState('请上传图片');
   // audio 播放音频
