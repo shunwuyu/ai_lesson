@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Chat() {
+function App() {
   const [text, setText] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,12 +14,24 @@ function Chat() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer`
+          'Authorization': `Bearer sk-d2a956f49ee245ae9e37af93f5441d14`
         },
         body: JSON.stringify({
           temperature: 1.0,
           model: 'deepseek-chat',
-          messages: [{ role: 'user', content: text }]
+          messages: [
+            {
+              role: 'system',
+              content: '你是一位来自字节跳动的助理'
+            },
+            {
+              role: 'user',
+              content: 'My name is wanghao'
+            },
+            { 
+              role: 'user', content: text 
+            }
+          ]
         })
       });
       
@@ -91,4 +103,4 @@ function Chat() {
   );
 }
 
-export default Chat;
+export default App;

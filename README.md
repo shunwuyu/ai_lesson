@@ -169,3 +169,4 @@ AI全栈工程师课程
 - https://github.com/shunwuyu/ai_lesson/blob/main/interview/2025_chun/js/bubble_event/readme.md
 - react/basic/event
 - react/basic/state
+- nid-agent-node/demo2
