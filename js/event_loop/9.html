@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// 控制台输出 1 3 2 , 是因为 promise 对象的 then 方法的回调函数是异步执行，所以 2 最后输出
+// 页面的背景色直接变成黑色，没有经过蓝色的阶段，是因为，我们在宏任务中将背景设置为蓝色，但在进行渲染前执行了微任务，
+// 在微任务中将背景变成了黑色，然后才执行的渲染
+
+// 作者：云中桥
+// 链接：https://juejin.cn/post/6844903919789801486
+// 来源：稀土掘金
+// 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+document.body.style = 'background:blue'
+console.log(1);
+Promise.resolve().then(()=>{
+    console.log(2);
+    document.body.style = 'background:black'
+});
+console.log(3);
+</script>
+</body>
+</html>

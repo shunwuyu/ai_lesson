@@ -170,3 +170,6 @@ AI全栈工程师课程
 - react/basic/event
 - react/basic/state
 - nid-agent-node/demo2
+- node/supabase/demo
+- react/hook-todos 
+- js/event_loop

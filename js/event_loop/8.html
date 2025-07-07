@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// 页面先显示成蓝色背景，然后瞬间变成了黑色背景，这是因为以上代码属于两次宏任务，
+// 第一次宏任务执行的代码是将背景变成蓝色，然后触发渲染，
+// 将页面变成蓝色，再触发第二次宏任务将背景变成黑色。
+document.body.style = 'background:blue';
+setTimeout(function(){
+    document.body.style = 'background:black'
+},0)
+</script>
+</body>
+</html>
