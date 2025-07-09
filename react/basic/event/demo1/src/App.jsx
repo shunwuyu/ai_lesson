@@ -1,20 +1,42 @@
 import React, { useState, useEffect } from 'react'
+import './App.css'
 
-function EventPoolExample() {
-  // react 18 取消了 event pooling
-  const handleClick = (e) => {
-    console.log('立即访问:', e.type); // 正常输出：click
-    // e.persist(); 
-    setTimeout(() => {
-      console.log('延迟访问:', e.type); // ⚠️ 报错：Cannot read properties of null
-    }, 1000);
-  };
+function WindowResizeListener() {
+  useEffect(() => {
+    const handleResize = () => {
+      console.log("resized, ???");
+    };
+    window.addEventListener("resize", handleResize);
 
-  return <button onClick={handleClick}>Click Me</button>;
+    return () => {
+      // 卸载时清除
+      console.log('////')
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return <div>Resize the window</div>;
 }
 
 function App() {
+  const [showResizer, setShowResizer] = useState(true);
 
-  return <EventPoolExample/>;
+  const handleClick = (e) => {
+    console.log(e); // 是 SyntheticEvent 合成事件
+    console.log(e.nativeEvent); // 原生事件
+  };
+
+  const toggleResizer = () => {
+    setShowResizer(!showResizer);
+  }
+
+  return (
+    <>
+      <button onClick={handleClick}>Click</button>
+      { showResizer && <WindowResizeListener /> }
+      <button onClick={toggleResizer}>toggle</button>
+    </>
+  )
 }
+
 export default App

@@ -47,13 +47,13 @@ React 中的事件并不是原生 DOM 事件，而是封装了一层的 Syntheti
 问题	解答简要
 React 中事件和原生事件有什么区别？	React 使用 SyntheticEvent，统一跨浏览器行为，并做事件委托。
 为什么需要事件池？	提高性能，减少频繁创建事件对象的开销。
-如何阻止事件冒泡？	使用 e.stopPropagation()
+如何阻止事件冒泡？	使用 e.stopPropagation()  e
 事件对象为何会为 null？	因为被事件池回收了。使用 e.persist() 保留。
 如何绑定/解绑全局事件？	在 useEffect 中添加和清除监听器。
 React 事件绑定在哪里？	React 统一绑定在根元素上，如 document 或 container。
 
 ## 事件池机制（Event Pooling）
-
+react 降低版本.....
 React 的事件系统中的一个性能优化策略
 
 React 中的事件对象是 SyntheticEvent，它并不是原生 DOM 事件，而是 React 自己封装的。

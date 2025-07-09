@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="inputA" />
+    <br>
+    <input type="text" id="inputB" />
+    <br>
+    <input type="text" id="inputC" />
+    <script>
+    function ajax(content) {
+        console.log('ajax request ' + content)
+    }
+
+    function throttle(fun, delay) {
+        let last, deferTimer
+        return function (args) {
+            let that = this
+            let _args = arguments
+            let now = +new Date()
+            if (last && now < last + delay) {
+                clearTimeout(deferTimer)
+                deferTimer = setTimeout(function () {
+                    last = now
+                    fun.apply(that, _args)
+                }, delay)
+            }else {
+                last = now
+                fun.apply(that,_args)
+            }
+        }
+    }
+
+    function debounce(fun, delay) {
+        return function (args) {
+            let that = this
+            let _args = args
+            clearTimeout(fun.id)
+            fun.id = setTimeout(function () {
+                fun.call(that, _args)
+            }, delay)
+        }
+    }
+    let inputa = document.getElementById('inputA');
+    let inputb = document.getElementById('inputB');
+    let inputc = document.getElementById('inputC');
+    let debounceAjax = debounce(ajax, 500)
+    inputa.addEventListener('keyup', function(event) {
+        // console.log(event.target)
+        ajax(event.target.value);
+    })
+    inputb.addEventListener('keyup', function(event) {
+        debounceAjax(event.target.value)
+    })
+    let throttleAjax = throttle(ajax, 1000)
+    inputc.addEventListener('keyup', function(e) {
+        throttleAjax(e.target.value)
+    })
+    </script>
+</body>
+</html>

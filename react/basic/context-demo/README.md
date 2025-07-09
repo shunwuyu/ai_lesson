@@ -1,0 +1,4 @@
+- 多层组件 props传不方便
+- 可以使用 context 解决
+- context 可以是响应式的 
+- 封装自定义的useTheme
