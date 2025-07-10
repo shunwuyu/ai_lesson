@@ -1,0 +1,43 @@
+// 使用 IIFE 创建一个具有私有作用域的计数器工厂函数
+const Counter = (function() {
+    // 私有变量和方法
+    let count = 0; // 私有状态
+
+    function increment() {
+        return ++count;
+    }
+
+    function reset() {
+        count = 0;
+    }
+
+    // 返回公共接口对象
+    return function() {
+        // 公共方法
+        return {
+            getCount: function() {
+                return count;
+            },
+            increment: function() {
+                return increment();
+            },
+            reset: function() {
+                reset();
+            }
+        };
+    };
+})();
+
+// 创建两个独立的计数器实例
+const counter1 = Counter();
+const counter2 = Counter();
+
+console.log(counter1.getCount()); // 输出: 0
+console.log(counter1.increment()); // 输出: 1
+console.log(counter1.increment()); // 输出: 2
+
+console.log(counter2.getCount()); // 输出: 0
+console.log(counter2.increment()); // 输出: 1
+
+counter1.reset();
+console.log(counter1.getCount()); // 输出: 0

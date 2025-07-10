@@ -1,0 +1,67 @@
+<script type="module">
+// JavaScript 的类私有字段语法
+class Book {
+    // 私有字段必须提前声明
+    #title;
+    #author;
+    #year;
+
+    constructor(title, author, year) {
+        this.#title = title;
+        this.#author = author;
+        this.#year = year;
+    }
+
+    getTitle() {
+        return this.#title;
+    }
+
+    getAuthor() {
+        return this.#author;
+    }
+
+    getYear() {
+        return this.#year;
+    }
+
+    updateYear(newYear) {
+        if (typeof newYear === 'number' && newYear > 0) {
+            this.#year = newYear;
+        } else {
+            throw new Error("Invalid year. Must be a positive number.");
+        }
+    }
+
+    getFullInfo() {
+        return `${this.#title} by ${this.#author}, published in ${this.#year}`;
+    }
+
+    // 私有方法
+    #logAccess() {
+        console.log(`Book accessed: ${this.#title}`);
+    }
+
+    showInfoAndLog() {
+        this.#logAccess();
+        console.log(this.getFullInfo());
+    }
+}
+
+// ✅ 示例使用
+const book1 = new Book("The JavaScript Way", "John Doe", 2020);
+
+console.log(book1.getTitle());           // 输出: The JavaScript Way
+console.log(book1.getYear());            // 输出: 2020
+console.log(book1.getFullInfo());        // 输出: The JavaScript Way by John Doe, published in 2020
+
+book1.updateYear(2023);
+console.log(book1.getYear());            // 输出: 2023
+
+book1.showInfoAndLog(); 
+// 输出:
+// Book accessed: The JavaScript Way
+// The JavaScript Way by John Doe, published in 2023
+
+// ❌ 下面的操作都会失败：
+console.log(book1.#title);               // 报错：SyntaxError: Private field '#title'  [ ](c)
+</script>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  img {
+    display: block;
+    width:500px;
+    height:500px;
+  }
+  </style>
+</head>
+<body>
+  <img data-src="https://img.36krcdn.com/hsossms/20250710/v2_e33bd9df5b894fdf8b911081b7bb7807@000000@ai_oswg250038oswg1536oswg722_img_000~tplv-1marlgjv7f-ai-v3:600:400:600:400:q70.jpg?x-oss-process=image/format,webp" alt="Placeholder" />
+  <img data-src="https://img.36krcdn.com/hsossms/20250709/v2_6764d535bd4544d6814810c47529c282@000000_oswg325419oswg432oswg288_img_png?x-oss-process=image/format,webp" alt="Placeholder" />
+  <img data-src="https://img.36krcdn.com/hsossms/20250710/v2_cec97370ce4740a1b544bcf65235e204@5888275@ai_oswg961027oswg1053oswg495_img_png~tplv-1marlgjv7f-ai-v3:600:400:600:400:q70.jpg?x-oss-process=image/format,webp" alt="Placeholder" />
+  <script>
+  // 惰性函数：图片懒加载初始化
+  const lazyLoad = (function () {
+    let initialized = false;
+    let observer;
+
+    return function initLazyLoad(image) {
+      // 如果尚未初始化，则一次性设置好 IntersectionObserver
+      if (!initialized) {
+        observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              img.src = img.dataset.src;
+              img.alt = img.dataset.alt || '';
+              observer.unobserve(img); // 加载完成后不再观察
+            }
+          });
+        }, { rootMargin: '0px 0px 200px 0px' }); // 提前加载一些图片
+
+        initialized = true;
+      }
+
+      // 开始观察这张图片
+      observer.observe(image);
+    };
+  })();
+
+  // 使用示例：
+  document.querySelectorAll('img[data-src]').forEach(lazyLoad);
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Closure in Event Listener Example</title>
+</head>
+<body>
+  <button id="myButton">Click Me</button>
+
+  <script>
+    const obj = {
+      message: "Hello from the object!",
+      
+      init: function() {
+        const button = document.getElementById('myButton');
+
+        // 保存 this 的引用，以便在事件处理函数中使用
+        const that = this;
+
+        button.addEventListener('click', function() {
+          alert(that.message);
+        });
+      }
+    };
+
+    obj.init(); // 初始化事件监听器
+  </script>
+</body>
+</html>

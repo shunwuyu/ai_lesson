@@ -1,0 +1,44 @@
+/* Card.css */
+
+.card {
+  background-color: #ffffff; /* 白色背景 */
+  border-radius: 12px; /* 圆角 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
+  padding: 20px; /* 内边距 */
+  margin: 16px auto; /* 居中并留出上下间距 */
+  max-width: 400px; /* 设置最大宽度 */
+  transition: all 0.3s ease; /* 动画过渡 */
+  overflow: hidden; /* 防止内容溢出圆角 */
+}
+
+.card:hover {
+  transform: translateY(-4px); /* 悬停上浮效果 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* 更强阴影 */
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.card p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.card button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #0070f3;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.card button:hover {
+  background-color: #005bb5;
+}

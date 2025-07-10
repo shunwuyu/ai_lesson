@@ -175,3 +175,5 @@ AI全栈工程师课程
 - js/event_loop
 - js/debounce_throttle
 - react/basic/context-demo
+- js/private_public
+- react/basic/props
