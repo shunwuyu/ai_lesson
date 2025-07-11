@@ -9,6 +9,7 @@
 <script>
 console.log('同步');
 queueMicrotask(() => {
+  // 保证DOM 已更新
   console.log('微任务：queueMicrotask');
 });
 console.log('同步结束');
