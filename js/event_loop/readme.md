@@ -130,3 +130,38 @@ document.body.style = 'background:black';
 document.body.style = 'background:red';
 document.body.style = 'background:blue';
 document.body.style = 'background:grey';
+
+
+- setTimeout
+它是由浏览器的 单独事件触发线程（也称为定时器线程） 管理的, 属于渲染进程。
+- DOM event 
+没有单独的线程， 浏览器的主线程（JS 引擎线程）**监听和处理
+与 setTimeout 不同，DOM 事件的触发和回调执行都在主线程中完成。
+
+特性	setTimeout	DOM 事件
+触发机制	浏览器定时器线程	主线程监听用户行为或页面变化
+回调放入队列	时间到后放入宏任务队列	事件触发后放入宏任务队列
+执行线程	最终在 JS 主线程执行	始终在 JS 主线程执行
+
+- XMLHttpRequest/fetch
+由浏览器的 网络线程（Network Thread） 处理，不占用 JS 主线程。
+请求完成后，回调函数（如 onreadystatechange）会被放入宏任务队列，并在 JS 主线程空闲时执行。
+
+- fetch
+同样由浏览器的 网络线程或进程 执行（更现代、更底层的网络栈）。
+：使用 Promise，其 .then() 和 .catch() 回调属于微任务，在主线程执行，但可以配合 await 在异步函数中使用。
+相比 XHR，fetch 更现代化，
+
+宏任务队列和微任务队列都是在 JavaScript 主线程（即渲染进程中的 JS 引擎线程） 中管理和执行的
+
+- 渲染进程的所有子线程
+
+线程名称	用途描述
+主线程（Main Thread）	运行 JavaScript、管理 DOM 树、计算样式、布局及绘制等核心操作。
+工作线程（Worker Threads）	用于 Web Workers，允许在后台执行脚本而不影响页面性能。
+栅格化线程（Raster Thread）	将绘图命令转换为像素，处理图像解码与重新采样。
+合成器线程（Compositor Thread）	分割页面为多个层，并决定何时更新这些层以响应用户输入或动画。
+计时器线程（Timer Thread）	管理 setTimeout 和 setInterval 的定时任务，确保回调能按时放入任务队列。
+网络线程（Network Thread）	负责处理 HTTP 请求、响应以及其他网络活动，如 XHR 和 fetch 请求。
+文件线程（File Thread）	处理本地文件系统访问相关的操作，比如读取或写入 IndexedDB 数据库。
+音频线程（Audio Thread）	专门用于处理音频播放，确保音频流的连续性和低延迟。
