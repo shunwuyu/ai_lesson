@@ -178,3 +178,5 @@ AI全栈工程师课程
 - js/private_public
 - react/basic/props
 - react/basic/callback-demo
+- react/layoutEffect
+- react/modal/modal-demo 
