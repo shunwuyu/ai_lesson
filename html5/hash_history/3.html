@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Change Example</title>
+    <style>
+        .content {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Navigation</h1>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div id="content-container" class="content">
+        Welcome! Click on the links above to navigate.
+    </div>
+
+    <script>
+        function updateContent() {
+            const contentContainer = document.getElementById('content-container');
+            let content = 'Welcome! Click on the links above to navigate.';
+            
+            switch (window.location.hash) {
+                case '#home':
+                    content = '<h2>Home</h2><p>Welcome to our homepage!</p>';
+                    break;
+                case '#about':
+                    content = '<h2>About Us</h2><p>Learn more about us.</p>';
+                    break;
+                case '#contact':
+                    content = '<h2>Contact Us</h2><p>Get in touch with us.</p>';
+                    break;
+                default:
+                    break;
+            }
+
+            contentContainer.innerHTML = content;
+        }
+
+        // 初始加载时调用一次
+        window.addEventListener('load', updateContent);
+
+        // 监听hash变化
+        window.addEventListener('hashchange', updateContent);
+    </script>
+</body>
+</html>
