@@ -11,3 +11,4 @@ function addToTotal(a) {
 }
 
 // reducer 就必须是个纯函数。
+

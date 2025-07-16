@@ -180,8 +180,9 @@ AI全栈工程师课程
 - react/basic/callback-demo
 - react/layoutEffect
 - react/modal/modal-demo 
-- html5/hash_history
 - interview/2025_chun/css/pxdp/readme.md
 - design_patterns/single
 - react/basic/usereducer-demo
 - react/basic/ref-demo
+- react/basic/fragment
+- html5/hash_history

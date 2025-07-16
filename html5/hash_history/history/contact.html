@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>联系我们</title>
+    <script>
+        function navigateHistory(steps) {
+            history.go(steps);
+        }
+    </script>
+</head>
+<body>
+    <h1>联系我们</h1>
+    <button onclick="navigateHistory(-2);">返回主页</button> <!-- 后退两页回到主页 -->
+    <button onclick="navigateHistory(-1);">后退一页至关于我们</button>
+    <button onclick="history.forward();">前进至主页（如果你之前访问过主页）</button>
+    <button onclick="history.back();">后退一页（无论你在哪个页面都会执行后退操作）</button>
+</body>
+</html>

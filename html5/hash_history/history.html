@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>history.pushState 示例</title>
+  <style>
+    body { font-family: sans-serif; }
+    button { margin: 10px; }
+    #view { padding: 20px; background: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <h2>SPA 路由模拟</h2>
+  <button onclick="navigate('/home')">首页</button>
+  <button onclick="navigate('/about')">关于</button>
+  <button onclick="replace('/contact')">联系（replaceState）</button>
+  <div id="view">当前视图：/</div>
+
+  <script>
+    function render(path) {
+      document.getElementById('view').textContent = `当前视图：${path}`;
+    }
+
+    function navigate(path) {
+      history.pushState({ path }, '', path);
+      render(path);
+    }
+
+    // 用户登录后，使用 replaceState 将浏览器历史中的登录页替换为目标页，避免后退时再次进入登录页，提升导航体验。
+
+    function replace(path) {
+      history.replaceState({ path }, '', path);
+      render(path);
+    }
+
+    // 页面加载时，如果刷新在某个子路径，也能渲染对应视图
+    window.addEventListener('DOMContentLoaded', () => {
+      render(location.pathname);
+    });
+
+    // 监听浏览器前进/后退事件
+    window.addEventListener('popstate', (event) => {
+      console.log('popstate fired:', event.state);
+      render(location.pathname);
+    });
+  </script>
+</body>
+</html>

@@ -28,7 +28,8 @@
     }
 
     .fill {
-        background-image: url('https://source.unsplash.com/random/150x150');
+        background-image: url('https://img1.baidu.com/it/u=400864332,910444934&fm=253&fmt=auto&app=138&f=JPEG?w=514&h=500');
+        background-size: cover;
         height: 145px;
         width: 145px;
         cursor: pointer;
@@ -43,7 +44,7 @@
         border-color: white;
         border-style: dashed;
     }
-
+    /* 媒体查询（Media Query）选择器，用于响应式设计，根据屏幕宽度调整样式 */
     @media (max-width: 800px) {
         body {
             flex-direction: column;
@@ -53,6 +54,7 @@
 </head>
 <body>
     <div class="empty">
+        <!-- draggable="true"属性用于启用HTML5拖拽功能，没有它元素将无法拖动 -->
         <div class="fill" draggable="true"></div>
     </div>
     <div class="empty"></div>
@@ -61,10 +63,10 @@
     <div class="empty"></div>
     <script>
     const fill = document.querySelector('.fill')
-const empties = document.querySelectorAll('.empty')
+    const empties = document.querySelectorAll('.empty')
 
-fill.addEventListener('dragstart', dragStart)
-fill.addEventListener('dragend', dragEnd)
+    fill.addEventListener('dragstart', dragStart)
+    fill.addEventListener('dragend', dragEnd)
 
 for(const empty of empties) {
     // 反复触发的事件

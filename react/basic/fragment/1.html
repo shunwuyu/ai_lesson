@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<div id="list"></div>
+<script>
+  // 这段代码会触发多次重排（reflow）
+const items = [
+  {
+    title: '标题一',
+    description: '内容一'
+  },
+  {
+    title: '标题二',
+    description: '内容二'
+  },
+  {
+    title: '标题三',
+    description: '内容三'
+  },
+];
+
+const container = document.getElementById('list');
+
+items.forEach(item => {
+  const wrapper = document.createElement('div'); // 多余的容器
+  const title = document.createElement('div');
+  const desc = document.createElement('div');
+
+  title.textContent = item.title;
+  desc.textContent = item.description;
+
+  wrapper.appendChild(title);
+  wrapper.appendChild(desc);
+  container.appendChild(wrapper); // 多了一层 wrapper
+});
+</script>
+</body>
+</html>

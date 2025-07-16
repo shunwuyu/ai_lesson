@@ -18,3 +18,14 @@
   - hash.html 手写
   
 
+- history
+  history.go(-1);       // 后退一页
+  history.go(2);        // 前进两页
+  history.forward();     // 前进一页
+  history.back();      // 后退一页
+  访问历史 栈
+
+- history 新增了以下几个 API
+  history.pushState();  // 添加新的状态到历史状态栈
+  history.replaceState(); // // 用新的状态代替当前状态
+  history.state // 返回当前状态对象
