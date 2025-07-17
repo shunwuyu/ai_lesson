@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple XSS Demo</title>
+</head>
+<body>
+    <h1>Search Page</h1>
+    <form id="searchForm">
+        <input type="text" id="searchBox" placeholder="Enter your search term">
+        <button type="submit">Search</button>
+    </form>
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const searchQuery = document.getElementById('searchBox').value;
+            // 直接使用用户输入的数据，没有进行任何验证或编码
+            document.getElementById('output').innerHTML = "You searched for: " + searchQuery;
+            // document.getElementById('output').textContent = "You searched for: " + searchQuery;
+        });
+    </script>
+</body>
+</html>
