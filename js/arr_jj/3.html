@@ -1,0 +1,38 @@
+<script>
+// 找到位置序号
+// indexOf、lastIndexOf、findIndex、findLastIndex
+// indexOf 是从前往后，lastIndexOf 是后往前
+Array.prototype.indexOf = function(ele) {
+    for (let i = 0; i < this.length; i += 1) {
+        // 判断有无此数据
+        if (!this.hasOwnProperty(i)) continue;
+        // 严格相等判断
+        if (ele === this[i]) return i;
+    }
+    
+    return -1;
+}
+
+
+// find findLast
+
+const users = [
+    { id: 1, name: "Alice" },
+    { id: 2, name: "Bob" },
+    { id: 3, name: "Charlie" },
+    { id: 4, name: "David" }
+];
+
+// 查找 id 为 3 的用户
+const user = users.find(user => user.id === 3);
+
+console.log(user);
+
+// 判断有没有找到
+
+[NaN, 1, Infinity].some(ele => ele === Infinity);
+
+[NaN].includes(NaN) // true
+
+console.log(new Array(5).includes(undefined)) // true
+</script>
