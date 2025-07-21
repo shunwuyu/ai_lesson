@@ -97,4 +97,43 @@ function computeExpensiveValue() {
     demo4
 
 - useRef 和 useState 有什么区别？为什么 useRef 修改值不会触发组件重新渲染？
-    
+    basic/ref-demo
+
+- 请对比 useEffect 和类组件的 componentDidMount、componentDidUpdate、componentWillUnmount 的对应关系。 demo5
+    - useEffect 是函数组件中用于处理副作用的 Hook，而类组件中则通过生命周期方法 componentDidMount、componentDidUpdate 和 componentWillUnmount 来处理类似逻辑。
+
+- 自定义 Hook 是什么？为什么要用自定义 Hook？请描述一个你写过的自定义 Hook 的使用场景。
+    自定义 Hook 是开发者自己封装的、以 use 开头的函数，可以包含状态（如 useState）、副作用（如 useEffect）和其他 Hook，用于逻辑复用。
+    useFetch 改成url
+    https://github.com/shunwuyu/ai_lesson/blob/ba65c01b1b36e333f8844d3c81b8826dac260baa/react/basic/callback-demo/src/hooks/useFetch.js#L4
+    App上调用 一下
+
+- 父子组件、兄弟组件、跨层级组件之间分别如何通信？你会如何选择不同的通信方式？
+    - 父子组件 props
+    - 子父  props 回调函数
+    - 兄弟组件 通过父组件（状态提升）
+    - 跨层级组件 Context API + useReducer 
+        redux zustand
+
+    选择哪种通信方式主要取决于组件之间的关系以及需要共享的数据的性质和范围。对于简单的父子组件通信，直接使用props就足够了；而对于复杂的或者跨层级的通信，则可能更适合使用Context API或状态管理库。
+    大型应用开发，一般会使用redux等库， 将应用开发分成UI 组件+状态管理。
+
+- useContext 的原理是什么？它会导致哪些性能问题？如何优化？
+    - React.createContext 创建上下文对象，通过 Provider 传值，子组件使用 useContext(Context) 直接读取最近的 Provider 提供的值，实现跨层级共享，无需手动传 props。
+    - 当 Context 的值发生变化时，所有使用了 useContext 订阅该 Context 的组件都会重新渲染。如果 Context 提供的数据是一个对象或数组等引用类型，即使实际内容没有改变，但由于引用地址的变化，也会导致子组件认为数据已更新并触发不必要的重渲染。
+    - 分割 Context  useMemo 
+    如果 Context 包含大量不同的数据，考虑将其拆分为多个更小、更专注的 Contexts。这样可以确保只有依赖特定部分数据的组件才会重新渲染。
+        redux
+
+- React 中何时需要使用状态管理工具（如 Redux、Zustand、Recoil 等）而不是只用本地状态？
+    redux
+
+- React 中的虚拟 DOM 是什么？它和真实 DOM 有什么区别？它如何帮助性能优化？
+- 什么是组件的“重新渲染”？在什么情况下组件会重新渲染？如何避免不必要的渲染？
+- 请解释 React.memo、useMemo 和 useCallback 的异同，它们分别适用于什么场景？
+
+
+
+
+
+
