@@ -1,12 +1,31 @@
-import { getProtected } from '../api';
-import { useEffect } from 'react';
+// src/pages/Pay.jsx
+import { useEffect, useState } from 'react';
+import {
+  getProtected
+} from '../api/index'
+// import request from '../utils/request';
+import { useAuthStore } from '../store/user';
 
-function Pay() {
+export default function Pay() {
+  const [data, setData] = useState(null);
+  const logout = useAuthStore(state => state.logout);
+
   useEffect(() => {
-    getProtected().then(console.log).catch(console.error);
+    async function fetchData() {
+      const res = await getProtected();
+      console.log(res);
+      if (res.code === 0) {
+        setData(res.data);
+      } 
+    }
+    fetchData();
   }, []);
 
-  return <h2>Pay Page - Protected</h2>;
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>Pay Page</h2>
+      {data ? <p>Welcome, {data}</p> : <p>Loading...</p>}
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
 }
-
-export default Pay;

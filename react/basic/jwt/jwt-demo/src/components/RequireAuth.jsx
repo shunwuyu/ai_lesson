@@ -1,15 +1,13 @@
-import { useAuth } from '../hooks/useAuth';
-import { useLocation, Navigate } from 'react-router-dom';
+// src/components/RequireAuth.jsx
+import { Navigate } from 'react-router-dom';
+import { useAuthStore } from '../store/user';
 
-function RequireAuth({ children }) {
-    const { state } = useAuth();
-    const location = useLocation();
-  
-    if (!state.token) {
-      return <Navigate to="/login" state={{ from: location.pathname }} replace />;
-    }
-  
-    return children;
+export default function RequireAuth({ children }) {
+  const token = useAuthStore(state => state.token);
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 }
-
-export default RequireAuth;

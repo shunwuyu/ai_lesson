@@ -1,20 +1,19 @@
+// src/utils/request.js
 import axios from 'axios';
+import { useAuthStore } from '../store/user';
 
-axios.interceptors.request.use(config => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        // Bearer 是一种用于身份验证的 token 类型，表示持有该 token 的用户或客户端被授权访问特定资源。
-        // 标准
-        config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
+const instance = axios.create({
+  baseURL: '/api',
+  timeout: 5000
 });
 
-axios.interceptors.response.use(response => {
-    return response;
-}, error => {
-    return Promise.reject(error);
+// 自动携带 token
+instance.interceptors.request.use(config => {
+  const token = useAuthStore.getState().token;
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
 });
 
-  
-export default axios;
+export default instance;

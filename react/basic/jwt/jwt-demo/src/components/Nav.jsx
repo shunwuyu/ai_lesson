@@ -1,19 +1,21 @@
-import { useAuth } from '../hooks/useAuth';
+// src/components/Nav.jsx
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../store/user';
 
 function Nav() {
-  const { state, dispatch } = useAuth();
+  const token = useAuthStore(state => state.token);
+  const logout = useAuthStore(state => state.logout);
 
   const handleLogout = () => {
-    dispatch({ type: 'LOGOUT' });
+    logout();
   };
 
   return (
-    <nav>
+    <nav style={{ padding: 10, borderBottom: '1px solid #ccc' }}>
       <Link to="/">Home</Link> | 
-      <Link to="/pay">Pay</Link> |
-      {!state.token && <Link to="/login">Login</Link>}
-      {state.token && <button onClick={handleLogout}>Logout</button>}
+      <Link to="/pay">Pay</Link> | 
+      {!token && <Link to="/login">Login</Link>}
+      {token && <button onClick={handleLogout}>Logout</button>}
     </nav>
   );
 }

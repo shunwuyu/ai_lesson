@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { login } from '../api';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthStore } from '../store/user'; // 👈 改成 zustand store
 import styles from './Login.module.css';
 
 function Login() {
-  const { dispatch } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || '/';
+
+  const setAuth = useAuthStore(state => state.setAuth); // 👈 zustand 设置状态
 
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({ username: '', password: '' });
   const [isValid, setIsValid] = useState(false);
 
-  // 实时校验逻辑
+  // 表单验证逻辑
   useEffect(() => {
     const newErrors = { username: '', password: '' };
 
@@ -34,21 +35,24 @@ function Login() {
     setIsValid(!newErrors.username && !newErrors.password);
   }, [formData]);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = async e => {
     e.preventDefault();
     try {
-      const res = await login(formData);
-      localStorage.setItem('token', res.token);
-      dispatch({ type: 'LOGIN', payload: res });
-      navigate(from, { replace: true });
+      const res = await login(formData); // 发起登录请求
+      if (res.code === 0) {
+        setAuth({ token: res.token, user: res.user }); // 使用 zustand 更新状态
+        navigate(from, { replace: true }); // 登录成功后跳转
+      } else {
+        alert(res.message || '登录失败');
+      }
     } catch (err) {
-      alert('登录失败');
       console.error(err);
+      alert('登录失败');
     }
   };
 
