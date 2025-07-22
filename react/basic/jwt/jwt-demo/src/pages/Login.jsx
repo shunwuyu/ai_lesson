@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { login } from '../api';
 import { useAuth } from '../hooks/useAuth';
+import styles from './Login.module.css';
 
 function Login() {
   const { dispatch } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
   const from = location.state?.from || '/';
 
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [errors, setErrors] = useState({ username: '', password: '' });
+  const [isValid, setIsValid] = useState(false);
+
+  // 实时校验逻辑
+  useEffect(() => {
+    const newErrors = { username: '', password: '' };
+
+    if (!formData.username.trim()) {
+      newErrors.username = '用户名不能为空';
+    } else if (formData.username.length < 3) {
+      newErrors.username = '用户名至少3位';
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = '密码不能为空';
+    } else if (formData.password.length < 6) {
+      newErrors.password = '密码至少6位';
+    }
+
+    setErrors(newErrors);
+    setIsValid(!newErrors.username && !newErrors.password);
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +43,6 @@ function Login() {
     e.preventDefault();
     try {
       const res = await login(formData);
-      console.log(res);
       localStorage.setItem('token', res.token);
       dispatch({ type: 'LOGIN', payload: res });
       navigate(from, { replace: true });
@@ -35,34 +53,38 @@ function Login() {
   };
 
   return (
-    <div>
-      <h2>Login Page</h2>
+    <div className={styles.container}>
+      <h2>登录</h2>
       <form onSubmit={handleLogin}>
-        <div>
-          <label>
-            Username: 
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </label>
+        <div className={styles.formGroup}>
+          <label htmlFor="username">用户名</label>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+          />
+          {errors.username && <div className={styles.error}>{errors.username}</div>}
         </div>
-        <div>
-          <label>
-            Password: 
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </label>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="password">密码</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          {errors.password && <div className={styles.error}>{errors.password}</div>}
         </div>
-        <button type="submit">Login</button>
+
+        <button type="submit" disabled={!isValid}>
+          登录
+        </button>
       </form>
     </div>
   );

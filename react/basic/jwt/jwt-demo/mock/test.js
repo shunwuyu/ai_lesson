@@ -51,6 +51,28 @@ export default [
     }
   },
   {
+    url: '/api/todos',
+    method: 'get',
+    timeout: 2000,
+    response: (req, res) => {
+      return {
+        code: 0,
+        user: [
+          {
+            id: 1,
+            text: 'haha',
+            completed: false
+          },
+          {
+            id: 2,
+            text: 'haha2',
+            completed: true
+          }
+        ]
+      }
+    }
+  },
+  {
     url: '/api/text',
     method: 'post',
     rawResponse: async (req, res) => {

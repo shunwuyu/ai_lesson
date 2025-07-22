@@ -1,0 +1,19 @@
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.fade-box {
+  padding: 20px;
+  background-color: lightcoral;
+}

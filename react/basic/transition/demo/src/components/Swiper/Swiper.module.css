@@ -1,0 +1,54 @@
+/* Swiper.module.css */
+.swiperContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.swiperWrapper {
+  display: flex;
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+.slide {
+  flex-shrink: 0;
+  width: 100%;
+  user-select: none;
+  text-align: center;
+}
+
+.slide img {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+}
+
+.title {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
+  padding: 0 10px;
+}
+
+.indicators {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.dot.active {
+  background: #fff;
+}
