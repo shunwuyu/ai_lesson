@@ -1,0 +1,39 @@
+/* TabBar.module.css */
+.tabBarContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #eee;
+  z-index: 999;
+}
+
+.tabItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-decoration: none;
+  color: #666;
+}
+
+.tabItem.active {
+  color: #ff6b6b;
+}
+
+.icon {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+.label {
+  font-size: 12px;
+}
