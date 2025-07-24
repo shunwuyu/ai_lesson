@@ -34,7 +34,7 @@ export default function Account() {
           style={{ cursor: 'pointer' }}
         />
         <div style={{ marginLeft: 16 }}>
-          <div style={{ fontSize: 18, fontWeight: 500 }}>昵称：小明</div>
+          <div style={{ fontSize: 18, fontWeight: 500 }}>昵称：奶龙</div>
           <div style={{ fontSize: 14, color: '#999', marginTop: 4 }}>等级：Lv.3</div>
           <div style={{ fontSize: 12, color: '#ccc', marginTop: 4 }}>签名：保持热爱，奔赴山海。</div>
         </div>
