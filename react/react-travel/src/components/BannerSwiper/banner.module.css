@@ -1,0 +1,35 @@
+.banner{
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner .rv-swiper__indicators {
+  bottom: 10px;
+}
+
+.item {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.image {
+  width: 100%;
+  display: block;
+  height: 180px; /* 可根据需要调整高度 */
+  object-fit: cover;
+}
+
+.title {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+}

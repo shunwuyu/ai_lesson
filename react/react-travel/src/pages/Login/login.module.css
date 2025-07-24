@@ -1,0 +1,20 @@
+/* Login/Login.module.css */
+.container {
+  padding: 40px 20px;
+  max-width: 400px;
+  margin: auto;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.button {
+  margin-top: 20px;
+}
