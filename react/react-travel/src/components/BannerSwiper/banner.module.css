@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
+  height: 360px;
 }
 
 .banner .rv-swiper__indicators {
@@ -17,19 +18,20 @@
 .image {
   width: 100%;
   display: block;
-  height: 180px; /* 可根据需要调整高度 */
+  height: 360px;
+   /* 可根据需要调整高度 */
   object-fit: cover;
 }
 
 .title {
   position: absolute;
-  bottom: 15px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 28px;
   white-space: nowrap;
 }

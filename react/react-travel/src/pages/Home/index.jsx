@@ -34,7 +34,6 @@ const Home = () => {
           readOnly // 设置为只读，防止输入，点击直接跳转
           shape="round"
           placeholder="请输入搜索内容"
-          
         />    
       </div>
       {

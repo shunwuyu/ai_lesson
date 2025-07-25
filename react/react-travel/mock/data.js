@@ -1,4 +1,4 @@
-
+import Mock from 'mockjs';
 
 export default [
   {
@@ -29,5 +29,28 @@ export default [
         data: banners
       }
     },
+  },
+  {
+    url: '/api/suggest',
+    method: 'get',
+    timeout: 100,
+    response: (req, res) => {
+      let keyword = req.query.keyword;
+      console.log(keyword);
+      let num = Math.floor(Math.random() * 10) + 1;
+      console.log(num);
+      let list = [];
+      for (let i = 0; i < num; i++) {
+        const randomData = Mock.mock({
+          title: '@ctitle'
+        });
+        // console.log(randomText, '-------')
+        list.push(`${randomData.title}${keyword}`)
+      }
+      return {
+        code: 0,
+        data: list
+      }
+    }
   }
 ]

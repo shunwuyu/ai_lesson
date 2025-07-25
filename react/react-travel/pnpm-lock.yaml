@@ -17,6 +17,9 @@ importers:
       lib-flexible:
         specifier: ^0.3.2
         version: 0.3.2
+      mockjs:
+        specifier: ^1.1.0
+        version: 1.1.0
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
