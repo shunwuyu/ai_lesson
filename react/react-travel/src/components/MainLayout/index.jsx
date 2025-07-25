@@ -36,8 +36,8 @@ const MainLayout = () => {
   }, [location.pathname]); // ✅ 添加依赖项
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex-1">
+    <div className="flex flex-col h-screen" style={{paddingBottom:'50px'}}>
+      <div style={{height:'100%'}}>
         <Outlet />
       </div>
       <Tabbar value={active} onChange={(key) => {

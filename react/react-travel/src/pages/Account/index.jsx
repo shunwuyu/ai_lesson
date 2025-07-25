@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Cell, CellGroup, Image, ActionSheet, Popup } from 'react-vant';
+import { Cell, CellGroup, Image, ActionSheet, Popup, Loading } from 'react-vant';
 import {
   FriendsO,
   StarO,
@@ -7,13 +7,39 @@ import {
   ServiceO,
   UserCircleO,
 } from '@react-vant/icons';
+import {
+  generateAvatar
+} from '../../llm';
 
 export default function Account() {
   const [showActionSheet, setShowActionSheet] = useState(false);
-
-  const handleAction = (e) => {
+  const [userInfo, setUserInfo] = useState({
+    avatar: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg',
+    nickname: '奶龙',
+    level: 3,
+    signature: '保持热爱，奔赴山海。',
+  })
+  const [loading, setLoading] = useState(false);
+  const handleAction = async (e) => {
     console.log(e)
-    setShowActionSheet(false)
+    
+    if (e.type === 2) {
+      // ai 生图
+      setShowActionSheet(false)
+      setLoading(true);
+      const prompt = `
+      请你生成一个用户的头像，
+      他的昵称是${userInfo.nickname},
+      他的签名是:${userInfo.signature}。
+      `
+      const res = await generateAvatar(prompt);
+      console.log(res);
+      setUserInfo({
+        ...userInfo,
+        avatar: res.avatar,
+      })
+      setLoading(false);
+    }
   }
   
   const actions2 = [
@@ -29,14 +55,14 @@ export default function Account() {
           round
           width="64px"
           height="64px"
-          src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
+          src={userInfo.avatar}
           onClick={() => setShowActionSheet(true)} // 点击头像弹出 ActionSheet
           style={{ cursor: 'pointer' }}
         />
         <div style={{ marginLeft: 16 }}>
-          <div style={{ fontSize: 18, fontWeight: 500 }}>昵称：奶龙</div>
-          <div style={{ fontSize: 14, color: '#999', marginTop: 4 }}>等级：Lv.3</div>
-          <div style={{ fontSize: 12, color: '#ccc', marginTop: 4 }}>签名：保持热爱，奔赴山海。</div>
+          <div style={{ fontSize: 18, fontWeight: 500 }}>昵称：{userInfo.nickname}</div>
+          <div style={{ fontSize: 14, color: '#999', marginTop: 4 }}>等级：{userInfo.level}</div>
+          <div style={{ fontSize: 12, color: '#ccc', marginTop: 4 }}>签名：{userInfo.signature}</div>
         </div>
       </div>
 
@@ -64,6 +90,9 @@ export default function Account() {
         onCancel={() => setShowActionSheet(false)}
         onSelect={(e) => handleAction(e)}
       />
+      {
+        loading && <div className="fixed-loading"><Loading type="ball" /></div>
+      } 
     </div>
   );
 }
