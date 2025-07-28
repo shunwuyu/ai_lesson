@@ -28,3 +28,5 @@
   - Search
   - Layout
   - TabBar 组件OK
+
+- Loading 组件

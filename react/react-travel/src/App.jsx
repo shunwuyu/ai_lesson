@@ -1,5 +1,6 @@
 // App.tsx
 import { useState, lazy, Suspense } from 'react';
+import Loading from './components/Loading';
 import './App.css';
 import { 
   Routes,
@@ -22,7 +23,7 @@ const App = () => {
   
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading />}>
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Navigate to="/home" />} />

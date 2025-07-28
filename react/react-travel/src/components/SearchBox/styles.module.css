@@ -1,0 +1,29 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 12px;
+    padding-right: 40px;
+    height: 80px;
+    background:#eee;
+}
+.box {
+    flex: 1;
+    margin: 0 5px;
+    line-height: 36px;
+    background:#eee;
+    color:#333;
+    font-size: 28px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #e4e4e4
+}
+
+.box::placeholder {
+    color: #f1f1f1
+}
+.clear {
+    font-size: 32px;
+    color: 'red';
+}

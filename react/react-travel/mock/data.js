@@ -52,5 +52,25 @@ export default [
         data: list
       }
     }
+  },
+  {
+    url: '/api/hotlist',
+    method: 'get',
+    timeout: 1000,
+    response: (req, res) => {
+      return {
+        code: 0,
+        data: [{
+          id: '101',
+          city: '北京'
+        },{
+          id: '102',
+          city: '上海'
+        },{
+          id: '103',
+          city: '三亚'
+        }]
+      }
+    }
   }
 ]

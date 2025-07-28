@@ -1,7 +1,10 @@
-export default function debounce(fn, delay) {
-  let timer
-  return function (...args) {
-    clearTimeout(timer)
-    timer = setTimeout(() => fn.apply(this, args), delay)
+export function debounce(fun, delay) {
+  return function (args) {
+      let that = this
+      let _args = args
+      clearTimeout(fun.id)
+      fun.id = setTimeout(function () {
+          fun.call(that, _args)
+      }, delay)
   }
 }
