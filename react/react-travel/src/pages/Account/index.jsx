@@ -6,12 +6,32 @@ import {
   SettingO,
   ServiceO,
   UserCircleO,
+  AddO,
+  CartO,
+  ChatO,
+  FireO,
+  LikeO,
+  Search,
+  HomeO,
+  UserO
 } from '@react-vant/icons';
 import {
   generateAvatar
 } from '../../llm';
+import styles from './account.module.css';
 
 export default function Account() {
+  const gridData = [
+    { icon: <AddO />, text: '添加' },
+    { icon: <CartO />, text: '购物车' },
+    { icon: <ChatO />, text: '聊天' },
+    { icon: <FireO />, text: '热门' },
+    { icon: <LikeO />, text: '喜欢' },
+    { icon: <StarO />, text: '收藏' },
+    { icon: <Search />, text: '搜索' },
+    { icon: <HomeO />, text: '首页' },
+    { icon: <UserO />, text: '我的' }
+  ];
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [userInfo, setUserInfo] = useState({
     avatar: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg',
@@ -93,6 +113,15 @@ export default function Account() {
       {
         loading && <div className="fixed-loading"><Loading type="ball" /></div>
       } 
+
+      <div className={styles.gridContainer}> 
+        {gridData.map((item, index) => (
+          <div key={index} className={styles.gridItem}>
+            <div className={styles.icon}>{item.icon}</div>
+            <div className={styles.text}>{item.text}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

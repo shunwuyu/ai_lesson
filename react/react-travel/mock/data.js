@@ -72,5 +72,39 @@ export default [
         }]
       }
     }
+  },
+  {
+    url: '/api/detail/:id',
+    method: 'get',
+    timeout: 1000,
+    response: (req, res) => {
+      // const id = req.params.id;
+      // const id = req.params.id
+      // console.log(id, '////')
+      const randomData = Mock.mock({
+        title: '@ctitle(5, 10)',
+        price: '@integer(60, 100)',
+        desc: '@cparagraph(3, 5)',
+        images: [
+          {
+              url: '@image(300x200, @color, #fff, 图片)',
+              alt: '@ctitle(5, 10)'
+          },
+          {
+            url: '@image(300x200, @color, #fff, 图片)',
+            alt: '@ctitle(5, 10)'
+          },
+          {
+            url: '@image(300x200, @color, #fff, 图片)',
+            alt: '@ctitle(5, 10)'
+          }
+        ],
+      });
+
+      return {
+        code: 0,
+        data: randomData
+      }
+    }
   }
 ]

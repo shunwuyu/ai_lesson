@@ -10,7 +10,7 @@ const Header = ({ title = '标题', onBack }) => {
       <NavBar
         className={styles.navbar}
       >
-        {title || "ddd"}
+        {title || ""}
       </NavBar>
     </div>
   );
