@@ -1,4 +1,11 @@
 import Mock from 'mockjs';
+const getImages = (page, pageSize = 10) => {
+  return Array.from({ length: pageSize }, (_, i) => ({
+    id: `${page}-${i}`,
+    height: Mock.Random.integer(400, 600),
+    url: Mock.Random.image('300x400', Mock.Random.color(), '#FFF', 'img')
+  }))
+}
 
 export default [
   {
@@ -104,6 +111,17 @@ export default [
       return {
         code: 0,
         data: randomData
+      }
+    }
+  },
+  {
+    url: '/api/images',
+    method: 'get',
+    response: ({ query }) => {
+      const page = Number(query.page) || 1
+      return {
+        code: 0,
+        data: getImages(page)
       }
     }
   }
