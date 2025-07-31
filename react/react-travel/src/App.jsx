@@ -19,6 +19,9 @@ const Search = lazy(() => import('./pages/Search/index.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound/index.jsx'))
 const Login = lazy(() => import('./pages/Login/index.jsx'))
 const Detail = lazy(() => import('./pages/Detail/index.jsx'))
+const Article = lazy(() => import('./pages/Article/index.jsx'))
+const ArticleNew = lazy(() => import('./pages/Article/new.jsx'))
+
 const App = () => {
   
   return (
@@ -37,6 +40,9 @@ const App = () => {
             <Route path="/detail/:id" element={<Detail />} />
             <Route path="/search" element={<Search />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/article" element={<Article />}>
+              <Route path="new" element={<ArticleNew />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

@@ -70,3 +70,36 @@ export const chat = async (messages) => {
   }
 
 }
+
+const createFormData = (base64Audio) => {
+  const formData = new FormData();
+  const blob = base64ToBlob(base64Audio, 'audio/webm');
+  formData.append('file', blob, 'audio.webm');
+  formData.append('model', 'whisper-1');
+  return formData;
+};
+
+const base64ToBlob = (base64, type) => {
+  const binary = atob(base64);
+  const array = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) array[i] = binary.charCodeAt(i);
+  return new Blob([array], { type });
+};
+
+
+export const speechToText = async (speech) => {
+  try {
+    const response = await fetch('https://api.302.ai/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_302_API_KEY}`,
+      },
+      body: createFormData(speech),
+    });
+    const data = await response.json();
+    return data.text || '';
+  } catch (err) {
+    console.error('转文字失败:', err);
+    return '';
+  }
+}
