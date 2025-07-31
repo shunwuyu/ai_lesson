@@ -1,0 +1,12 @@
+.container { display: flex; flex-direction: row; align-items: start; justify-content: start; height: 100vh; font-size: 28px;}
+.preview { max-width: 400px; margin-bottom: 40px;}
+.settings { display: flex; flex-direction: row; align-items: start; justify-content: start; margin-top: 32px;}
+.selection { width: 100%; text-align: left;}
+.selection input { width: 100px;}
+.input { display: flex; flex-direction: column; min-width: 660px;}
+.file-input { display: flex; margin-bottom: 32px;}
+.output { margin-top: 20px; min-height: 600px; width: 100%; text-align: left;}
+button { padding: 20px; min-width: 400px; margin-left: 12px; border: solid 1px black;}
+.generate { width: 100%; margin-top: 32px;}
+.generated { width: 800px; height: 800px; border: solid 1px black; position: relative; display: flex; justify-content: center; /* 水平居中 */ align-items: center; /* 垂直居中 */}
+.output img { width: 100%;}

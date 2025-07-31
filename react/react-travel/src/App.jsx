@@ -21,6 +21,7 @@ const Login = lazy(() => import('./pages/Login/index.jsx'))
 const Detail = lazy(() => import('./pages/Detail/index.jsx'))
 const Article = lazy(() => import('./pages/Article/index.jsx'))
 const ArticleNew = lazy(() => import('./pages/Article/new.jsx'))
+const Coze = lazy(() => import('./pages/Coze/index.jsx'));
 
 const App = () => {
   
@@ -43,6 +44,7 @@ const App = () => {
             <Route path="/article" element={<Article />}>
               <Route path="new" element={<ArticleNew />} />
             </Route>
+            <Route path="/coze" element={<Coze />}/>
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
