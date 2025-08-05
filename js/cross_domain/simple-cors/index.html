@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head><title>CORS Test</title></head>
+<body>
+  <script>
+    fetch('http://localhost:8080/api/test')
+      .then(res => res.json())
+      .then(data => console.log(data.msg))
+      .catch(err => console.error('Error:', err));
+  </script>
+</body>
+</html>

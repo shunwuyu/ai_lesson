@@ -7,7 +7,7 @@
 <body>
 
 
-<script>
+<!-- <script>
 const myWorker = new Worker('./worker.js'); // 创建worker
 
 myWorker.addEventListener('error', err => {
@@ -17,6 +17,9 @@ myWorker.addEventListener('message', e => {
     console.log(e.data)
 });
 myWorker.postMessage('hello');
-</script>
+</script> -->
+<input type="file" id="fileInput">
+<div id="output"></div>
+<script src="./main.js"></script>
 </body>
 </html>

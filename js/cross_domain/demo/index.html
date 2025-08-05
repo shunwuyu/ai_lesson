@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cross-Origin Demo</title>
+</head>
+<body>
+  <h1>跨域请求测试</h1>
+  <button id="fetchBtn">发送 Fetch 请求</button>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('fetchBtn').addEventListener('click', async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/hello');
+        const data = await response.json();
+        document.getElementById('result').innerText = data.message;
+      } catch (error) {
+        document.getElementById('result').innerText = 'Error: ' + error.message;
+        console.error('Fetch error:', error);
+      }
+    });
+  </script>
+</body>
+</html>

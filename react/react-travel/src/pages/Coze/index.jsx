@@ -27,15 +27,18 @@ const Coze = () => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (e) => { 
+            // base64格式图片
             setImgPreview(e.target?.result)
             // imgPreview.value = e.target?.result as string; 
         };
     }
 
     const uploadFile = async () => {
+        // 请求体对象
         const formData = new FormData();
         const input = uploadImageRef.current;
         if (!input.files || input.files.length <= 0) return;
+        // 二进制文件
         formData.append('file', input.files[0]);
 
         const res = await fetch(uploadUrl, { 
@@ -45,7 +48,7 @@ const Coze = () => {
         });
 
         const ret = await res.json();
-
+        console.log(ret);
         if (ret.code !== 0) { status.value = ret.msg; return; }
 
         return ret.data.id;
@@ -54,10 +57,11 @@ const Coze = () => {
     const generate = async () => {
         setStatus("图片上传中...");
         const file_id = await uploadFile();
-        // console.log(file_id);
+        console.log(file_id);
         if (!file_id) return;
         setStatus("图片上传成功，正在生成...")
         const parameters = { 
+            // 图片需要id 
             picture: JSON.stringify({ file_id}), 
             style: style, 
             uniform_number: uniform_number, //队服编号 
@@ -79,6 +83,7 @@ const Coze = () => {
 
         if (ret.code !== 0) { setStatus(ret.msg); return; }
         const data = JSON.parse(ret.data); 
+        console.log(data);
         setStatus(''); 
         setImgUrl(data.data);
         // imgUrl.value = data.data;
