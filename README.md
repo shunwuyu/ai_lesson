@@ -201,3 +201,4 @@ AI全栈工程师课程
 - tailwindcss/init-demo
 - interview/2025_chun/html5/webworker-demo
 - js/cors-demo
+- stitch
