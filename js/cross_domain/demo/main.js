@@ -5,6 +5,7 @@ const server = http.createServer((req, res) => {
   // 允许所有来源（跨域关键：CORS 头）
   // 注意：我们先不加 CORS 头，让跨域失败！
   // 这样你就能看到经典的跨域错误
+  console.log('hahahah');
 
   if (req.url === '/api/hello' && req.method === 'GET') {
     // 响应 JSON 数据

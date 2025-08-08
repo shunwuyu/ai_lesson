@@ -2,8 +2,9 @@ let obj = {};
 
 Object.defineProperty(obj, 'name', {
     value: 'Alice',
-    configurable: false, // 允许后续修改
-    writable: true
+    configurable: true, // 允许后续修改
+    // configurable: false, // 允许后续修改
+    writable: false
     // writable: false     // 初始为只读
 });
 

@@ -2,8 +2,8 @@ let obj = {};
 
 Object.defineProperty(obj, 'visibleProperty', {
     value: 'Visible Value',
-    // enumerable: false // 属性可以在迭代中被枚举
-    enumerable: true
+    enumerable: false // 属性可以在迭代中被枚举
+    // enumerable: true
 });
 
 for(let prop in obj) {

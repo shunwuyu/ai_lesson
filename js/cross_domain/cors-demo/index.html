@@ -10,7 +10,7 @@
 // index.html
 let xhr = new XMLHttpRequest()
 xhr.open('PUT', 'http://localhost:4000/getData', true)
-xhr.setRequestHeader('name', 'xiamen')
+xhr.setRequestHeader('name', 'xiamen') // 需预检
 xhr.onreadystatechange = function() {
   if (xhr.readyState === 4) {
     if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {

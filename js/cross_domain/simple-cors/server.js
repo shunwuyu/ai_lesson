@@ -8,6 +8,12 @@ const server = http.createServer((req, res) => {
       'Access-Control-Allow-Origin': '*', // 允许任何源
     });
     res.end(JSON.stringify({ msg: '跨域成功！' }));
+  } else if (req.url === '/api/test' && req.method === 'PATCH') {
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*', // 允许任何源
+    });
+    res.end(JSON.stringify({ msg: '跨域成功！' }));
   } else {
     res.writeHead(404);
     res.end('Not Found');

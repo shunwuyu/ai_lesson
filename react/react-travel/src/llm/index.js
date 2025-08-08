@@ -86,7 +86,6 @@ const base64ToBlob = (base64, type) => {
   return new Blob([array], { type });
 };
 
-
 export const speechToText = async (speech) => {
   try {
     const response = await fetch('https://api.302.ai/v1/audio/transcriptions', {

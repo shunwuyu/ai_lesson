@@ -13,7 +13,9 @@ Make.com是一个无代码自动化平台，允许用户通过可视化界面连
         - retrieve rss feed items
         检索
             URL
-            maximum number of returned items
+            maximum number of returned items 10
+        - 跑起来
+            
         - 点击闹钟 Schedule setting
             15分钟执行一次
             Days of the week

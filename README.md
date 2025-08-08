@@ -200,5 +200,5 @@ AI全栈工程师课程
 - react/react-travel
 - tailwindcss/init-demo
 - interview/2025_chun/html5/webworker-demo
-- js/cors-demo
+- js/cross_domain/cors-demo
 - stitch
