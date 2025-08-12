@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual DOM Demo</title>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+    // vNode factory
+    function h(type, props = {}, ...children) {
+      return { type, props, children: children.flat() };
+    }
+
+    // 将 vNode 渲染为真实 DOM（第一次渲染）
+    function createDom(vnode) {
+      if (vnode === null || vnode === undefined) return document.createTextNode('');
+      if (typeof vnode === 'string' || typeof vnode === 'number') {
+        return document.createTextNode(String(vnode));
+      }
+      const $el = document.createElement(vnode.type);
+
+      // --- 修复：处理 props (包括事件) ---
+      const props = vnode.props || {};
+      Object.entries(props).forEach(([key, value]) => {
+        if (key.startsWith('on')) {
+          const eventName = key.slice(2).toLowerCase(); // 'onClick' -> 'click'
+          $el.addEventListener(eventName, value);
+        } else {
+          $el.setAttribute(key, value);
+        }
+      });
+      // --- 修复结束 ---
+
+      // children
+      vnode.children.forEach(child => $el.appendChild(createDom(child)));
+      return $el;
+    }
+
+    // 简单的 diff + patch
+    function patch(parent, oldVNode, newVNode, index = 0) {
+      const existingDom = parent.childNodes[index];
+
+      if (!newVNode) {
+        if (existingDom) parent.removeChild(existingDom);
+        return;
+      }
+      if (!oldVNode) {
+        parent.appendChild(createDom(newVNode));
+        return;
+      }
+
+      if (typeof oldVNode === 'string' || typeof oldVNode === 'number' ||
+          typeof newVNode === 'string' || typeof newVNode === 'number') {
+        if (String(oldVNode) !== String(newVNode)) {
+          parent.replaceChild(createDom(newVNode), existingDom);
+        }
+        return;
+      }
+
+      if (oldVNode.type !== newVNode.type) {
+        parent.replaceChild(createDom(newVNode), existingDom);
+        return;
+      }
+
+      // --- 修复：更新 props (包括事件) ---
+      const el = existingDom;
+      const oldProps = oldVNode.props || {};
+      const newProps = newVNode.props || {};
+
+      // 移除旧的 props
+      Object.keys(oldProps).forEach(key => {
+        if (!(key in newProps)) {
+          if (key.startsWith('on')) {
+            const eventName = key.slice(2).toLowerCase();
+            el.removeEventListener(eventName, oldProps[key]);
+          } else {
+            el.removeAttribute(key);
+          }
+        }
+      });
+
+      // 设置/更新新的 props
+      Object.entries(newProps).forEach(([key, value]) => {
+        const oldValue = oldProps[key];
+        if (value !== oldValue) {
+          if (key.startsWith('on')) {
+            if (oldValue) {
+              const eventName = key.slice(2).toLowerCase();
+              el.removeEventListener(eventName, oldValue);
+            }
+            const eventName = key.slice(2).toLowerCase();
+            el.addEventListener(eventName, value);
+          } else {
+            el.setAttribute(key, value);
+          }
+        }
+      });
+      // --- 修复结束 ---
+
+      // diff children
+      const max = Math.max(oldVNode.children.length, newVNode.children.length);
+      for (let i = 0; i < max; i++) {
+        patch(el, oldVNode.children[i], newVNode.children[i], i);
+      }
+    }
+    </script>
+
+    <script>
+    // --- 调用代码 ---
+    const $app = document.getElementById('app');
+
+    function App({ count, onIncrement }) {
+      return h('div', { className: 'app' },
+        h('h1', {}, `计数: ${count}`),
+        h('button', { onClick: onIncrement }, '点击增加') // onClick 是函数！
+      );
+    }
+
+    let state = { count: 0,
+        onIncrement: () => {
+            console.log('按钮被点击了！');
+            state = { ...state, count: state.count + 1 };
+            // 2. 触发重新渲染
+            render();
+        }
+    };
+    let oldVNode = null;
+
+    function render() {
+      const newVNode = App(state, );
+
+      if (!oldVNode) {
+        const dom = createDom(newVNode);
+        $app.appendChild(dom);
+      } else {
+        patch($app, oldVNode, newVNode);
+      }
+
+      oldVNode = newVNode;
+    }
+
+    function handleIncrement() {
+      state = { ...state, count: state.count + 1 };
+      render();
+    }
+
+    render(); // 启动
+    </script>
+</body>
+</html>
