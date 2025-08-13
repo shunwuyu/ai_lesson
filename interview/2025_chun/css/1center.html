@@ -311,10 +311,13 @@ ul, li {
       <div class="demo1 box">
         <div class="bg-ddd">absolute + 负 margin</div>
       </div>
+      <!-- 绝对定位元素设左右/上下偏移为0，配合margin:auto，浏览器自动分配外边距，实现居中。 -->
       <h5>方法二：absolute + margin auto</h5>
       <div class="demo2 box">
         <div class="bg-ddd">absolute + margin auto</div>
       </div>
+      <!-- calc() 在浏览器渲染时进行实时计算，尤其是在动画或频繁重排/重绘的场景中，
+      复杂的 calc() 表达式可能带来额外的性能负担 -->
       <h5>方法三：absolute + calc</h5>
       <div class="demo3 box">
         <div class="bg-ddd">absolute + calc</div>
