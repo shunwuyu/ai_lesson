@@ -1,0 +1,26 @@
+[
+    {
+      "id": 1,
+      "title": "我的第一篇博客",
+      "content": "这是我的第一篇博客内容，欢迎阅读！",
+      "author": "张三",
+      "createdAt": "2025-01-01",
+      "excerpt": "这是我的第一篇博客内容，欢迎阅读！"
+    },
+    {
+      "id": 2,
+      "title": "React 最佳实践",
+      "content": "学习 React 的最佳实践方法，提高开发效率。",
+      "author": "李四",
+      "createdAt": "2025-01-02",
+      "excerpt": "学习 React 的最佳实践方法，提高开发效率。"
+    },
+    {
+      "id": 3,
+      "title": "Next.js 新特性",
+      "content": "探索 Next.js 的最新特性和功能，提升应用性能。",
+      "author": "王五",
+      "createdAt": "2025-01-03",
+      "excerpt": "探索 Next.js 的最新特性和功能，提升应用性能。"
+    }
+]

@@ -1,0 +1,108 @@
+body {
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  main {
+    font-size: 18px;
+    line-height: 1.8;
+  }
+  
+  h1 {
+    font-size: 32px;
+    margin: 0;
+  }
+  
+  a {
+    color: black;
+    text-decoration: none;
+  }
+  
+  button {
+    border: none;
+    outline: none;
+    background: #ededed;
+    padding: 6px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    color: #666;
+    cursor: pointer;
+    border: 1px solid transparent;
+    margin-bottom: 16px;
+    margin-top: 8px;
+  }
+  
+  button:hover {
+    color: #000;
+  }
+  
+  button ~ button {
+    margin-left: 8px;
+  }
+  
+  button.primary {
+    background: #000;
+    color: #ededed;
+  }
+  
+  button.primary:hover {
+    color: #fff;
+  }
+  
+  button.bordered {
+    background: none;
+    border: 1px solid #eaeaea;
+  }
+  
+  input,
+  textarea {
+    margin-bottom: 16px;
+    margin-right: 16px;
+  }
+  
+  pre {
+    font-size: 16px;
+    padding: 8px;
+  }
+  
+  label {
+    margin-right: 16px;
+  }
+  
+  input[type='submit'] {
+    border: none;
+    outline: none;
+    background: #ededed;
+    padding: 6px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    color: #666;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  
+  input[type='submit']:active {
+    color: #000;
+  }
+  
+  input[type='text'],
+  input[type='password'],
+  textarea {
+    min-width: 360px;
+  }
+  
+  input[type='text'],
+  input[type='password'],
+  textarea,
+  select {
+    border: 1px solid #eaeaea;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  input[type='checkbox'] {
+    transform: scale(1.3);
+  }

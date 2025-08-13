@@ -1,0 +1,53 @@
+/* App */
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Header */
+  .app > header {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .app > header > div:nth-child(1) {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin-right: 56px;
+  }
+  
+  .app > header > div:nth-child(1) > span {
+    font-size: 32px;
+    padding-right: 8px;
+  }
+  
+  .app > header > nav {
+    display: flex;
+    flex-grow: 1;
+    color: #666;
+  }
+  
+  .app > header > nav > div {
+    margin: 0 16px;
+  }
+  
+  .app > header > nav ~ div {
+    display: flex;
+  }
+  
+  .app > header > nav ~ div > div {
+    margin-left: 8px;
+  }
+  
+  /* Main */
+  .app > main {
+    flex-grow: 1;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+  }
