@@ -208,3 +208,5 @@ AI全栈工程师课程
 - next/my-todo
 - nest/demo/hello
 - es6/defineProperty_proxy
+- https://juejin.cn/post/7069805387490263047?searchId=202508131141561A1308918B4F0AE85B16 promise.all
+- https://juejin.cn/post/6844903589920374792?searchId=2025081311460996073016A39D4ADE3BDA Set Map 
