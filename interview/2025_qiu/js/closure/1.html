@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// 解决方案 1：移除事件监听
+// 移除监听后，闭包引用断开，bigData 会被 GC 回收。
+function registerHandler() {
+  const bigData = new Array(1000000).fill('*');
+
+  function handler() {
+    console.log(bigData.length);
+  }
+
+  const btn = document.getElementById('btn');
+  btn.addEventListener('click', handler);
+
+  // 模拟业务结束后移除
+  setTimeout(() => {
+    btn.removeEventListener('click', handler);
+  }, 5000);
+}
+
+registerHandler();
+// 解决方案 2：手动断开引用
+// 这样即使闭包存在，bigData 也不再占用内存。
+function registerHandler() {
+  let bigData = new Array(1000000).fill('*');
+
+  document.getElementById('btn').addEventListener('click', function() {
+    console.log(bigData.length);
+    bigData = null; // 断开对大对象的引用
+  });
+}
+
+registerHandler();
+// 解决方案 3：缩小闭包作用域
+// function registerHandler() {
+//   const size = 1000000; // 只保存需要的信息
+
+//   document.getElementById('btn').addEventListener('click', function() {
+//     console.log(size);
+//   });
+// }
+// 减少闭包捕获变量，降低内存压力。
+</script>  
+</body>
+</html>

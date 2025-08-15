@@ -1,50 +1,89 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
+- 共同点
+  interface 和 type 都可以：
+  描述对象的结构
+  用于函数参数、返回值
+  给变量/对象做类型约束
 
 ```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+// interface 写法
+interface User {
+  name: string
+  age: number
+}
+
+// type 写法
+type UserType = {
+  name: string
+  age: number
+}
+
+const u1: User = { name: 'Alice', age: 20 }
+const u2: UserType = { name: 'Bob', age: 22 }
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+<!-- 区别一：扩展方式不同 -->
+interface 用 extends 继承（可多继承）
+type 用交叉类型 & 合并
+```ts
+// interface 继承
+interface Person {
+  name: string
+}
+interface Employee extends Person {
+  job: string
+}
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+// type 交叉类型
+type PersonType = { name: string }
+type EmployeeType = PersonType & { job: string }
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+const e1: Employee = { name: 'Alice', job: 'Dev' }
+const e2: EmployeeType = { name: 'Bob', job: 'QA' }
+
+```
+
+- 区别二：声明合并（只有 interface 有）
+```ts
+interface Animal {
+  name: string
+}
+interface Animal {
+  age: number
+}
+// 合并结果：{ name: string; age: number }
+const dog: Animal = { name: '旺财', age: 3 }
+
+// type 不能重复声明
+type AnimalType = { name: string }
+// ❌ 再声明会报错
+// type AnimalType = { age: number }
+
+```
+
+4. 区别三：能否表示非对象类型
+type 可以用来定义基础类型、联合类型、元组等
+interface 只能描述对象结构（包括函数、类）
+```ts
+// type 可以这样
+type ID = string | number   // 联合类型
+type Point = [number, number] // 元组
+
+// interface 不行 ❌
+// interface ID = string | number  // 会报错
+
+```
+
+5. 区别四：函数类型写法差异
+```
+// interface 函数
+interface AddFn {
+  (a: number, b: number): number
+}
+
+// type 函数
+type AddType = (a: number, b: number) => number
+
+const add1: AddFn = (x, y) => x + y
+const add2: AddType = (x, y) => x + y
+
 ```

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixed 被 Transform 容器限制</title>
+  <style>
+    body {
+      margin: 0;
+      height: 200vh; /* 长页面，可滚动 */
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .scroll-container {
+      width: 300px;
+      height: 400px;
+      margin: 50px auto;
+      border: 2px solid #007bff;
+      overflow-y: auto;
+
+      /* 关键：这个 transform 会让内部的 fixed 失效 */
+      transform: translateZ(0);
+      /* 一旦加上这行，.fixed-box 就不再相对于视口固定 */
+    }
+
+    .content {
+      height: 600px;
+      background: linear-gradient(to bottom, #f0f0f0, #ddd);
+      padding: 20px;
+    }
+
+    .fixed-box {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 100px;
+      height: 50px;
+      background: red;
+      color: white;
+      text-align: center;
+      line-height: 50px;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>Fixed 被 transform 容器限制示例</h3>
+  <p>滚动蓝色框，观察红色块是否固定在视口右上角</p>
+
+  <!-- transform 容器 -->
+  <div class="scroll-container">
+    <div class="content">
+      <div class="fixed-box">Fixed</div>
+      <p>滚动我...</p>
+      <!-- 多内容 -->
+    </div>
+  </div>
+
+</body>
+</html>
