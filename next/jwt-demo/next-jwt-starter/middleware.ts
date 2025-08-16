@@ -8,7 +8,7 @@ export function middleware(req: NextRequest) {
 
   if (PROTECTED.some(p => pathname.startsWith(p))) {
     const token = req.cookies.get('auth_token')?.value
-    console.log(token, '//////////')
+    console.log(token, '//////////-9    ibovnnklirfioiiriiu')
     const secret = process.env.JWT_SECRET
     if (!token || !secret) {
       const url = new URL('/login', req.url)

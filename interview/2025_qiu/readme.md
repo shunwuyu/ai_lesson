@@ -4,8 +4,10 @@
     deep_clone
     去重 https://juejin.cn/post/6844903602197102605?searchId=20250813115234B6A7F6B2AFD1FDE6A01E
     异步 asyn
+
 - hand
     Promise.all https://juejin.cn/post/7069805387490263047?searchId=202508131141561A1308918B4F0AE85B16
+
 - es6
     es6/defineProperty_proxy
     Map Set https://juejin.cn/post/6844903589920374792?searchId=2025081311460996073016A39D4ADE3BDA
@@ -21,3 +23,6 @@
     7cssnew 2025/chun/7cssnew
     css/position
     css/specificity
+- http
+- ai
+    mcp 

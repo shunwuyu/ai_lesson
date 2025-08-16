@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+String(100) // "100"
+String(true) // "true"
+String(null); // "null"
+
+(100).toString(); // "100"
+// true 是基本类型，但 JS 在调用方法时会进行 装箱操作（boxing），临时把 true
+// 包装成 Boolean 对象（有 toString 方法），
+// 所以 true.toString() 可以正常运行
+true.toString()  // "true"
+// Null 是没有的
+null.toString() // 报错 null 不是对象，没有原型链上的 toString 方法
+undeinfed.toString() // 报错 
+</script> 
+</body>
+</html>
+

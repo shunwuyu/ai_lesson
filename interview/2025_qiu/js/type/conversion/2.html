@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+Number("123") // 123
+Number("  123 ") // 123
+// Number() 函数执行的是严格的（或称“全量”）转换，
+// 要求整个字符串必须能被解析为一个有效的数字。
+Number(" 123df")
+Number("") // 0
+// Number(null) 和 Number(undefined) 结果不同的原因
+// 在于 JavaScript 规范对这两个值在数值转换上下文中的语义定义不同：
+// 在 JavaScript 的类型转换规则中，null 被认为是“空值”或“无值”。
+// 当需要将其转换为数字时，规范将其定义为转换为 0。这可以理解为
+//  null 表示“什么都没有”，在数值上最接近的表示就是 0。
+// undefined 表示一个变量未被定义或未被赋值。
+// 当尝试将一个“未定义”的东西转换为数字时，JavaScript 认为这是一个无效的操作，
+// 因为无法推断出一个有意义的数值。
+// 因此，结果是 NaN（Not-a-Number），表示“不是一个有效的数字”。
+Number(null) // 0
+Number(undefined) // NaN
+Number(true) // 1
+Number(false) // 0
+
+Number(null) === 0
+Number(undefined) === NaN // NaN 不等于NaN
+
+</script>
+</body>
+</html>
