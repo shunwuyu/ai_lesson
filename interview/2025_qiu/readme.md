@@ -2,8 +2,11 @@
 
 - js
     deep_clone
+    数组方法 arr_methods
     去重 https://juejin.cn/post/6844903602197102605?searchId=20250813115234B6A7F6B2AFD1FDE6A01E
     异步 asyn
+     
+
 
 - hand
     Promise.all https://juejin.cn/post/7069805387490263047?searchId=202508131141561A1308918B4F0AE85B16
@@ -23,6 +26,12 @@
     7cssnew 2025/chun/7cssnew
     css/position
     css/specificity
+
 - http
+    dns
 - ai
     mcp 
+    function_call
+
+- 408
+    url2page
