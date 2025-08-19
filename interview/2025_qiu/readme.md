@@ -5,7 +5,7 @@
     数组方法 arr_methods
     去重 https://juejin.cn/post/6844903602197102605?searchId=20250813115234B6A7F6B2AFD1FDE6A01E
     异步 asyn
-     
+    dom api
 
 
 - hand
@@ -14,6 +14,7 @@
 - es6
     es6/defineProperty_proxy
     Map Set https://juejin.cn/post/6844903589920374792?searchId=2025081311460996073016A39D4ADE3BDA
+    promise hld
 
 - css 
     居中方案 2025/chun/css/1center
@@ -26,6 +27,8 @@
     7cssnew 2025/chun/7cssnew
     css/position
     css/specificity
+    css/box
+    css/img
 
 - http
     dns
@@ -35,3 +38,6 @@
 
 - 408
     url2page
+
+- react
+   interview/2025_chun/react/fiber/hand-fiber/

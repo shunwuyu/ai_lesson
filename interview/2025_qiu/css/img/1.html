@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>移动端图片适配 - picture/source 示例</title>
+  <style>
+    .wrap {
+      max-width: 1200px;
+      margin: 16px auto;
+      padding: 0 12px;
+    }
+    .hero {
+      display: block;
+      width: 100%;
+      height: auto;  /* 让图片按比例缩放 */
+      border-radius: 12px;
+    }
+    p { color:#444; line-height:1.6; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>移动端图片适配（&lt;picture&gt; + &lt;source&gt;）</h1>
+    <p>小屏（≤600px）使用竖图裁剪；大屏使用横图。浏览器优先加载 WebP，不支持时回退到 JPEG。</p>
+
+    <picture>
+      <!-- ① 小屏（竖图，按屏宽裁剪） -->
+      <source
+        media="(max-width: 600px)"
+        type="image/webp"
+        srcset="
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=webp&fit=crop&w=360&h=540&q=80 360w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=webp&fit=crop&w=540&h=810&q=80 540w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=webp&fit=crop&w=720&h=1080&q=80 720w
+        "
+        sizes="(max-width: 600px) 100vw"
+      />
+      <source
+        media="(max-width: 600px)"
+        type="image/jpeg"
+        srcset="
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=jpg&fit=crop&w=360&h=540&q=80 360w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=jpg&fit=crop&w=540&h=810&q=80 540w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=jpg&fit=crop&w=720&h=1080&q=80 720w
+        "
+        sizes="(max-width: 600px) 100vw"
+      />
+
+      <!-- ② 大屏（横图，按屏宽裁剪） -->
+      <source
+        type="image/webp"
+        srcset="
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=webp&fit=crop&w=768&h=512&q=80 768w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=webp&fit=crop&w=1024&h=683&q=80 1024w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=webp&fit=crop&w=1440&h=960&q=80 1440w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=webp&fit=crop&w=1920&h=1280&q=80 1920w
+        "
+        sizes="(max-width: 900px) 90vw, (max-width: 1200px) 80vw, 1200px"
+      />
+      <source
+        type="image/jpeg"
+        srcset="
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=jpg&fit=crop&w=768&h=512&q=80 768w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=jpg&fit=crop&w=1024&h=683&q=80 1024w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=jpg&fit=crop&w=1440&h=960&q=80 1440w,
+          https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=jpg&fit=crop&w=1920&h=1280&q=80 1920w
+        "
+        sizes="(max-width: 900px) 90vw, (max-width: 1200px) 80vw, 1200px"
+      />
+
+      <!-- ③ 最终回退的 <img>（保障始终可见） -->
+      <img
+        class="hero"
+        src="https://images.unsplash.com/photo-1519681393784-d120267933ba?fm=jpg&fit=crop&w=1024&h=683&q=80"
+        alt="风景示例图（小屏竖裁，大屏横裁）"
+        width="1024"
+        height="683"
+        loading="lazy"
+      />
+    </picture>
+
+    <p>
+      关键点：<code>media</code> 控制不同屏宽选用不同裁剪；<code>type</code> 让浏览器优先挑选 WebP；
+      <code>srcset + sizes</code> 让浏览器按实际视口与 DPR 选择最佳分辨率；回退的
+      <code>&lt;img&gt;</code> 确保任何情况下都能显示。
+    </p>
+  </div>
+</body>
+</html>
