@@ -22,6 +22,19 @@
     - 304 Not Modified: 
         资源未被修改，客户端可以使用缓存的版本。
 
+    - 401 HTTP 401 状态码的全称是：Unauthorized。
+
+    - HTTP 402 的全称是：Payment Required。
+
+    - HTTP 403 状态码的全称是：Forbidden。
+    - 404 Not Found 
+    - 500	Internal Server Error	服务器内部错误，最常见，表示服务器出 bug 了
+    - 502 Bad Gateway
+    常见于 Nginx 作为反向代理时，后端服务（如 Node.js、PHP）崩溃或未启动。
+    - 503 Service Unavailable
+    服务器过载或维护，暂时无法处理请求，可重试。常用于限流、熔断场景。
+    
+
 - http://www.baidu.com 发生什么？
     307 Temporary Redirect: 表示请求的资源临时移动到另一个 URI，客户端应使用原始请求方法（如 POST）进行请求。
     https://www.baidu.com

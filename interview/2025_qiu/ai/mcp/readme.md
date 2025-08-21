@@ -1,5 +1,11 @@
 # mcp
 
+- Function call 可以让大模型突破自身知识和能力的局限，通过调用外部工具或API来获取实时信息、执行计算或操作，从而解决需要最新数据、精确计算或与外部系统交互的复杂任务。
+
+- MCP（Model Context Protocol）为大模型提供了一种标准化的上下文管理与交互协议，使其能够更高效、一致地与外部工具、系统或不同模型进行通信和协作。
+
+- Function Call 偏向模型「调用外部函数」，解决的是模型→工具的问题；MCP（Model Context Protocol）更像是统一协议层，让不同模型和工具在同一上下文里协作，支持多来源知识、权限控制和跨工具交互，所以它是 Function Call 的升级与扩展。
+
 mcp 是 大模型与外部世界之间的通信协议，就像是“插件规范” 
 大模型本身训练完后是不了解外部知识的。
 
@@ -26,3 +32,22 @@ mcp 是 大模型与外部世界之间的通信协议，就像是“插件规范
 平台价值：未来每个外部能力（支付、地图、搜索）都能成为一个 MCP 插件，AI 开发者只需“拼积木”。
 
 和智能前端结合：前端应用只要声明 MCP 工具，模型就能无缝调度。
+
+
+- 高德地图mcp 体验
+    配置 
+    https://console.amap.com/dev/key/app key
+
+    2. "amap-maps": {
+      "disabled": false,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@amap/amap-maps-mcp-server"
+      ],
+      "env": {
+        "AMAP_MAPS_API_KEY": "73351caae5b18d0bcb497c715f6b0871"
+      }
+    } 
