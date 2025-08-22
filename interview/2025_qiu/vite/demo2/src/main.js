@@ -1,5 +1,7 @@
 import { aMessage } from './a.js';
-
+import {
+    useState
+} from 'react';
 document.getElementById('app').innerHTML = `
   <h1>✅ Vite Legacy 示例</h1>
   <p>${aMessage()}</p>

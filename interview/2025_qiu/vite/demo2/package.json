@@ -16,5 +16,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "react": "^19.1.1"
+  }
 }

@@ -9,5 +9,9 @@ demo1
     不支持 IE11
 
 早期浏览器不支持ES模块，需打包合并文件、转换语法、处理依赖，减少HTTP请求并兼容旧环境。
-App.jsx 依赖 components/Hello.jsx  useState react  
-import 是没有办法解析的， 先react, hello, 再 App.jsx 就能允许了
+
+
+webpack 需要打包的
+![](https://pic.rmb.bdstatic.com/f78661bef717cf2cc2c2e5158f196384.png)
+
+vite 开发时无需打包，实现按需编译与极速启动。
