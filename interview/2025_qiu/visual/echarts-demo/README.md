@@ -1,0 +1,2 @@
+- npm install echarts
+- npm install @types/echarts --save-dev
