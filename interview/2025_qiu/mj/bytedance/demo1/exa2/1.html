@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>flex:1 vs flex:auto</title>
+  <style>
+    .container {
+      display: flex;
+      width: 600px;
+      margin: 20px 0;
+      border: 2px solid #ccc;
+    }
+
+    .item {
+      padding: 10px;
+      margin: 5px;
+      background: #ffcc80;
+      border: 1px solid #ff8f00;
+      text-align: center;
+    }
+
+    /* --- 测试 1: flex: 1 --- */
+    .test1 .item {
+      flex: 1;
+    }
+
+    /* --- 测试 2: flex: auto --- */
+    .test2 .item {
+      flex: auto; /* 等价于 1 1 auto */
+    }
+  </style>
+</head>
+<body>
+
+  <h3>测试 1: 两个 item 都用 flex: 1</h3>
+  <div class="container test1">
+    <div class="item">短</div>
+    <div class="item">很长很长的内容，撑开容器</div>
+  </div>
+
+  <h3>测试 2: 两个 item 都用 flex: auto</h3>
+  <div class="container test2">
+    <div class="item">短</div>
+    <div class="item">很长很长的内容，撑开容器</div>
+  </div>
+
+</body>
+</html>

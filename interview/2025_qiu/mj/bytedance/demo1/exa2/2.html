@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    .container {
+  display: flex;
+  width: 500px;
+  border: 1px solid #000;
+}
+
+.item {
+  flex: 1 1 auto; /* 默认值 */
+  padding: 0;
+  margin: 0;
+  min-width: 0; /* 允许压缩到小于内容 */
+  text-align: center;
+  background: #eee;
+}
+
+.item1 {
+  flex: 2 2 200px; /* grow:2, shrink:2, basis:200px */
+}
+
+.item2 {
+  flex: 1 1 300px; /* grow:1, shrink:1, basis:300px */
+}
+
+.item3 {
+  flex: 1 3 100px; /* grow:1, shrink:3, basis:100px */
+}
+/* 
+    第一步：确定每个 item 的 flex-basis
+    item1, item2, item3 200 300 100
+    flex-basis 优先于 width，这里直接使用设定值。
+    第二步：计算总基准宽度
+    总基准宽度 = 200 + 300 + 100 = 600px
+    容器宽度 = 500px
+    总基准宽度 > 容器宽度（600 > 500）
+    所以：需要压缩，进入 flex-shrink
+    第三步：计算需要压缩的总量
+    需压缩总量 = 600px - 500px = 100px
+    第四步：计算每个 item 的“加权收缩值”
+    flex-shrink 的缩放不是简单按比例，而是：
+    每个 item 的可压缩“权重” = flex-shrink × flex-basis
+    项	flex-shrink	flex-basis	加权值 = shrink × basis
+    item1	2	200px	2 × 200 = 400
+    item2	1	300px	1 × 300 = 300
+    item3	3	100px	3 × 100 = 300
+    总计			1000
+
+    第五步：按加权值分配压缩量
+    压缩量 = (加权值 / 总加权值) × 需压缩总量
+
+    item1 压缩量 = (400 / 1000) × 100px = 40px
+    item2 压缩量 = (300 / 1000) × 100px = 30px
+    item3 压缩量 = (300 / 1000) × 100px = 30px
+
+    第六步：计算最终宽度
+
+    最终宽度 = flex-basis - 压缩量
+
+    item1 = 200px - 40px = 160px
+item2 = 300px - 30px = 270px
+item3 = 100px - 30px = 70px
+
+*/
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="item item1">A</div>
+        <div class="item item2">BB</div>
+        <div class="item item3">CCC</div>
+    </div>
+</body>
+</html>
