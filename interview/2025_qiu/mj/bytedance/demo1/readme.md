@@ -393,3 +393,18 @@ exa3
 - demo1
 切换 颜色
 Rendered fewer hooks than expected. This may be caused by an accidental early return statement.
+
+- 首次渲染
+    color = 'red' → 进入 if 块
+    执行 useState(0) → count = 0
+
+- 点击“切换颜色”变成 blue：
+    color = 'blue' → 跳过 if 块
+    useState(0) 不执行
+    下一个 useState('small') 执行
+
+- 再切回 red：
+    color = 'red' → 进入 if 块
+    执行 useState(0)
+    但 React 内部 Hook 链表已错位！
+    
