@@ -408,3 +408,54 @@ Rendered fewer hooks than expected. This may be caused by an accidental early re
     执行 useState(0)
     但 React 内部 Hook 链表已错位！
     
+
+## 后端写了没？
+
+在实习和学习项目中，我主要专注于前端架构和功能实现。为了高效开发和解耦，我使用 Mock.js 独立模拟了完整的后端接口（包括数据格式、延迟、随机值等），这让我能深入理解 API 设计、Restful开发风格和前后端协作规范。同时，我完全掌握跨域原理（如 CORS）和前后端联调流程，熟悉如何对接真实后端服务。虽然项目未涉及后端开发，但我清楚接口契约的重要性，能确保前端代码无缝对接真实 API。我具备独立完成前端闭环开发和高效协作的能力。最近在写的next.js 项目， 结合了mysql, prisma在做全栈的ssr。
+
+## 大模型的role 有哪一些？
+
+system       系统角色        用来设定整体对话的行为、身份或风格，
+                            例如：“你是一个乐于助人的老师”。
+
+user         用户角色        表示真实用户的输入或问题。
+assistant    助手角色        表示模型的回复内容。
+function->tool 工具/函数角色  当使用 function calling 或工具调用时，模型可以生成对工具的调用，返回结果时通常以这个角色。
+
+## chat memory
+- 丢失记忆
+- 简单拼接
+- 总结
+exa4
+
+## LRU 缓存
+
+https://leetcode.cn/problems/lru-cache/description/
+
+实现 LRUCache 类：
+LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存
+int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。
+void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
+函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。
+
+exa5
+ES2015 (ES6) 开始，Map 对象明确保证了其元素的顺序
+插入顺序 (Insertion Order)：Map 会严格按照键值对被添加（set）到 Map 中的顺序来进行迭代。
+更新不改变位置：当你使用 map.set(key, value) 更新一个已经存在的 key 的值时，这个键值对在 Map 内部的顺序位置不会改变。它仍然保持在最初插入时的位置。
+删除与重新插入会改变位置：如果你先 map.delete(key) 删除一个键，然后再 map.set(key, newValue) 重新插入同一个键，那么这个键值对会被添加到 Map 的末尾，因为它被视为一个新的插入操作。
+
+get(key) 操作：当访问一个已存在的键时，为了将其标记为“最近使用”，我们需要把它移到“新”的位置（末尾）。我们通过 delete + set 实现：
+this.cache.delete(key); // 移除旧的（位置不变）
+this.cache.set(key, value); // 重新插入，放在末尾（成为最新的）
+
+put(key, value) 操作：
+如果是新键：直接 set 会将其添加到末尾。
+如果是更新旧键：先 delete 再 set，也会将其移到末尾。
+
+淘汰策略：由于 Map 保证了插入顺序，那么最久未使用的项（即 LRU 项）必然位于 Map 的开头。当需要淘汰时，获取 this.cache.keys().next().value 就能得到第一个（最旧的）键。
+
+## 大模型调优的手段
+
+
+
+
