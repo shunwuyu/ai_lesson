@@ -54,40 +54,15 @@ setTimeout的执行时间并不是确定的。在JS中，setTimeout任务被放�
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/10/29/16e15195cf16a558~tplv-t2oaga2asx-jj-mark:3024:0:0:0:q75.awebp)
 
-假设滚动发生，滚动条距顶部的位置为150px,则我们可得知在可见区域内的列表项为第4项至`第13项。
+虚拟列表：只把可视窗口内（+少量缓冲区）需要展示的 DOM 节点渲染到页面，其余数据只保持在内存/数据结构里，从而把渲染量从 O(N) 降到 O(V)（V = 可视项数），极大提升滚动/渲染性能。
 
-虚拟列表的实现，实际上就是在首屏加载的时候，只加载可视区域内需要的列表项，当滚动发生时，动态通过计算获得可视区域内的列表项，并将非可视区域内存在的列表项删除。
-
-计算当前可视区域起始数据索引(startIndex)
-计算当前可视区域结束数据索引(endIndex)
-计算当前可视区域的数据，并渲染到页面中
-计算startIndex对应的数据在整个列表中的偏移位置startOffset并设置到列表上
+为什么要用：当列表项很多（数千 / 万）时，生成大量 DOM 会导致长时间渲染、回流重排、内存暴涨、卡顿。虚拟化能把渲染开销限制在可见范围。
 
 
-由于只是对可视区域内的列表项进行渲染，所以为了保持列表容器的高度并可正常的触发滚动，将Html结构设计成如下结构：
+监听滚动，获取 scrollTop（滚动距离）和容器高度 viewportHeight。
 
-<div class="infinite-list-container">
-    <div class="infinite-list-phantom"></div>
-    <div class="infinite-list">
-      <!-- item-1 -->
-      <!-- item-2 -->
-      <!-- ...... -->
-      <!-- item-n -->
-    </div>
-</div>
+根据每项高度，计算当前开始索引 startIndex 和结束索引 endIndex（再加上 overscan 缓冲项）。
 
-infinite-list-container 为可视区域的容器
-infinite-list-phantom 为容器内的占位，高度为总列表高度，用于形成滚动条
-infinite-list 为列表项的渲染区域
-监听infinite-list-container的scroll事件，获取滚动位置scrollTop
+渲染 data[startIndex..endIndex]，并在渲染区域上方留一个等高占位（或用 transform）来保证滚动条总高度不变。
 
-假定可视区域高度固定，称之为screenHeight
-假定列表每项高度固定，称之为itemSize
-假定列表数据称之为listData
-假定当前滚动位置称之为scrollTop
-
-列表总高度listHeight = listData.length * itemSize
-可显示的列表项数visibleCount = Math.ceil(screenHeight / itemSize)
-数据的起始索引startIndex = Math.floor(scrollTop / itemSize)
-数据的结束索引endIndex = startIndex + visibleCount
-列表显示数据为visibleData = listData.slice(startIndex,endIndex)
+滚动时更新索引，替换渲染的子项。
