@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+    const element = {
+        type: "h1",
+        props: {
+            title: "foo",
+            children: "Hello",
+        },
+    }
+
+    const container = document.getElementById("root")
+
+    const node = document.createElement(element.type)
+    node["title"] = element.props.title
+    const text = document.createTextNode("")
+    text["nodeValue"] = element.props.children
+
+    node.appendChild(text)
+    container.appendChild(node)
+    </script>
+</body>
+</html>

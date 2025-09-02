@@ -30,3 +30,41 @@ model Post {
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
 }
+
+enum FileStatus {
+  PENDING
+  UPLOADING
+  COMPLETED
+  FAILED
+}
+
+model File {
+  id           String     @id @default(cuid())
+  filename     String
+  size         BigInt
+  chunkSize    Int
+  totalChunks  Int
+  hash         String     @unique
+  storagePath  String
+  status       FileStatus @default(PENDING)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  sessions     UploadSession[]
+}
+
+model UploadSession {
+  id             String   @id @default(cuid()) // 唯一 ID 生成函数
+  fileId         String?
+  file           File?    @relation(fields: [fileId], references: [id])
+  filename       String
+  size           BigInt
+  chunkSize      Int
+  totalChunks    Int
+  hash           String   // 与 File.hash 相同算法（chunkedSha256）
+  uploadedChunks Json     // 存已上传分片下标数组，例如 [0,1,2]
+  paused         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([hash])
+}

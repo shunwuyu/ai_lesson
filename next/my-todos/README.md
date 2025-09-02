@@ -11,8 +11,15 @@
 - npx prisma init
     初始化 Prisma，创建 prisma 目录和 schema 文件，安装必要依赖。
 
-
 - npx prisma migrate dev --name init
+
+
+
+## 双token 登录 
+DATABASE_URL="mysql://root:Codingdream2021@localhost:3306/shu"
+
+### register模块
+
 
 ## 大文件上传
 
@@ -68,3 +75,12 @@ onResume()：用同一个 sessionId 重新拉取状态，继续上传。
 - 怎么计算hash?
     先将文件按固定大小切片，计算每个分片的 SHA256 哈希值，再将所有分片的哈希值按顺序拼接成一个字符串，对该字符串再次计算 SHA256，得到的结果就是这个文件的 chunkedSha256 指纹。
 
+## 为什么需要UploadSession表
+- File 表代表已成功上传的文件
+- UploadSession 表代表正在上传中的临时会话
+- 两者分离，避免“上传一半的脏数据”污染正式文件表
+- 支持同一个文件多次上传尝试（不同 session）
+File 就像是“已完成的订单”
+UploadSession 就像是“购物车”——你可以加商品、暂停付款、回头再来付，直到最终下单成功。
+
+- npx prisma migrate dev --name add-file

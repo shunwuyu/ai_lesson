@@ -11,6 +11,7 @@ type WorkerOut =
   | { type: 'META'; totalChunks: number }
   | { type: 'HASH_PROGRESS'; progress: number }
   | { type: 'ERROR'; message: string  }
+  | { type: 'CHUNK'; index: number; blob: Blob }
   | { type: 'HASH_DONE'; hash: string };
 
 
@@ -49,7 +50,7 @@ self.onmessage = async (e: MessageEvent<WorkerIn>) => {
                 // 1字节 = 8位，32字节 × 8 = 256位。
                 const h = await crypto.subtle.digest('SHA-256', ab);
                 // 这个片段的hash
-                console.log(h, '/////')
+                // console.log(h, '/////')
                 perHashes.push(h);
                 processed += (end - start);
                 // 更新hash计算的进度
@@ -67,6 +68,17 @@ self.onmessage = async (e: MessageEvent<WorkerIn>) => {
             // 转成16进制
             const hex = toHex(new Uint8Array(final));
             (self as any).postMessage({ type: 'HASH_DONE', hash: hex } satisfies WorkerOut);
+        }
+
+        if (msg.type === 'PULL') {
+            if (!theFile) throw new Error('Worker not initialized');
+            for (const i of msg.next) {
+                if (stopped) return;
+                const start = i * chunkSize;
+                const end = Math.min(theFile.size, start + chunkSize);
+                const blob = theFile.slice(start, end);
+                (self as any).postMessage({ type: 'CHUNK', index: i, blob } satisfies WorkerOut);
+            }
         }
     } catch(err: any) {
         (self as any).postMessage({ type: 'ERROR', message: err?.message || String(err) } satisfies WorkerOut);
