@@ -2,6 +2,17 @@
 "use client";
 import React, { useRef, useState } from 'react';
 import Link from 'next/link';
+import { ReactNode } from 'react';
+
+// 定义 VirtualList 组件的 props 类型
+interface VirtualListProps<T> {
+    data: T[];                    // 数据列表，泛型 T 表示数据项的类型
+    height: number;               // 可视区域高度（像素）
+    itemHeight: number;           // 每一项的高度（像素）
+    renderItem: (item: T, index: number) => ReactNode; // 渲染每一项的函数
+    overscan?: number;            // 预渲染数量（上下额外渲染的项数），可选，默认 2
+}
+
 /**
  * 虚拟滚动列表组件（Virtualized List）
  * 用于高效渲染大量数据列表，只渲染可视区域内的元素，提升性能。
@@ -12,13 +23,13 @@ import Link from 'next/link';
  * @param {Function} renderItem - 渲染每一项的函数，接收 item 和 index
  * @param {number} [overscan=2] - 预渲染上下额外的项数，防止快速滚动时白屏
  */
-export default function VirtualList({
+export default function VirtualList<T>({
   data,
   height,
   itemHeight,
   renderItem,
   overscan = 2,
-}) {
+}: VirtualListProps<T>) {
   // 引用容器 DOM 元素
   const containerRef = useRef(null);
 
@@ -39,7 +50,7 @@ export default function VirtualList({
    * 滚动处理函数
    * 使用 requestAnimationFrame 实现滚动节流，避免频繁 setState
    */
-  function onScroll(e) {
+  function onScroll(e:React.UIEvent<HTMLDivElement>) {
     const st = e.currentTarget.scrollTop; // 获取当前滚动位置
 
     // 如果尚未安排动画帧任务，则安排一次

@@ -24,7 +24,7 @@ export default function PostsPage() {
   }, [])
 
   console.log(posts, '---------------------')
-  const renderItem = (post, index) => (
+  const renderItem = (post: Post, index: Number) => (
       <article
         key={post.id}
         className="border-b pb-6 last:border-b-0"
