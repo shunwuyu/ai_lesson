@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server"
 import { verifyAccessToken } from "@/lib/auth"
 
 // 需要鉴权的路径
-const protectedRoutes = [ "/api/posts"]
+const protectedRoutes = ["/dashboard"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl

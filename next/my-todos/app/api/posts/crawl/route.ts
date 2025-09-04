@@ -30,9 +30,7 @@ export async function GET() {
           data: {
             title: post.title,
             content: post.content,
-            published: true,
-            authorId: 1
-            // authorId: Math.floor(Math.random() * 10) + 1
+            userId: Math.floor(Math.random() * 10) + 1
           }
         })
         
