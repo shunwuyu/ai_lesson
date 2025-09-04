@@ -1,0 +1,13 @@
+{
+  "fileName": "202508020230-Kiro-dmg-darwin-arm64.dmg",
+  "fileSize": 261181344,
+  "chunkSize": 5242880,
+  "totalChunks": 50,
+  "uploadedChunks": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "complete": false
+}

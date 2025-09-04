@@ -79,3 +79,7 @@ Refresh Token: 有效期 7～30 天，HttpOnly, Secure, SameSite=Strict/Lax
 🧩 可维护性	⭐⭐⭐⭐
 📱 适合场景	SPA、移动端、需要长会话的应用
 👉 结论：双 Token 是现代 Web 认证的事实标准，尤其适合 Next.js 这类全栈框架。你的实现已经非常接近生产级，只需完善刷新接口和安全细节即可。
+
+## 流式输出
+
+- highlight.js markdown-it
