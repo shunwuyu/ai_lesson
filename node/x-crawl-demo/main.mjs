@@ -1,4 +1,5 @@
-import { createCrawl, createCrawlOpenAI } from 'x-crawl'
+import { createCrawl, 
+  createCrawlOpenAI } from 'x-crawl'
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 
@@ -24,11 +25,11 @@ async function writeJsonToFile(data, filename) {
 //Create AI application
 const crawlOpenAIApp = createCrawlOpenAI({
   clientOptions: { 
-    apiKey: 'sk-ZJBjRaPVZH8gU04LUmCXQNKyxJyWBzf36MibH0TvhLR31C0N',
+    apiKey: 'sk-Y9UF0cvidvCtVJtkvd5RTAhc8TkvyDrEsrlCZY5QP6JhKuyO',
     baseURL: 'https://api.302.ai/v1/' 
   
   },
-  defaultModel: { chatModel: 'gpt-4-turbo-preview' }
+  defaultModel: { chatModel: 'gpt-4o' }
 })
 
 // crawlPage is used to crawl pages

@@ -5,6 +5,28 @@
             "args": [
                 "/Users/shunwuyu/workspace/lesson/ai_lesson/mcp/weather-mcp-server/weather.js"
             ]
+        },
+        "github.com/github/github-mcp-server": {
+            "type": "http",
+            "url": "https://api.githubcopilot.com/mcp/",
+            "headers": {
+                "Authorization": "Bearer ${input:github_token}"
+            }
+        },
+        "firecrawl-mcp": {
+            "command": "npx",
+            "args": ["-y", "firecrawl-mcp"],
+            "env": {
+                "FIRECRAWL_API_KEY": "fc-7b76fea56e544e68ad0808d1697715ee"
+            }
         }
-    }
-} 
+    },
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "github_token",
+            "description": "GitHub Personal Access Token",
+            "password": true
+        }
+    ]
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="./didact.js" type="module"></script>
+  <script type="module">
+  import Didact from './didact.js';
+  //是告诉 Babel 把 JSX 编译成 Didact.createElement(...)。
+  /** @jsx Didact.createElement */
+  function App() {
+    const [n, setN] = Didact.useState(0);
+    return (
+      <div>
+        <h1>Hello Didact</h1>
+        <button onClick={() => setN(n + 1)}>count: {n}</button>
+      </div>
+    );
+  }
+
+  const container = document.getElementById("root");
+  Didact.render(<App />, container);
+
+
+  </script>
+</body>
+</html>
