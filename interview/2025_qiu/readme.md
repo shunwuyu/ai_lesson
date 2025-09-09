@@ -44,3 +44,6 @@
 
 - react
    interview/2025_chun/react/fiber/hand-fiber/
+
+- algorithm/reverse_linked_list
+- vite/hand_plugin

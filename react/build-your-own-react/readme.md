@@ -12,6 +12,9 @@
 
 
 ## Concurrent Mode 并发模式
+
+React 的 Concurrent Mode 中的‘并发’，并不是多线程意义上的并行，而是指 React 能够将渲染任务拆分成小块，通过调度器在浏览器空闲时执行，并支持中断、优先级调度和多版本 UI 准备。它让高优先级更新（如用户输入）能够及时响应，避免页面卡顿。从 React 18 起，只要使用 createRoot，就默认启用了并发模式。
+
 把一次性深度遍历变成 可中断的工作队列。用 requestIdleCallback（教学用，React 实际使用 scheduler）把渲染分割为一小块一小块做。
 
 - nextUnitOfWork 指向当前待处理的 fiber。
@@ -55,7 +58,7 @@ Fiber
 {
   type,          // 节点类型
   props,         // 属性
-  stateNode,     // 对应的 DOM 或组件实例
+  stateNode,     // 对应的 DOM 或组件实例 stateNode 就是 Fiber 节点所代表的“真实实体”：
 
   // 链表指针（实现遍历的关键）
   return,        // 指向父节点
@@ -244,3 +247,68 @@ function commitWork(fiber) {
   commitWork(fiber.sibling);
 }
 ```
+
+## React 更新的三个阶段
+React 的更新流程分为三个阶段，DOM 操作只在最后一个阶段发生：
+- Render 阶段（可中断、可暂停）
+  React 从根节点开始，遍历 Fiber 树，创建新的 workInProgress 树。
+  执行组件函数或类组件的 render() 方法。
+  对比新旧树（diff），为需要更新的 Fiber 节点打上 effectTag（如 Update、Placement、Deletion）。
+  这个阶段完全在内存中进行，不操作真实 DOM。
+  可被高优先级任务中断（Concurrent Mode）
+
+- Effect 处理前的准备（可选）
+  收集所有带有 effectTag 的节点，组成一个 Effect List（副作用链表）。
+  这个链表只包含需要更新的节点，用于后续高效遍历。
+
+- Commit 阶段（不可中断，同步执行）
+  这才是 DOM 真正更新的时刻！
+
+
+  操作	对应 effectTag	如何通过 stateNode 更新 DOM
+  插入 DOM	Placement	parent.stateNode.appendChild(child.stateNode)
+  更新 DOM	Update	dom.setProperty() 或 setAttribute()
+  删除 DOM	Deletion	parent.stateNode.removeChild(child.stateNode)
+  调用 useEffect	Passive	执行副作用函数
+  调用 componentDidMount / componentDidUpdate	-	生命周期钩子
+
+## 支持函数组件（Function Components）
+
+  之前我们只支持普通 DOM 元素字符串类型（div、h1）。要支持函数组件，我们在处理 fiber 时要判断 type 是否是函数：如果是函数组件，就“执行”这个函数以得到它返回的 element（类似 React 渲染函数组件）。
+
+  ```js
+  /**
+ * 执行一个“工作单元”（Unit of Work）
+ * 这是 React 渲染循环中的核心函数，用于处理单个 Fiber 节点
+ * 
+ * @param {Fiber} fiber - 当前要处理的 Fiber 节点
+ */
+function performUnitOfWork(fiber) {
+  // 判断当前 Fiber 节点是否为函数式组件
+  // fiber.type 是组件的类型，如果是函数，则认为是函数组件
+  const isFunctionComponent = fiber.type instanceof Function;
+
+  if (isFunctionComponent) {
+    // 如果是函数组件，调用 updateFunctionComponent 处理
+    updateFunctionComponent(fiber);
+  } else {
+    // 否则是原生 DOM 组件（如 div、span）或类组件
+    // 调用 updateHostComponent 来处理 DOM 元素的创建/更新
+    updateHostComponent(fiber);
+  }
+
+  // ...（后续逻辑：返回下一个需要处理的 Fiber 节点）
+  // 通常通过 child -> sibling -> return.sibling 链表遍历
+  // 实现深度优先的 Fiber 树遍历
+}
+
+  function updateFunctionComponent(fiber) {
+  // 设置全局 hook 指针等（为实现 useState）
+  // 每渲染一个函数组件时，重置 hookIndex 并创建 wipFiber.hooks，让 hook（如 useState）把自身 state 存入 wipFiber.hooks。
+  wipFiber = fiber;
+  hookIndex = 0;
+  wipFiber.hooks = [];
+  const children = [fiber.type(fiber.props)];
+  reconcileChildren(fiber, children);
+}
+  ```
