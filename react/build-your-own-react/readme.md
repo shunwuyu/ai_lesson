@@ -309,6 +309,7 @@ function performUnitOfWork(fiber) {
   hookIndex = 0;
   wipFiber.hooks = [];
   const children = [fiber.type(fiber.props)];
+  // reconcileChildren 将 element.children 转成 child fibers 并设置 effectTag（PLACEMENT/UPDATE/DELETION），用于后续 commit。
   reconcileChildren(fiber, children);
 }
   ```
