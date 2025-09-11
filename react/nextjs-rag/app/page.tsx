@@ -1,21 +1,33 @@
 "use client";
-import { useChat } from "@ai-sdk/react";
 import ChatInput from "@/components/ChatInput";
+import { useChat } from "@ai-sdk/react";
+import ChatOutput from "@/components/ChatOutput";
 
 export default function Home() {
-  //Hook 解构出聊天功能所需的状态和方法：输入框内容、输入处理函数、表单提交、消息列表和连接状态。
+  // /api/chat 是默认地址
+  const {
+    input,
+    handleInputChange,
+    handleSubmit,
+    messages,
+    status
+  } = useChat()
+  // console.log(input, handleInputChange, handleSubmit)
 
-  const { input, handleInputChange, handleSubmit, messages, status } =
-      useChat();
-    
   return (
     <main className="max-w-3xl mx-auto p-4">
       <h1 className="text-xl font-semibold mb-4">PhoneGPT</h1>
+
+      <div className="space-y-4 mb-4 max-h-[80vh] overflow-y-auto">
+        <ChatOutput messages={messages} status={status} />
+      </div>
+
       <ChatInput
         input={input}
         handleInputChange={handleInputChange}
         handleSubmit={handleSubmit}
       />
+
       <p className="text-xs text-muted-foreground mt-2 text-center">
         Output genarated using content from{" "}
         <a
@@ -35,6 +47,5 @@ export default function Home() {
         </a>
       </p>
     </main>
-  )
+  );
 }
-
