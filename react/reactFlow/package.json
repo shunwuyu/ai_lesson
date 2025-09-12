@@ -1,0 +1,16 @@
+{
+  "name": "reactflow",
+  "version": "1.0.0",
+  "description": "- AI 工作流编排器（AI Agent 编排） [监听邮箱] → [用 AI 分析邮件情绪] → [生成回复草稿] → [人工审核] → [发送邮件]",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4"
+  }
+}
