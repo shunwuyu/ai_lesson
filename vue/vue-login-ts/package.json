@@ -1,0 +1,30 @@
+{
+  "name": "vue-login-ts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@types/node": "^24.5.2",
+    "axios": "^1.12.2",
+    "element-plus": "^2.11.2",
+    "jsonwebtoken": "^9.0.2",
+    "mockjs": "^1.1.0",
+    "pinia": "^3.0.3",
+    "vue": "^3.5.10",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@vitejs/plugin-vue": "^5.1.4",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.8",
+    "vite-plugin-mock": "^3.0.2",
+    "vite-plugin-mockjs": "^0.0.4",
+    "vue-tsc": "^2.1.6"
+  }
+}
