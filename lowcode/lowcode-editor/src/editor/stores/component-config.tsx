@@ -6,6 +6,7 @@ import Button from '../materials/Button';
 
 export interface ComponentConfig {
     name: string;
+    // 这是一个对象，键是字符串，值可以是任何类型。
     defaultProps: Record<string, any>,
     component: any
 }

@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { useDrag } from "react-dnd";
 
 export interface MaterialItemProps {
@@ -10,7 +9,7 @@ export function MaterialItem(props: MaterialItemProps) {
     const {
         name
     } = props;
-
+    // useDrag 是 react-dnd 提供的 Hook，用于让一个组件变成 可拖拽的
     const [_, drag] = useDrag({
         type: name,
         item: {

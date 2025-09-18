@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="toggleBtn">切换显示</button>
+  <p id="myElement">这是一个示例元素</p>
+  <script>
+  // 获取元素
+const btn = document.getElementById('toggleBtn');
+const el = document.getElementById('myElement');
+
+// 初始状态
+let visible = true;
+
+// 切换显示函数
+function toggle() {
+  visible = !visible;
+  el.style.display = visible ? 'block' : 'none';
+}
+
+// 绑定事件
+btn.addEventListener('click', toggle);
+
+// 初始化显示状态
+el.style.display = visible ? 'block' : 'none';
+
+  </script>
+</body>
+</html>

@@ -5,6 +5,7 @@ export function Material() {
     const { componentConfig } = useComponentConfigStore();
 
     const components = useMemo(() => {
+        // 获取对象 componentConfig 的所有可枚举属性值，并返回一个包含这些值的数组。
         return Object.values(componentConfig);
      }, [componentConfig]);
 

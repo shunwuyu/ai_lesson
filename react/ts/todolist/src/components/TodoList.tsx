@@ -9,7 +9,7 @@ const TodoList: React.FC = () => {
 
   return (
     <ul style={{ listStyle: 'none', padding: 0 }}>
-      {state.todos.map((todo:Todo,) => (
+      {state.todos.map((todo:Todo) => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
     </ul>
