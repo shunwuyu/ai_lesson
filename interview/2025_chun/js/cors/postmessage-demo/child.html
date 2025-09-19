@@ -19,7 +19,7 @@
     let parentWin
     // 监听父页面的消息
     window.addEventListener('message', e => {
-      if (e.origin !== 'http://127.0.0.1:5500') { // 验证对方的身份
+      if (e.origin !== 'http://127.0.0.1:5501') { // 验证对方的身份
         return
       }
       // 发送详细窗口的window对象引用，调用对象postMessage方法实现父子页面的通信，当然也可以使用window.parent来通信

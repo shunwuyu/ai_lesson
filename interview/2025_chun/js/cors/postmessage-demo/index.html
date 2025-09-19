@@ -19,7 +19,7 @@
   <script>
     // 父页面监听message事件，接受iframe发送的消息
     window.addEventListener('message', e => {
-      if (e.origin !== 'http://127.0.0.1:5500') { // 验证对方的身份
+      if (e.origin !== 'http://127.0.0.1:5501') { // 验证对方的身份
         return
       }
       const box = document.querySelector('.messages')

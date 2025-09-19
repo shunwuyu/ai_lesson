@@ -8,6 +8,9 @@ const generateToken = (username: string) => {
 
 export default [
   {
+    
+  }
+  {
     url: '/api/login',
     method: 'post',
     response: ({ body }) => {
