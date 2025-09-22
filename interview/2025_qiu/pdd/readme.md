@@ -259,3 +259,8 @@ const u: User = { id: 1, name: 'Alice', age: 18 };
 
     “interface 更像是面向对象的蓝图，可继承、可扩展，适合大型项目或库；
     type 更像万能积木，可以组合、做联合、做交叉，但不能声明合并，适合灵活定义各种类型。”
+
+- 手写async await 
+
+- useUpdateEffect
+  useUpdateEffect 就是一个只在更新阶段执行的 useEffect，
