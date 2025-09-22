@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- 事件委托 项目中列表往往是动态的（新增/删除），事件委托是必备技能 -->
+<ul id="list">
+  <li>A <button class="del">删除</button></li>
+  <li>B <button class="del">删除</button></li>
+</ul>
+<script>
+const ul = document.getElementById('list');
+
+ul.addEventListener('click', e => {
+  if (e.target.classList.contains('del')) {  // 判断点击的是删除按钮
+    const li = e.target.closest('li');      // 找到最近的 li
+    if (li) li.remove();
+  }
+});
+</script> 
+</body>
+</html>

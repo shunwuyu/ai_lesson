@@ -1,0 +1,1 @@
+Promise.resolve(1).finally(()=>2).then(v=>console.log(v)) // 1

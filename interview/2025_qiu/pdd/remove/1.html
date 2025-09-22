@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<ul id="list">
+  <li>A <button class="del">删除</button></li>
+  <li>B <button class="del">删除</button></li>
+</ul>
+<script>
+document.querySelectorAll('.del').forEach(btn => {
+  btn.addEventListener('click', e => {
+    const li = e.target.parentNode; // 找到当前按钮的 li
+    li.remove(); // 直接删除
+    // 或 li.parentNode.removeChild(li)
+  });
+});
+</script>
+</body>
+</html>
