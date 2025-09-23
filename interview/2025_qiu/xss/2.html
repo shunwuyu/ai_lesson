@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<input id="name" />
+<div id="preview"></div>
+<script>
+const nameInput = document.getElementById('name');
+nameInput.oninput = () => {
+  // preview.innerHTML = nameInput.value;
+  preview.textContent = nameInput.value;
+};
+
+// <img src=x onerror=alert(1)>
+</script>
+</body>
+</html>

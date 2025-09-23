@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>圣杯布局 - 无 Flex</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    /* 容器：用 padding 给左右栏留出空间 */
+    .container {
+      padding-left: 200px;   /* 为左栏留空间 */
+      padding-right: 200px;  /* 为右栏留空间 */
+      min-height: 100vh;
+    }
+
+    /* 主内容区：浮动，占据全部宽度 */
+    .content {
+      float: left;
+      width: 100%;
+      background: white;
+      padding: 20px;
+    }
+
+    /* 左侧边栏 */
+    .left {
+      position: relative;
+      left: -200px; /* 向左移动 200px，进入 container 的 padding 区域 */
+      width: 200px;
+      margin-left: -100%; /* 关键：拉到最左边 */
+      float: left;
+      background: #f0f0f0;
+      padding: 20px;
+      top: 0;
+    }
+
+    /* 右侧边栏 */
+    .right {
+      position: relative;
+      right: -200px; /* 向右移动 200px，进入右边 padding 区 */
+      width: 200px;
+      margin-left: -200px; /* 关键：从 content 底下拉上来 */
+      float: left;
+      background: #e0e0e0;
+      padding: 20px;
+      top: 0;
+    }
+
+    /* 清除浮动，防止高度塌陷 */
+    .container::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    /* 标题样式 */
+    h3 {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 容器：用 padding 挤出左右空间 -->
+  <div class="container">
+    <!-- ✅ 主内容在 HTML 中最前面，优先渲染 -->
+    <main class="content">
+      <h1>主内容区域</h1>
+      <p>这是最重要的内容，我希望它在 HTML 中最先出现，被搜索引擎优先抓取。</p>
+    </main>
+
+    <aside class="left">
+      <h3>左侧菜单</h3>
+      <ul>
+        <li>首页</li>
+        <li>关于</li>
+        <li>联系</li>
+      </ul>
+    </aside>
+
+    <aside class="right">
+      <h3>右侧工具</h3>
+      <p>设置、通知、用户信息等辅助内容。</p>
+    </aside>
+  </div>
+
+</body>
+</html>

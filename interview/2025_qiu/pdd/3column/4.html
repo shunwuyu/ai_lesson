@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  /* mobile first: single column, sidebars hidden */
+  .layout { display:block; }
+  .sidebar { display:none; }
+
+  /* tablet+ (desktop) */
+  @media (min-width: 768px) {
+    .layout {
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+    }
+    .sidebar { display:block; width:240px; flex:0 0 240px; }
+    .content { flex:1 1 auto; min-width:0; } /* min-width:0 避免内容溢出 */
+  }
+
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="left" class="sidebar left">Left</aside>
+    <main class="content">Main content</main>
+    <aside id="right" class="sidebar right">Right</aside>
+  </div>
+  <button id="toggle-left">Menu</button>
+  <script>
+  document.getElementById('toggle-left').addEventListener('click', () => {
+    const leftSidebar = document.getElementById('left');
+    leftSidebar.style.display = 'block';
+    const rightSidebar = document.getElementById('right');
+    rightSidebar.style.display = 'block';
+  })
+  </script>
+</body>
+</html>

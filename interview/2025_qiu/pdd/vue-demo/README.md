@@ -1,0 +1,1 @@
+- pnpm i element-plus @element-plus/icons-vue pinia axios vite-plugin-mock
