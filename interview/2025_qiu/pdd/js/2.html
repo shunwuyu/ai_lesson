@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>opacity:0 + GPU 加速</title>
+    <style>
+        .box {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: 10px solid #555;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            /* 关键：启用 GPU 加速 */
+            transform: translateZ(0); /* 或者使用 translateX(0) 等触发层合成 */
+            /* 更现代的方式：明确告知浏览器将要变化的属性 */
+            will-change: opacity;
+            /* 过渡效果由 GPU 处理 */
+            transition: opacity 1s ease-in-out;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .box.hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="myBox" class="box">点击我隐藏</div>
+
+<script>
+    const box = document.getElementById('myBox');
+    
+    box.addEventListener('click', function() {
+        // 切换 hidden 类，触发动画
+        box.classList.toggle('hidden');
+        
+        // 更新按钮文字
+        box.textContent = box.classList.contains('hidden') ? '我被隐藏了' : '点击我隐藏';
+    });
+</script>
+
+</body>
+</html>

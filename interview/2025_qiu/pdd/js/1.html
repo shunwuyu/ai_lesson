@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .hidden {
+    visibility: hidden;
+  }
+
+  .transparent {
+      opacity: 0;
+  }
+  </style>
+</head>
+<body>
+  <button id="toggleVisibility">Toggle Visibility</button>
+  <button id="toggleOpacity">Toggle Opacity</button>
+  <div id="myElement" style="background-color: yellow; width: 100px; height: 100px;"></div>
+  <script>
+  const myElement = document.getElementById('myElement');
+  document.getElementById('toggleVisibility').addEventListener('click', function() {
+    var element = document.getElementById('myElement');
+    if (element.classList.contains('hidden')) {
+        element.classList.remove('hidden'); // 显示元素
+    } else {
+        element.classList.add('hidden'); // 隐藏元素
+    }
+});
+
+document.getElementById('toggleOpacity').addEventListener('click', function() {
+    var element = document.getElementById('myElement');
+    if (element.classList.contains('transparent')) {
+        element.classList.remove('transparent'); // 恢复元素透明度，使其可见
+    } else {
+        element.classList.add('transparent'); // 设置元素透明度为0，使其不可见但仍可触发事件
+    }
+});
+  myElement.addEventListener('click', function() {
+        // 这个函数是否执行，取决于 myElement 是否能接收到点击事件
+        alert('✅ 元素被点击了！ (当前 visibility: ' + 
+                         window.getComputedStyle(myElement).visibility + 
+                         ', opacity: ' + window.getComputedStyle(myElement).opacity + ')');
+    });
+  </script>
+</body>
+</html>
