@@ -1,0 +1,22 @@
+<script>
+const user = {
+  name: '子君',
+  getName() {
+    return this.name
+  }
+}
+
+const proxy = new Proxy(user, {
+  get(target, key, receiver) {
+    // ❌ 没用 Reflect，直接返回函数本体
+    return target[key]
+  }
+})
+
+const another = { name: '小美' }
+
+// 把 proxy.getName 当作函数取出来调用
+const fn = proxy.getName
+console.log(fn.call(another)) // 👉 输出 undefined
+
+</script>
