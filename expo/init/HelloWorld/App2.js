@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+// 底层控件
 import { StyleSheet, View, FlatList } from 'react-native';
+// 这是一个 基于Google Material Design 的 UI 组件库，封装了美观的交互组件 相当于vant
 import { Provider as PaperProvider, TextInput, Button, Checkbox, List } from 'react-native-paper';
 
 export default function App() {
@@ -51,7 +53,7 @@ export default function App() {
         <Button mode="contained" onPress={addTodo} style={styles.addButton}>
           添加
         </Button>
-
+        {/* FlatList 是 React Native 中用于高性能渲染长列表的组件，支持懒加载、虚拟化和滚动优化。 */}
         <FlatList
           data={todos}
           keyExtractor={(item) => item.id}
