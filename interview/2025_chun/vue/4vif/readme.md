@@ -20,3 +20,5 @@ v-show 适用场景
 - 动画效果：如果你希望对某个元素进行淡入淡出等动画效果，使用 v-show 可以保持元素在 DOM 中，便于实现过渡效果。
 - 响应式布局调整：例如在不同屏幕尺寸下显示或隐藏某些内容块，使用 v-show 可以避免重新渲染带来的性能开销。
 - 
+fade-enter-from → fade-enter-active → fade-enter-to
+fade-leave-from → fade-leave-active → fade-leave-to
