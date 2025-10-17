@@ -213,3 +213,4 @@ AI全栈工程师课程
 - vue/ai-streaming/
 - react/react-flow
 - expo/tinder
+- n8n/readme2.md
