@@ -9,7 +9,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
-    "openai": "^3.3.0"
+    "openai": "^6.6.0"
   }
 }

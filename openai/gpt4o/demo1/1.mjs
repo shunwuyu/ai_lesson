@@ -1,11 +1,10 @@
 import OpenAI from 'openai';
-import dotenv from 'dotenv'
-dotenv.config({path: '.env'});
 
 const client = new OpenAI({
-    apiKey:process.env.OPENAI_KEY,
-    baseURL:'https://api.gptsapi.net/v1'
-})
+    apiKey: 'sk-g2aGXLfj9ScHVMH1RumFwM9Mc2nS0KBjrP4uvwMBmNAYRRkp', // This is the default and can be omitted
+    baseURL: 'https://api.302.ai/v1'
+});
+
 
 const main = async () => {
     // const response = await client.chat.completions.create({

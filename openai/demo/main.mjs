@@ -1,20 +1,17 @@
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from 'openai';
 
-const configuration = new Configuration({
-    apiKey:'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'
-})
+const client = new OpenAI({
+    apiKey: 'sk-g2aGXLfj9ScHVMH1RumFwM9Mc2nS0KBjrP4uvwMBmNAYRRkp', // This is the default and can be omitted
+    baseURL: 'https://api.302.ai/v1'
+});
 
-const openai = new OpenAIApi(configuration);
 
 try {
-    const result = await openai.createCompletion({
-        engine: 'text-davinci-003',
+    const result = await client.completions.create({
+        model: 'gpt-3.5-turbo',
         prompt: 'hello',
-        maxTokens: 5,
-        temperature: 0.9,
-        topP: 1
     })
-    console.log(result);
+    console.log(result.choices[0].text);
 } catch(e) {
     console.log(e)
 }
