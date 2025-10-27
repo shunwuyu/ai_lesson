@@ -4,8 +4,8 @@ import OpenAI from 'openai';
 dotenv.config({path: '.env'});
 
 const client = new OpenAI({
-    apiKey:'sk-EotDnSmaUpIchUFfXMOpmx0QBHUPe43c2Rr8UOUiEzBwCYUJ',
-    baseURL:''
+    apiKey:process.env.OPENAI_KEY,
+    baseURL:'https://api.agicto.cn/v1'
 })
 
 const main = async () => {

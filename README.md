@@ -214,3 +214,6 @@ AI全栈工程师课程
 - react/react-flow
 - expo/tinder
 - n8n/readme2.md
+- n8n/readme3.md
+- 50projects/toast-notification
+- js/str-demo

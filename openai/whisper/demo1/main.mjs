@@ -8,26 +8,29 @@ import OpenAI from 'openai';
 // });
 
 const client = new OpenAI({
-    apiKey: 'sk-Gl1ASRfqtsM8Y89sWlInTrElCDUja0M2X7B4lIQrY1oThSkV',
-    baseUrl:'https://api.302.ai/v1'
+    apiKey: 'sk-jadYF8phnh9xsa1Xt19tkYMiWcOCDDizQvBglHsifZuML63C',
+    baseURL:'https://api.agicto.cn/v1'
 });
 
 async function textToSpeech() {
   try {
+    console.log('/////////')
     const response = await client.audio.speech.create({
       model: 'whisper-1',
       messages: [{ role: 'system', content: '你好，欢迎使用 OpenAI 文字转语音功能。' }],
     });
 
+    console.log(response, '----')
+
     // 假设 API 返回一个 URL 链接到音频文件
     const audioUrl = response.data.audio_url;
     console.log(audioUrl, '/////')
-    const audioResponse = await axios.get(audioUrl, { responseType: 'arraybuffer' });
+    // const audioResponse = await axios.get(audioUrl, { responseType: 'arraybuffer' });
 
-    // 将音频数据保存为 MP3 文件
-    fs.writeFileSync('output.mp3', audioResponse.data);
+    // // 将音频数据保存为 MP3 文件
+    // fs.writeFileSync('output.mp3', audioResponse.data);
 
-    console.log('音频文件已保存为 output.mp3');
+    // console.log('音频文件已保存为 output.mp3');
   } catch (error) {
     console.error('文字转语音失败:', error);
   }

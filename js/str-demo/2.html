@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="todos"></div>
+  <script>
+  // 模拟待办事项数据
+  const todos = [
+    { id: 1, text: '学习ES6' },
+    { id: 2, text: '完成项目' }
+  ];
+
+  // 使用模板字符串渲染HTML
+  const todoListHTML = `
+    <ul>
+      ${todos.map(todo => `<li>
+        ${todo.text}
+        <button>完成</button>
+        </li>`).join('')}
+    </ul>
+  `;
+
+  // 插入到页面
+  document.getElementById('todos').innerHTML = todoListHTML;
+  // ES6 模板字符串（Template Literals）的优点非常明显
+  // 多行字符串更自然 无需使用 \n 或字符串拼接，直接换行书写 HTML 结构，代码清晰易读
+  // 内嵌表达式方便 通过 ${} 可以直接插入变量 避免了繁琐的字符串拼接
+  </script>
+</body>
+</html>
