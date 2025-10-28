@@ -1,0 +1,115 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+body{
+  text-align: center;
+}
+.music__head{
+  position: relative;
+  height: 303px;
+  overflow: auto;/*滑动自适应*/
+}
+.music__head .bg{
+  width: 100%;
+  height: 303px;
+  background-image: url(./jay.jpg);
+  background-size: cover;/*图片铺满窗口*/
+  filter: blur(8px);/*虚化图片*/
+  position: absolute;
+  z-index: -1;/*将背景向下移一个层级*/
+}
+.music__head-title{
+  margin: 45px 0;
+  color: rgb(255, 255, 255);
+  padding: 0 40px;
+}
+.back{
+  float: left;
+}
+.title{
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: SourceHanSansCN;/*字体*/
+}
+.music__body{
+  width: 100%;
+  height: calc(100vh - 130px);/*计算全屏-head部分高度 减号两边加空格*/
+  position: absolute;
+  top: 130px;
+  background-color: #fff;
+  border-top-right-radius: 32px;/*右上角圆滑*/
+  border-top-left-radius: 32px;/*左上角圆滑*/
+}
+.body-pic{
+  width: 257px;
+  height: 283px;
+  overflow: hidden;/*超出即隐藏*/
+  display: flex;
+  justify-content: center;
+  align-items: center;/*弹性布局让子容器完全居中*/
+  border-radius: 40px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);/*图片居中*/
+  top:-39px;
+  box-shadow: 0 0 10px #efefef;/*图片阴影*/
+}
+.body-pic img{
+  height: 100%;
+}
+.body-desc{
+  margin-top: 260px;
+  text-align: center;/*文字居中*/
+}
+.name{
+  font-size: 22px;
+  font-weight: bold;
+  font-family: SourceHanSansCN;
+  line-height: 50px;
+}
+.author{
+  font-family: SourceHanSansCN;
+  font-weight: bold;
+  font-size: 15px;
+}
+.body-line{
+  margin: 0 auto;
+  margin-top: 30px;
+  width: 245px;
+}
+.bord-left{
+  width: 100px;
+  border: 2px solid #F03030;
+}
+.bord-right{
+  width: 245px;
+  border: 1px solid #C6C6C6;
+}
+.time{
+  margin-top: 8px;
+  font-size: 8px;
+  font-family: SourceHanSansCN;
+  font-weight: bold;
+  color: #9EA0AD;
+  display: flex;
+  justify-content:space-between;
+  align-items: center;/*弹性布局让子容器完全居中*/
+}
+.body-play{
+  height: 80px;
+  width: 280px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+}
+.body-model{
+  margin: 0 auto;
+  width: 230px;
+  margin-top: 5px;
+  display: flex;
+  justify-content:space-between;
+  align-items: center;/*弹性布局让子容器完全居中*/
+}
