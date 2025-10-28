@@ -20,7 +20,7 @@
                         <textarea class="form-control"  id="descInput" name="desc" rows="3"></textarea>
                       </div>
                     
-                    <button type="submit" class="btn btn-default btn-primary">生成图标</button>
+                    <button type="submit" id="submitBtn" class="btn btn-default btn-primary">生成图标</button>
                   </form>
                 
             </div>
@@ -33,35 +33,43 @@
     const oForm = document.forms["appForm"];
     oForm.addEventListener('submit', function (event) {
         event.preventDefault(); 
+        const oBtn = document.getElementById('submitBtn');
+        oBtn.disabled = true;
+        oBtn.innerHTML = '生成中....';
         const title = this["title"].value;
         const desc = this["desc"].value;
         console.log(name, desc);
-        const obj = {
-            title: title,
-            desc: desc
-        }
-        // const formData = new FormData(oForm);
-        // formData.append('title', title)
-        // formData.append('desc', desc)
 
-        fetch('http://localhost:3000/logo', {
+        const prompt = `
+        你是一个logo设计师，
+        请为应用名为${title},
+        描述为${desc}的移动端App
+        设计一个高端，大气，上档次的logo
+        请确保设计方案适用于移动应用图标（App Icon）
+        `
+        fetch('https://api.agicto.cn/v1/images/generations', {
             method: 'POST',
             headers: {
+                'Authorization': 'Bearer sk-UYTJpmWZ1UIDvbqsnM8AQOaXuHIa6REcs1tc1OTaLOYrUiXM',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(obj)
+            body:JSON.stringify({
+                model: "dall-e-3",
+                prompt,
+                n: 1,
+                size: "1024x1024"
+            })
         })
         .then(response => response.json())
         .then(data => {
-            // console.log('Success:', data);
-            const { url } = data
-            if (url) {
-                const img = document.createElement('img');
-                img.onload = function() {
-                    document.querySelector('#logo').appendChild(img)
-                }
-                img.src = url
+            console.log('Success:', data);
+            oBtn.disabled = false;
+            oBtn.innerHTML = '生成图标';
+            const img = document.createElement('img');
+            img.onload = function() {
+                document.querySelector('#logo').appendChild(img)
             }
+            img.src = data.data[0].url  
         })
         .catch((error) => {
             console.error('Error:', error);
