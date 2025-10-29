@@ -1,0 +1,27 @@
+├── public/                  # 静态资源
+│   ├── images/              # 图片资源
+│   └── favicon.ico          # 网站图标
+├── src/
+│   ├── assets/              # 静态资源
+│   ├── components/          # 公共组件
+│   ├── pages/               # 页面组件
+│   │   ├── Home/            # 首页
+│   │   ├── FileConvert/     # 文件转换
+│   │   ├── ImageCompress/   # 图片压缩
+│   │   ├── ImageCrop/       # 图片裁剪
+│   │   ├── ImageFormat/     # 图片格式转换
+│   │   └── ImageWatermark/  # 图片水印
+│   ├── services/            # API服务
+│   ├── utils/               # 工具函数
+│   ├── App.jsx              # 主应用
+│   └── main.jsx             # 入口文件
+├── server/                  # 后端服务
+│   ├── controllers/         # 控制器
+│   ├── middlewares/         # 中间件
+│   ├── routes/              # 路由
+│   ├── utils/               # 工具函数
+│   └── app.js               # 主应用
+├── .env                     # 环境变量
+├── .gitignore               # Git忽略文件
+├── package.json             # 项目依赖
+└── README.md                # 项目说明

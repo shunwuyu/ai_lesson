@@ -1,0 +1,23 @@
+{
+  "name": "ai-news-scraper",
+  "version": "1.0.0",
+  "description": "全网AI相关新闻、知识获取程序",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["ai", "news", "scraper", "nodejs"],
+  "author": "",
+  "license": "MIT"
+}
