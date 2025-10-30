@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude 4 及 Agent 能力 API 演示文稿</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f4f8;
+            color: #333;
+            overflow: hidden;
+        }
+        
+        /* 演示文稿容器 */
+        .presentation {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        /* 幻灯片样式 */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 0;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+        
+        /* 内容容器 */
+        .content {
+            max-width: 1200px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* 标题样式 */
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* 段落和列表样式 */
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        ul {
+            list-style-type: none;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        li {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #a5b4fc;
+            font-size: 1.8rem;
+            line-height: 1.2;
+        }
+        
+        /* 目录卡片样式 */
+        .toc-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 2rem;
+        }
+        
+        .toc-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .toc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .toc-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #e0e7ff;
+        }
+        
+        .toc-card p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .toc-number {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* 章节卡片样式 */
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 3rem;
+        }
+        
+        .point-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .point-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #e0e7ff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+        }
+        
+        .point-card p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* 高亮数据样式 */
+        .highlight-data {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #a5b4fc;
+            margin: 10px 0;
+            display: block;
+        }
+        
+        /* 导航控制 */
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* 页码和进度 */
+        .pagination {
+            position: fixed;
+            bottom: 20px;
+            right: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+        
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #a5b4fc, #8b5cf6);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+        
+        /* 全屏按钮 */
+        .fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 回到目录按钮 */
+        .toc-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .toc-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .toc-container,
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+            
+            .pagination {
+                right: 20px;
+                font-size: 0.8rem;
+                padding: 8px 16px;
+            }
+        }
+        
+        /* 全屏模式样式 */
+        .presentation.fullscreen {
+            background: #000;
+        }
+        
+        /* 章节特定背景 */
+        .slide:nth-child(1) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .slide:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .slide:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .slide:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .slide:nth-child(5) {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .slide:nth-child(6) {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- 演示文稿容器 -->
+    <div class="presentation" id="presentation">
+        <!-- 第1页：封面和目录 -->
+        <div class="slide active" id="slide-1">
+            <div class="content">
+                <h1>Claude 4 及 Agent 能力 API 解析</h1>
+                <p style="text-align: center; margin-top: 1rem; margin-bottom: 3rem; font-size: 1.3rem;">探索下一代AI模型的革命性突破</p>
+                
+                <h2 style="margin-top: 2rem; margin-bottom: 1rem;">目录</h2>
+                <div class="toc-container">
+                    <div class="toc-card" data-slide="2">
+                        <h3><span class="toc-number">1</span>Claude 4 模型家族</h3>
+                        <p>了解 Claude Opus 4 和 Sonnet 4 的核心能力与性能突破</p>
+                    </div>
+                    <div class="toc-card" data-slide="3">
+                        <h3><span class="toc-number">2</span>编程能力革新</h3>
+                        <p>探索 Claude 4 在软件工程师和开发者工具领域的领先表现</p>
+                    </div>
+                    <div class="toc-card" data-slide="4">
+                        <h3><span class="toc-number">3</span>Agent 能力 API</h3>
+                        <p>深入了解 Anthropic API 的四种新能力及其应用场景</p>
+                    </div>
+                    <div class="toc-card" data-slide="5">
+                        <h3><span class="toc-number">4</span>代码执行工具</h3>
+                        <p>探索 Claude 如何在沙箱环境中运行代码并生成可视化结果</p>
+                    </div>
+                    <div class="toc-card" data-slide="6">
+                        <h3><span class="toc-number">5</span>商业价值与应用前景</h3>
+                        <p>分析 Claude 4 和新 API 能力为企业带来的实际业务价值</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第2页：Claude 4 模型家族 -->
+        <div class="slide" id="slide-2">
+            <div class="content">
+                <h2>Claude 4 模型家族</h2>
+                <div class="key-points">
+                    <div class="point-card">
+                        <h4>Claude Opus 4</h4>
+                        <p>世界上最强大的编程模型，在复杂的长时间任务和代理工作流中表现出色。</p>
+                        <span class="highlight-data">SWE-bench 得分：72.5%</span>
+                        <p>能够持续工作数小时，显著超越所有 Sonnet 模型，极大扩展了 AI 代理的能力范围。</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>Claude Sonnet 4</h4>
+                        <p>相比 Sonnet 3.7 有显著提升，在编码方面表现优异，同时保持更高的精准度。</p>
+                        <span class="highlight-data">SWE-bench 得分：72.7%</span>
+                        <p>为内部和外部用例平衡性能和效率，增强了可操纵性，提供对实现的更精确控制。</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>混合模型模式</h4>
+                        <p>两款模型均提供两种模式：近乎即时的响应和用于深度推理的扩展思考模式。</p>
+                        <span class="highlight-data">Pro、Max、Team 和 Enterprise 计划包含两种模型</span>
+                        <p>Sonnet 4 也向免费用户开放，两款模型均可在 API、Amazon Bedrock 和 Google Cloud 的 Vertex AI 上使用。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第3页：编程能力革新 -->
+        <div class="slide" id="slide-3">
+            <div class="content">
+                <h2>编程能力革新</h2>
+                <div class="key-points">
+                    <div class="point-card">
+                        <h4>业界领先表现</h4>
+                        <p>Claude Opus 4 在 SWE-bench 和 Terminal-bench 等基准测试中领先，成为世界最佳编程模型。</p>
+                        <span class="highlight-data">Terminal-bench 得分：43.2%</span>
+                        <p>Cursor 评价其为编码领域的最先进技术，在复杂代码库理解方面取得飞跃性进步。</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>企业应用案例</h4>
+                        <p>Replit 报告其在复杂代码变更方面的精确度和戏剧性进步；Block 称其是第一个在编辑和调试过程中提升代码质量的模型。</p>
+                        <span class="highlight-data">Rakuten 验证其能独立运行复杂重构达7小时</span>
+                        <p>Cognition 指出 Opus 4 擅长解决其他模型无法解决的复杂挑战，成功处理了之前模型遗漏的关键操作。</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>开发者工具集成</h4>
+                        <p>Claude Code 现已全面可用，支持通过 GitHub Actions 进行后台任务，与 VS Code 和 JetBrains 原生集成。</p>
+                        <span class="highlight-data">代码编辑直接显示在文件中，实现无缝配对编程</span>
+                        <p>GitHub 宣布 Claude Sonnet 4 将作为 GitHub Copilot 中新编码代理的支持模型。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第4页：Agent 能力 API -->
+        <div class="slide" id="slide-4">
+            <div class="content">
+                <h2>Agent 能力 API</h2>
+                <div class="key-points">
+                    <div class="point-card">
+                        <h4>四大核心能力</h4>
+                        <p>Anthropic API 推出四种新功能，使开发者能够构建更强大的 AI 代理：代码执行工具、MCP 连接器、Files API 和最多一小时的提示缓存能力。</p>
+                        <span class="highlight-data">无需构建自定义基础设施</span>
+                        <p>结合 Claude Opus 4 和 Sonnet 4，这些 beta 功能使开发者能够构建执行高级数据分析代码、连接外部系统的代理。</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>MCP 连接器</h4>
+                        <p>使开发者能够将 Claude 连接到任何远程模型上下文协议 (MCP) 服务器，无需编写客户端代码。</p>
+                        <span class="highlight-data">自动处理连接管理、工具发现和错误处理</span>
+                        <p>只需在 API 请求中添加远程 MCP 服务器 URL，即可立即访问强大的第三方工具，显著降低了构建启用工具代理的复杂性。</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>文件 API 与扩展缓存</h4>
+                        <p>Files API 简化了开发者在使用 Claude 构建时存储和访问文档的方式，可上传文档一次并在对话中反复引用。</p>
+                        <span class="highlight-data">提示缓存最长可达 1 小时，比标准的 5 分钟提高了 12 倍</span>
+                        <p>扩展缓存可将长提示的成本降低高达 90%，延迟降低高达 85%，使构建能在较长时间内保持上下文的代理成为可能。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第5页：代码执行工具 -->
+        <div class="slide" id="slide-5">
+            <div class="content">
+                <h2>代码执行工具</h2>
+                <div class="key-points">
+                    <div class="point-card">
+                        <h4>沙箱环境执行</h4>
+                        <p>Anthropic API 上的代码执行工具使 Claude 能够在沙箱环境中运行 Python 代码，生成计算结果和数据可视化。</p>
+                        <span class="highlight-data">将 Claude 从代码编写助手转变为数据分析师</span>
+                        <p>能够加载数据集、生成探索性图表、识别模式，并根据执行结果迭代改进输出，全部在单次交互中完成。</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>核心应用场景</h4>
+                        <p>金融建模：生成财务预测、分析投资组合和计算复杂财务指标</p>
+                        <p>科学计算：执行模拟、处理实验数据和分析研究数据集</p>
+                        <p>商业智能：创建自动报告、分析销售数据和生成绩效仪表板</p>
+                        <p>文档处理：跨格式提取和转换数据、生成格式化报告</p>
+                        <p>统计分析：执行回归分析、假设检验和预测建模</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>与 Files API 集成</h4>
+                        <p>Files API 将与代码执行工具集成，使 Claude 能够在代码执行期间直接访问和处理上传的文件，并生成图表等文件作为响应的一部分。</p>
+                        <span class="highlight-data">每天免费使用 50 小时</span>
+                        <p>组织每天可免费使用代码执行工具 50 小时，超出部分按每容器每小时 $0.05 收费。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第6页：商业价值与应用前景 -->
+        <div class="slide" id="slide-6">
+            <div class="content">
+                <h2>商业价值与应用前景</h2>
+                <div class="key-points">
+                    <div class="point-card">
+                        <h4>战略价值</h4>
+                        <p>Opus 4 推动编码、研究、写作和科学发现的边界，而 Sonnet 4 则将前沿性能带入日常用例，作为 Sonnet 3.7 的即时升级。</p>
+                        <span class="highlight-data">全面提升客户的 AI 战略</span>
+                        <p>GitHub 表示 Claude Sonnet 4 在代理场景中表现出色，Manus 强调其在遵循复杂指令、清晰推理和美学输出方面的改进。</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>实际应用案例</h4>
+                        <p>项目管理 AI 代理：使用 MCP 连接器与 Asana 连接，通过 Files API 上传相关报告，使用代码执行工具分析进度和风险。</p>
+                        <span class="highlight-data">iGent 报告导航错误从 20% 降至接近零</span>
+                        <p>Sourcegraph 表示该模型在软件开发方面展现出巨大潜力，能够更长时间保持专注，更深入地理解问题，并提供更优雅的代码质量。</p>
+                    </div>
+                    <div class="point-card">
+                        <h4>定价与可用性</h4>
+                        <p>定价与之前的 Opus 和 Sonnet 模型保持一致：Opus 4 为每百万令牌（输入/输出）$15/$75，Sonnet 4 为 $3/$15。</p>
+                        <span class="highlight-data">广泛的平台支持</span>
+                        <p>两款模型均可在 API、Amazon Bedrock 和 Google Cloud 的 Vertex AI 上使用，为企业提供灵活的部署选择。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 进度条 -->
+    <div class="progress-bar" id="progress-bar"></div>
+    
+    <!-- 导航控制 -->
+    <div class="navigation">
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prev-btn">上一页</button>
+            <button class="nav-btn" id="next-btn">下一页</button>
+        </div>
+    </div>
+    
+    <!-- 页码显示 -->
+    <div class="pagination" id="pagination">
+        1 / 6
+    </div>
+    
+    <!-- 全屏按钮 -->
+    <button class="fullscreen-btn" id="fullscreen-btn">⛶</button>
+    
+    <!-- 回到目录按钮 -->
+    <button class="toc-btn" id="toc-btn">回到目录</button>
+    
+    <script>
+        // 获取DOM元素
+        const presentation = document.getElementById('presentation');
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const pagination = document.getElementById('pagination');
+        const progressBar = document.getElementById('progress-bar');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const tocBtn = document.getElementById('toc-btn');
+        const tocCards = document.querySelectorAll('.toc-card');
+        
+        // 当前幻灯片索引
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        
+        // 更新幻灯片显示
+        function updateSlides() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            
+            // 更新页码
+            pagination.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            
+            // 更新进度条
+            progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+        }
+        
+        // 下一页
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlides();
+        }
+        
+        // 上一页
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlides();
+        }
+        
+        // 跳转到指定幻灯片
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlides();
+        }
+        
+        // 切换全屏模式
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                    fullscreenBtn.textContent = '⛌';
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    fullscreenBtn.textContent = '⛶';
+                }
+            }
+        }
+        
+        // 事件监听器
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+        tocBtn.addEventListener('click', () => goToSlide(0));
+        
+        // 目录卡片点击事件
+        tocCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const slideIndex = parseInt(card.dataset.slide) - 1;
+                goToSlide(slideIndex);
+            });
+        });
+        
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'Escape') {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                    fullscreenBtn.textContent = '⛶';
+                }
+            }
+        });
+        
+        // 初始化
+        updateSlides();
+    </script>
+</body>
+</html>

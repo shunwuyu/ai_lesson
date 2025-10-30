@@ -1,0 +1,100 @@
+Name,Gender,Age,Education Level,Screen Time (hrs/day),Sleep Duration (hrs),Physical Activity (hrs/week),Stress Level,Anxious Before Exams,Academic Performance Change
+Aarav,Male,15,Class 8,7.1,8.9,9.3,Medium,No,Same
+Meera,Female,25,MSc,3.3,5.0,0.2,Medium,No,Same
+Ishaan,Male,20,BTech,9.5,5.4,6.2,Medium,No,Same
+Aditya,Male,20,BA,10.8,5.6,5.5,High,Yes,Same
+Anika,Female,17,Class 11,2.8,5.4,3.1,Medium,Yes,Same
+Aditya,Male,23,MSc,8.6,8.4,0.1,Low,No,Improved
+Vivaan,Male,22,MTech,3.6,6.6,0.5,Medium,Yes,Improved
+Arjun,Male,25,MTech,7.0,4.7,4.5,Medium,No,Same
+Sai,Male,20,BA,4.8,5.0,7.9,Medium,No,Improved
+Aadhya,Female,16,Class 9,8.9,8.4,7.8,Low,Yes,Improved
+Kavya,Female,15,Class 8,8.0,7.3,0.8,Low,No,Same
+Sai,Male,23,MSc,10.3,8.8,3.7,High,Yes,Same
+Myra,Female,16,Class 10,5.8,4.4,6.7,High,No,Same
+Meera,Female,23,MA,11.2,4.3,1.4,Low,No,Improved
+Shaurya,Male,22,MSc,8.9,7.8,5.3,High,No,Declined
+Arjun,Male,21,MA,11.1,8.5,2.1,Medium,No,Declined
+Krishna,Male,25,MTech,11.5,5.6,0.4,Medium,Yes,Declined
+Diya,Female,18,Class 11,7.0,4.8,9.9,Low,Yes,Declined
+Anika,Female,16,Class 9,9.7,7.2,1.5,High,No,Same
+Vivaan,Male,18,Class 11,2.5,7.9,2.8,High,Yes,Same
+Anika,Female,20,BTech,6.9,5.4,6.8,Medium,No,Declined
+Reyansh,Male,20,BA,6.0,7.3,3.9,Low,Yes,Same
+Aarav,Male,19,BSc,7.6,7.7,2.7,Low,No,Same
+Kavya,Female,15,Class 8,11.0,8.5,1.9,Medium,No,Improved
+Vihaan,Male,17,Class 11,3.0,4.3,8.6,High,No,Improved
+Anika,Female,26,MTech,4.7,6.8,9.6,Medium,Yes,Declined
+Myra,Female,24,MTech,9.9,7.9,0.7,Medium,No,Declined
+Shaurya,Male,24,MTech,3.2,8.2,0.9,Low,Yes,Improved
+Arjun,Male,18,Class 11,7.9,4.7,1.6,Low,Yes,Declined
+Kavya,Female,17,Class 11,7.9,4.9,3.2,Medium,No,Same
+Reyansh,Male,18,Class 11,5.4,4.6,8.4,Medium,No,Declined
+Arjun,Male,16,Class 9,2.4,8.5,8.7,Low,No,Same
+Kavya,Female,19,BA,9.5,4.5,1.1,High,Yes,Same
+Ira,Female,20,BSc,11.4,8.8,7.4,Medium,Yes,Declined
+Aadhya,Female,18,Class 12,10.6,8.6,8.8,Medium,Yes,Declined
+Anika,Female,20,BSc,10.6,6.4,8.2,High,No,Same
+Sai,Male,18,Class 12,11.7,8.6,6.8,Medium,No,Same
+Krishna,Male,22,BSc,6.7,6.5,6.8,Low,No,Same
+Shaurya,Male,25,MSc,8.3,7.6,6.8,Low,Yes,Same
+Aarav,Male,21,MTech,6.6,8.3,7.6,Medium,No,Improved
+Kavya,Female,23,MA,5.6,8.1,5.5,Medium,Yes,Same
+Meera,Female,20,BTech,2.5,4.7,1.1,Low,Yes,Improved
+Aadhya,Female,16,Class 9,7.8,6.9,2.0,Low,Yes,Same
+Saanvi,Female,23,MSc,11.9,5.1,3.0,High,Yes,Improved
+Riya,Female,15,Class 9,2.4,6.6,5.4,Medium,No,Same
+Rishi,Other,16,Class 10,9.4,6.2,5.1,Medium,Yes,Declined
+Riya,Female,21,BSc,7.9,6.8,9.6,Medium,No,Same
+Shaurya,Male,21,BA,9.3,7.3,3.0,Medium,Yes,Same
+Vihaan,Male,21,BTech,8.0,8.5,9.1,High,No,Declined
+Arjun,Male,24,MA,5.1,5.4,5.7,Low,Yes,Same
+Shaurya,Male,20,BSc,7.2,7.8,6.8,Low,Yes,Declined
+Meera,Female,19,Class 12,10.7,7.2,8.1,Medium,No,Same
+Diya,Female,20,BTech,4.9,5.1,2.0,Low,Yes,Same
+Ananya,Female,23,MTech,3.6,6.4,1.0,Medium,No,Same
+Aditya,Male,19,BTech,3.1,8.5,2.6,Medium,No,Same
+Arjun,Male,19,BA,8.7,9.0,0.4,Medium,Yes,Improved
+Meera,Female,16,Class 9,11.1,7.0,9.2,Low,No,Declined
+Anika,Female,16,Class 9,6.1,5.6,1.6,Low,Yes,Improved
+Arjun,Male,22,BSc,3.4,5.0,8.5,Low,Yes,Same
+Reyansh,Male,16,Class 10,2.2,4.5,5.2,High,No,Same
+Meera,Female,15,Class 9,4.7,6.1,6.8,Medium,Yes,Same
+Arjun,Male,25,MTech,11.0,5.6,4.4,Medium,No,Improved
+Aadhya,Female,15,Class 9,10.3,8.5,0.3,High,Yes,Same
+Tara,Other,18,Class 11,9.9,8.0,7.8,High,Yes,Improved
+Vivaan,Male,22,MA,7.3,8.8,4.0,Medium,Yes,Same
+Riya,Female,20,BTech,3.3,8.1,9.4,Medium,Yes,Same
+Vihaan,Male,20,BTech,7.2,6.0,5.1,High,Yes,Declined
+Riya,Female,15,Class 8,3.1,5.6,6.0,Low,No,Same
+Riya,Female,21,BSc,5.8,7.3,9.9,Medium,Yes,Declined
+Aadhya,Female,18,Class 12,7.7,7.2,3.0,High,No,Improved
+Meera,Female,23,MSc,10.0,6.7,2.2,High,No,Improved
+Shaurya,Male,17,Class 10,7.0,4.1,2.3,Medium,Yes,Improved
+Ananya,Female,25,MSc,3.2,7.8,8.8,High,Yes,Declined
+Sai,Male,26,MSc,4.1,5.2,9.8,Medium,No,Same
+Saanvi,Female,15,Class 9,3.5,5.5,1.7,Medium,No,Declined
+Arjun,Male,25,MSc,2.6,8.7,9.1,Medium,No,Declined
+Diya,Female,18,Class 12,9.8,4.7,2.6,Medium,Yes,Same
+Saanvi,Female,22,MTech,9.1,6.6,1.7,High,Yes,Same
+Krishna,Male,21,MSc,9.8,4.9,9.4,Medium,Yes,Declined
+Ishaan,Male,15,Class 9,7.6,8.3,0.0,High,No,Same
+Shaurya,Male,15,Class 8,7.5,6.4,4.7,High,No,Improved
+Vivaan,Male,24,MSc,3.9,5.0,5.8,Medium,No,Declined
+Meera,Female,17,Class 10,10.6,4.6,5.9,High,Yes,Same
+Aditya,Male,16,Class 9,7.5,7.5,4.8,Medium,Yes,Improved
+Anika,Female,24,MSc,10.5,4.1,5.2,Medium,No,Same
+Kavya,Female,21,BTech,5.6,7.2,7.6,High,Yes,Improved
+Myra,Female,19,BSc,10.7,6.8,2.8,Low,Yes,Improved
+Vivaan,Male,24,MA,5.8,6.8,2.9,Low,Yes,Same
+Riya,Female,19,BSc,4.6,6.4,3.6,Low,No,Declined
+Vihaan,Male,26,MTech,11.5,5.0,0.6,Medium,Yes,Improved
+Aadhya,Female,23,MSc,11.5,5.4,0.9,Low,Yes,Improved
+Myra,Female,26,MSc,6.1,5.3,9.3,Medium,Yes,Same
+Aarav,Male,25,MTech,7.7,4.1,6.3,Medium,Yes,Improved
+Kavya,Female,20,BSc,10.0,8.2,9.9,Low,No,Same
+Meera,Female,23,MTech,3.4,4.3,0.1,Low,No,Improved
+Diya,Female,17,Class 10,11.5,5.8,3.3,Low,Yes,Improved
+Vivaan,Male,22,MTech,5.1,6.7,1.1,Low,Yes,Improved
+Meera,Female,20,BSc,5.4,5.5,6.8,Medium,Yes,Declined
+Diya,Female,17,Class 10,6.4,4.0,8.5,Low,No,Declined

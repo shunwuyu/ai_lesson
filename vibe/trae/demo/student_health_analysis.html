@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生心理健康分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        danger: '#EF4444',
+                        info: '#3B82F6',
+                        light: '#F3F4F6',
+                        dark: '#1F2937'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+            .hover-lift {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .hover-lift:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .gradient-bg {
+                background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
+            }
+            .stat-card {
+                border-left: 4px solid #4F46E5;
+            }
+            .filter-active {
+                background-color: #4F46E5;
+                color: white;
+            }
+        }
+        
+        /* 加载指示器样式 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-size: 1.2rem;
+            color: #4a5568;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #4299e1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-overlay .error {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+    <!-- 加载指示器 -->
+    <div id="loading-indicator" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>正在加载数据...</p>
+    </div>
+    <!-- 导航栏 -->
+    <nav class="gradient-bg text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-line-chart text-2xl"></i>
+                <h1 class="text-xl md:text-2xl font-bold">学生心理健康分析</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#overview" class="hover:text-gray-200 transition-colors">数据概览</a>
+                <a href="#visualizations" class="hover:text-gray-200 transition-colors">可视化分析</a>
+                <a href="#insights" class="hover:text-gray-200 transition-colors">深度洞察</a>
+                <a href="#recommendations" class="hover:text-gray-200 transition-colors">建议方案</a>
+            </div>
+            <button class="md:hidden text-2xl">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 介绍部分 -->
+        <section class="mb-12 text-center">
+            <h2 class="text-[clamp(1.8rem,3vw,2.8rem)] font-bold mb-4 text-dark">学生心理健康数据分析报告</h2>
+            <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+                基于1000名学生的健康数据，我们分析了屏幕时间、睡眠时长、体育活动等因素与学习压力和学业表现的关系，
+                希望为学生健康管理提供科学依据和实用建议。
+            </p>
+        </section>
+
+        <!-- 数据概览卡片 -->
+        <section id="overview" class="mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 总人数卡片 -->
+                <div class="bg-white rounded-xl p-6 card-shadow stat-card hover-lift">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 mb-1">总分析人数</p>
+                            <h3 class="text-3xl font-bold text-dark" id="total-students">1000</h3>
+                        </div>
+                        <div class="bg-primary/10 p-3 rounded-full">
+                            <i class="fa fa-users text-primary text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-secondary flex items-center">
+                            <i class="fa fa-check-circle mr-1"></i> 全部有效数据
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 平均屏幕时间卡片 -->
+                <div class="bg-white rounded-xl p-6 card-shadow stat-card hover-lift">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 mb-1">平均屏幕时间</p>
+                            <h3 class="text-3xl font-bold text-dark" id="avg-screen-time">7.3小时</h3>
+                        </div>
+                        <div class="bg-info/10 p-3 rounded-full">
+                            <i class="fa fa-tablet text-info text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-danger flex items-center">
+                            <i class="fa fa-exclamation-triangle mr-1"></i> 超过健康标准
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 平均睡眠时长卡片 -->
+                <div class="bg-white rounded-xl p-6 card-shadow stat-card hover-lift">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 mb-1">平均睡眠时长</p>
+                            <h3 class="text-3xl font-bold text-dark" id="avg-sleep">6.6小时</h3>
+                        </div>
+                        <div class="bg-secondary/10 p-3 rounded-full">
+                            <i class="fa fa-moon-o text-secondary text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-danger flex items-center">
+                            <i class="fa fa-exclamation-triangle mr-1"></i> 低于推荐标准
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 高压力比例卡片 -->
+                <div class="bg-white rounded-xl p-6 card-shadow stat-card hover-lift">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 mb-1">高压力学生比例</p>
+                            <h3 class="text-3xl font-bold text-dark" id="high-stress-rate">32%</h3>
+                        </div>
+                        <div class="bg-accent/10 p-3 rounded-full">
+                            <i class="fa fa-tachometer text-accent text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-warning flex items-center">
+                            <i class="fa fa-bell mr-1"></i> 需要关注
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 筛选工具栏 -->
+        <section class="mb-10">
+            <div class="bg-white rounded-xl p-4 card-shadow">
+                <div class="flex flex-wrap gap-3 items-center">
+                    <h3 class="text-lg font-semibold text-dark mr-4">筛选条件:</h3>
+                    <div class="flex flex-wrap gap-2" id="filters">
+                        <button class="filter-btn filter-active px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="all">全部学生</button>
+                        <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-200 hover:bg-gray-300 transition-colors" data-filter="gender-male">男生</button>
+                        <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-200 hover:bg-gray-300 transition-colors" data-filter="gender-female">女生</button>
+                        <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-200 hover:bg-gray-300 transition-colors" data-filter="stress-high">高压力</button>
+                        <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-200 hover:bg-gray-300 transition-colors" data-filter="academic-improved">学业进步</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 可视化分析部分 -->
+        <section id="visualizations" class="mb-16">
+            <h2 class="text-[clamp(1.5rem,2.5vw,2.2rem)] font-bold mb-6 text-dark border-b pb-2">数据分析可视化</h2>
+            
+            <!-- 图表网格 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 压力水平分布图 -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-lg font-semibold mb-4">学生压力水平分布</h3>
+                    <div class="aspect-square">
+                        <canvas id="stressDistributionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 睡眠时间与屏幕时间关系图 -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-lg font-semibold mb-4">睡眠时间与屏幕时间关系</h3>
+                    <div class="aspect-square">
+                        <canvas id="sleepScreenChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 体育活动与学业表现关系图 -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-lg font-semibold mb-4">体育活动与学业表现关系</h3>
+                    <div class="aspect-square">
+                        <canvas id="activityAcademicChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 考试焦虑情况分布图 -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-lg font-semibold mb-4">考试焦虑情况分布</h3>
+                    <div class="aspect-square">
+                        <canvas id="examAnxietyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 不同教育阶段的压力对比 -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-lg font-semibold mb-4">不同教育阶段的压力对比</h3>
+                    <div class="aspect-square">
+                        <canvas id="educationStressChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 年龄分布直方图 -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-lg font-semibold mb-4">学生年龄分布</h3>
+                    <div class="aspect-square">
+                        <canvas id="ageDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 深度洞察部分 -->
+        <section id="insights" class="mb-16">
+            <h2 class="text-[clamp(1.5rem,2.5vw,2.2rem)] font-bold mb-6 text-dark border-b pb-2">深度洞察</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 洞察卡片1 -->
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
+                    <div class="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <i class="fa fa-lightbulb-o text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">屏幕时间过长影响睡眠</h3>
+                    <p class="text-gray-600">数据显示，日均屏幕时间超过8小时的学生中，75%睡眠不足7小时，而屏幕时间少于4小时的学生睡眠质量普遍更好。</p>
+                </div>
+
+                <!-- 洞察卡片2 -->
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
+                    <div class="bg-secondary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <i class="fa fa-heartbeat text-secondary text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">体育活动改善心理健康</h3>
+                    <p class="text-gray-600">每周体育活动超过5小时的学生中，仅20%报告高压力水平，而缺乏运动的学生高压力比例达到45%。</p>
+                </div>
+
+                <!-- 洞察卡片3 -->
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
+                    <div class="bg-info/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <i class="fa fa-graduation-cap text-info text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">考试焦虑影响学业表现</h3>
+                    <p class="text-gray-600">报告考试焦虑的学生中，42%学业表现下降，而不焦虑的学生中，30%学业表现有所改善。</p>
+                </div>
+
+                <!-- 洞察卡片4 -->
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
+                    <div class="bg-accent/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <i class="fa fa-users text-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">教育阶段与压力关系</h3>
+                    <p class="text-gray-600">高中生和研究生阶段的学生压力水平最高，本科生相对较低，显示出关键学习阶段的心理压力特征。</p>
+                </div>
+
+                <!-- 洞察卡片5 -->
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
+                    <div class="bg-danger/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <i class="fa fa-clock-o text-danger text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">睡眠时间临界值</h3>
+                    <p class="text-gray-600">数据分析显示，7小时是睡眠时长的重要临界值，低于此值的学生压力水平显著上升，学业表现下降风险增加。</p>
+                </div>
+
+                <!-- 洞察卡片6 -->
+                <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
+                    <div class="bg-dark/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <i class="fa fa-balance-scale text-dark text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">生活方式平衡的重要性</h3>
+                    <p class="text-gray-600">在屏幕时间、睡眠和运动三者达到平衡的学生中，80%报告中等或低压力水平，且学业表现更稳定。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 建议方案部分 -->
+        <section id="recommendations" class="mb-16">
+            <h2 class="text-[clamp(1.5rem,2.5vw,2.2rem)] font-bold mb-6 text-dark border-b pb-2">健康建议方案</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- 学生建议 -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-primary/10 p-3 rounded-full mr-4">
+                            <i class="fa fa-user-circle text-primary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">学生自我管理</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>控制每日屏幕时间在6小时以内，避免睡前使用电子设备</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>保证每晚7-8小时的优质睡眠，建立规律作息</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>每周至少进行150分钟中等强度体育锻炼</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>学习压力管理技巧，如深呼吸、冥想或瑜伽</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>建立良好的社交支持网络，及时寻求帮助</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 家长建议 -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-info/10 p-3 rounded-full mr-4">
+                            <i class="fa fa-home text-info text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">家长支持指南</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>营造良好的家庭环境，减少学习压力</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>与孩子建立开放的沟通渠道，关注情绪变化</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>协助制定合理的学习计划，避免过度安排</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>鼓励孩子参与户外活动，限制屏幕使用时间</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>必要时寻求专业心理咨询帮助</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 学校建议 -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-secondary/10 p-3 rounded-full mr-4">
+                            <i class="fa fa-university text-secondary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">学校干预措施</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>建立学生心理健康监测和预警机制</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>开设心理健康教育课程，普及心理调适技能</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>增加体育课程和课外活动时间</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>优化考试评价体系，减轻考试压力</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>建立专业心理咨询服务中心</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i class="fa fa-line-chart text-2xl"></i>
+                        <h2 class="text-xl font-bold">学生心理健康分析</h2>
+                    </div>
+                    <p class="text-gray-400">基于数据科学的学生健康管理解决方案</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-github text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-twitter text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-linkedin text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+                <p>© 2023 学生心理健康分析系统. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 解析CSV数据
+        function parseCSV(csv) {
+            const lines = csv.split('\n');
+            const headers = lines[0].split(',');
+            const data = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                if (values.length === headers.length) {
+                    const row = {};
+                    headers.forEach((header, index) => {
+                        row[header] = values[index];
+                    });
+                    data.push(row);
+                }
+            }
+            
+            return data;
+        }
+
+        // 全局数据变量
+        let allData = [];
+        let filteredData = [];
+
+        // 加载CSV数据
+        async function loadCSVData() {
+            try {
+                const response = await fetch('Student-Health-Analysis.csv');
+                if (!response.ok) {
+                    throw new Error('网络响应错误');
+                }
+                const csvText = await response.text();
+                allData = parseCSV(csvText);
+                filteredData = [...allData];
+                
+                // 显示加载成功消息
+                const loadingIndicator = document.getElementById('loading-indicator');
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+                
+                // 初始化页面
+                initPage();
+                
+            } catch (error) {
+                console.error('加载CSV数据失败:', error);
+                const loadingIndicator = document.getElementById('loading-indicator');
+                if (loadingIndicator) {
+                    loadingIndicator.innerHTML = '<div class="error">数据加载失败，请刷新页面重试</div>';
+                }
+            }
+        }
+
+        // 更新统计卡片数据
+        function updateStats(data) {
+            // 计算平均值
+            const total = data.length;
+            const avgScreenTime = (data.reduce((sum, item) => sum + parseFloat(item['Screen Time (hrs/day)']), 0) / total).toFixed(1);
+            const avgSleep = (data.reduce((sum, item) => sum + parseFloat(item['Sleep Duration (hrs)']), 0) / total).toFixed(1);
+            const highStressCount = data.filter(item => item['Stress Level'] === 'High').length;
+            const highStressRate = Math.round((highStressCount / total) * 100);
+            
+            // 更新DOM
+            document.getElementById('total-students').textContent = total;
+            document.getElementById('avg-screen-time').textContent = `${avgScreenTime}小时`;
+            document.getElementById('avg-sleep').textContent = `${avgSleep}小时`;
+            document.getElementById('high-stress-rate').textContent = `${highStressRate}%`;
+        }
+
+        // 创建压力分布饼图
+        function createStressDistributionChart(data) {
+            const ctx = document.getElementById('stressDistributionChart').getContext('2d');
+            
+            // 统计不同压力水平的人数
+            const stressCounts = {
+                'Low': data.filter(item => item['Stress Level'] === 'Low').length,
+                'Medium': data.filter(item => item['Stress Level'] === 'Medium').length,
+                'High': data.filter(item => item['Stress Level'] === 'High').length
+            };
+            
+            // 销毁已存在的图表
+            if (window.stressChart) window.stressChart.destroy();
+            
+            // 创建新图表
+            window.stressChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['低压力', '中等压力', '高压力'],
+                    datasets: [{
+                        data: [stressCounts.Low, stressCounts.Medium, stressCounts.High],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.8)',  // 绿色
+                            'rgba(59, 130, 246, 0.8)',  // 蓝色
+                            'rgba(239, 68, 68, 0.8)'    // 红色
+                        ],
+                        borderColor: [
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(239, 68, 68, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value}人 (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        // 创建睡眠与屏幕时间散点图
+        function createSleepScreenChart(data) {
+            const ctx = document.getElementById('sleepScreenChart').getContext('2d');
+            
+            // 准备数据
+            const scatterData = data.map(item => ({
+                x: parseFloat(item['Screen Time (hrs/day)']),
+                y: parseFloat(item['Sleep Duration (hrs)']),
+                stress: item['Stress Level']
+            }));
+            
+            // 按压力水平分组
+            const highStressData = scatterData.filter(item => item.stress === 'High');
+            const mediumStressData = scatterData.filter(item => item.stress === 'Medium');
+            const lowStressData = scatterData.filter(item => item.stress === 'Low');
+            
+            // 销毁已存在的图表
+            if (window.sleepScreenChart) window.sleepScreenChart.destroy();
+            
+            // 创建新图表
+            window.sleepScreenChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: '高压力',
+                            data: highStressData,
+                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: '中等压力',
+                            data: mediumStressData,
+                            backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: '低压力',
+                            data: lowStressData,
+                            backgroundColor: 'rgba(16, 185, 129, 0.6)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 1,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '屏幕时间 (小时/天)',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            min: 0,
+                            max: 15
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '睡眠时间 (小时/天)',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            min: 0,
+                            max: 12
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        // 创建体育活动与学业表现关系图
+        function createActivityAcademicChart(data) {
+            const ctx = document.getElementById('activityAcademicChart').getContext('2d');
+            
+            // 按活动时间分组并计算学业表现比例
+            const activityGroups = {
+                '低活动量(0-3h)': data.filter(item => parseFloat(item['Physical Activity (hrs/week)']) <= 3),
+                '中等活动量(3-7h)': data.filter(item => parseFloat(item['Physical Activity (hrs/week)']) > 3 && parseFloat(item['Physical Activity (hrs/week)']) <= 7),
+                '高活动量(>7h)': data.filter(item => parseFloat(item['Physical Activity (hrs/week)']) > 7)
+            };
+            
+            const labels = Object.keys(activityGroups);
+            const improvedData = [];
+            const sameData = [];
+            const declinedData = [];
+            
+            labels.forEach(label => {
+                const group = activityGroups[label];
+                const total = group.length;
+                improvedData.push(Math.round((group.filter(item => item['Academic Performance Change'] === 'Improved').length / total) * 100));
+                sameData.push(Math.round((group.filter(item => item['Academic Performance Change'] === 'Same').length / total) * 100));
+                declinedData.push(Math.round((group.filter(item => item['Academic Performance Change'] === 'Declined').length / total) * 100));
+            });
+            
+            // 销毁已存在的图表
+            if (window.activityAcademicChart) window.activityAcademicChart.destroy();
+            
+            // 创建新图表
+            window.activityAcademicChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '学业进步',
+                            data: improvedData,
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '学业稳定',
+                            data: sameData,
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '学业下降',
+                            data: declinedData,
+                            backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: '学生百分比 (%)',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        // 创建考试焦虑分布图
+        function createExamAnxietyChart(data) {
+            const ctx = document.getElementById('examAnxietyChart').getContext('2d');
+            
+            // 统计数据
+            const anxietyCounts = {
+                'Yes': data.filter(item => item['Anxious Before Exams'] === 'Yes').length,
+                'No': data.filter(item => item['Anxious Before Exams'] === 'No').length
+            };
+            
+            // 销毁已存在的图表
+            if (window.examAnxietyChart) window.examAnxietyChart.destroy();
+            
+            // 创建新图表
+            window.examAnxietyChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['有考试焦虑', '无考试焦虑'],
+                    datasets: [{
+                        data: [anxietyCounts.Yes, anxietyCounts.No],
+                        backgroundColor: [
+                            'rgba(245, 158, 11, 0.8)',  // 橙色
+                            'rgba(79, 70, 229, 0.8)'    // 紫色
+                        ],
+                        borderColor: [
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(79, 70, 229, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value}人 (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        // 创建不同教育阶段的压力对比图
+        function createEducationStressChart(data) {
+            const ctx = document.getElementById('educationStressChart').getContext('2d');
+            
+            // 定义教育阶段的顺序
+            const educationOrder = ['Class 8', 'Class 9', 'Class 10', 'Class 11', 'Class 12', 'BA', 'BSc', 'BTech', 'MA', 'MSc', 'MTech'];
+            const educationLabels = ['8年级', '9年级', '10年级', '11年级', '12年级', '本科(文)', '本科(理)', '本科(工)', '硕士(文)', '硕士(理)', '硕士(工)'];
+            
+            // 按教育阶段分组
+            const educationGroups = {};
+            educationOrder.forEach(level => {
+                educationGroups[level] = data.filter(item => item['Education Level'] === level);
+            });
+            
+            // 计算每个教育阶段的压力比例
+            const highStressRates = [];
+            const mediumStressRates = [];
+            const lowStressRates = [];
+            
+            educationOrder.forEach(level => {
+                const group = educationGroups[level];
+                if (group.length > 0) {
+                    const total = group.length;
+                    highStressRates.push(Math.round((group.filter(item => item['Stress Level'] === 'High').length / total) * 100));
+                    mediumStressRates.push(Math.round((group.filter(item => item['Stress Level'] === 'Medium').length / total) * 100));
+                    lowStressRates.push(Math.round((group.filter(item => item['Stress Level'] === 'Low').length / total) * 100));
+                } else {
+                    highStressRates.push(0);
+                    mediumStressRates.push(0);
+                    lowStressRates.push(0);
+                }
+            });
+            
+            // 销毁已存在的图表
+            if (window.educationStressChart) window.educationStressChart.destroy();
+            
+            // 创建新图表
+            window.educationStressChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: educationLabels,
+                    datasets: [
+                        {
+                            label: '高压力',
+                            data: highStressRates,
+                            backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '中等压力',
+                            data: mediumStressRates,
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '低压力',
+                            data: lowStressRates,
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            ticks: {
+                                rotation: 45,
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: '学生百分比 (%)',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        // 创建年龄分布直方图
+        function createAgeDistributionChart(data) {
+            const ctx = document.getElementById('ageDistributionChart').getContext('2d');
+            
+            // 统计年龄分布
+            const ageCounts = {};
+            data.forEach(item => {
+                const age = item.Age;
+                ageCounts[age] = (ageCounts[age] || 0) + 1;
+            });
+            
+            // 准备图表数据
+            const ages = Object.keys(ageCounts).sort((a, b) => a - b);
+            const counts = ages.map(age => ageCounts[age]);
+            
+            // 销毁已存在的图表
+            if (window.ageDistributionChart) window.ageDistributionChart.destroy();
+            
+            // 创建新图表
+            window.ageDistributionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ages.map(age => `${age}岁`),
+                    datasets: [{
+                        label: '学生人数',
+                        data: counts,
+                        backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '年龄',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '学生人数',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        // 应用筛选
+        function applyFilter(filterType) {
+            // 重置按钮样式
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('filter-active');
+                btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+            });
+            
+            // 激活当前筛选按钮
+            const activeBtn = document.querySelector(`.filter-btn[data-filter="${filterType}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('filter-active');
+                activeBtn.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+            }
+            
+            // 应用筛选
+            switch (filterType) {
+                case 'gender-male':
+                    filteredData = allData.filter(item => item.Gender === 'Male');
+                    break;
+                case 'gender-female':
+                    filteredData = allData.filter(item => item.Gender === 'Female');
+                    break;
+                case 'stress-high':
+                    filteredData = allData.filter(item => item['Stress Level'] === 'High');
+                    break;
+                case 'academic-improved':
+                    filteredData = allData.filter(item => item['Academic Performance Change'] === 'Improved');
+                    break;
+                default:
+                    filteredData = [...allData];
+            }
+            
+            // 更新图表和统计
+            updateStats(filteredData);
+            createStressDistributionChart(filteredData);
+            createSleepScreenChart(filteredData);
+            createActivityAcademicChart(filteredData);
+            createExamAnxietyChart(filteredData);
+            createEducationStressChart(filteredData);
+            createAgeDistributionChart(filteredData);
+        }
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 初始化页面
+        function initPage() {
+            // 更新统计数据
+            updateStats(filteredData);
+            
+            // 创建所有图表
+            createStressDistributionChart(filteredData);
+            createSleepScreenChart(filteredData);
+            createActivityAcademicChart(filteredData);
+            createExamAnxietyChart(filteredData);
+            createEducationStressChart(filteredData);
+            createAgeDistributionChart(filteredData);
+            
+            // 添加筛选事件监听
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    applyFilter(btn.dataset.filter);
+                });
+            });
+            
+            // 添加卡片动画效果
+            const cards = document.querySelectorAll('.hover-lift');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-5px)';
+                    card.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+                });
+            });
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', function() {
+            // 开始加载CSV数据
+            loadCSVData();
+        });
+        
+        // 响应式处理
+        window.addEventListener('resize', () => {
+            // 重新调整图表大小
+            if (window.stressChart) window.stressChart.resize();
+            if (window.sleepScreenChart) window.sleepScreenChart.resize();
+            if (window.activityAcademicChart) window.activityAcademicChart.resize();
+            if (window.examAnxietyChart) window.examAnxietyChart.resize();
+            if (window.educationStressChart) window.educationStressChart.resize();
+            if (window.ageDistributionChart) window.ageDistributionChart.resize();
+        });
+    </script>
+</body>
+</html>

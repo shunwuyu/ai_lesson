@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>杠杆原理交互式演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .left-panel {
+            flex: 1;
+            padding: 30px;
+            border-right: 1px solid #e0e6ed;
+        }
+
+        .right-panel {
+            flex: 1.5;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+            accent-color: #667eea;
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-left: 10px;
+            font-size: 1rem;
+        }
+
+        .value-display {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .formula-box {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e6ed;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .result-indicator {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .balanced {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .unbalanced-left {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .unbalanced-right {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        canvas {
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            background-color: #fafafa;
+            margin-bottom: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .info-text {
+            background-color: #e7f3ff;
+            color: #004085;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #b8daff;
+        }
+
+        .tips {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #ffeaa7;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .reset-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .reset-btn:hover {
+            background-color: #ee5253;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(238, 82, 83, 0.3);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #e0e6ed;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .left-panel, .right-panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>杠杆原理交互式演示</h1>
+            <p>探索杠杆的平衡条件及其在生活中的应用</p>
+        </header>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="section">
+                    <h2>参数调节</h2>
+                    
+                    <div class="control-group">
+                        <label>
+                            动力大小 (F₁): 
+                            <span class="value-display" id="force1-value">10</span> N
+                            <input type="number" id="force1-input" min="1" max="100" value="10">
+                        </label>
+                        <input type="range" id="force1-slider" min="1" max="100" value="10">
+                    </div>
+
+                    <div class="control-group">
+                        <label>
+                            动力臂长度 (L₁): 
+                            <span class="value-display" id="length1-value">30</span> cm
+                            <input type="number" id="length1-input" min="10" max="100" value="30">
+                        </label>
+                        <input type="range" id="length1-slider" min="10" max="100" value="30">
+                    </div>
+
+                    <div class="control-group">
+                        <label>
+                            阻力大小 (F₂): 
+                            <span class="value-display" id="force2-value">15</span> N
+                            <input type="number" id="force2-input" min="1" max="100" value="15">
+                        </label>
+                        <input type="range" id="force2-slider" min="1" max="100" value="15">
+                    </div>
+
+                    <div class="control-group">
+                        <label>
+                            阻力臂长度 (L₂): 
+                            <span class="value-display" id="length2-value">20</span> cm
+                            <input type="number" id="length2-input" min="10" max="100" value="20">
+                        </label>
+                        <input type="range" id="length2-slider" min="10" max="100" value="20">
+                    </div>
+
+                    <button class="reset-btn" id="reset-btn">重置参数</button>
+                </div>
+
+                <div class="section">
+                    <h2>力矩计算</h2>
+                    <div class="formula-box">
+                        动力矩 = F₁ × L₁<br>
+                        阻力矩 = F₂ × L₂<br>
+                        平衡条件：F₁ × L₁ = F₂ × L₂
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>动力矩: <span class="value-display" id="torque1-value">300</span> N·cm</label>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>阻力矩: <span class="value-display" id="torque2-value">300</span> N·cm</label>
+                    </div>
+
+                    <div class="result-indicator balanced" id="balance-status">
+                        杠杆处于平衡状态
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <h2>杠杆模拟演示</h2>
+                <canvas id="leverCanvas" width="600" height="400"></canvas>
+                
+                <div class="section">
+                    <h3>杠杆原理知识要点</h3>
+                    <div class="info-text">
+                        <p>杠杆是一种简单机械，由支点、动力臂和阻力臂组成。</p>
+                        <p>杠杆平衡的条件是：动力 × 动力臂 = 阻力 × 阻力臂</p>
+                    </div>
+                    
+                    <h3>杠杆的分类</h3>
+                    <ul>
+                        <li><strong>省力杠杆：</strong>动力臂 > 阻力臂，可以省力但费距离</li>
+                        <li><strong>费力杠杆：</strong>动力臂 < 阻力臂，费力但省距离</li>
+                        <li><strong>等臂杠杆：</strong>动力臂 = 阻力臂，不省力也不费力</li>
+                    </ul>
+                    
+                    <div class="tips">
+                        <p><strong>操作提示：</strong></p>
+                        <p>1. 拖动滑块或直接输入数值来改变参数</p>
+                        <p>2. 观察杠杆的平衡状态变化</p>
+                        <p>3. 尝试找到不同的平衡条件组合</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const force1Slider = document.getElementById('force1-slider');
+        const force1Input = document.getElementById('force1-input');
+        const force1Value = document.getElementById('force1-value');
+        
+        const length1Slider = document.getElementById('length1-slider');
+        const length1Input = document.getElementById('length1-input');
+        const length1Value = document.getElementById('length1-value');
+        
+        const force2Slider = document.getElementById('force2-slider');
+        const force2Input = document.getElementById('force2-input');
+        const force2Value = document.getElementById('force2-value');
+        
+        const length2Slider = document.getElementById('length2-slider');
+        const length2Input = document.getElementById('length2-input');
+        const length2Value = document.getElementById('length2-value');
+        
+        const torque1Value = document.getElementById('torque1-value');
+        const torque2Value = document.getElementById('torque2-value');
+        const balanceStatus = document.getElementById('balance-status');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        const canvas = document.getElementById('leverCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 杠杆相关参数
+        let params = {
+            force1: 10,   // 动力
+            length1: 30,  // 动力臂长度
+            force2: 15,   // 阻力
+            length2: 20,  // 阻力臂长度
+            angle: 0,     // 杠杆角度
+            rotationSpeed: 0, // 旋转速度
+            isAnimating: false // 是否正在动画中
+        };
+
+        // 监听滑块变化
+        force1Slider.addEventListener('input', () => updateValues('force1', force1Slider.value));
+        force1Input.addEventListener('input', () => updateValues('force1', force1Input.value));
+        
+        length1Slider.addEventListener('input', () => updateValues('length1', length1Slider.value));
+        length1Input.addEventListener('input', () => updateValues('length1', length1Input.value));
+        
+        force2Slider.addEventListener('input', () => updateValues('force2', force2Slider.value));
+        force2Input.addEventListener('input', () => updateValues('force2', force2Input.value));
+        
+        length2Slider.addEventListener('input', () => updateValues('length2', length2Slider.value));
+        length2Input.addEventListener('input', () => updateValues('length2', length2Input.value));
+        
+        resetBtn.addEventListener('click', resetParameters);
+
+        // 更新参数和显示
+        function updateValues(type, value) {
+            value = parseFloat(value);
+            params[type] = value;
+            
+            // 更新对应的显示
+            if (type === 'force1') {
+                force1Slider.value = value;
+                force1Input.value = value;
+                force1Value.textContent = value;
+            } else if (type === 'length1') {
+                length1Slider.value = value;
+                length1Input.value = value;
+                length1Value.textContent = value;
+            } else if (type === 'force2') {
+                force2Slider.value = value;
+                force2Input.value = value;
+                force2Value.textContent = value;
+            } else if (type === 'length2') {
+                length2Slider.value = value;
+                length2Input.value = value;
+                length2Value.textContent = value;
+            }
+            
+            // 计算力矩
+            calculateTorques();
+            
+            // 更新动画状态
+            updateAnimation();
+        }
+
+        // 计算力矩
+        function calculateTorques() {
+            const torque1 = params.force1 * params.length1;
+            const torque2 = params.force2 * params.length2;
+            
+            torque1Value.textContent = torque1.toFixed(1);
+            torque2Value.textContent = torque2.toFixed(1);
+            
+            // 判断平衡状态
+            if (Math.abs(torque1 - torque2) < 1) {
+                balanceStatus.textContent = '杠杆处于平衡状态';
+                balanceStatus.className = 'result-indicator balanced';
+                params.rotationSpeed = 0;
+                params.isAnimating = false;
+            } else if (torque1 > torque2) {
+                balanceStatus.textContent = '杠杆向左下倾斜';
+                balanceStatus.className = 'result-indicator unbalanced-left';
+                params.rotationSpeed = -0.02;
+                params.isAnimating = true;
+            } else {
+                balanceStatus.textContent = '杠杆向右下倾斜';
+                balanceStatus.className = 'result-indicator unbalanced-right';
+                params.rotationSpeed = 0.02;
+                params.isAnimating = true;
+            }
+        }
+
+        // 重置参数
+        function resetParameters() {
+            params.force1 = 10;
+            params.length1 = 30;
+            params.force2 = 15;
+            params.length2 = 20;
+            params.angle = 0;
+            params.rotationSpeed = 0;
+            params.isAnimating = false;
+            
+            // 更新UI
+            updateValues('force1', params.force1);
+            updateValues('length1', params.length1);
+            updateValues('force2', params.force2);
+            updateValues('length2', params.length2);
+            
+            // 重绘画布
+            drawLever();
+        }
+
+        // 更新动画
+        function updateAnimation() {
+            if (params.isAnimating) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        // 动画循环
+        function animate() {
+            // 更新角度
+            params.angle += params.rotationSpeed;
+            
+            // 限制最大角度，避免过度旋转
+            if (params.angle > Math.PI / 6) params.angle = Math.PI / 6;
+            if (params.angle < -Math.PI / 6) params.angle = -Math.PI / 6;
+            
+            // 绘制更新后的杠杆
+            drawLever();
+            
+            // 继续动画
+            if (params.isAnimating) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        // 绘制杠杆系统
+        function drawLever() {
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const leverWidth = 10;
+            const leverHeight = 300;
+            const pivotRadius = 15;
+            
+            // 保存当前状态
+            ctx.save();
+            
+            // 移动到支点位置
+            ctx.translate(centerX, centerY);
+            
+            // 应用旋转角度
+            ctx.rotate(params.angle);
+            
+            // 绘制杠杆
+            ctx.beginPath();
+            ctx.rect(-leverHeight / 2, -leverWidth / 2, leverHeight, leverWidth);
+            ctx.fillStyle = '#4a5568';
+            ctx.fill();
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // 绘制刻度
+            ctx.strokeStyle = '#718096';
+            ctx.lineWidth = 1;
+            for (let i = -150; i <= 150; i += 10) {
+                if (i === 0) continue; // 跳过支点位置
+                ctx.beginPath();
+                ctx.moveTo(i, -leverWidth / 2);
+                ctx.lineTo(i, leverWidth / 2);
+                ctx.stroke();
+            }
+            
+            // 绘制动力臂和阻力臂标记
+            const leftArmLength = params.length1 * 3; // 缩放以便在画布上显示
+            const rightArmLength = params.length2 * 3;
+            
+            // 动力点
+            ctx.beginPath();
+            ctx.arc(-leftArmLength, 0, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = '#f56565';
+            ctx.fill();
+            ctx.strokeStyle = '#c53030';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // 动力箭头
+            ctx.beginPath();
+            ctx.moveTo(-leftArmLength, 0);
+            ctx.lineTo(-leftArmLength, 50);
+            ctx.strokeStyle = '#f56565';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // 箭头头部
+            ctx.beginPath();
+            ctx.moveTo(-leftArmLength, 50);
+            ctx.lineTo(-leftArmLength - 5, 40);
+            ctx.lineTo(-leftArmLength + 5, 40);
+            ctx.closePath();
+            ctx.fillStyle = '#f56565';
+            ctx.fill();
+            
+            // 阻力点
+            ctx.beginPath();
+            ctx.arc(rightArmLength, 0, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = '#48bb78';
+            ctx.fill();
+            ctx.strokeStyle = '#2f855a';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // 阻力箭头
+            ctx.beginPath();
+            ctx.moveTo(rightArmLength, 0);
+            ctx.lineTo(rightArmLength, 50);
+            ctx.strokeStyle = '#48bb78';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // 箭头头部
+            ctx.beginPath();
+            ctx.moveTo(rightArmLength, 50);
+            ctx.lineTo(rightArmLength - 5, 40);
+            ctx.lineTo(rightArmLength + 5, 40);
+            ctx.closePath();
+            ctx.fillStyle = '#48bb78';
+            ctx.fill();
+            
+            // 恢复状态
+            ctx.restore();
+            
+            // 绘制支点（不随杠杆旋转）
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, pivotRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = '#718096';
+            ctx.fill();
+            ctx.strokeStyle = '#4a5568';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // 绘制支点中心
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = '#2d3748';
+            ctx.fill();
+            
+            // 绘制标签
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#2d3748';
+            ctx.textAlign = 'center';
+            
+            // 动力标签
+            const force1X = centerX - leftArmLength * Math.cos(params.angle);
+            const force1Y = centerY - leftArmLength * Math.sin(params.angle) - 30;
+            ctx.fillText(`F₁ = ${params.force1}N`, force1X, force1Y);
+            ctx.fillText(`L₁ = ${params.length1}cm`, force1X, force1Y + 20);
+            
+            // 阻力标签
+            const force2X = centerX + rightArmLength * Math.cos(params.angle);
+            const force2Y = centerY + rightArmLength * Math.sin(params.angle) - 30;
+            ctx.fillText(`F₂ = ${params.force2}N`, force2X, force2Y);
+            ctx.fillText(`L₂ = ${params.length2}cm`, force2X, force2Y + 20);
+            
+            // 支点标签
+            ctx.fillText('支点', centerX, centerY - 25);
+        }
+
+        // 初始化
+        function init() {
+            calculateTorques();
+            drawLever();
+            
+            // 监听窗口大小变化，调整画布
+            window.addEventListener('resize', () => {
+                // 在实际项目中可以根据窗口大小调整画布尺寸
+                // 这里简化处理，保持固定尺寸
+            });
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

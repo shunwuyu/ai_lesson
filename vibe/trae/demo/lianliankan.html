@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>连连看小游戏</title>
+  <style>
+    :root {
+      --bg: #f9fbff;
+      --primary: #5c8df6;
+      --accent: #ffb6c1;
+      --good: #4cd964;
+      --bad: #ff3b30;
+      --tile-bg: #ffffff;
+      --tile-border: #e6eaf2;
+      --text: #2b2f36;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg), #eef3ff);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, "Noto Color Emoji", sans-serif;
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .container {
+      width: min(1000px, 96vw);
+      max-width: 1000px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: linear-gradient(90deg, var(--primary), #9aaefc);
+      color: #fff;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn {
+      background: #fff;
+      color: var(--primary);
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn:active { transform: translateY(1px); box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+    }
+    .timer {
+      background: rgba(255,255,255,0.2);
+      border-radius: 999px;
+      padding: 6px 12px;
+    }
+    .board-wrap {
+      position: relative;
+      padding: 16px;
+    }
+    .board {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      background: #f3f6ff;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .tile {
+      position: relative;
+      display: grid;
+      place-items: center;
+      aspect-ratio: 1 / 1;
+      background: var(--tile-bg);
+      border: 2px solid var(--tile-border);
+      border-radius: 10px;
+      font-size: clamp(22px, 4.5vw, 36px);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+    .tile:hover { transform: translateY(-2px); }
+    .tile.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.45);
+      background: #fff8fb;
+    }
+    .tile.removed { opacity: 0; transform: scale(0.6); pointer-events: none; transition: opacity 220ms ease, transform 220ms ease; }
+    .tile.error { animation: shake 300ms ease; border-color: var(--bad); }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      50% { transform: translateX(3px); }
+      75% { transform: translateX(-2px); }
+      100% { transform: translateX(0); }
+    }
+    .overlay { position: absolute; inset: 16px; pointer-events: none; }
+    svg { width: 100%; height: 100%; overflow: visible; }
+    .line {
+      fill: none;
+      stroke: var(--good);
+      stroke-width: 6px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+    .game-over {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+      font-size: 28px;
+      font-weight: 700;
+      z-index: 5;
+    }
+    .game-over.active { display: flex; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      header h1 { font-size: 18px; }
+      .btn { padding: 6px 12px; }
+      .board { gap: 6px; padding: 8px; }
+      .tile { border-width: 1.5px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌟 连连看</h1>
+      <div class="controls">
+        <div class="status">
+          <span class="timer">⏳ 剩余时间：<b id="time">60</b>s</span>
+        </div>
+        <button class="btn" id="restart">🔄 重开游戏</button>
+        <button class="btn" id="soundToggle">🔊 音效开</button>
+      </div>
+    </header>
+    <div class="board-wrap">
+      <div class="board" id="board"></div>
+      <div class="overlay"><svg id="svg"></svg></div>
+      <div class="game-over" id="gameOver">时间到啦！游戏结束～</div>
+    </div>
+  </div>
+
+  <script>
+    // Config
+    const ROWS = 6, COLS = 8, TOTAL = ROWS * COLS;
+    const EMOJIS = ["🍎","🍋","🍇","🍉","🍒","🍑","🥝","🍍","🥕","🍆","🍔","🍪"];
+    const USE_SOUND = { enabled: true };
+
+    // State
+    let grid = []; // values or null
+    let selected = null; // {r,c}
+    let timer = 60; let timerId = null; let playing = true;
+
+    // Audio: simple beeps via WebAudio
+    const audioCtx = typeof AudioContext !== 'undefined' ? new AudioContext() : null;
+    function playBeep(freq=600, ms=120, vol=0.06) {
+      if (!USE_SOUND.enabled || !audioCtx) return;
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = freq; g.gain.value = vol;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); setTimeout(() => { o.stop(); }, ms);
+    }
+    function successSound(){ playBeep(660, 110, 0.08); setTimeout(()=>playBeep(880, 110, 0.06), 120); }
+    function tickSound(){ playBeep(480, 80, 0.05); }
+
+    // Utils
+    const $ = sel => document.querySelector(sel);
+    function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+    function inBounds(r,c){ return r>=0 && r<ROWS && c>=0 && c<COLS; }
+
+    // Build initial pairs
+    function buildGrid(){
+      const pairs = [];
+      const needed = TOTAL/2; // 24 pairs
+      const base = [];
+      // Repeat emojis to reach needed pairs
+      const repeats = Math.ceil(needed / EMOJIS.length);
+      for(let k=0;k<repeats;k++) base.push(...EMOJIS);
+      const chosen = base.slice(0, needed);
+      chosen.forEach(v=>{ pairs.push(v,v); });
+      shuffle(pairs);
+      grid = [];
+      let idx=0;
+      for(let r=0;r<ROWS;r++){
+        const row=[];
+        for(let c=0;c<COLS;c++) row.push(pairs[idx++]);
+        grid.push(row);
+      }
+    }
+
+    // Render board
+    function render(){
+      const board = $('#board');
+      board.innerHTML = '';
+      for(let r=0;r<ROWS;r++){
+        for(let c=0;c<COLS;c++){
+          const v = grid[r][c];
+          const tile = document.createElement('button');
+          tile.className = 'tile';
+          tile.dataset.r = r; tile.dataset.c = c;
+          tile.disabled = !playing || !v;
+          tile.textContent = v || '';
+          if(selected && selected.r===r && selected.c===c) tile.classList.add('selected');
+          tile.addEventListener('click', onTileClick);
+          board.appendChild(tile);
+        }
+      }
+    }
+
+    // Padded occupancy grid for path finding
+    function buildOcc(start, end){
+      const R = ROWS+2, C = COLS+2;
+      const occ = Array.from({length:R},()=>Array(C).fill(0));
+      for(let r=0;r<ROWS;r++){
+        for(let c=0;c<COLS;c++){
+          if(grid[r][c]) occ[r+1][c+1] = 1; // occupied
+        }
+      }
+      // endpoints should be passable
+      occ[start.r+1][start.c+1] = 0;
+      occ[end.r+1][end.c+1] = 0;
+      return occ;
+    }
+
+    // BFS with max 2 turns
+    function findPath(start, end){
+      const R = ROWS+2, C = COLS+2;
+      const occ = buildOcc(start, end);
+      const sr = start.r+1, sc = start.c+1;
+      const er = end.r+1, ec = end.c+1;
+      const dirs = [[1,0],[ -1,0],[0,1],[0,-1]]; // down, up, right, left
+      const key = (r,c,d,t)=> r+","+c+","+d+","+t;
+      const visited = new Set();
+      const queue = [];
+      queue.push({r:sr,c:sc,dir:-1,turns:0,points:[{r:sr,c:sc}]});
+      visited.add(key(sr,sc,-1,0));
+      while(queue.length){
+        const cur = queue.shift();
+        if(cur.r===er && cur.c===ec){
+          // convert padded points to real grid points
+          const pts = cur.points.map(p=>({r:p.r-1,c:p.c-1}));
+          // compress points: keep endpoints + bends
+          const res=[];
+          for(let i=0;i<pts.length;i++){
+            if(i===0 || i===pts.length-1) res.push(pts[i]);
+            else {
+              const a=pts[i-1], b=pts[i], c=pts[i+1];
+              if((a.r===b.r && b.r===c.r) || (a.c===b.c && b.c===c.c)) {
+                // collinear, skip b
+              } else res.push(b);
+            }
+          }
+          return res;
+        }
+        for(let d=0; d<4; d++){
+          const nr = cur.r + dirs[d][0];
+          const nc = cur.c + dirs[d][1];
+          const turns = cur.dir===-1 || cur.dir===d ? cur.turns : cur.turns+1;
+          if(turns>2) continue;
+          if(nr<0||nr>=R||nc<0||nc>=C) continue;
+          if(!(nr===er && nc===ec) && occ[nr][nc]!==0) continue;
+          const k = key(nr,nc,d,turns);
+          if(visited.has(k)) continue;
+          visited.add(k);
+          const nextPoints = cur.dir===-1 || cur.dir===d ? cur.points.slice() : cur.points.concat({r:cur.r,c:cur.c});
+          queue.push({r:nr,c:nc,dir:d,turns,points: nextPoints.concat({r:nr,c:nc})});
+        }
+      }
+      return null;
+    }
+
+    // Map grid point to pixel center
+    function getCenter(r,c){
+      // r,c in real grid coords
+      const board = $('#board');
+      const idx = r*COLS + c;
+      const tile = board.children[idx];
+      const rectBoard = board.getBoundingClientRect();
+      const rect = tile.getBoundingClientRect();
+      return { x: rect.left - rectBoard.left + rect.width/2, y: rect.top - rectBoard.top + rect.height/2 };
+    }
+
+    function drawPath(path){
+      const svg = $('#svg');
+      svg.innerHTML = '';
+      if(!path || path.length<2) return;
+      const points = path.map(p=>getCenter(p.r,p.c));
+      const poly = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+      poly.setAttribute('class','line');
+      poly.setAttribute('points', points.map(p=>`${p.x},${p.y}`).join(' '));
+      svg.appendChild(poly);
+      // animate draw
+      const totalLen = points.reduce((acc, cur, i) => acc + (i? Math.hypot(cur.x-points[i-1].x, cur.y-points[i-1].y):0), 0);
+      poly.style.strokeDasharray = totalLen;
+      poly.style.strokeDashoffset = totalLen;
+      requestAnimationFrame(()=>{
+        poly.style.transition = 'stroke-dashoffset 240ms ease';
+        poly.style.strokeDashoffset = '0';
+      });
+      // remove after animation
+      setTimeout(()=>{ svg.innerHTML=''; }, 340);
+    }
+
+    function onTileClick(e){
+      if(!playing) return;
+      const r = +e.currentTarget.dataset.r;
+      const c = +e.currentTarget.dataset.c;
+      const v = grid[r][c];
+      if(!v) return;
+      if(!selected){ selected = {r,c}; render(); return; }
+      const s = selected; selected = null;
+      if(s.r===r && s.c===c){ render(); return; }
+      if(grid[s.r][s.c] !== v){
+        // error feedback
+        const board = $('#board');
+        const idx1 = s.r*COLS + s.c, idx2 = r*COLS + c;
+        [board.children[idx1], board.children[idx2]].forEach(el=>{ el.classList.add('error'); setTimeout(()=>el.classList.remove('error'), 300); });
+        tickSound();
+        render();
+        return;
+      }
+      const path = findPath(s, {r,c});
+      if(path){
+        drawPath(path);
+        successSound();
+        // remove tiles
+        const board = $('#board');
+        const idx1 = s.r*COLS + s.c, idx2 = r*COLS + c;
+        [board.children[idx1], board.children[idx2]].forEach(el=> el.classList.add('removed'));
+        setTimeout(()=>{
+          grid[s.r][s.c] = null; grid[r][c] = null; render();
+          checkWin();
+        }, 220);
+      } else {
+        const board = $('#board');
+        const idx1 = s.r*COLS + s.c, idx2 = r*COLS + c;
+        [board.children[idx1], board.children[idx2]].forEach(el=>{ el.classList.add('error'); setTimeout(()=>el.classList.remove('error'), 300); });
+        tickSound();
+        render();
+      }
+    }
+
+    function checkWin(){
+      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) if(grid[r][c]) return;
+      playing = false; clearInterval(timerId);
+      $('#gameOver').textContent = '恭喜通关！';
+      $('#gameOver').classList.add('active');
+    }
+
+    function startTimer(){
+      clearInterval(timerId);
+      $('#time').textContent = String(timer);
+      timerId = setInterval(()=>{
+        if(!playing){ clearInterval(timerId); return; }
+        timer -= 1; $('#time').textContent = String(timer);
+        if(timer<=10) tickSound();
+        if(timer<=0){
+          playing = false; clearInterval(timerId);
+          $('#gameOver').textContent = '时间到啦！游戏结束～';
+          $('#gameOver').classList.add('active');
+        }
+      }, 1000);
+    }
+
+    function restart(){
+      playing = true; timer = 60; selected = null;
+      $('#gameOver').classList.remove('active');
+      buildGrid(); render(); startTimer();
+    }
+
+    // Controls
+    $('#restart').addEventListener('click', restart);
+    $('#soundToggle').addEventListener('click', ()=>{
+      USE_SOUND.enabled = !USE_SOUND.enabled;
+      $('#soundToggle').textContent = USE_SOUND.enabled ? '🔊 音效开' : '🔇 音效关';
+    });
+
+    // Init
+    buildGrid(); render(); startTimer();
+  </script>
+</body>
+</html>
