@@ -4,7 +4,7 @@ import { Buffer } from "buffer";   // 如需
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: 'sk-jadYF8phnh9xsa1Xt19tkYMiWcOCDDizQvBglHsifZuML63C',
+  apiKey: 'sk-UYTJpmWZ1UIDvbqsnM8AQOaXuHIa6REcs1tc1OTaLOYrUiXM',
   baseURL: 'https://api.agicto.cn/v1'
 });
 

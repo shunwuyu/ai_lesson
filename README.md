@@ -218,3 +218,4 @@ AI全栈工程师课程
 - 50projects/toast-notification
 - js/str-demo
 - js/function
+- ai/generative-ai-for-beginners
