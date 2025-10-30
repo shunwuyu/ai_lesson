@@ -217,3 +217,4 @@ AI全栈工程师课程
 - n8n/readme3.md
 - 50projects/toast-notification
 - js/str-demo
+- js/function

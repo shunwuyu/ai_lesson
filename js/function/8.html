@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Person.length 表示函数定义时期望的参数个数。
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+console.log(Person.length); // 👈 2
+
+const john = new Person('John', 20);
+console.log(john.name, john.age); // John 20
+</script> 
+</body>
+</html>

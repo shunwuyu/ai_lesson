@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// 函数和普通对象在 typeof 上返回不同的结果，
+// 但别被表象骗了，它们在底层其实是一类东西。
+// 函数本质上是“可调用对象”
+// 在 JavaScript 的底层（ECMAScript 规范中），
+// 函数其实是 一种“内部 [[Call]] 方法的对象”。
+// 普通对象：只有属性和方法。
+// 函数对象：在此基础上多了一个“可调用的能力（[[Call]]）”。
+console.log(typeof function() {}); // "function"
+console.log(typeof {}); // "object"
+
+
+// 普通对象
+const obj = { name: 'JS' };
+
+// 函数对象
+function fn() {} // 函数是“带有 [[Call]] 的对象”，
+fn.name = 'callable'; // 也就是“可调用的对象（callable object）”。
+console.log(fn);
+</script>
+</body>
+</html>

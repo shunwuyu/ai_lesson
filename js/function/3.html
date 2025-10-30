@@ -1,0 +1,41 @@
+<script>
+// 形参与实参
+function greet(name) { // 形参
+    console.log(`Hello, ${name}!`);
+}
+greet('Andrew'); // Hello, Andrew! 实参
+  
+// 默认参数
+function power(base, exp = 2) {
+    return base ** exp; // 幂运算
+}
+
+console.log(power(3));
+
+// 剩余参数（Rest Parameter）
+function sum(...nums) {
+    console.log(Object.prototype.toString.call(nums));
+    return nums.reduce((a, b) => a + b, 0);
+}
+console.log(sum(1, 2, 3, 4));
+
+// arguments 对象
+
+function logAll() {
+    console.log(Object.prototype.toString.call(arguments));
+    // arguments.forEach(element => { // is not a function
+    //     console.log(element);
+    // });
+    console.log(arguments); // 类数组
+}
+
+logAll(1, 'JS', true);
+// arguments 是类数组
+// ...rest 是真正的数组
+// 箭头函数中没有 arguments
+// 前端方式运行
+const arrowFunction = () => {
+    console.log(arguments); // ❌ ReferenceError: arguments is not defined
+};
+arrowFunction();
+</script>

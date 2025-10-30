@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// 能有属性的，一定是对象！函数能有属性，所以函数也是对象！
+function add(a, b) {
+  return a + b;
+}
+
+console.log(typeof add, Object.prototype.toString.call(add)); // 👈 function
+console.log(add.length); // 👈 2
+console.log(add.name);   // 👈 "add"
+
+// 你甚至可以给函数「添加自定义属性」！
+// 你可以像给对象加属性一样，给函数加“元信息”。
+function greet(name) {
+  console.log(`Hello, ${name}!`);
+}
+
+greet.version = '1.0.0';
+greet.author = 'Andrew';
+
+console.log(greet.version); // "1.0.0"
+console.log(greet.author);  // "Andrew"
+
+function callTracker() {
+  callTracker.count = (callTracker.count || 0) + 1;
+  console.log(`Called ${callTracker.count} times`);
+}
+
+callTracker(); // Called 1 times
+callTracker(); // Called 2 times
+callTracker(); // Called 3 times
+</script> 
+</body>
+</html>
