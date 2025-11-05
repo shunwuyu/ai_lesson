@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HTML5 语义化三列布局</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      min-height: calc(100vh - 120px); /* 减去 header 和 footer 高度 */
+    }
+
+    main {
+      flex: 1;
+      background-color: #fff;
+      padding: 1.5rem;
+    }
+
+    section h2 {
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+
+    aside {
+      width: 250px;
+      background-color: #ecf0f1;
+      padding: 1.5rem;
+    }
+
+    .aside-left {
+      order: -1; /* 左侧栏放在最前面 */
+    }
+
+    .aside-right {
+      order: 1; /* 右侧栏放在最后 */
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: auto;
+    }
+
+    /* 响应式：小屏幕下变为单列 */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      aside {
+        width: 100%;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>我的网站</h1>
+  </header>
+
+  <div class="container">
+    <main>
+      <section>
+        <h2>主要内容</h2>
+        <p>这里是页面的核心内容区域。使用 <code>&lt;main&gt;</code> 和 <code>&lt;section&gt;</code> 标签保持结构清晰。</p>
+        <p>HTML5 的语义化标签有助于 SEO 和无障碍访问（a11y）。</p>
+      </section>
+    </main>
+
+    <aside class="aside-left">
+      <h3>左侧边栏</h3>
+      <p>导航链接、目录或广告位。</p>
+      <ul>
+        <li>首页</li>
+        <li>关于</li>
+        <li>联系</li>
+      </ul>
+    </aside>
+
+    <aside class="aside-right">
+      <h3>右侧边栏</h3>
+      <p>相关文章、推荐内容等。</p>
+    </aside>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 旅梦开发团. 保留所有权利。</p>
+  </footer>
+
+</body>
+</html>

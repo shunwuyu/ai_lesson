@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .scene {
+  width: 200px;
+  height: 250px;
+  perspective: 1000px; /* 创建 3D 视角 */
+  margin: 50px auto;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d; /* 子元素保留 3D 空间 */
+  transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  cursor: pointer;
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* 背面不可见 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-face--front {
+  background: #4a90e2;
+  color: white;
+}
+
+.card-face--back {
+  background: #f5a623;
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.layer--bg {
+  background: rgba(0, 0, 0, 0.2);
+  z-index: -1;
+}
+
+.layer--deco {
+  font-size: 40px;
+  color: gold;
+}
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="card">
+      <div class="card-face card-face--front">
+        <div class="layer layer--bg" style="transform: translateZ(-20px);"></div>
+        <div class="layer layer--title" style="transform: translateZ(10px);">封面</div>
+        <div class="layer layer--deco" style="transform: translateZ(5px);">★</div>
+      </div>
+      <div class="card-face card-face--back">
+        <div class="layer layer--bg" style="transform: translateZ(-20px);"></div>
+        <div class="layer layer--content" style="transform: translateZ(10px);">
+          这是背面内容！
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+  document.querySelector('.card').addEventListener('click', function() {
+    this.classList.toggle('flipped');
+  });
+  </script>
+</body>
+</html>
