@@ -8,7 +8,7 @@ import OpenAI from 'openai';
 // });
 
 const client = new OpenAI({
-    apiKey: 'sk-jadYF8phnh9xsa1Xt19tkYMiWcOCDDizQvBglHsifZuML63C',
+    apiKey: 'sk-2br8WRKLJx86xrViCWO5WTCU6vVQhIcdG2a5k4r8MvRzmCS6',
     baseURL:'https://api.agicto.cn/v1'
 });
 
@@ -16,15 +16,21 @@ async function textToSpeech() {
   try {
     console.log('/////////')
     const response = await client.audio.speech.create({
-      model: 'whisper-1',
-      messages: [{ role: 'system', content: '你好，欢迎使用 OpenAI 文字转语音功能。' }],
+      model: "gpt-4o-mini-tts", // 文本转语音模型
+      voice: "alloy",            // 可选声音：alloy, verse, coral, sage, shimmer 等
+      input: "你家猫",
     });
+    // 将响应数据转换为 Buffer
+    // 网络响应（response）中的原始二进制数据（arrayBuffer() 返回 ArrayBuffer）
+    // 使用 Buffer.from() 将其转换为 Node.js 中常用的 Buffer 实例
+    const buffer = Buffer.from(await response.arrayBuffer());
+    fs.writeFileSync("output.mp3", buffer);
 
-    console.log(response, '----')
+    console.log("✅ 已生成语音文件：output.mp3");
 
     // 假设 API 返回一个 URL 链接到音频文件
-    const audioUrl = response.data.audio_url;
-    console.log(audioUrl, '/////')
+    // const audioUrl = response.data.audio_url;
+    // console.log(audioUrl, '/////')
     // const audioResponse = await axios.get(audioUrl, { responseType: 'arraybuffer' });
 
     // // 将音频数据保存为 MP3 文件
