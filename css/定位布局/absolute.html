@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 文档流， 先，display:none, 定位， 离开文档流 */
+        * {
+          margin: 0;
+          padding: 0;
+        }
+        .body {
+            background-color: azure;
+        }
+        .parent {
+            display: none;
+            width: 550px;
+            height: 500px;
+            background-color: pink;
+            position: relative;
+        }
+        .child {
+            width: 300px;
+            height: 200px;
+            background-color: skyblue;
+            position: absolute;
+            right: 100px;
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: palegreen;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="child">
+
+        </div>
+    </div>
+    <div class="box">hello world</div>
+</body>
+</html>
