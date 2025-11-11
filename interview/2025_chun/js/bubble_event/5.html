@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <ul id="list">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+    <!-- 即使动态添加新的 li 也能响应 -->
+  </ul>
+  
+  <script>
+    document.getElementById('list').addEventListener('click', (e) => {
+      if (e.target.tagName === 'LI') {
+        console.log(e.target.textContent);
+      }
+    });
+  </script>
+</body>
+</html>

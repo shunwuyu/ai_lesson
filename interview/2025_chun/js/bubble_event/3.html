@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>组织冒泡</title>
+</head>
+<body>
+  <div id="parent" style="padding: 20px; background: lightblue;">
+    Parent
+    <div id="child" style="padding: 20px; background: coral;">
+      Child
+    </div>
+  </div>
+  
+  <script>
+    document.getElementById('parent').addEventListener('click', () => {
+      alert('Parent clicked');
+    });
+  
+    document.getElementById('child').addEventListener('click', (e) => {
+      e.stopPropagation();
+      alert('Child clicked');
+    });
+  </script>
+</body>
+</html>

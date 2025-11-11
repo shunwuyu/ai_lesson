@@ -139,3 +139,17 @@ dist
 **/.DS_Store
 stu_info/
 qjb.md
+
+venv/
+env/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.ipynb_checkpoints
+
+# IDE / OS
+.vscode/
+.DS_Store

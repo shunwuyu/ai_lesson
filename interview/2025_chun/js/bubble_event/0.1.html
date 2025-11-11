@@ -20,14 +20,29 @@
 </head>
 <body>
     <div id="parent">
-        <div id="child">
-            
+        <div id="child">    
         </div>
     </div>
     <script >
-        // 捕获阶段处理事件的例子
+        // 谁先发生？
+        // document.getElementById("parent").addEventListener("click", function(event) {
+        //   console.log("父元素触发");
+        // }); 
+    
+        // document.getElementById("child").addEventListener("click", function(event) {
+        // console.log("子元素触发");
+        // });
+        // useCapture 为 true 时，事件在捕获阶段处理，为 false 时，事件在冒泡阶段处理
+        // document.getElementById("parent").addEventListener("click", function(event) {
+        //   console.log("父元素触发");
+        // }, true); 
+    
+        // document.getElementById("child").addEventListener("click", function(event) {
+        // console.log("子元素触发");
+        // }, true); 
+         // 捕获阶段处理事件的例子
         document.getElementById("parent").addEventListener("click", function(event) {
-        console.log("父元素捕获阶段被触发");
+          console.log("父元素捕获阶段被触发");
         }, true); // 第三个参数为 true，表示在捕获阶段处理事件
     
         document.getElementById("child").addEventListener("click", function(event) {

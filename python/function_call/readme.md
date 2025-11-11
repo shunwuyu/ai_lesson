@@ -1,0 +1,2 @@
+- pip3 install openai (openai是行业标准，制定了一套调用 LLM 的方法)
+- 梳理角色
