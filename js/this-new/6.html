@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// function a(){
+//     let b = function() {
+//         let c = () => {
+//             let d = () => {
+//                 console.log(this); // window
+//             }
+//             d()
+//         }
+//         c()
+//     }
+//     b()
+// }
+// a()
+var a = 1
+var obj = {
+  a: 2,
+  bar: function() {
+    const baz = () => {
+      console.log(this.a); // 2
+    }
+    baz()
+  }
+}
+obj.bar()
+</script>
+</body>
+</html>

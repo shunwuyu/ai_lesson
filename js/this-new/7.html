@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// function identify(context) {
+//     return context.name.toUpperCase()
+// }
+// function speak(context) {
+//     var greeting = 'hello, I am ' + identify(context)
+//     console.log(greeting);
+// }
+// var me = {
+//     name: 'zz',
+// }
+// speak(me)
+
+function identify() {
+    return this.name.toUpperCase()
+}
+function speak() {
+    var greeting = 'hello, I am ' + identify.call(this)
+    console.log(greeting);
+}
+
+var me = {
+    name: 'zz',
+}
+speak.call(me)  // hello, I am ZZ
+</script>
+</body>
+</html>

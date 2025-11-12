@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+function foo(x, y) {
+    console.log(this.a, x + y); // 打印 this.a 和两个参数之和
+}
+
+var obj = {
+    a: 1
+};
+
+// 1. 使用 call：显式指定 this 为 obj，参数逐个传入
+foo.call(obj, 1, 2); 
+// 输出：1 3（this 指向 obj → this.a = 1；x=1, y=2 → x+y=3）
+
+// 2. 使用 apply：显式指定 this 为 obj，参数以数组形式传入
+foo.apply(obj, [1, 2]); 
+// 输出：1 3（效果与 call 相同，只是参数形式不同）
+
+// 3. 使用 bind：创建一个新函数 bar，永久绑定 this 为 obj，并预置参数 1 和 2
+const bar = foo.bind(obj, 1, 2);
+bar(); 
+// 输出：1 3（调用时无需再传参，this 和参数已在 bind 时固定）
+
+// 4. bind 后立即调用：先绑定 this 和参数，返回的新函数立刻执行
+foo.bind(obj, 1, 2)(); 
+// 输出：1 3（等价于上面 bar()，只是不保存中间函数）
+</script>
+</body>
+</html>

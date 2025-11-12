@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// var 声明的变量会自动成为全局对象（window）的属性
+// var a = 1
+
+// function foo() {
+//     console.log(this.a); // window 1
+// }
+// // 作为普通函数被调用 this 指向window
+// // foo();
+// function bar() {
+//     var a = 2
+//     foo() // 作为普通函数被调用 this 指向window 1
+// }
+// bar()
+// var obj = {
+//     a: 2,
+//     // 作为对象方法被调用 this 指向对象 obj
+//     foo: function() {
+//       console.log(this.a); // 2
+//     }
+// }
+// obj.foo()
+
+var a = 3
+function foo() {
+    var a = 2
+    // 普通函数 被调用 this 指向window
+    function bar() {
+        var a = 1
+        console.log(this.a);
+    }
+    bar()
+}
+foo()
+
+</script>
+</body>
+</html>

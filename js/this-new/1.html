@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// 调用栈 
+// function foo() {
+//     console.log(this); // window
+// } 
+// 作为普通函数被调用
+// foo()
+// console.log(this); // window
+
+// var obj = {
+//     a: this
+// }
+// console.log(obj.a); // window
+
+// 块级作用域 {} 只限制变量声明的作用范围（比如用 let、const 定义的变量），
+// 但 不会改变 this 的指向。
+// this 的绑定规则取决于“代码执行环境”和“调用方式”，
+
+{
+    let a = this
+    console.log(a, '////////////'); 
+}
+
+
+</script>
+</body>
+</html>
