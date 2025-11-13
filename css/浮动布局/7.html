@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .container {
+      border: 2px solid #000;
+      width: 300px;
+    }
+    .item {
+      margin-left: 50px; /* margin-left 从包含块左边界开始计算 */
+      background: lightblue;
+      height: 40px;
+    }
+    .float {
+      float: right; /* 即使存在浮动，margin-left 的计算方式不变 */
+      width: 100px;
+      height: 40px;
+      background: pink;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="float"></div>
+    <div class="float"></div>
+    <div class="item">margin-left 从包含块左边计算</div>
+  </div>
+</body>
+</html>

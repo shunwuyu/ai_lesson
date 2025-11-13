@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>水平布局 Float</title>
+  <style>
+  /* 浮动使元素脱离文档流并向左排列，实现并排布局。 */
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .row {
+    background-color: green;
+    overflow: hidden;
+  }
+  .box {
+    float: left;
+    width: 50%;
+    height: 100px;
+  }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <div class="box">123</div>
+    <div class="box">456</div>
+  </div>
+</body>
+</html>

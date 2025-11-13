@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  /* 盒子垂直方向的距离由 margin 决定，属于同一个 
+  BFC 的两个相邻盒子的 margin 会发生重叠； */
+  /* 开辟新的bfc */
+  .box {
+    margin: 20px;
+  }
+  .wrapper {
+    overflow: hidden; /*触发BFC*/
+  }
+  </style>
+</head>
+<body>
+  <div class="box">123</div>
+  <div class="box">456</div>
+  <div class="wrapper">
+    <div class="box">789</div>
+  </div>
+</body>
+</html>

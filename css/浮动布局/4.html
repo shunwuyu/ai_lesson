@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            height: 100px;
+            width: 300px;
+            float: left;
+        }
+        /* .title{
+            clear: both;
+        } */
+        li:nth-child(1){
+            background-color: red;
+        }
+        li:nth-child(2){
+            background-color: green;
+        }
+        li:nth-child(3){
+            background-color: blue;
+        }
+
+        /* .list::after{
+            content: '';
+            clear: both;
+            display: block;
+        } */
+        .list {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <ul class="list">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <!-- <div class="title"></div> -->
+    </ul>
+    <h2 class="title">
+        hello
+    </h2>
+</body>
+</html>
