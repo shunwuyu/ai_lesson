@@ -1,152 +1,186 @@
-import { useState, useEffect } from 'react';
-import { User } from '@/types';
-import { authAPI, setAuthToken, removeAuthToken } from '@/services/api';
+import { useState, useEffect, useCallback } from 'react';
+import { User, AuthResponse, LoginCredentials, RegisterCredentials } from '@/types';
+import { authAPI } from '@/services/api';
 
 interface AuthState {
   user: User | null;
-  isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  isAuthenticated: boolean;
 }
 
 interface AuthActions {
-  login: (email: string, password: string) => Promise<void>;
-  register: (userData: {
-    email: string;
-    password: string;
-    name: string;
-    role: 'parent' | 'child';
-    avatar?: string;
-  }) => Promise<void>;
+  login: (credentials: LoginCredentials) => Promise<AuthResponse>;
+  register: (credentials: RegisterCredentials) => Promise<AuthResponse>;
   logout: () => Promise<void>;
-  updateProfile: (userData: Partial<User>) => Promise<void>;
+  updateProfile: (userData: Partial<User>) => Promise<User | null>;
+  refreshUser: () => Promise<void>;
   clearError: () => void;
 }
 
 export const useAuth = (): AuthState & AuthActions => {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
-    isAuthenticated: false,
     isLoading: true,
     error: null,
+    isAuthenticated: false,
   });
 
-  // 检查用户是否已登录
-  useEffect(() => {
-    const checkAuth = async () => {
+  // 检查本地存储的token
+  const checkStoredAuth = useCallback(async (): Promise<void> => {
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+
+    if (token && userStr) {
       try {
-        const user = await authAPI.getCurrentUser();
+        const user = JSON.parse(userStr);
         setAuthState({
           user,
-          isAuthenticated: true,
           isLoading: false,
           error: null,
+          isAuthenticated: true,
         });
       } catch (error) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setAuthState({
           user: null,
-          isAuthenticated: false,
           isLoading: false,
           error: null,
+          isAuthenticated: false,
         });
       }
-    };
-
-    checkAuth();
+    } else {
+      setAuthState(prev => ({ ...prev, isLoading: false }));
+    }
   }, []);
 
-  const login = async (email: string, password: string): Promise<void> => {
+  const login = useCallback(async (credentials: LoginCredentials): Promise<AuthResponse> => {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
-    
+
     try {
-      const user = await authAPI.login(email, password);
-      setAuthToken(user.id); // 使用用户ID作为token
+      const response = await authAPI.login(credentials);
+      
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
       setAuthState({
-        user,
-        isAuthenticated: true,
+        user: response.user,
         isLoading: false,
         error: null,
+        isAuthenticated: true,
       });
+
+      return response;
     } catch (error: any) {
+      const errorMessage = error.message || '登录失败，请检查用户名和密码';
       setAuthState(prev => ({
         ...prev,
         isLoading: false,
-        error: error.message || '登录失败，请检查用户名和密码',
+        error: errorMessage,
       }));
       throw error;
     }
-  };
+  }, []);
 
-  const register = async (userData: {
-    email: string;
-    password: string;
-    name: string;
-    role: 'parent' | 'child';
-    avatar?: string;
-  }): Promise<void> => {
+  const register = useCallback(async (credentials: RegisterCredentials): Promise<AuthResponse> => {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
-    
+
     try {
-      const user = await authAPI.register(userData);
-      setAuthToken(user.id);
+      const response = await authAPI.register(credentials);
+      
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
       setAuthState({
-        user,
-        isAuthenticated: true,
+        user: response.user,
         isLoading: false,
         error: null,
+        isAuthenticated: true,
       });
+
+      return response;
     } catch (error: any) {
+      const errorMessage = error.message || '注册失败，请重试';
       setAuthState(prev => ({
         ...prev,
         isLoading: false,
-        error: error.message || '注册失败，请稍后重试',
+        error: errorMessage,
       }));
       throw error;
     }
-  };
+  }, []);
 
-  const logout = async (): Promise<void> => {
+  const logout = useCallback(async (): Promise<void> => {
     setAuthState(prev => ({ ...prev, isLoading: true }));
-    
+
     try {
       await authAPI.logout();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error('Logout API error:', error);
     } finally {
-      removeAuthToken();
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       setAuthState({
         user: null,
-        isAuthenticated: false,
         isLoading: false,
         error: null,
+        isAuthenticated: false,
       });
     }
-  };
+  }, []);
 
-  const updateProfile = async (userData: Partial<User>): Promise<void> => {
+  const updateProfile = useCallback(async (userData: Partial<User>): Promise<User | null> => {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
-    
+
     try {
       const updatedUser = await authAPI.updateProfile(userData);
+      
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      
       setAuthState(prev => ({
         ...prev,
         user: updatedUser,
         isLoading: false,
         error: null,
       }));
+
+      return updatedUser;
     } catch (error: any) {
+      const errorMessage = error.message || '更新个人信息失败';
       setAuthState(prev => ({
         ...prev,
         isLoading: false,
-        error: error.message || '更新用户信息失败',
+        error: errorMessage,
       }));
       throw error;
     }
-  };
+  }, []);
 
-  const clearError = (): void => {
+  const refreshUser = useCallback(async (): Promise<void> => {
+    try {
+      const user = await authAPI.getCurrentUser();
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        setAuthState(prev => ({
+          ...prev,
+          user,
+          isAuthenticated: true,
+        }));
+      }
+    } catch (error) {
+      console.error('Refresh user error:', error);
+    }
+  }, []);
+
+  const clearError = useCallback((): void => {
     setAuthState(prev => ({ ...prev, error: null }));
-  };
+  }, []);
+
+  // 初始化检查
+  useEffect(() => {
+    checkStoredAuth();
+  }, [checkStoredAuth]);
 
   return {
     ...authState,
@@ -154,6 +188,7 @@ export const useAuth = (): AuthState & AuthActions => {
     register,
     logout,
     updateProfile,
+    refreshUser,
     clearError,
   };
 };
