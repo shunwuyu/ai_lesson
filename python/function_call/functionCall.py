@@ -1,15 +1,15 @@
 import json
-from email import message
 from openai import OpenAI
-import os
-from dotenv import load_dotenv
-load_dotenv('.env.local')
 
 client = OpenAI(
-  api_key=os.getenv('DEEPSEEK_API_KEY'),
+  api_key='sk-8d1436c7a2b74d6ca98d73276c58fd5a',
   base_url="https://api.deepseek.com/v1",
 )
-
+# 启用了工具调用功能
+# 模型会根据输入自动决定是否调用外部工具
+# （tool_choice='auto'），以增强回答能力，
+# 比如查询实时数据或执行计算，从而弥补大模型本身
+# 无法获取最新信息的局限。
 def send_message(messages):
   response = client.chat.completions.create(
     model='deepseek-reasoner',
@@ -20,6 +20,10 @@ def send_message(messages):
   return response
 
 # 打造一个函数调用的工具
+# 定义 tool 时需明确函数名称、清晰描述其功能，
+# 并严格规范参数类型、属性及是否必填（required）。
+# 参数结构应为 JSON Schema 格式，确保模型能准
+# 确理解何时调用及如何构造请求，避免歧义或调用失败。
 tools = [
   {
     "type": "function",
@@ -50,55 +54,43 @@ def get_closing_price(name):
     return '未找到该股票'
 
 
-if __name__ == '__main__': 
-  messages = [{"role": "user", "content": "青岛啤酒的收盘价是多少？"}]
-  response = send_message(messages)
 
-  message = response.choices[0].message
-  messages.append({
+messages = [{"role": "user", "content": "青岛啤酒的收盘价是多少？"}]
+response = send_message(messages)
+
+message = response.choices[0].message
+print(message)
+messages.append({
     "role": message.role,
     "content": message.content,
     "tool_calls": message.tool_calls
-  })
+})
 
+
+print("回复：")
+print(response.choices[0].message.content)
+
+print("工具选择：")
+print(response.choices[0].message.tool_calls)
+
+  # LLM 已经确定了它要用的函数
+if response.choices[0].message.tool_calls != None:
+  tool_call = response.choices[0].message.tool_calls[0]
+
+  if tool_call.function.name == "get_closing_price":
+    # 调用参数（JSON 字符串）解析为 Python 字典
+    arguments_dict = json.loads(tool_call.function.arguments)  # {"name": "青岛啤酒"}
+    price = get_closing_price(arguments_dict['name'])
+
+    messages.append({
+      "role": "tool",
+      "content": price,
+      "tool_call_id": tool_call.id
+    })
+
+  print("messages:", messages)
+
+  response = send_message(messages)
 
   print("回复：")
   print(response.choices[0].message.content)
-
-  print("工具选择：")
-  print(response.choices[0].message.tool_calls)
-
-  # LLM 已经确定了它要用的函数
-  if response.choices[0].message.tool_calls != None:
-    tool_call = response.choices[0].message.tool_calls[0]
-
-    if tool_call.function.name == "get_closing_price":
-      arguments_dict = json.loads(tool_call.function.arguments)  # {"name": "青岛啤酒"}
-      price = get_closing_price(arguments_dict['name'])
-
-      messages.append({
-        "role": "tool",
-        "content": price,
-        "tool_call_id": tool_call.id
-      })
-
-    print("messages:", messages)
-
-    response = send_message(messages)
-
-    print("回复：")
-    print(response.choices[0].message.content)
-
-
-
-  # [
-  #   ChatCompletionMessageToolCall(id='call_0_0cbbc0d2-62ca-45e4-9684-1e89a0155e34', 
-  #   function=Function(arguments='{"name": "青岛啤酒"}', name='get_closing_price'), type='function', index=0)
-  # ] 
-
-
-# messages: [
-#   {'role': 'user', 'content': '青岛啤酒的收盘价是多少？'}, 
-#   {'role': 'assistant', 'content': '我需要调用函数来获取青岛啤酒的收盘价。', 'tool_calls': [ChatCompletionMessageToolCall(id='call_0_e174c1a7-7aca-4a8b-98ad-e193e024d9a5', function=Function(arguments='{"name": "青岛啤酒"}', name='get_closing_price'), type='function', index=0)]}, 
-#   {'role': 'tool', 'content': '67.92', 'tool_call_id': 'call_0_e174c1a7-7aca-4a8b-98ad-e193e024d9a5'}
-# ]

@@ -1,14 +1,10 @@
 from openai import OpenAI
-import os
-from dotenv import load_dotenv
-load_dotenv('.env.local')
-
 
 client = OpenAI(
-  api_key=os.getenv('DEEPSEEK_API_KEY'), # 确保这里读取的是正确的环境变量
+  api_key='sk-8d1436c7a2b74d6ca98d73276c58fd5a', # 确保这里读取的是正确的环境变量
   base_url="https://api.deepseek.com/v1", # 替换为DeepSeek的实际API地址
 )
-
+# DeepSeek-Reasoner 是深度求索推出的推理增强大模型，擅长复杂逻辑推理与多步问题求解。
 completion = client.chat.completions.create(
   model='deepseek-reasoner',
   messages=[
