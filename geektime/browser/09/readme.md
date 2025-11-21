@@ -3,13 +3,29 @@
 
 正是由于 JavaScript 存在变量提升这种特性，从而导致了很多与直觉不符的代码，这也是 JavaScript 的一个重要设计缺陷。
 
+console.log(x); // 输出：undefined
+var x = 5;
+{
+  var y = 10;
+}
+console.log(y);
+
+
+console.log(x); // 输出：undefined
+let x = 5;
+{
+  let y = 10;
+}
+console.log(y);
+
 - 怎么解决？
   - let、const 关键字
   - 块级作用域
   - 但是由于 JavaScript 需要保持向下兼容，所以变量提升在相当长一段时间内还会继续存在。
 
-- JavaScript 中会存在变量提升？
+- JavaScript 中为什么会存在变量提升？
   其他语言似乎都没有这个特性呢？
+  得从作用域讲起  
 
 ## 作用域 Scope
 
