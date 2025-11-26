@@ -1,0 +1,17 @@
+{
+  "name": "ai-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@ai-sdk/deepseek": "^1.0.29",
+    "ai": "^5.0.101"
+  }
+}

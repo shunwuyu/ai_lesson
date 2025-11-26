@@ -14,3 +14,4 @@ function Person(name) {
 var person = new Person('陈伟鸿');
 // person.name = '陈伟鸿';
 console.log(person.name) 
+console.log(Person.prototype)

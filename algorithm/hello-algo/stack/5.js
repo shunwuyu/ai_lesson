@@ -1,5 +1,6 @@
 /**
  * 初始化你的栈结构
+ * https://leetcode.cn/problems/min-stack/
  */
 const MinStack = function() {
   this.stack = []
@@ -17,7 +18,7 @@ MinStack.prototype.push = function(x) {
 /**
  * @return {void}
  */
-// 栈的入栈操作，其实就是数组的 pop 方法
+// 栈的出栈操作，其实就是数组的 pop 方法
 MinStack.prototype.pop = function() {
   this.stack.pop()
 };
@@ -34,16 +35,24 @@ MinStack.prototype.top = function() {
 };
 
 /**
- * @return {number}
+ * 获取栈中的最小值
+ * @return {number} 栈中当前所有元素的最小值
  */
-// 按照一次遍历的思路取最小值
 MinStack.prototype.getMin = function() {
-    let minValue = Infinity  
-    const  { stack } = this
-    for(let i=0; i<stack.length;i++) {
-        if(stack[i] < minValue) {
-            minValue = stack[i]
-        }
-    }
-    return minValue
+  // 初始化最小值为正无穷，确保任何数字都会比它小
+  let minValue = Infinity;
+  
+  // 解构赋值，从当前实例中取出 stack 数组（即主栈）
+  const { stack } = this;
+  
+  // 遍历栈中的每一个元素（从底到顶）
+  for (let i = 0; i < stack.length; i++) {
+      // 如果当前元素比已知的最小值还小，则更新最小值
+      if (stack[i] < minValue) {
+          minValue = stack[i];
+      }
+  }
+  
+  // 返回找到的最小值
+  return minValue;
 };
