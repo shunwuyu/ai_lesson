@@ -1,0 +1,20 @@
+<script>
+const p = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    // resolve("结果1");
+    reject("失败了")
+  }, 1000);
+});
+console.log(p);
+p.then((res) => {
+  console.log(p);
+  console.log(res);
+}).catch(err => {
+  console.log(err);
+})
+const vipClient = Promise.resolve("Mercedes S-Class");
+console.log(vipClient);
+
+const badGuest = Promise.reject("衣冠不整，禁止入内");
+console.log(badGuest);
+</script>
