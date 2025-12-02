@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML5 Buffer 最简示例</title>
+</head>
+<body>
+
+    <h3>ArrayBuffer 示例</h3>
+    <p>我们在内存中创建了 4 个字节，并写入了数据。</p>
+    
+    <!-- 用于显示结果 -->
+    <div id="output" style="border:1px solid #ccc; padding:10px;"></div>
+
+    <script>
+        const encoder = new TextEncoder();
+        const myBuffer = encoder.encode("你好 HTML5"); 
+        console.log(myBuffer)
+        // 1. 创建一个 4 字节的缓冲区 (Raw Memory)
+        const buffer = new ArrayBuffer(12);
+
+        // 2. 创建一个视图 (View) 来操作这个缓冲区
+        // Uint8Array 意味着我们要把数据当做 0-255 的整数来处理
+         // 3. 写入数据
+        const view = new Uint8Array(buffer);
+        for (let i = 0; i < myBuffer.length; i++) {
+            view[i] = myBuffer[i];
+        }
+
+        const decoder = new TextDecoder();
+        const originalText = decoder.decode(buffer);  
+
+        // 4. 读取并显示数据
+        const outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = `
+            完整数据: [${view}] <br>
+            第一个字节: ${view[0]} <br>
+            缓冲区的字节长度: ${buffer.byteLength}<br>
+            原来的文本: ${originalText}
+        `;
+        
+        console.log(buffer); // 你也可以在控制台查看原始对象
+    </script>
+</body>
+</html>
