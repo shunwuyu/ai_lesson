@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// 第二版 (来自 underscore 的实现)
+var memorize = function(func, hasher) {
+    var memoize = function(key) {
+        var cache = memoize.cache;
+        var address = '' + (hasher ? hasher.apply(this, arguments) : key);
+        if (!cache[address]) {
+            cache[address] = func.apply(this, arguments);
+        }
+        return cache[address];
+    };
+    memoize.cache = {};
+    return memoize;
+};
+var add = function(a, b, c) {
+  return a + b + c
+}
+
+var memoizedAdd = memorize(add, function(){
+    var args = Array.prototype.slice.call(arguments)
+    return JSON.stringify(args)
+})
+
+console.log(memoizedAdd(1, 2, 3)) // 6
+console.log(memoizedAdd(1, 2, 4)) // 7
+
+</script> 
+</body>
+</html>

@@ -1,0 +1,58 @@
+<script>
+// 普通函数
+function normalFunction(a) {
+  console.log('=== 普通函数 ===');
+  console.log('this:', this);
+  console.log('arguments:', arguments);        // 类数组对象
+  console.log('new.target:', new.target);      // 如果通过 new 调用，指向构造函数
+  console.log('a:', a);
+}
+
+// 箭头函数（定义在全局作用域）
+const arrowFunction = (a) => {
+  console.log('=== 箭头函数 ===');
+  console.log('this:', this);                  // 继承外层（这里是全局）
+  try {
+    console.log('arguments:', arguments);      // ❌ ReferenceError！
+  } catch (e) {
+    console.log('arguments: 报错 —', e.message);
+  }
+  try {
+    console.log('new.target:', new.target);    // ❌ SyntaxError（不能用于 new）
+  } catch (e) {
+    console.log('new.target: 报错 —', e.message);
+  }
+  console.log('a:', a);
+};
+
+// 测试 1：直接调用（非严格模式下 this 是 global/window）
+normalFunction(1);
+arrowFunction(2);
+
+console.log('\n--- 分隔线 ---\n');
+
+// 测试 2：作为对象方法调用
+const obj = {
+  name: 'MyObject',
+  normalMethod: normalFunction,
+  arrowMethod: arrowFunction
+};
+
+obj.normalMethod(3);   // this 指向 obj
+obj.arrowMethod(4);    // this 仍指向全局（因为箭头函数定义在全局！）
+
+console.log('\n--- 分隔线 ---\n');
+
+// 测试 3：使用 new 调用（仅普通函数支持）
+try {
+  new normalFunction(5);  // 可以
+} catch (e) {
+  console.log('new normalFunction 失败:', e);
+}
+
+try {
+  new arrowFunction(6);   // ❌ TypeError: arrowFunction is not a constructor
+} catch (e) {
+  console.log('new arrowFunction 失败:', e.message);
+}
+</script>

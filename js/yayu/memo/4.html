@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// 第一版 (来自《JavaScript权威指南》)
+function memorize(f) {
+    var cache = {};
+    return function(){
+        var key = arguments.length + Array.prototype.join.call(arguments, ",");
+        if (key in cache) {
+            return cache[key]
+        }
+        else return cache[key] = f.apply(this, arguments)
+    }
+}
+
+var propValue = function(obj){
+    return obj.value
+}
+
+var memoizedAdd = memorize(propValue)
+// toString 方法转换成 [Object object]
+console.log(memoizedAdd({value: 1})) // 1
+console.log(memoizedAdd({value: 2})) // 1
+
+</script>
+</body>
+</html>

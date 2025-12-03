@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+var count = 0;
+var fibonacci = function(n){
+    count++;
+    return n < 2? n : fibonacci(n-1) + fibonacci(n-2);
+};
+for (var i = 0; i <= 10; i++){
+    fibonacci(i)
+}
+
+console.log(count) // 453
+
+// 我们会发现最后的 count 数为 453，也就是说 fibonacci 函数被调用了 453 次！也许你会想
+// ，我只是循环到了 10
+// ，为什么就被调用了这么多次，所以我们来具体分析下：
+</script>
+</body>
+</html>
