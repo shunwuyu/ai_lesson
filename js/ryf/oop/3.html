@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+function Animal(){ }
+Animal.prototype.species = "动物";
+
+function Cat(name,color){
+  this.name = name;
+  this.color = color;
+}
+
+var F = function(){};
+F.prototype = Animal.prototype;
+Cat.prototype = new F();
+Cat.prototype.constructor = Cat;
+console.log(Animal.prototype.constructor)
+</script>
+</body>
+</html>

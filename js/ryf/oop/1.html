@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+function Animal(){
+  this.species = "动物";
+}
+
+function Cat(name,color){
+  this.name = name;
+  this.color = color;
+}
+// 它相当于完全删除了prototype 对象原先的值，然后赋予一个新值
+Cat.prototype = new Animal();
+// Cat.prototype.constructor指向Animal
+console.log(Cat.prototype.constructor == Animal) // animal
+var cat1 = new Cat("大毛","黄色");
+console.log(cat1.constructor == Animal); // animal
+Cat.prototype.constructor = Cat;
+console.log(cat1.constructor == Cat); // true
+
+
+
+</script>
+</body>
+</html>
