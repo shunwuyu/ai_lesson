@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+function makeReactive(obj) {
+  Object.keys(obj).forEach(key => {
+    let value = obj[key];
+    Object.defineProperty(obj, key, {
+      get() {
+        console.log(`[defineProperty] 读取 ${key}: ${value}`);
+        return value;
+      },
+      set(newVal) {
+        console.log(`[defineProperty] 设置 ${key} = ${newVal}`);
+        value = newVal;
+      }
+    });
+  });
+}
+
+const user1 = { name: 'Alice', age: 25, email: 'alice@example.com' };
+makeReactive(user1);
+
+user1.name = 'Bob';         // ✅ 能监听
+user1.age = 30;             // ✅ 能监听
+
+// ⚠️ 问题1：新增属性无法被监听！
+user1.address = 'Beijing';  // ❌ 不会触发任何日志
+console.log(user1.address); // ❌ 也不会触发 getter 日志
+</script>
+</body>
+</html>

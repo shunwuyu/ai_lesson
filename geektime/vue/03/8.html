@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+const obj = { a: { b: { c: 1 } } };
+
+function reactive(target) {
+  return new Proxy(target, {
+    get(target, key) {
+      // 安全地从 target 对象上读取 key 属性的值，等价于 target[key]，但更规范、更可靠（尤其在 Proxy 中使用）。
+      const res = Reflect.get(target, key);
+      
+      // 👇 仅当访问到对象属性时，才对其做 reactive！
+      if (typeof res === 'object' && res !== null) {
+        return reactive(res); // 懒代理：用到才代理
+      }
+      return res;
+    },
+    set(target, key, value) {
+      // ...
+    }
+  });
+}
+
+const proxy = reactive(obj);
+
+// 此时：
+// - obj 被代理了
+// - obj.a 还没被代理！
+// - obj.a.b、obj.a.b.c 更没有！
+
+proxy.a;        // 👈 第一次访问 a → 此时才对 { b: { c: 1 } } 做 reactive
+proxy.a.b;      // 👈 访问 b → 才代理 { c: 1 }
+proxy.a.b.c;    // 👈 访问 c → 才代理 1（但 1 是 number，不代理）
+</script>
+</body>
+</html>

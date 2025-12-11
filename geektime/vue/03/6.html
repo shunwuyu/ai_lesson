@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+const arr2 = [1, 2, 3];
+
+const reactiveArr = new Proxy(arr2, {
+  get(target, prop) {
+    console.log(`[Proxy] 读取 ${prop}: ${target[prop]}`);
+    return target[prop];
+  },
+  set(target, prop, value) {
+    console.log(`[Proxy] 设置 ${prop} = ${value}`);
+    target[prop] = value;
+    return true;
+  }
+});
+
+// 测试 1：修改已有元素 → ✅
+reactiveArr[0] = 10; // 日志: 设置 0 = 10
+
+// 测试 2：push 新元素 → ✅
+reactiveArr.push(4); 
+// 内部会触发：
+//   设置 3 = 4
+//   设置 length = 4
+
+// 测试 3：访问新元素 → ✅
+console.log(reactiveArr[3]); // 日志: 读取 3: 4
+
+// 测试 4：直接赋值新索引 → ✅
+reactiveArr[5] = 6;
+// 日志: 设置 5 = 6
+//       设置 length = 6 （因为数组自动扩容）
+
+// 测试 5：使用数组方法 → ✅ 全部可拦截
+reactiveArr.pop(); // 会触发对 length 和最后一个元素的修改
+
+
+const p = new Proxy([1, 2], {
+  has(target, prop) {
+    console.log(`检测属性是否存在: ${prop}`);
+    return prop in target;
+  },
+  deleteProperty(target, prop) {
+    console.log(`删除索引: ${prop}`);
+    return delete target[prop];
+  }
+});
+
+'0' in p;        // 检测属性是否存在: 0
+delete p[0];     // 删除索引: 0
+</script>
+</body>
+</html>

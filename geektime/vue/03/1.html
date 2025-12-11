@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Object.defineProperty 响应式示例</title>
+</head>
+<body>
+  <div id="app">Loading...</div>
+
+  <script>
+    const data = {};
+    const el = document.getElementById('app');
+
+    // 使用 Object.defineProperty 拦截 data.message 的读写
+    // 属性拦截
+    Object.defineProperty(data, 'message', {
+      enumerable: true,
+      configurable: true,
+
+      get() {
+        console.log('读取 message');
+        return this._message;
+      },
+
+      set(newVal) {
+        console.log('设置 message 为:', newVal);
+        this._message = newVal;
+        // 👇 关键：数据变化时，手动更新 DOM
+        el.textContent = newVal; // vue 帮我们做的
+      }
+    });
+
+    // 初始化值（会触发 setter）
+    data.message = 'Hello, Vue 2!';
+
+    // 3 秒后改变数据，页面自动更新
+    setTimeout(() => {
+      data.message = '数据变了！页面已更新 🎉';
+    }, 3000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+const arr1 = [1, 2, 3];
+
+// 尝试用 defineProperty 监听数组（只能监听已存在的索引）
+arr1.forEach((_, index) => {
+  let val = arr1[index];
+  Object.defineProperty(arr1, index, {
+    get() {
+      console.log(`[defineProperty] 读取索引 ${index}: ${val}`);
+      return val;
+    },
+    set(newVal) {
+      console.log(`[defineProperty] 设置索引 ${index} = ${newVal}`);
+      val = newVal;
+    }
+  });
+});
+
+// 测试 1：修改已有索引 → ✅ 能监听（但仅限已定义的索引）
+arr1[0] = 10; // 触发 setter 日志
+arr1[0] // 触发 getter 日志
+
+// 测试 2：push 新元素 → ❌ 不会触发任何监听！
+arr1.push(4); // 没有日志！而且新索引 3 没有被 defineProperty 包裹
+
+// 测试 3：访问新元素 → ❌ 没有 getter 拦截
+console.log(arr1[3]); // 直接输出 4，无日志
+
+// 测试 4：修改 length → ❌ 无法拦截
+arr1.length = 2; // 无声无息地截断数组
+console.log(arr1)
+</script>
+</body>
+</html>

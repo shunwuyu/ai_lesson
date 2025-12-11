@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Proxy 响应式示例</title>
+</head>
+<body>
+  <div id="app">Loading...</div>
+
+  <script>
+    const el = document.getElementById('app');
+
+    const data = {
+      message: 'Hello, Vue 3 (Proxy)!'
+    };
+
+    // 使用 Proxy 创建响应式对象
+    // 代理
+    const state = new Proxy(data, {
+      get(target, key, receiver) {
+        console.log('读取', key);
+        return Reflect.get(target, key, receiver);
+      },
+      set(target, key, value, receiver) {
+        console.log(`设置 ${key} 为:`, value);
+        const result = Reflect.set(target, key, value, receiver);
+
+        // 👇 数据变化时更新 DOM （Vue3 内部帮我们做）
+        if (key === 'message') {
+          el.textContent = value;
+        }
+
+        return result;
+      }
+    });
+
+    // 初始化渲染
+    el.textContent = state.message;
+
+    // 3 秒后更新数据
+    setTimeout(() => {
+      state.message = '数据变了！Proxy 让页面自动更新 🎉';
+    }, 3000);
+  </script>
+</body>
+</html>

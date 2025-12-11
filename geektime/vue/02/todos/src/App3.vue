@@ -58,7 +58,7 @@ function clear() {
     {{todos.length}}
     </div>
     <button v-if="active<all" @click="clear">清理</button>
-    全选 <input type="checkbox" v-model="allDone" />
+    全选 <input type="checkbox" v-model="allDone"/>
   </div>
   
 </template>

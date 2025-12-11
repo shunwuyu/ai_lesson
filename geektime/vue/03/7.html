@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+const obj = { a: { b: { c: 1 } } };
+
+function observe(obj) {
+  if (typeof obj !== 'object' || obj === null) return;
+
+  // ⚠️ 关键：必须立刻遍历所有属性，包括嵌套对象！
+  Object.keys(obj).forEach(key => {
+    let val = obj[key];
+    
+    // 如果值是对象，递归 observe
+    if (typeof val === 'object') {
+      observe(val); // 👈 立即递归！
+    }
+
+    Object.defineProperty(obj, key, {
+      get() { console.log('读操作', val);return val; },
+      set(newVal) {
+        if (typeof newVal === 'object') {
+          observe(newVal); // 新对象也要递归
+        }
+        console.log('写操作', val);
+        val = newVal;
+        // 触发更新...
+      }
+    });
+  });
+}
+
+observe(obj);
+// 此时 obj、obj.a、obj.a.b 都已经被 defineProperty 处理过了！
+</script>
+</body>
+</html>
