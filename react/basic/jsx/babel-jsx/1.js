@@ -1,3 +1,3 @@
-// 原始代码
-let a = 1;
-console.log(a);
+const element = /*#__PURE__*/React.createElement("h1", {
+  className: "greeting"
+}, "Hello");

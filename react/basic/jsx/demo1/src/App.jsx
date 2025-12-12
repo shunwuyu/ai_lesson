@@ -42,29 +42,13 @@ const LoginForm = () => {
 // 受控组件
 // 表单元素的值由组件的状态管理，输入变化通过
 // 事件处理器更新状态，确保 UI 和数据的一致性。
-function MyForm() {
+function ControlledForm() {
   const [value, setValue] = useState('');
   return (
     <input value={value} onChange={e => setValue(e.target.value)} />
   );
 }
 // 非受控组件
-function ControlledForm() {
-  const inputRef = useRef(null);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Input value:', inputRef.current.value);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" ref={inputRef} />
-      <button type="submit">Submit</button>
-    </form>
-  );
-}
-// 非受控组件是指在 React 中不使用状态来管理输入值，而是直接通过 DOM 元素来获取输入值。
 function UnControlledForm() {
   const inputRef = useRef(null);
 
@@ -80,6 +64,22 @@ function UnControlledForm() {
     </form>
   );
 }
+// 非受控组件是指在 React 中不使用状态来管理输入值，而是直接通过 DOM 元素来获取输入值。
+// function UnControlledForm() {
+//   const inputRef = useRef(null);
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     console.log('Input value:', inputRef.current.value);
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       <input type="text" ref={inputRef} />
+//       <button type="submit">Submit</button>
+//     </form>
+//   );
+// }
 
 
 
