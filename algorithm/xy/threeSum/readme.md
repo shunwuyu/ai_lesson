@@ -17,7 +17,7 @@ https://leetcode.cn/problems/3sum/
 
   时间复杂度
 
-  排序：O(n log n)  快排
+  排序：O(nlog n)  快排
   遍历每个 i（外层循环）：n 次
   每次 i 下做双指针：left、right 只会从两端向中间移动一次，所以是 O(n)
 

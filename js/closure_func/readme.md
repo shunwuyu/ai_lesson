@@ -100,7 +100,33 @@ cache 必须持久存在，不能每次调用都重置。
 但又不能暴露给全局（避免污染、安全、模块化）。
 闭包 正好提供了：函数 + 私有状态 的能力。
 
+```
+function memoize(fn) {
+  const cache = {};
 
+  return function (...args) {
+    // 把参数转成字符串作为 key（简单场景）
+    const key = JSON.stringify(args);
+
+    if (key in cache) {
+      console.log('缓存命中:', key);
+      return cache[key];
+    }
+
+    const result = fn.apply(this, args);
+    cache[key] = result;
+    return result;
+  };
+}
+
+const fib = memoize(function (n) {
+  if (n <= 1) return n;
+  return fib(n - 1) + fib(n - 2); // 递归调用的是 memoized 版本！
+});
+
+console.log(fib(100))
+
+```
 ## 高阶函数
 1.js
 传给高阶函数的函数就是一个中间件，它把数据预处理好了，然后再转交给高阶函数继续运算。
