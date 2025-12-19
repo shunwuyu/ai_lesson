@@ -1,0 +1,37 @@
+<script>
+const list = [
+  { id: 1, parentId: 0, name: 'A' },
+  { id: 2, parentId: 1, name: 'B' },
+  { id: 3, parentId: 1, name: 'C' },
+  { id: 4, parentId: 2, name: 'D' }
+]
+
+// function listToTree(list, parentId = 0) {
+//   const result = []
+
+//   list.forEach(item => {
+//     if (item.parentId === parentId) {
+//       const children = listToTree(list, item.id)
+//       if (children.length) {
+//         item.children = children
+//       }
+//       result.push(item)
+//     }
+//   })
+
+//   return result
+// }
+
+function listToTree(list, parentId = 0) {
+  // 过滤当前父节点的子节点
+  return list
+    .filter(item => item.parentId === parentId)
+    .map(item => ({
+      ...item,
+      // 递归查找子节点的子节点
+      children: listToTree(list, item.id)
+    }));
+}
+
+console.log(listToTree(list));
+</script>
