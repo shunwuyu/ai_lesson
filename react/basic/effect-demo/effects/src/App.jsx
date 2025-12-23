@@ -1,45 +1,20 @@
-import { useState, useEffect } from 'react'
+// App.jsx
+import { useTodos } from './hooks/useTodos'
 import TodoInput from './components/TodoInput'
 import TodoList from './components/TodoList'
 import TodoStats from './components/TodoStats'
 import './styles/app.styl'
 
-const TODO_KEY = 'react-todos-v1'
-
 export default function App() {
-  const [todos, setTodos] = useState(() => {
-    const saved = localStorage.getItem(TODO_KEY)
-    return saved ? JSON.parse(saved) : []
-  })
-
-  useEffect(() => {
-    localStorage.setItem(TODO_KEY, JSON.stringify(todos))
-  }, [todos])
-
-  const addTodo = (text) => {
-    if (text.trim() === '') return
-    setTodos([
-      ...todos,
-      { id: Date.now(), text, completed: false }
-    ])
-  }
-
-  const toggleTodo = (id) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ))
-  }
-
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id))
-  }
-
-  const clearCompleted = () => {
-    setTodos(todos.filter(todo => !todo.completed))
-  }
-
-  const activeCount = todos.filter(t => !t.completed).length
-  const completedCount = todos.length - activeCount
+  const {
+    todos,
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    clearCompleted,
+    activeCount,
+    completedCount
+  } = useTodos()
 
   return (
     <div className="todo-app">

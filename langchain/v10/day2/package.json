@@ -1,0 +1,20 @@
+{
+  "name": "day2",
+  "version": "1.0.0",
+  "description": "把大模型返回的原始文本（如无结构字符串），转换成可直接使用的结构化格式。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@langchain/core": "^1.1.7",
+    "@langchain/deepseek": "^1.0.3",
+    "dotenv": "^17.2.3",
+    "langchain": "^1.2.2",
+    "zod": "^4.2.1"
+  }
+}

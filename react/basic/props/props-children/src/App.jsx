@@ -21,18 +21,18 @@ function MyFooter() {
 function App() {
   return (
     <>
-      <Card className="user-card">
+      {/* <Card className="user-card">
         <h2>张三</h2>
         <p>高级前端工程师</p>
         <button>查看详情</button>
-      </Card>
+      </Card> */}
       <Card className="user-card">
         <h2>字节跳动</h2>
         <p>字节跳动是中国领先的互联网技术公司，提供了丰富的互联网产品和服务。</p>
       </Card>
 
       <Greeting name="Alice" message="欢迎加入我们！" showIcon />
-      <Greeting name="Bob" />
+      {/* <Greeting name="Bob"/> */}
 
       <Modal HeaderComponent={MyHeader} FooterComponent={MyFooter}>
         <p>这是弹窗主体内容。</p>
