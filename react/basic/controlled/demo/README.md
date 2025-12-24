@@ -1,8 +1,2 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+受控组件适合表单校验、联动、实时展示等场景，例如登录表单中用户名输入需即时校验长度、禁用提交按钮，输入值必须由 React state 统一管理；
+非受控组件适合一次性读取、性能敏感或第三方组件场景，例如文件上传、富文本编辑器，只在提交时通过 ref 获取值即可，避免频繁重渲染。

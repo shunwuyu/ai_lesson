@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import './App.css'
+import LoginForm from './Login'
 
 
 function ControlledInput() {
@@ -90,7 +91,11 @@ function App() {
   
   return (
     <>
-      
+      {/* <ControlledInput/>
+      <UncontrolledInput />
+      <CommentBox/>
+      <RegisterForm /> */}
+      <LoginForm/>
     </>
   )
 }

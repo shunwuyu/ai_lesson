@@ -1,0 +1,13 @@
+{
+  "name": "qcoder-cli",
+  "version": "1.0.0",
+  "description": "Qoder CLI 基于阿里自研的先进编程大模型，构建了轻量级 AI Agent 框架。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
