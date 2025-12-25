@@ -21,3 +21,7 @@ useContext 让“数据流动”从显式传递，变成按需订阅
 
 ## useRef 
 - 我要拿 DOM，怎么办? useRef
+- 保存“不参与渲染的状态”
+  useState  会触发渲染 驱动 UI
+  useRef   不会     只存数据
+
