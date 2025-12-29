@@ -74,7 +74,7 @@ function App() {
 
 function BoxAnimation() {
   const boxRef = useRef(null);
-  // DOM 更新 → useLayoutEffect → 浏览器绘制
+  // DOM 更新 → useLayoutEffect →   浏览器绘制
 // 👉 用户永远只看到动画后的状态
   // useLayoutEffect(() => {
     // DOM 更新 → 浏览器绘制（初始位置） → 执行 effect → 再绘制
