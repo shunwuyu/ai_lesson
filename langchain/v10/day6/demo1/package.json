@@ -1,0 +1,23 @@
+{
+  "name": "demo1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@langchain/community": "^1.1.1",
+    "@langchain/core": "^1.1.8",
+    "@langchain/deepseek": "^1.0.3",
+    "@langchain/openai": "^1.2.0",
+    "@langchain/textsplitters": "^1.0.1",
+    "dotenv": "^17.2.3",
+    "langchain": "^1.2.3",
+    "pdf-parse": "^1.1.4"
+  }
+}
