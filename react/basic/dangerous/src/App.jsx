@@ -16,6 +16,7 @@ import './App.css'
 //   // React 不允许直接在 JSX 中插入 HTML 字符串，因为这可能会导致 XSS（跨站脚本攻击）
 //   const content = "<div>Hello World</div>";
 //   return (
+//     // dangerouslySetInnerHTML 明确告诉 React：这是一段可信 HTML，请直接插入。
 //     // 用于直接插入 HTML 字符串到组件中，但需谨慎使用以避免 XSS 攻击风险。
 //     <div dangerouslySetInnerHTML={{__html: content}} />
 //   )
@@ -23,14 +24,17 @@ import './App.css'
 
 // function App() {
 //   // React 不允许直接在 JSX 中插入 HTML 字符串，因为这可能会导致 XSS（跨站脚本攻击）
-//   const content = "<script>alert('友商是傻逼')</script>";
+//   const content = "<img src='x' onerror='alert(1111)'>";
 
 //   return (
 //     // 用于直接插入 HTML 字符串到组件中，但需谨慎使用以避免 XSS 攻击风险。
-//     <div dangerouslySetInnerHTML={{__html: content}} />
+//     <div>{content}</div>
+//     // <div dangerouslySetInnerHTML={{__html: content}} />
 //   )
 // }
 
+// DOMPurify 用于清理并转义 HTML 字符串中的恶意代码（如 <script> 标签、
+// 事件处理器等），只保留安全的 HTML，从而防止 XSS 攻击。
 function App() {
   // React 不允许直接在 JSX 中插入 HTML 字符串，因为这可能会导致 XSS（跨站脚本攻击）
   const content = "ddfd<script>alert('友商是傻逼')</script>ddd</script>";

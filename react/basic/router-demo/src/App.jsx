@@ -3,7 +3,8 @@ import { useState, Suspense, lazy } from 'react'
 import './App.css'
 // import Home from './views/Home';
 const Home = lazy(() => import('./views/Home'));
-import About from './views/About';
+// import About from './views/About';
+const About = lazy(() => import('./views/About'));
 import Navigation from './components/Navigation';
 import UserProfile from './views/UserProfile';
 import Products from './views/Products';

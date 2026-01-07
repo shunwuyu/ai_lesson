@@ -16,9 +16,11 @@
         document.getElementById('searchForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const searchQuery = document.getElementById('searchBox').value;
+            // <img src="x" onerror="alert('XSS')"> 输入这个
             // 直接使用用户输入的数据，没有进行任何验证或编码
-            document.getElementById('output').innerHTML = "You searched for: " + searchQuery;
-            // document.getElementById('output').textContent = "You searched for: " + searchQuery;
+            // document.getElementById('output').innerHTML = "You searched for: " + searchQuery;
+            
+            document.getElementById('output').textContent = "You searched for: " + searchQuery;
         });
     </script>
 </body>
