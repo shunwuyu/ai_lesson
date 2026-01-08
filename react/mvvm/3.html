@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<div id="app">
+  <p id="text"></p>
+  <button id="btn">+1</button>
+</div>
+<script>
+const data = {
+  count: 0
+}
+
+// 简单的响应式
+function observe(obj, key, cb) {
+  let value = obj[key]
+
+  Object.defineProperty(obj, key, {
+    get() {
+      return value
+    },
+    set(newVal) {
+      value = newVal
+      cb(newVal)
+    }
+  })
+}
+
+const text = document.getElementById('text')
+const btn = document.getElementById('btn')
+
+// 建立数据和视图的绑定
+observe(data, 'count', (newVal) => {
+  text.innerText = newVal
+})
+
+// 初始化
+text.innerText = data.count
+
+btn.onclick = () => {
+  data.count++
+}
+
+</script>
+</body>
+</html>

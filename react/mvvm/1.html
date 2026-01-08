@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM思路</title>
+</head>
+<body>
+  <div>
+    <span id="count"></span>
+    <button id="add">+1</button>
+    <p>当前计数（副显示）: <span id="count2"></span></p>
+  </div>
+  <script>
+  let count = 0
+
+  document.getElementById('count').innerText = count
+  // 后面加
+  document.getElementById('count2').innerText = count
+
+  document.getElementById('add').onclick = function () {
+    count++
+    document.getElementById('count').innerText = count
+    document.getElementById('count2').innerText = count;
+  }
+
+  </script>
+</body>
+</html>

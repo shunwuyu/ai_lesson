@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ViewModel 示例</title>
+</head>
+<body>
+  <div>
+    <span id="count"></span>
+    <button id="add">+1</button>
+  </div>
+
+  <script>
+//     解耦：View 不知道 Model，Model 不知道 View。
+// 维护性高：逻辑集中在 ViewModel，改一处即可。
+// 自动化：数据变 → 视图自动更新，无需手动操作多个 DOM。
+// 封装性更强 所有状态变更逻辑集中在 ViewModel 的方法中。未来如果加“最大值限制”、
+// “记录日志”、“触发副作用”等，
+// 只需改 increment，不用动 View。
+// 2. 符合 MVVM 设计思想
+// View 只负责“展示”和“发出指令”（如“我想加1”），具体怎么改、能不能改，由 ViewModel 决定。    
+
+// ===== 1. Model =====
+    const model = { count: 0 };
+
+    // ===== 2. ViewModel =====
+    const viewModel = {
+      state: new Proxy(model, {
+        set(target, key, value) {
+          target[key] = value;
+          updateView(); // 自动更新视图
+          return true;
+        }
+      }),
+
+      // 暴露操作方法（可选，这里直接通过 state 修改）
+      // increment() {
+      //   this.state.count++;
+      // }
+      increment() {
+        if (this.state.count < 100) {
+          this.state.count++;
+          console.log('Count increased!');
+        }
+      }
+
+      
+    };
+
+    // ===== 3. View 更新函数 =====
+    function updateView() {
+      document.getElementById('count').textContent = viewModel.state.count;
+    }
+
+    // 初始化视图
+    updateView();
+
+    // 绑定用户操作
+    document.getElementById('add').onclick = () => {
+      // viewModel.state.count++; // 改 ViewModel → 自动改 Model + 更新 View
+      viewModel.increment();
+    };
+  </script>
+</body>
+</html>
