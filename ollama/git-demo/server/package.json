@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@langchain/community": "^1.1.2",
+    "@langchain/core": "^1.1.11",
+    "@langchain/ollama": "^1.1.0",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "langchain": "^1.2.6"
+  }
+}
