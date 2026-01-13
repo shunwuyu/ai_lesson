@@ -1,0 +1,60 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '@/store/authStore';
+import { Button } from '@/components/ui/button';
+
+export default function Mine() {
+  const { userInfo, logout, isLoggedIn } = useAuthStore();
+  const navigate = useNavigate();
+
+  // 虽然 Tab 栏做了拦截，但为了安全，页面内部也做一个检查（双重保险）
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/login');
+    }
+  }, [isLoggedIn, navigate]);
+
+  if (!userInfo) return null;
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white p-6 pb-10 mb-4">
+        <div className="flex items-center space-x-4">
+          <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold">
+            {userInfo.name[0].toUpperCase()}
+          </div>
+          <div>
+            <h2 className="text-xl font-bold">{userInfo.name}</h2>
+            <p className="text-sm text-gray-500">ID: {userInfo.id}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4 space-y-4">
+        <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="flex justify-between items-center py-2 border-b last:border-0">
+            <span>我的订单</span>
+            <span className="text-gray-400 text-sm">{'>'}</span>
+          </div>
+          <div className="flex justify-between items-center py-2 border-b last:border-0">
+            <span>设置</span>
+            <span className="text-gray-400 text-sm">{'>'}</span>
+          </div>
+        </div>
+
+        <Button 
+          variant="destructive" 
+          className="w-full mt-8" 
+          onClick={handleLogout}
+        >
+          退出登录
+        </Button>
+      </div>
+    </div>
+  );
+}

@@ -1,4 +1,5 @@
 [source](https://learn.deeplearning.ai/courses/build-with-andrew/lesson/a45t1o/creating-an-app-with-ai)
+# You are AI builder now!
 
 - 需求
 
@@ -70,3 +71,23 @@
 - 如果有bug
   清楚的告诉AI 发生了什么
   当我点击“生成卡片”按钮时没有任何反应。你能帮我修复一下吗？
+
+## 乒乓游戏
+计算机历史上最早的视频游戏之一是一款叫做乒乓的游戏
+- 为我创建一个乒乓球游戏，使用单个HTML文件。用户通过方向键控制球拍，与电脑对战。
+- 添加3个难度等级供选择，并允许用户指定获胜所需的分数。在底部保留比分显示。
+- 将场地设为绿色，球拍设为米色，球设为白色。
+将此图像插入为背景：https://raw.githubusercontent.com/https-deep-learning-with-andrew-platform/main/images/tabletennis43.jpg
+
+### 原则
+- 具体一些，才能获得更好的结果
+- 将基础模块作为工具箱，按需使用
+- 使用你的聊天机器人进行迭代、改进和故障排查
+
+## A builder 
+
+- 一些灵感
+  搞笑的产品评价生成器 2.png
+  产品名称、一些数字、一个名词、一个身体部位生成产品评价
+  请假申请生成器
+  可以指定请假时间，一个名词，一个身体部位， 一个物品， 难后说需要整整一个月的假期。

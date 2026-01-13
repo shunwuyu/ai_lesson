@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>杭州两日浪漫游 - 9.1 Trip</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: 'ee357f74abe3e26c997b9bed0984dcca', // 提示：如果是Web端开发，请替换为您的安全密钥
+        }
+    </script>
+    <script src="https://webapi.amap.com/loader.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f0f9ff;
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-shadow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            bottom: 0;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+
+        .love-icon {
+            animation: beat 1.5s infinite;
+        }
+
+        @keyframes beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* 隐藏高德地图logo */
+        .amap-logo, .amap-copyright {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md fixed w-full z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <i class="fas fa-paper-plane text-teal-500 text-xl mr-2"></i>
+                    <span class="font-bold text-xl tracking-wider text-teal-800">Hangzhou Trip <i class="fas fa-heart text-pink-500 love-icon mx-1"></i> 9.1</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#map-section" class="text-gray-600 hover:text-teal-500 transition">地图概览</a>
+                    <a href="#itinerary" class="text-gray-600 hover:text-teal-500 transition">行程详情</a>
+                    <a href="#essentials" class="text-gray-600 hover:text-teal-500 transition">出行锦囊</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 顶部Hero区域 + 地图 -->
+    <div id="map-section" class="pt-16 h-[60vh] relative w-full bg-gray-200">
+        <div id="container" class="w-full h-full"></div>
+        
+        <!-- 浮动天气卡片 -->
+        <div class="absolute top-20 right-4 bg-white/90 backdrop-blur rounded-xl p-4 shadow-lg z-10 w-48 card-shadow">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs text-gray-500">2026-09-01</span>
+                <span class="text-xs bg-teal-100 text-teal-600 px-2 py-0.5 rounded-full">预计</span>
+            </div>
+            <div class="flex items-center">
+                <i class="fas fa-sun text-yellow-400 text-3xl mr-3"></i>
+                <div>
+                    <div class="text-2xl font-bold text-gray-800">26°C</div>
+                    <div class="text-sm text-gray-600">晴转多云</div>
+                </div>
+            </div>
+            <div class="mt-2 text-xs text-gray-500 border-t pt-2">
+                <i class="fas fa-wind mr-1"></i> 东风 2级
+            </div>
+        </div>
+
+        <!-- 快速行程概览卡片 -->
+        <div class="absolute bottom-4 left-4 right-4 md:left-8 md:w-96 bg-white/95 backdrop-blur rounded-xl p-4 shadow-lg z-10 card-shadow">
+            <h3 class="font-bold text-lg mb-3 text-teal-800 border-b pb-2">当前行程: Day 1 西湖漫步</h3>
+            <div class="space-y-3" id="mini-itinerary">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+        
+        <!-- 行程详情 -->
+        <div id="itinerary">
+            <h2 class="text-3xl font-bold text-center mb-10 text-teal-800">
+                <span class="border-b-4 border-pink-200">浪漫行程规划</span>
+            </h2>
+
+            <!-- Day 1 -->
+            <div class="mb-12">
+                <div class="flex items-center mb-6">
+                    <div class="bg-teal-500 text-white font-bold rounded-lg px-4 py-2 text-xl shadow-md mr-4">D1</div>
+                    <h3 class="text-2xl font-bold text-gray-800">9月1日 · 初见西湖与日落</h3>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- 左侧路线轴 -->
+                    <div class="relative pl-8 space-y-8" id="day1-timeline">
+                        <div class="timeline-line"></div>
+                        <!-- 动态生成 D1 节点 -->
+                    </div>
+                    <!-- 右侧详情展示 (瀑布流卡片) -->
+                    <div class="space-y-6" id="day1-cards">
+                        <!-- 动态生成 D1 卡片 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div>
+                <div class="flex items-center mb-6">
+                    <div class="bg-teal-500 text-white font-bold rounded-lg px-4 py-2 text-xl shadow-md mr-4">D2</div>
+                    <h3 class="text-2xl font-bold text-gray-800">9月2日 · 灵隐祈福与光影</h3>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- 左侧路线轴 -->
+                    <div class="relative pl-8 space-y-8" id="day2-timeline">
+                        <div class="timeline-line"></div>
+                         <!-- 动态生成 D2 节点 -->
+                    </div>
+                    <!-- 右侧详情展示 -->
+                    <div class="space-y-6" id="day2-cards">
+                        <!-- 动态生成 D2 卡片 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 附加功能区 -->
+        <div id="essentials" class="grid md:grid-cols-3 gap-6">
+            <!-- 美食 -->
+            <div class="bg-white rounded-2xl p-6 card-shadow border-t-4 border-orange-400">
+                <h4 class="font-bold text-lg mb-4 flex items-center"><i class="fas fa-utensils text-orange-400 mr-2"></i> 必吃美食</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex justify-between"><span>A.MONO 法式甜品</span> <span class="text-pink-500">★★★★☆</span></li>
+                    <li class="flex justify-between"><span>西湖醋鱼 (慎点)</span> <span class="text-gray-400">避雷</span></li>
+                    <li class="flex justify-between"><span>片儿川面</span> <span class="text-orange-500">推荐</span></li>
+                    <li class="flex justify-between"><span>葱包桧</span> <span class="text-orange-500">街头小吃</span></li>
+                </ul>
+            </div>
+
+            <!-- 物品清单 -->
+            <div class="bg-white rounded-2xl p-6 card-shadow border-t-4 border-blue-400">
+                <h4 class="font-bold text-lg mb-4 flex items-center"><i class="fas fa-suitcase text-blue-400 mr-2"></i> 必备清单</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li><input type="checkbox" class="mr-2" checked> 身份证/学生证</li>
+                    <li><input type="checkbox" class="mr-2" checked> 充电宝 (拍照耗电)</li>
+                    <li><input type="checkbox" class="mr-2" checked> 防晒霜/遮阳伞</li>
+                    <li><input type="checkbox" class="mr-2"> 舒适的平底鞋</li>
+                    <li><input type="checkbox" class="mr-2"> 驱蚊水 (山里蚊虫多)</li>
+                </ul>
+            </div>
+
+            <!-- 紧急联系 -->
+            <div class="bg-white rounded-2xl p-6 card-shadow border-t-4 border-red-400">
+                <h4 class="font-bold text-lg mb-4 flex items-center"><i class="fas fa-heartbeat text-red-400 mr-2"></i> 紧急助手</h4>
+                <div class="text-sm text-gray-600 space-y-2">
+                    <p>最近医院: 杭州市第一人民医院</p>
+                    <p>报警: 110 | 急救: 120</p>
+                    <div class="mt-4 p-3 bg-red-50 rounded text-red-600 text-xs">
+                        <i class="fas fa-exclamation-circle"></i> 灵隐寺请香注意防骗，建议只在寺内请香。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-white py-8 text-center mt-12">
+        <p class="text-gray-400 text-sm">Made with ❤️ for your Trip</p>
+        <p class="text-gray-500 text-xs mt-2">数据来源：高德开放平台</p>
+    </footer>
+
+    <!-- 数据与逻辑 -->
+    <script>
+        // 模拟数据 (基于MCP查询结果)
+        const tripData = {
+            day1: [
+                {
+                    id: 'd1-1',
+                    time: '14:00',
+                    name: '湖滨公园 (出发)',
+                    desc: '西湖的绝佳起点，看松鼠，拍湖景。',
+                    type: 'start',
+                    lat: 30.256583,
+                    lng: 120.158818,
+                    photo: 'https://store.is.autonavi.com/showpic/04A76AB46308410FBDAF3C8577E67275',
+                    rating: '4.7',
+                    duration: '0.5h'
+                },
+                {
+                    id: 'd1-2',
+                    time: '15:00',
+                    name: '断桥残雪',
+                    desc: '许仙白娘子相会处，虽然没雪，但桥上视野开阔，适合人像摄影。',
+                    type: 'scenic',
+                    lat: 30.2588, // 近似
+                    lng: 120.1519,
+                    photo: 'http://store.is.autonavi.com/showpic/7c59b9c01d797d7372df644ac99c3492',
+                    rating: '4.8',
+                    duration: '1h'
+                },
+                {
+                    id: 'd1-3',
+                    time: '16:30',
+                    name: 'A.MONO 法式甜品',
+                    desc: '位于满觉陇的精致甜品店，环境优雅，适合休息拍照。',
+                    type: 'food',
+                    lat: 30.217525,
+                    lng: 120.123375,
+                    photo: 'https://aos-comment.amap.com/B0FFJN4BD2/comment/content_media_external_file_100002339_1767019834225_38740273.jpg',
+                    rating: '4.4',
+                    duration: '1.5h'
+                },
+                {
+                    id: 'd1-4',
+                    time: '19:00',
+                    name: '雷峰塔 (日落/夜景)',
+                    desc: '夕阳西下，雷峰夕照。晚上亮灯后更美。',
+                    type: 'scenic',
+                    lat: 30.2319,
+                    lng: 120.1420,
+                    photo: 'http://store.is.autonavi.com/showpic/00ed729f44f8613ee1ecdb93d10370f4',
+                    rating: '4.7',
+                    duration: '1.5h'
+                }
+            ],
+            day2: [
+                {
+                    id: 'd2-1',
+                    time: '08:30',
+                    name: '灵隐寺',
+                    desc: '千年古刹，祈福求签。建议早去避开人流。',
+                    type: 'scenic',
+                    lat: 30.240826,
+                    lng: 120.101406,
+                    photo: 'http://store.is.autonavi.com/showpic/4aa0a6a1b6ee72c9833441f363cbb43a',
+                    rating: '4.9',
+                    duration: '2.5h'
+                },
+                {
+                    id: 'd2-2',
+                    time: '11:30',
+                    name: '素面/附近餐饮',
+                    desc: '灵隐寺内的素面非常有名，值得一试。',
+                    type: 'food',
+                    lat: 30.240826,
+                    lng: 120.101406,
+                    photo: 'https://store.is.autonavi.com/showpic/89f14a50e5de4e4ffaf01a11ebdf5ed0',
+                    rating: '4.5',
+                    duration: '1h'
+                },
+                {
+                    id: 'd2-3',
+                    time: '13:30',
+                    name: '法喜寺 (上天竺)',
+                    desc: '网红打卡地，求姻缘灵验，拍照非常出片。',
+                    type: 'scenic',
+                    lat: 30.227208,
+                    lng: 120.095362,
+                    photo: 'http://store.is.autonavi.com/showpic/3d2678cd496db03f14090ba6e1330717',
+                    rating: '4.8',
+                    duration: '2h'
+                }
+            ]
+        };
+
+        // 初始化页面内容
+        function initContent() {
+            renderDay('day1', tripData.day1);
+            renderDay('day2', tripData.day2);
+            renderMiniItinerary();
+        }
+
+        // 渲染每一天的行程
+        function renderDay(dayId, nodes) {
+            const timelineEl = document.getElementById(`${dayId}-timeline`);
+            const cardsEl = document.getElementById(`${dayId}-cards`);
+
+            nodes.forEach((node, index) => {
+                // 1. 渲染时间轴节点
+                const isLast = index === nodes.length - 1;
+                const nodeHtml = `
+                    <div class="relative z-10 flex items-start group cursor-pointer hover:bg-white/50 p-2 rounded-lg transition" onclick="focusOnMap('${node.id}')">
+                        <div class="bg-white border-4 ${node.type === 'food' ? 'border-pink-400' : 'border-teal-500'} w-4 h-4 rounded-full mt-1.5 -ml-[1.65rem] shrink-0"></div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-800">${node.time}</div>
+                            <div class="text-sm font-medium text-gray-600">${node.name}</div>
+                            ${!isLast ? `<div class="text-xs text-gray-400 mt-2 pl-2 border-l-2 border-dotted border-gray-300 h-8"> 🚗 约15分钟</div>` : ''}
+                        </div>
+                    </div>
+                `;
+                timelineEl.insertAdjacentHTML('beforeend', nodeHtml);
+
+                // 2. 渲染卡片
+                const cardHtml = `
+                    <div class="bg-white rounded-xl overflow-hidden card-shadow flex flex-col md:flex-row h-full md:h-48" id="card-${node.id}">
+                        <div class="md:w-1/3 h-48 md:h-full relative overflow-hidden">
+                            <img src="${node.photo || 'https://via.placeholder.com/300'}" class="w-full h-full object-cover transform hover:scale-110 transition duration-700" alt="${node.name}">
+                            <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+                                ⭐ ${node.rating}
+                            </div>
+                        </div>
+                        <div class="p-4 md:w-2/3 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-bold text-lg text-gray-800">${node.name}</h4>
+                                    <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">游玩 ${node.duration}</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-2 line-clamp-2">${node.desc}</p>
+                                <div class="mt-2 text-xs text-gray-500">
+                                    <i class="far fa-clock"></i> 开放时间: 07:00-18:00 (参考)
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-end">
+                                <a href="https://uri.amap.com/marker?position=${node.lng},${node.lat}&name=${node.name}" target="_blank" 
+                                   class="bg-teal-500 hover:bg-teal-600 text-white text-sm px-4 py-2 rounded-full shadow-md transition flex items-center">
+                                    <i class="fas fa-location-arrow mr-2"></i> 导航前往
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                cardsEl.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        // 渲染左下角小浮窗
+        function renderMiniItinerary() {
+            const container = document.getElementById('mini-itinerary');
+            tripData.day1.forEach(node => {
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="flex items-center text-sm cursor-pointer hover:text-teal-600" onclick="focusOnMap('${node.id}')">
+                        <div class="w-2 h-2 rounded-full bg-teal-400 mr-3"></div>
+                        <span class="w-12 text-gray-400 text-xs">${node.time}</span>
+                        <span class="truncate font-medium">${node.name}</span>
+                    </div>
+                `);
+            });
+        }
+
+        // 地图相关逻辑
+        let map;
+        let markers = {};
+
+        function initMap() {
+            AMapLoader.load({
+                key: "YOUR_KEY_HERE", // 必须: 请使用您的Key
+                version: "2.0",
+                plugins: ['AMap.Driving', 'AMap.ToolBar', 'AMap.Scale']
+            }).then((AMap) => {
+                map = new AMap.Map("container", {
+                    viewMode: "3D",
+                    zoom: 13,
+                    center: [120.158818, 30.256583], // 默认杭州西湖
+                    pitch: 45,
+                });
+                
+                map.addControl(new AMap.ToolBar());
+                map.addControl(new AMap.Scale());
+
+                // 绘制 Day 1 路线和标记
+                drawRoute(tripData.day1, 'teal', AMap);
+                drawRoute(tripData.day2, 'pink', AMap);
+
+            }).catch(e => {
+                console.warn("地图加载失败，可能是Key未配置。页面将以降级模式运行。", e);
+                document.getElementById('container').innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full bg-gray-100 text-gray-500">
+                        <i class="fas fa-map-marked-alt text-6xl mb-4 text-gray-300"></i>
+                        <p>地图加载需配置API Key</p>
+                        <p class="text-xs mt-2">但您的行程卡片已准备就绪 👇</p>
+                    </div>
+                `;
+            });
+        }
+
+        function drawRoute(nodes, color, AMap) {
+            const path = [];
+            
+            nodes.forEach((node, i) => {
+                const position = new AMap.LngLat(node.lng, node.lat);
+                path.push(position);
+
+                // 创建标记
+                const markerContent = `
+                    <div class="flex flex-col items-center">
+                        <div class="bg-white text-xs font-bold px-2 py-1 rounded shadow-md mb-1 whitespace-nowrap text-${color}-600 border border-${color}-100">
+                            ${node.name}
+                        </div>
+                        <div class="w-8 h-8 bg-${color}-500 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-white font-bold text-xs">
+                            ${i + 1}
+                        </div>
+                    </div>
+                `;
+
+                const marker = new AMap.Marker({
+                    position: position,
+                    content: markerContent,
+                    offset: new AMap.Pixel(-16, -40),
+                    map: map
+                });
+
+                markers[node.id] = { marker, position };
+
+                marker.on('click', () => {
+                    document.getElementById(`card-${node.id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    highlightCard(node.id);
+                });
+            });
+
+            // 简单连线
+            /* 注意：实际驾车路线需要调用 Driving API，这里仅用直线连接演示 */
+            const polyline = new AMap.Polyline({
+                path: path,
+                isOutline: true,
+                outlineColor: '#ffeeff',
+                borderWeight: 2,
+                strokeColor: color === 'teal' ? "#14b8a6" : "#ec4899", 
+                strokeOpacity: 0.8,
+                strokeWeight: 5,
+                strokeStyle: "dashed",
+                lineJoin: 'round',
+                lineCap: 'round',
+                zIndex: 50,
+            });
+            map.add(polyline);
+        }
+
+        function focusOnMap(id) {
+            if (!map || !markers[id]) return;
+            map.setZoomAndCenter(16, markers[id].position);
+            highlightCard(id);
+        }
+
+        function highlightCard(id) {
+            // 移除其他高亮
+            document.querySelectorAll('[id^="card-"]').forEach(el => el.classList.remove('ring-4', 'ring-teal-200'));
+            const card = document.getElementById(`card-${id}`);
+            if (card) {
+                card.classList.add('ring-4', 'ring-teal-200');
+            }
+        }
+
+        // 启动
+        initContent();
+        initMap();
+
+    </script>
+</body>
+</html>
