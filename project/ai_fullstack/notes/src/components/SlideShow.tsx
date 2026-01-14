@@ -1,88 +1,73 @@
-import * as React from "react"
-import Autoplay from "embla-carousel-autoplay"
+// components/Slideshow.tsx
+import { useRef, useState, useEffect } from "react";
+import Autoplay from "embla-carousel-autoplay";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  type CarouselApi,
-} from "@/components/ui/carousel"
-import { cn } from "@/lib/utils"
+  Carousel,// 轮播图组件，显示、自动切换、分页等功能
+  CarouselContent, // 负责展示实际的轮播内容
+  CarouselItem, // CarouselItem 是每个单独的轮播项
+  type CarouselApi, // 通过这个 API，你可以访问和控制轮播图的一些行为，如跳转到特定的轮播项、启动或停止自动播放等
+} from "@/components/ui/carousel";
 
 export interface SlideData {
-  id: number | string;
-  image?: string; // 可选：如果是图片轮播
-  content?: React.ReactNode; // 可选：如果是自定义内容
-  title?: string;
+  id: number | string; // 唯一标识符
+  image: string; // 图片URL
+  title?: string; // 可选标题
 }
 
 interface SlideshowProps {
-  slides: SlideData[];
-  autoPlayDelay?: number; // 自动播放间隔，默认 3000ms
-  className?: string;
+  slides: SlideData[]; // 支持包含id, image, title的slides数组
+  autoPlay?: boolean;
+  autoPlayDelay?: number;
 }
 
-export default function Slideshow({ 
-  slides, 
-  autoPlayDelay = 3000, 
-  className 
+export default function Slideshow({
+  slides,
+  autoPlay = true,
+  autoPlayDelay = 3000, // 自动播放延迟时间，单位毫秒
 }: SlideshowProps) {
-  const [api, setApi] = React.useState<CarouselApi>()
-  const [current, setCurrent] = React.useState(0)
-  const [count, setCount] = React.useState(0)
-
-  // 配置自动播放插件
-  const plugin = React.useRef(
-    Autoplay({ delay: autoPlayDelay, stopOnInteraction: true })
-  )
+  // 持久化跨渲染的可变引用对象
+  const plugin = useRef(
+    autoPlay ? Autoplay({ delay: autoPlayDelay, stopOnInteraction: true }) : null
+  );
+  const [api, setApi] = useState<CarouselApi | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   // 监听 Carousel 状态变化（用于更新底部指示点）
-  React.useEffect(() => {
-    if (!api) {
-      return
-    }
+  useEffect(() => {
+    if (!api) return;
 
-    setCount(api.scrollSnapList().length)
-    setCurrent(api.selectedScrollSnap())
+    setSelectedIndex(api.selectedScrollSnap()); // 初始化选中索引
 
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap())
-    })
-  }, [api])
+    const onSelect = () => setSelectedIndex(api.selectedScrollSnap());
+    api.on("select", onSelect);
+
+    return () => {
+      api.off("select", onSelect); // 组件卸载时移除事件监听
+    };
+  }, [api]); // 依赖项数组包含 api，确保在 api 变化时重新运行
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div className="relative w-full">
       <Carousel
         setApi={setApi}
-        plugins={[plugin.current]}
+        plugins={plugin.current ? [plugin.current] : []}
+        opts={{ loop: true }}
+        onMouseEnter={() => plugin.current?.stop()}
+        onMouseLeave={() => plugin.current?.reset()}
         className="w-full"
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
-        opts={{
-          loop: true, // 开启无限循环
-        }}
       >
         <CarouselContent>
-          {slides.map((slide, index) => (
-            <CarouselItem key={slide.id || index}>
-              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border bg-muted">
-                {/* 如果有图片，显示图片 */}
-                {slide.image ? (
-                  <img
-                    src={slide.image}
-                    alt={slide.title || "slide"}
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                ) : (
-                  /* 如果没有图片，显示自定义内容或占位符 */
-                  <div className="flex h-full items-center justify-center p-6">
-                    {slide.content || <span className="text-2xl font-semibold">{slide.title}</span>}
-                  </div>
-                )}
-                
-                {/* 标题遮罩 (可选) */}
-                {slide.title && (
+          {slides.map(({ id, image, title }, index) => (
+            <CarouselItem key={id}>
+              <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden">
+                <img
+                  src={image}
+                  alt={title || `slide ${index + 1}`}
+                  className="h-full w-full object-cover"
+                />
+                {title && (
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-white">
-                    <h3 className="text-lg font-bold">{slide.title}</h3>
+                    <h3 className="text-lg font-bold">{title}</h3>
                   </div>
                 )}
               </div>
@@ -91,22 +76,19 @@ export default function Slideshow({
         </CarouselContent>
       </Carousel>
 
-      {/* 底部指示点 (Dots) */}
-      <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10">
-        {Array.from({ length: count }).map((_, index) => (
+      {/* 指示点 */}
+      <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
+        {slides.map((_, i) => (
           <button
-            key={index}
-            className={cn(
-              "h-2 w-2 rounded-full transition-all duration-300",
-              current === index 
-                ? "bg-white w-6" // 选中状态：白色长条
-                : "bg-white/50 hover:bg-white/80" // 未选中状态：半透明圆点
-            )}
-            onClick={() => api?.scrollTo(index)}
-            aria-label={`Go to slide ${index + 1}`}
+            key={i}
+            className={`h-2 w-2 rounded-full transition-all ${
+              selectedIndex === i ? "bg-white w-6" : "bg-white/50"
+            }`}
+            onClick={() => api?.scrollTo(i)}
+            aria-label={`Go to slide ${i + 1}`}
           />
         ))}
       </div>
     </div>
-  )
+  );
 }

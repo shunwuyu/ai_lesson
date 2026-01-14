@@ -279,6 +279,13 @@ shadcn/ui 是一个基于 Radix UI 和 Tailwind CSS 的可定制 React 组件库
   - npx shadcn@latest add carousel
   - pnpm i embla-carousel-autoplay
   - components/SlideShow.tsx
+- BackToTop 组件  节流
+
+### mockjs 模拟数据
+Mock.js 能在后端接口未完成时，快速生成模拟数据，让前端独立开发、调试和演示，提升协作效率。
+- vite.config.ts 配置
+- pnpm i mockjs @types/mockjs
+- mock/post.js 
 
 ### 注册页面
 - pnpm i axios

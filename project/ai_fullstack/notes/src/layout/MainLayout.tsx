@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { BottomNav } from '@/components/BottomNav';
+import { BackToTop } from '@/components/BackToTop';
 
 export const MainLayout = () => {
   return (
@@ -11,6 +12,7 @@ export const MainLayout = () => {
       
       {/* 底部导航 */}
       <BottomNav />
+      <BackToTop threshold={400} />
     </div>
   );
 };
