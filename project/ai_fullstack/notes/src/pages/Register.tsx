@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 // 引入 API
-import { registerUser } from "@/api/auth";
+// import { registerUser } from "@/api/auth";
 
 // 定义表单数据类型（手动）
 type FormValues = {
@@ -73,22 +73,7 @@ export default function Register() {
     }
 
     setIsLoading(true);
-    try {
-      await registerUser({
-        name: values.name,
-        password: values.password,
-      });
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "注册服务暂不可用，请稍后再试";
-      // 可在此处添加 toast 提示（如需）
-      console.error(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
+    
   }
 
   return (

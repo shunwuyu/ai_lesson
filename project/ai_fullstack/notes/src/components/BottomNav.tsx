@@ -1,12 +1,12 @@
 import { Home, User } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/store/authStore';
+import { useUserStore } from '@/store/user';
 import { cn } from '@/lib/utils'; // Shadcn 的工具函数
 
 export const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const { isLogin } = useUserStore();
 
   const tabs = [
     {
@@ -23,7 +23,7 @@ export const BottomNav = () => {
 
   const handleNavigation = (path: string) => {
     // 核心逻辑：拦截跳转
-    if (path === '/mine' && !isLoggedIn) {
+    if (path === '/mine' && !isLogin) {
       navigate('/login');
       return;
     }

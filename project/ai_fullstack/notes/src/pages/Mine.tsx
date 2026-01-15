@@ -1,20 +1,20 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/store/authStore';
+import { useUserStore } from '@/store/user';
 import { Button } from '@/components/ui/button';
 
 export default function Mine() {
-  const { userInfo, logout, isLoggedIn } = useAuthStore();
+  const { user, isLogin, logout } = useUserStore();
   const navigate = useNavigate();
 
   // 虽然 Tab 栏做了拦截，但为了安全，页面内部也做一个检查（双重保险）
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLogin) {
       navigate('/login');
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLogin, navigate]);
 
-  if (!userInfo) return null;
+  if (!user) return null;
 
   const handleLogout = () => {
     logout();
@@ -26,11 +26,11 @@ export default function Mine() {
       <div className="bg-white p-6 pb-10 mb-4">
         <div className="flex items-center space-x-4">
           <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold">
-            {userInfo.name[0].toUpperCase()}
+            {user.name[0].toUpperCase()}
           </div>
           <div>
-            <h2 className="text-xl font-bold">{userInfo.name}</h2>
-            <p className="text-sm text-gray-500">ID: {userInfo.id}</p>
+            <h2 className="text-xl font-bold">{user.name}</h2>
+            <p className="text-sm text-gray-500">ID: {user.id}</p>
           </div>
         </div>
       </div>
