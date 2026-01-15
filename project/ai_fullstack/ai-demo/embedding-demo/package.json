@@ -1,0 +1,19 @@
+{
+  "name": "embedding-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@langchain/deepseek": "^1.0.5",
+    "@langchain/openai": "^1.2.2",
+    "dotenv": "^17.2.3",
+    "langchain": "^1.2.10"
+  }
+}

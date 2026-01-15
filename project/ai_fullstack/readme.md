@@ -392,3 +392,7 @@ export class AppModule {}
 
 ### 登录，注册功能
 - next.js 注册
+
+## AI 功能
+### RAG
+- 向量化 embedding-demo
