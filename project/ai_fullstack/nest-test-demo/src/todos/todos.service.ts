@@ -27,4 +27,11 @@ export class TodosService {
     this.todos.push(todo);
     return todo;
   }
+
+  deleteTodo(id: number) {
+    console.log(typeof id, '///////')
+    this.todos = this.todos.filter((todo) => todo.id != id);
+    console.log(this.todos);
+    return { message: 'Todo deleted', code: 200 };
+  }
 }
