@@ -429,7 +429,9 @@ npm install @prisma/client 自动生成的、类型安全的数据库客户端�
 - nest g service user
 - nest g controller user
 
-
+### 后台管理系统用户列表功能
+- nest-prisma-demo/user
+- antd-admin/pages/Users
 
 
 ### 登录，注册功能
@@ -438,3 +440,4 @@ npm install @prisma/client 自动生成的、类型安全的数据库客户端�
 ## AI 功能
 ### RAG
 - 向量化 embedding-demo
+

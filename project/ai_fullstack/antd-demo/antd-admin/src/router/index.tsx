@@ -2,6 +2,7 @@ import { Navigate, RouteObject, createBrowserRouter } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import Login from '../pages/Login';
 import Home from '../pages/Home/index';
+import Users from '../pages/Users/index';
 
 // 路由守卫：验证是否登录
 const RequireAuth = ({ children }: { children: React.ReactNode }) => {
@@ -35,6 +36,12 @@ export const routes: RouteObject[] = [
       <RequireAuth>
         <Home />
       </RequireAuth>
+    ),
+  },
+  {
+    path: '/users',
+    element: (
+      <Users />
     ),
   },
   // 404 路由（可选，补充完整）
