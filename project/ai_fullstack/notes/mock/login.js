@@ -9,13 +9,13 @@ const secret = '!&124coddefgg';
 // login 模块 mock 
 export default [
     {
-        url: '/api/login',
+        url: '/api/auth/login',
         method: 'post',
         timeout: 2000, // 请求耗时
         response: (req, res) => {
             // req, username, password
-            const {username, password} = req.body;
-            if (username !== 'admin' || password !== '123456') {
+            const {name, password} = req.body;
+            if (name !== 'admin' || password !== '123456') {
                 return {
                     code: 1,
                     message: '用户名或密码错误'
@@ -25,7 +25,7 @@ export default [
             const token = jwt.sign({
                 user: {
                     id: "001",
-                    username: "admin"
+                    name: "admin"
                 }
             }, secret, {
                 expiresIn: 86400
@@ -36,7 +36,7 @@ export default [
                 token,
                 data: {
                     id: "001",
-                    username: "admin"
+                    name: "admin"
                 }
             }
         }

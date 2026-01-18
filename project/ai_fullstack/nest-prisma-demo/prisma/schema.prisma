@@ -1,19 +1,199 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-  
+model User {
+  id        Int    @id @default(autoincrement())
+  name      String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @default(now()) @map("updated_at") @db.Timestamptz(6)
+  posts Post[]
+  comments  Comment[] 
+  likes UserLikePost[]
+  avatars Avatar[]
+  files File[]
+  @@map("users")
 }
 
-model User {
-  id         BigInt   @id @default(autoincrement())
-  name       String   @unique @db.VarChar(255)
-  password   String   @db.VarChar(255)
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @default(now()) @map("updated_at")
+model Post {
+  id      Int     @id @default(autoincrement())
+  // title 对应 varchar(255)
+  title   String  @db.VarChar(255)
+  
+  // content 对应 longtext，在 PostgreSQL 中映射为 Text
+  // String? 表示允许为 NULL (对应 MySQL 的 DEFAULT NULL)
+  content String? @db.Text
+  
+  // userId 对应 int(11)，允许为 NULL
+  userId  Int?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  
+  // 重点：在这里也加上 @default(now())
+  // 这样在迁移时，旧的 25 条数据会自动填入当前时间，满足 NOT NULL 约束
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  @@map("users")
+  // 建立与 User 表的关系
+  // onDelete: SetNull 表示用户删除后，帖子的 userId 设为 null（对应原表允许 null 的逻辑）
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  comments Comment[] 
+  tags PostTag[]
+  likes UserLikePost[]
+  files File[]
+  // 对应 MySQL 中的 KEY `userId` (`userId`)
+  @@index([userId])
+
+  // 映射到数据库中实际的表名 "posts"
+  @@map("posts")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  // content 对应 longtext，PostgreSQL 中使用 Text
+  content   String?  @db.Text
+  
+  postId    Int
+  userId    Int
+  parentId  Int?     // 对应 DEFAULT NULL，用于自关联
+
+  // 1. 关联到 Post
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // 2. 关联到 User
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 3. 自关联：父评论与回复（子评论）
+  // @relation("CommentToComment") 必须命名，因为一个模型内有两个字段指向同一个模型
+  parent    Comment? @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentToComment")
+
+  // 对应 MySQL 中的 KEY 索引
+  @@index([postId])
+  @@index([userId])
+  @@index([parentId])
+
+  // 映射到数据库表名 "comments"
+  @@map("comments")
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  
+  // name 对应 varchar(255) 且具有 UNIQUE 约束
+  name String @unique @db.VarChar(255)
+
+  // 如果你需要实现多对多关联（一个标签对应多个帖子，一个帖子有多个标签）
+  posts PostTag[]
+
+  @@map("tags")
+}
+
+model PostTag {
+  postId Int
+  tagId  Int
+
+  // 关系定义
+  // onDelete: Cascade 确保删除帖子或标签时，中间表的记录也被清理
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  // 对应 MySQL 的 PRIMARY KEY (`postId`, `tagId`)
+  @@id([postId, tagId])
+
+  // 对应 MySQL 的 KEY `tagId` (`tagId`)
+  // 注意：PostgreSQL 会自动为主键的第一列创建索引，
+  // 但为了优化按标签查询帖子的性能，需要为第二列 tagId 显式创建索引
+  @@index([tagId])
+
+  // 映射到数据库表名 "post_tags"
+  @@map("post_tags")
+}
+
+model UserLikePost {
+  userId Int
+  postId Int
+
+  // 关系定义
+  // 注意：此处 references: [id] 对应的模型是 User 和 Post
+  // onDelete: Cascade 建议开启，用户或帖子删除时自动清理点赞记录
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  // 对应 MySQL 的 PRIMARY KEY (`userId`, `postId`)
+  @@id([userId, postId])
+
+  // 对应 MySQL 的 KEY `postId` (`postId`)
+  @@index([postId])
+
+  // 如果你希望遵循之前的复数建议，可以改为 "user_like_posts"
+  // 这里先严格对应你提供的 SQL 表名
+  @@map("user_like_posts")
+}
+
+model Avatar {
+  id       Int    @id @default(autoincrement())
+  
+  // mimetype 对应 varchar(255)
+  mimetype String @db.VarChar(255)
+  
+  // filename 对应 varchar(255)
+  filename String @db.VarChar(255)
+  
+  // size 对应 int(11)
+  size     Int
+  
+  // userId 对应 int(11) NOT NULL
+  userId   Int
+
+  // 建立与 User 表的关系
+  // onDelete: Cascade 建议开启，用户注销时自动删除头像记录
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 对应 MySQL 中的 KEY `userId` (`userId`)
+  @@index([userId])
+
+  // 按照我们之前的经验建议，使用复数表名 avatars
+  @@map("avatars")
+}
+
+model File {
+  id           Int      @id @default(autoincrement())
+  // originalname 对应 varchar(255)
+  originalname String   @db.VarChar(255)
+  // mimetype 对应 varchar(255)
+  mimetype     String   @db.VarChar(255)
+  // filename 对应 varchar(255)
+  filename     String   @db.VarChar(255)
+  // size 对应 int(11)
+  size         Int
+  
+  // width/height 对应 smallint(6)
+  // 在 PostgreSQL 中，smallint 映射为 Int 并添加 @db.SmallInt
+  width        Int      @db.SmallInt
+  height       Int      @db.SmallInt
+  // metadata 对应 json
+  // PostgreSQL 完美支持 native JSON 类型
+  metadata     Json?
+  // 外键字段
+  postId       Int?     // 对应 DEFAULT NULL
+  userId       Int      // 对应 NOT NULL
+
+  // 关系定义
+  // 关联到 Post：当帖子删除时，文件关联设为 null（因为 postId 允许为空）
+  post         Post?    @relation(fields: [postId], references: [id], onDelete: SetNull)
+  
+  // 关联到 User：当用户删除时，级联删除其上传的文件
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 对应 MySQL 中的 KEY 索引
+  @@index([postId])
+  @@index([userId])
+
+  // 按照之前的习惯，映射为复数形式
+  @@map("files")
 }

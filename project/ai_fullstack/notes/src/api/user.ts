@@ -4,6 +4,6 @@ export const getUser = () => {
     return axios.get('/user');
 }
 
-export const doLogin = (data: { username: string; password: string }) => {
-    return axios.post('/login', data);
+export const doLogin = (data: { name: string; password: string }) => {
+    return axios.post('/auth/login', data);
 } 

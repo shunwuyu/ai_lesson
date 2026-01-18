@@ -35,12 +35,13 @@ export const useHomeStore = create<HomeState>((set, get) => ({
     if (get().loading) return;
     set({loading: true});
     try {
-      const { list } = await fetchPosts(get().page);
-      if (list.length === 0) {
+      const { items } = await fetchPosts(get().page);
+      console.log(items, '?????');
+      if (items.length === 0) {
         set({hasMore: false})
       } else {
         set({
-          posts: [...get().posts, ...list],
+          posts: [...get().posts, ...items],
           page: get().page + 1,
         })
       }

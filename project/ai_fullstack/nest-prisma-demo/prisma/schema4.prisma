@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int    @id @default(autoincrement())
+  name      String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @default(now()) @map("updated_at") @db.Timestamptz(6)
+  posts Post[]
+  comments  Comment[] 
+  @@map("users")
+}
+
+model Post {
+  id      Int     @id @default(autoincrement())
+  // title 对应 varchar(255)
+  title   String  @db.VarChar(255)
+  
+  // content 对应 longtext，在 PostgreSQL 中映射为 Text
+  // String? 表示允许为 NULL (对应 MySQL 的 DEFAULT NULL)
+  content String? @db.Text
+  
+  // userId 对应 int(11)，允许为 NULL
+  userId  Int?
+
+  // 建立与 User 表的关系
+  // onDelete: SetNull 表示用户删除后，帖子的 userId 设为 null（对应原表允许 null 的逻辑）
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  comments Comment[] 
+
+  // 对应 MySQL 中的 KEY `userId` (`userId`)
+  @@index([userId])
+
+  // 映射到数据库中实际的表名 "posts"
+  @@map("posts")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  // content 对应 longtext，PostgreSQL 中使用 Text
+  content   String?  @db.Text
+  
+  postId    Int
+  userId    Int
+  parentId  Int?     // 对应 DEFAULT NULL，用于自关联
+
+  // 1. 关联到 Post
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // 2. 关联到 User
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 3. 自关联：父评论与回复（子评论）
+  // @relation("CommentToComment") 必须命名，因为一个模型内有两个字段指向同一个模型
+  parent    Comment? @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentToComment")
+
+  // 对应 MySQL 中的 KEY 索引
+  @@index([postId])
+  @@index([userId])
+  @@index([parentId])
+
+  // 映射到数据库表名 "comments"
+  @@map("comments")
+}

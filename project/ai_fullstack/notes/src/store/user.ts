@@ -5,7 +5,7 @@ import type { User } from '../types/index';
 interface UserStore {
   user: User | null;
   isLogin: boolean;
-  login: (credentials: { username: string; password: string }) => Promise<void>;
+  login: (credentials: { name: string; password: string }) => Promise<void>;
   logout: () => void;
 }
 
@@ -13,11 +13,11 @@ export const useUserStore = create<UserStore>((set) => ({
   user: null,
   isLogin: false,
 
-  login: async ({ username = '', password = '' }) => {
-    const res = await doLogin({ username, password });
+  login: async ({ name = '', password = '' }) => {
+    const res = await doLogin({ name, password });
     // 假设 res.data 结构为 { token: string; data: User }
-    const { token, data: user } = res.data;
-
+    // const { token, data: user } = res.data;
+    const { access_token: token, data: user } = res.data;
     localStorage.setItem('token', token);
     set({
       user,

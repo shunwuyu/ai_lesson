@@ -16,7 +16,7 @@ export default function Login() {
   }
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     password: '',
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,17 +29,17 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.username || !formData.password) return;
+    if (!formData.name || !formData.password) return;
     setLoading(true);
     try {
-      await login({ username: formData.username, password: formData.password });
+      await login({ name: formData.name, password: formData.password });
       navigate('/', { replace: true });
     } catch (error) {
       console.error('登录失败:', error);
     }
     setLoading(false);
     // 模拟登录请求
-    // login({ id: 1, name: formData.username });
+    // login({ id: 1, name: formData.name });
     
     // 登录成功后返回上一页或去我的页面
     // navigate('/mine', { replace: true });
@@ -54,11 +54,11 @@ export default function Login() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="username">用户名</Label>
+            <Label htmlFor="name">用户名</Label>
             <Input 
-              id="username" 
+              id="name" 
               placeholder="请输入用户名" 
-              value={formData.username}
+              value={formData.name}
               onChange={handleChange}
             />
           </div>

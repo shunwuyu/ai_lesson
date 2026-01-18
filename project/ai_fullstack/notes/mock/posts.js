@@ -7,26 +7,25 @@ const posts = Mock.mock({
     {
       // 文章标题
       title: '@ctitle(8, 20)',
-      // 作者
-      author: '@cname',
+      brief: '@ctitle(20, 100)',
       // 阅读量
-      views: '@integer(100, 100000)',
+      totalComments: '@integer(1, 10)',
       // 点赞数
-      likes: '@integer(0, 500)',
+      totalLikes: '@integer(0, 500)',
       // 发布时间
-      createdAt: '@datetime("yyyy-MM-dd HH:mm")',
-      // 是否有图片（概率 60%）
-      hasImage: '@boolean(true, 0.4)',
-      // 图片链接（如果有的话）
-      imageUrl: '@image(300x200, #f0f0f0, #999, "post", #fff)',
-      // 标签/分类（随机选一个）
-      category: () => Mock.Random.pick(categories),
-      // 是否置顶（少量）
-      isTop: '@boolean(false, 0.8)',
-      // 内容摘要（前 50 字左右）
-      excerpt: '@cparagraph(1, 2)',
-      // 是否有评论（用于 UI 展示）
-      comments: '@integer(0, 100)',
+      publishedAt: '@datetime("yyyy-MM-dd HH:mm")',
+      user: {
+        id: '@integer(1, 10)',
+        name: '@ctitle(2, 3)',
+        avatar: '@image(300x200, #f0f0f0, #999, "post", #fff)' 
+      },  
+      tags: () => Mock.Random.pick(categories, 2),
+      thumbnail: '@image(300x200, #f0f0f0, #999, "post", #fff)',
+      pics: [
+        '@image(300x200, #f0f0f0, #999, "post", #fff)',
+        '@image(300x200, #f0f0f0, #999, "post", #fff)',
+        '@image(300x200, #f0f0f0, #999, "post", #fff)',
+      ],  
       // 唯一 ID
       id: '@increment(1)'
     }
@@ -70,17 +69,16 @@ export default [
       const paginatedData = posts.slice(start, end);
 
       return {
-        code: 200,
+        status: 200,
         msg: 'success',
-        data: {
-          list: paginatedData,
-          pagination: {
-            current: currentPage,
-            pageSize: size,
-            total,
-            totalPage: Math.ceil(total / size)
-          }
+        items: paginatedData,
+        pagination: {
+          current: currentPage,
+          limit: size,
+          total,
+          totalPage: Math.ceil(total / size)
         }
+        
       };
     }
   }

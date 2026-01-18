@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int    @id @default(autoincrement())
+  name      String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @default(now()) @map("updated_at") @db.Timestamptz(6)
+  posts Post[]
+  @@map("users")
+}
+
+model Post {
+  id      Int     @id @default(autoincrement())
+  // title 对应 varchar(255)
+  title   String  @db.VarChar(255)
+  
+  // content 对应 longtext，在 PostgreSQL 中映射为 Text
+  // String? 表示允许为 NULL (对应 MySQL 的 DEFAULT NULL)
+  content String? @db.Text
+  
+  // userId 对应 int(11)，允许为 NULL
+  userId  Int?
+
+  // 建立与 User 表的关系
+  // onDelete: SetNull 表示用户删除后，帖子的 userId 设为 null（对应原表允许 null 的逻辑）
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // 对应 MySQL 中的 KEY `userId` (`userId`)
+  @@index([userId])
+
+  // 映射到数据库中实际的表名 "posts"
+  @@map("posts")
+}
