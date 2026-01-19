@@ -267,6 +267,7 @@ npm install -D @types/node
 ### shadcn-ui 初始化
 
 shadcn/ui 是一个基于 Radix UI 和 Tailwind CSS 的可定制 React 组件库，将组件代码直接复制到你的项目中，让你完全掌控样式和逻辑；其核心优势是：零黑盒、高度可定制、自动集成 Tailwind、类型安全、且只引入所需组件，无冗余依赖。
+Radix UI 是一个“无样式（Headless）”的组件库， shadcn给这个骨架套上了用 Tailwind CSS 写的漂亮“衣服“。
 
 - npx shadcn@latest init
 - npx shadcn@latest add button
@@ -755,3 +756,6 @@ CREATE INDEX "idx_avatar_userId" ON "avatars" ("userId");
 ### RAG
 - 向量化 embedding-demo
 
+## stitch 
+### 详情页
+帮我设计一个文章详情页，参考截图。

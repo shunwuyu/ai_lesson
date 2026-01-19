@@ -3,10 +3,17 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Eye, Heart } from "lucide-react";
 import type { Post } from "../types/index"
+import LazyLoad from 'react-lazy-load';
+import {
+  useNavigate 
+} from 'react-router-dom';
 
 export default function PostItem({ post }: { post: Post }) {
+  const navigate = useNavigate();
   return (
-    <div className="flex border-b border-border py-4 px-2">
+    <div className="flex border-b border-border py-4 px-2" onClick={() => {
+      navigate(`/post/${post.id}`)
+    }}>
       {/* 文章内容区域 */}
       <div className="flex-1 pr-4 space-y-2">
         <div className="flex items-center gap-2">
@@ -53,12 +60,16 @@ export default function PostItem({ post }: { post: Post }) {
 
       {/* 缩略图区域 —— 右侧固定宽度 */}
       {post.thumbnail && (
+
         <div className="w-24 h-24 flex-shrink-0 relative overflow-hidden">
-          <img
-            src={post.thumbnail}
-            alt={post.title}
-            className="w-full h-full object-cover"
-          />
+          <LazyLoad className="w-full h-full">
+            <img
+              src={post.thumbnail}
+              alt={post.title}
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
+          </LazyLoad>
         </div>
       )}
     </div>

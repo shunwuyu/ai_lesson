@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/store/user';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Mine() {
   const { user, isLogin, logout } = useUserStore();
@@ -26,7 +27,15 @@ export default function Mine() {
       <div className="bg-white p-6 pb-10 mb-4">
         <div className="flex items-center space-x-4">
           <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold">
-            {user.name[0].toUpperCase()}
+            <Avatar className="h-16 w-16">
+              {/* 如果 user 对象中有 avatar 字段则会显示图片 */}
+              <AvatarImage src={user.avatar} alt={user.name} />
+              
+              {/* 如果图片加载失败或没有图片，显示 fallback 内容 */}
+              <AvatarFallback className="bg-primary/10 text-primary text-xl font-bold">
+                {user.name?.[0]?.toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar> 
           </div>
           <div>
             <h2 className="text-xl font-bold">{user.name}</h2>

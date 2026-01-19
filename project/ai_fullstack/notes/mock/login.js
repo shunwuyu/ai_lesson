@@ -1,3 +1,10 @@
+// jsonwebtoken（JWT）是一种开放标准（RFC 7519），
+// 用于在各方之间安全地传输信息作为 JSON 对象。
+// 在登录认证中，用户成功验证身份后，
+// 服务端生成一个 JWT 返回给客户端；
+// 后续请求中，客户端携带该 token，
+// 服务端通过验证其签名确认用户身份，
+// 无需保存会话状态，实现无状态、可扩展的认证机制。
 import jwt from "jsonwebtoken";
 
 
@@ -25,7 +32,8 @@ export default [
             const token = jwt.sign({
                 user: {
                     id: "001",
-                    name: "admin"
+                    name: "admin",
+                    avatar: "https://p9-passport.byteacctimg.com/img/user-avatar/8b472f29b528ad097a78d288ef895900~100x100.awebp"
                 }
             }, secret, {
                 expiresIn: 86400
@@ -36,7 +44,8 @@ export default [
                 token,
                 data: {
                     id: "001",
-                    name: "admin"
+                    name: "admin",
+                    avatar: "https://p9-passport.byteacctimg.com/img/user-avatar/8b472f29b528ad097a78d288ef895900~100x100.awebp"
                 }
             }
         }

@@ -24,3 +24,25 @@ export interface Post {
   thumbnail: string; // 缩略图地址，必选字段（JSON 中存在且非空）
   pics: string[]; // 图片数组，必选字段（JSON 中存在且非空）
 }
+
+
+export interface ArticleData {
+  title: string;
+  author: {
+    name: string;
+    avatar: string;
+    isFollowing: boolean;
+  };
+  metadata: {
+    date: string;
+    views: string;
+    readTime: string;
+  };
+  content: ArticleSection[];
+}
+
+export interface ArticleSection {
+  type: 'paragraph' | 'heading' | 'quote' | 'image';
+  text?: string;
+  url?: string;
+}

@@ -66,6 +66,7 @@ export default function Login() {
             <Label htmlFor="password">密码</Label>
             <Input 
               id="password" 
+              type="password"
               placeholder="请输入密码" 
               value={formData.password}
               onChange={handleChange}
