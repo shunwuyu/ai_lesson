@@ -17,13 +17,13 @@ export default function Home() {
 
   return (
     <>
-      <Header 
-        title="首页"
-        showBackBtn={true}
-      />
+    <Header 
+      title="首页"
+      showBackBtn={true}
+    />
+    <div className="p-4 space-y-4">
     <Slideshow slides={bannerData} autoPlayDelay={4000} />
     {/* space 子元素间的间距 */}
-    <div className="p-4 space-y-4">
       {/* <h1 className="text-2xl font-bold mb-4">首页</h1> */}
       <Card>
         <CardHeader>
@@ -41,24 +41,24 @@ export default function Home() {
           </div>
         ))}
       </div>
-    </div>
-    <div className="container mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-6">文章列表</h1>
-      <InfiniteScroll
-        onLoadMore={loadMore}
-        hasMore={hasMore}
-        isLoading={loading}
-      >
-        <ul className="space-y-3">
-          {posts.map((post) => (
-            <PostItem
-              key={post.id}
-              post={post}
-            />
-          ))}
-        </ul>
-      </InfiniteScroll>
-    </div>
+      <div className="container mx-auto py-8">
+        <h1 className="text-2xl font-bold mb-6">文章列表</h1>
+        <InfiniteScroll
+          onLoadMore={loadMore}
+          hasMore={hasMore}
+          isLoading={loading}
+        >
+          <ul className="space-y-3">
+            {posts.map((post) => (
+              <PostItem
+                key={post.id}
+                post={post}
+              />
+            ))}
+          </ul>
+        </InfiniteScroll>
+      </div>
+      </div>
     </>
   );
 }

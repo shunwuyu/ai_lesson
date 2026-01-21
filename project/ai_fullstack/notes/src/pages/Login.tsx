@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     useUserStore
@@ -11,9 +11,11 @@ import { Loader2 } from 'lucide-react';
 export default function Login() {
   const navigate = useNavigate();
   const { isLogin, login } = useUserStore();
-  if (isLogin) {
-    navigate('/', { replace: true });
-  }
+  
+  useEffect(() => {
+    if (isLogin) navigate("/")
+  }, [])
+
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',

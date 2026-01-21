@@ -1,6 +1,7 @@
 // userStore.ts
 import { create } from 'zustand';
-import { doLogin, getUser } from '../api/user';
+import { persist } from 'zustand/middleware';
+import { doLogin, getUser, getAiAvatar } from '../api/user';
 import type { User } from '../types/index';
 interface UserStore {
   user: User | null;
@@ -8,9 +9,11 @@ interface UserStore {
   login: (credentials: { name: string; password: string }) => Promise<void>;
   logout: () => void;
   getUser: () => void;
+  aiAvatar: () => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
+export const useUserStore = create<UserStore>()(
+  persist((set) => ({
   user: null,
   isLogin: false,
 
@@ -43,5 +46,17 @@ export const useUserStore = create<UserStore>((set) => ({
       isLogin: true,
       user: data.data.data
     })
+  },
+  aiAvatar: async () => {
+    const res = await getAiAvatar();
+    console.log(res, '???');
   }
-}));
+  }),{
+      name: 'user-store', // localStorage key
+      partialize: (state) => ({
+        user: state.user,
+        isLogin: state.isLogin,
+      }),
+  }), 
+  
+);

@@ -22,4 +22,9 @@ export class UserController {
   async register(@Body() createUserDto: CreateUserDto) {
     return this.userService.register(createUserDto);
   }
+
+  @Get('/gen-avatar')
+  async genAvatar() {
+    
+  }
 }

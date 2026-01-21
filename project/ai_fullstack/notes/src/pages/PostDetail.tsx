@@ -6,7 +6,8 @@ import ArticleHeader from '@/components/ArticleHeader';
 import ArticleContent from '@/components/ArticleContent';
 import { ArticleData } from '../types';
 import { BottomNavbar } from '@/components/BottomNavBar';
- 
+import Header from '@/components/Header';
+
 export default function PostDetail() {
   const { id } = useParams();
   const [isDark, setIsDark] = useState(false);
@@ -70,6 +71,7 @@ export default function PostDetail() {
 
   return (
     <>
+      <Header title="详情页" showBackBtn={true}/>
       <ArticleHeader 
         title={mockArticle.title}
         author={mockArticle.author}

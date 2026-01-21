@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  .box {
+    height: 200vh;
+    background-color: #eee;
+  }
+  </style>
+</head>
+<body>
+<div class="box"></div>
+<img class="lazy" data-src="https://img.36krcdn.com/hsossms/20260119/v2_53cad3f2226f48e2afc1942de3ab74e4@5888275@ai_oswg1141728oswg1053oswg495_img_png~tplv-1marlgjv7f-ai-v3:960:400:960:400:q70.jpg?x-oss-process=image/format,webp" alt="懒加载图片">
+<div class="box"></div>
+<img class="lazy" data-src="https://img.36krcdn.com/hsossms/20260117/v2_1e74add07bb94971845c777e0ce87a49@000000@ai_oswg421938oswg1536oswg722_img_000~tplv-1marlgjv7f-ai-v3:960:400:960:400:q70.jpg?x-oss-process=image/format,webp" alt="懒加载图片">
+<script>
+  const images = document.querySelectorAll('.lazy');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src; // 加载真实图片
+        observer.unobserve(img);   // 停止观察
+      }
+    });
+  });
+
+  images.forEach(img => observer.observe(img));
+</script>
+</body>
+</html>

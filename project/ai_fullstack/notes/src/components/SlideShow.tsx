@@ -1,5 +1,7 @@
 // components/Slideshow.tsx
 import { useRef, useState, useEffect } from "react";
+// Autoplay 是 embla-carousel-autoplay 提供的一个插件，
+// 用于为 Embla Carousel 轮播组件添加自动播放功能。
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,// 轮播图组件，显示、自动切换、分页等功能
@@ -26,18 +28,21 @@ export default function Slideshow({
   autoPlayDelay = 3000, // 自动播放延迟时间，单位毫秒
 }: SlideshowProps) {
   // 持久化跨渲染的可变引用对象
+  // useRef 创建一个持久且不可变的插件实例
   const plugin = useRef(
     autoPlay ? Autoplay({ delay: autoPlayDelay, stopOnInteraction: true }) : null
   );
+  // 轮播组件会在就绪后调用 setApi 传入真实的 API 对象
+  // 轮播图给我们操纵的api 
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   // 监听 Carousel 状态变化（用于更新底部指示点）
   useEffect(() => {
     if (!api) return;
-
+    // 立即读取当前激活的轮播项索引（即第几张），并设为初始选中状态，用于高亮底部指示点。
     setSelectedIndex(api.selectedScrollSnap()); // 初始化选中索引
-
+    // 当轮播图发生切换（如自动播放、手动滑动、点击指示点）时，重新获取最新选中索引并更新状态。
     const onSelect = () => setSelectedIndex(api.selectedScrollSnap());
     api.on("select", onSelect);
 
