@@ -45,19 +45,20 @@ export class UserService {
     const { name, password } = createUserDto;
 
     // 检查用户名是否已存在
-    const existingUser = await this.prisma.user.findUnique({
-      where: { name },
-    });
+    // const existingUser = await this.prisma.user.findUnique({
+    //   where: { name },
+    // });
 
     // console.log(existingUser, '//////////////')
 
-    if (existingUser) {
-      throw new BadRequestException('用户名已存在');
-    }
+    // if (existingUser) {
+    //   throw new BadRequestException('用户名已存在');
+    // }
 
     // 哈希密码
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log(hashedPassword, '??????')
+    return ;
     // 创建用户
     const user = await this.prisma.user.create({
       data: {

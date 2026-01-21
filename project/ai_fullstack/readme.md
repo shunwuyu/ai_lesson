@@ -387,10 +387,16 @@ export class AppModule {}
 
   ```
 
-## prisma
+
+
+### prisma demo
+- nest new nest-prisma-demo
+  基于ts, 依赖注入和模块化，大幅提升后端开发效率与代码质量,适合企业级开发
+
+-  prisma
 给 Node.js 用的数据库操作神器，不用手写 SQL，直接调用api 就好。
 
-### ORM 
+-  ORM 
 ORM 工具就像程序员和数据库之间的 “翻译官”，让你不用写复杂的 SQL 语句，而是用编程语言（比如 TypeScript/JavaScript）的对象语法来操作数据库里的数据。
 
 ORM 的全称是 Object-Relational Mapping，中文标准译名为对象关系映射。
@@ -399,20 +405,65 @@ ORM 的全称是 Object-Relational Mapping，中文标准译名为对象关系�
 编程语言对象	ORM 映射	数据库表
 User 类的一个实例	↔	users 表的一行数据
 User.name 属性	↔	users 表的 name 列
-user.save () 方法	↔	INSERT/UPDATE SQL
-```
 
-### prisma demo
-- nest new nest-prisma-demo
+const user = await prisma.user.create({
+  data: {
+    email: 'alice@example.com',
+    name: 'Alice',
+  },
+});
+
+const users = await prisma.user.findMany();
+
+const user = await prisma.user.findUnique({
+  where: { email: 'alice@example.com' },
+});
+
+const user = await prisma.user.findFirst({
+  where: { name: { contains: 'Ali' } },
+});
+
+const updatedUser = await prisma.user.update({
+  where: { id: 1 }, // 或 { email: 'alice@example.com' }
+  data: {
+    name: 'Alice Smith',
+  },
+});
+
+await prisma.user.updateMany({
+  where: { name: null },
+  data: { name: 'Anonymous' },
+});
+
+const deletedUser = await prisma.user.delete({
+  where: { id: 1 },
+});
+
+await prisma.user.deleteMany({
+  where: { email: { endsWith: '@temp.com' } },
+});
+
+
+```
 - npm install prisma --save-dev 命令行工具
   npx prisma init 初始化项目
+  - prisma/ 目录生成
+    schema.prisma  包含模型定义
+  - .env
+    自动生成数据库连接 URL
   npx prisma generate 生成 Prisma Client
   npx prisma migrate dev 执行数据库迁移
-  npx prisma studio 查看数据库数据模型
+  npx prisma studio 查看数据库数据模型 展示一下
 
 npm install @prisma/client 自动生成的、类型安全的数据库客户端。
 在你的应用程序代码中用来查询数据库（例如 prisma.user.findMany()）。
 它是根据你的 schema.prisma 文件自动生成的。
+
+CREATE DATABASE xb
+WITH OWNER = postgres    /*最高权限 */
+ENCODING = 'UTF8';
+- 进入xb2
+\c xb2
 
 - npx prisma init
   自动创建 Prisma 所需的核心配置文件和目录结构，并引导你配置数据库连接信息，是使用 Prisma 操作数据库的第一步
@@ -433,7 +484,7 @@ npm install @prisma/client 自动生成的、类型安全的数据库客户端�
 - users sql
 ```
 INSERT INTO "users" ("id", "name", "password") VALUES
-(1, '王皓', '$2b$10$CsO/ykedPpuxqUETBZTYm.F2U4TXDdo01rLmoRPwjKBv3pIL5pnWq'),
+(1, '王皓', '$2b$10$E.q5K8kY96Fx9.u2Hpwf.e90wRhZa8a8eesuajR7laUw0lUpXPXXa'),
 (2, '小雪', '$2b$10$CsO/ykedPpuxqUETBZTYm.F2U4TXDdo01rLmoRPwjKBv3pIL5pnWq'),
 (3, '李白', '$2b$10$CsO/ykedPpuxqUETBZTYm.F2U4TXDdo01rLmoRPwjKBv3pIL5pnWq'),
 (4, '杜甫', '$2b$10$CsO/ykedPpuxqUETBZTYm.F2U4TXDdo01rLmoRPwjKBv3pIL5pnWq'),
