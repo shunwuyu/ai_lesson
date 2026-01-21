@@ -5,6 +5,7 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
+  // 这个 app 实例其实是基于 Express 的 可以使用中间件
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true
   });
