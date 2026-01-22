@@ -16,8 +16,8 @@ export class AuthService {
   ) {}
 
   // 封装：生成双 Token 的公共方法
-  private async generateTokens(userId: string, username: string) {
-    const payload = { sub: userId, username };
+  private async generateTokens(id: string, name: string) {
+    const payload = { sub: id, name };
     
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(payload, {
@@ -68,7 +68,7 @@ export class AuthService {
       // 生产环境通常还会去数据库查一下用户是否存在，或校验 RT 是否在黑名单
       
       // 3. 签发新的双 Token
-      return this.generateTokens(payload.sub, payload.username);
+      return this.generateTokens(payload.sub, payload.name);
     } catch (e) {
       // 如果验证失败（过期或伪造），抛出异常
       throw new UnauthorizedException('Refresh Token 已失效，请重新登录');
