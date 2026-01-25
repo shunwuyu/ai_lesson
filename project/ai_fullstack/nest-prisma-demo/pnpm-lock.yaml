@@ -50,6 +50,9 @@ importers:
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
+      express:
+        specifier: ^5.2.1
+        version: 5.2.1
       langchain:
         specifier: ^1.2.10
         version: 1.2.10(@langchain/core@1.1.15(openai@6.16.0(zod@4.3.5)))(openai@6.16.0(zod@4.3.5))

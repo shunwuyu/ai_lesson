@@ -16,7 +16,7 @@ async function bootstrap() {
   // 👇 关键：全局启用验证管道
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,      // 自动过滤 DTO 未定义的属性
-    forbidNonWhitelisted: true, // 遇到未定义属性直接报错（可选）
+    // forbidNonWhitelisted: true, // 遇到未定义属性直接报错（可选）
     transform: true,      // 自动转换类型（如 string → number）
   }));
 

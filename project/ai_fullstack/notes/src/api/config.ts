@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useUserStore } from '@/store/user'; // 引入你的 store
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5173/api',
+  // baseURL: 'http://localhost:5173/api',
+  baseURL: 'http://localhost:3000/api'
 });
 
 // 标记是否正在刷新 Token 的标志

@@ -6,7 +6,7 @@ config();
 
 export default [
   {
-    url: '/api/chat',
+    url: '/api/ai/chat',
     method: 'post',
     // 使用 rawResponse 来处理流
     rawResponse: async (req, res) => {
