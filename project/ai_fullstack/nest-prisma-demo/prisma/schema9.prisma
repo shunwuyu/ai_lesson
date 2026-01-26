@@ -1,12 +1,10 @@
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  extensions = [pgvector]
 }
 
 model User {
@@ -39,7 +37,7 @@ model Post {
   // 重点：在这里也加上 @default(now())
   // 这样在迁移时，旧的 25 条数据会自动填入当前时间，满足 NOT NULL 约束
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  embedding Unsupported("vector(1536)")?
+
   // 建立与 User 表的关系
   // onDelete: SetNull 表示用户删除后，帖子的 userId 设为 null（对应原表允许 null 的逻辑）
   user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)

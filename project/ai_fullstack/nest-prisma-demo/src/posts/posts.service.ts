@@ -2,11 +2,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service'; // 假设你已全局注册 PrismaService
 import { PostQueryDto } from './dto/post-query.dto';
+
 // 被自动创建实例并注入到其他地方使用
 @Injectable()
 export class PostsService {
   // 全局注入的
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService
+  ) {}
   // 分页查询所有帖子
   async findAll(query: PostQueryDto) {
     const { page, limit } = query;

@@ -803,10 +803,27 @@ CREATE TABLE "avatars" (
 CREATE INDEX "idx_avatar_userId" ON "avatars" ("userId");
 ```
 
-## AI 功能
-### RAG
-- 向量化 embedding-demo
+
 
 ## stitch 
 ### 详情页
 帮我设计一个文章详情页，参考截图。
+
+## AI 功能
+### RAG
+- 向量化 embedding-demo
+### Posts RAG
+- 激活扩展：在 PostgreSQL 中执行 CREATE EXTENSION vector;。
+- 在 schema.prisma 的 generator client 中开启 previewFeatures = ["postgresqlExtensions"]。
+- 在 datasource db 中添加 extensions = [pgvector]。
+  - 安装扩展
+    - xcode-select --install
+    - cd /tmp
+    - # 克隆 pgvector 源码
+git clone https://github.com/pgvector/pgvector.git
+    - cd pgvector
+    - sudo make PG_CONFIG=/Library/PostgreSQL/17/bin/pg_config install
+    - 重启
+- 给 Post 模型增加一个字段（例如 embedding），类型为 Unsupported("vector(1536)")（如果是 OpenAI 的模型，维度通常是 1536）。
+- npx prisma migrate dev --name add_embedding_to_posts
+- 
