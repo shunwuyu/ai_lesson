@@ -757,7 +757,14 @@ bcrypt bcrypt 是一种单向哈希（Hashing）算法，用于将密码转换�
 - SELECT setval(' "User_id_seq" ', (SELECT MAX(id) FROM "User")); 数据库ID 自增序列重置
 
 ### nestjs 双token登录
+- 注册
+  user module  register
+- 登录
+  JWT（JSON Web Token）是一种开放标准（RFC 7519），用于在各方之间安全地以 JSON 对象形式传输信息，常用于身份认证和信息交换。
 - pnpm install @nestjs/jwt passport-jwt // NestJS 官方提供的 JWT 工具模块
+  @nestjs/jwt：NestJS 官方提供的 JWT 工具模块，用于在 Nest 应用中方便地生成和验证 JSON Web Token。
+  passport-jwt：能自动从请求中提取 Token、验证其有效性，并将用户信息注入请求上下文，简化了基于 Token 的身份认证流程，确保安全且标准化的鉴权机制。
+  
   - JwtService.sign(payload) → 生成 token
   - JwtService.verify(token) → 验证并解析 token
   - 实现 从 HTTP 请求中提取 JWT 并验证用户身份 的完整认证流程。 passport-jwt 
@@ -806,8 +813,28 @@ CREATE INDEX "idx_avatar_userId" ON "avatars" ("userId");
 
 
 ## stitch 
+
+Google Stitch 是 Google Labs 在 2025 年 Google I/O 推出的实验性 AI UI 设计与前端代码生成工具。
+它基于强大的 Gemini 多模态模型，允许用户用自然语言描述或上传草图／截图，自动生成完整的网页或移动应用界面设计及对应的 HTML/CSS 代码。并支持导出到 Figma 进行进一步编辑。Stitch 的目标是缩短从想法到可用 UI 的流程，让设计与开发更快速、更低门槛。
+
 ### 详情页
-帮我设计一个文章详情页，参考截图。
+帮我设计一个阅读类App的文章详情页， 可以参考上传图片， 但要有自己的风格，和shadcn比较搭
+
+帮我基于上传图片的文章详情页设计稿，生成 react +ts + tailwindcss+shadcn 的前端代码，
+
+
+
+## KEEP ALive
+
+首页通常承载轮播、推荐、搜索、用户状态等核心功能。如果路由切换时首页被反复销毁并重建，会带来不必要的性能开销（重复请求、重渲染），同时导致滚动位置、输入内容、弹窗状态等丢失，影响用户体验；而主流应用在返回首页时通常会保留原有状态，这也更符合用户的使用预期。
+
+- react-activation 路由切换时缓存组件状态的高阶组件
+  组件“卸载”时其实没真删，而是被藏起来了；下次再进来，直接把它拿出来复用，状态和 DOM 都还在。这样就不用重新加载、重新请求数据，体验更流畅。
+
+- demo
+  说白了，就是组件切换的时候，我们不像平时那样直接“干掉”不显示的那个组件，而是偷偷把它藏起来（用 CSS 的 display: none）。
+  这样一来，这个组件其实一直都在页面上“活着”，所以它里面的数据啊、你输入的东西啊、滚动的进度啊，全都不会丢。只有第一次用到的时候才真正渲染一次，之后就只是藏起来再拿出来，状态就一直保持住了。
+
 
 ## AI 功能
 ### RAG

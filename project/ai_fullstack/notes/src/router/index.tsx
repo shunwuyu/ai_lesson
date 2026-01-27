@@ -13,6 +13,7 @@ const Login = lazy(() => import('@/pages/Login'));
 const Register = lazy(() => import('@/pages/Register'));
 const PostDetail = lazy(() => import('@/pages/PostDetail'));
 const Chat = lazy(()=> import('@/pages/Chat'));
+const PostLayout = lazy(() => import('@/pages/PostLayout'));
 
 export default function RouterConfig() {
   return (
@@ -24,7 +25,10 @@ export default function RouterConfig() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/chat" element={<Chat />} />
-            <Route path="/post/:id" element={<PostDetail />} />
+            <Route path="/post" element={<PostLayout />}>
+              <Route path=":id" element={<PostDetail />} />
+            </Route>
+            
             {/* 主布局，包含底部栏 */}
             <Route element={<MainLayout />}>
               <Route path="/" element={<Home />} />

@@ -56,8 +56,10 @@ export class UserService {
     }
 
     // 哈希密码
+    // bcrypt 算法对明文密码 password 进行哈希加密，其中 10 是计算强度
+    // 最终生成一个安全的哈希字符串并赋值给 hashedPassword
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword, '??????')
+    console.log(hashedPassword,'??????')
     // 创建用户
     const user = await this.prisma.user.create({
       data: {
@@ -67,7 +69,6 @@ export class UserService {
       select: {
         id: true,
         name: true,
-        createdAt: true,
       },
     });
 
