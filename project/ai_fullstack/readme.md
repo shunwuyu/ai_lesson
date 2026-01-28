@@ -854,3 +854,16 @@ git clone https://github.com/pgvector/pgvector.git
 - 给 Post 模型增加一个字段（例如 embedding），类型为 Unsupported("vector(1536)")（如果是 OpenAI 的模型，维度通常是 1536）。
 - npx prisma migrate dev --name add_embedding_to_posts
 - 
+
+### Auth Guard
+- 整体思路
+前端请求 /posts，在 Header 里带上
+Authorization: Bearer <access_token>
+- JwtAuthGuard
+  - 从 Header 里解析 token
+  - 校验 token
+  - 校验通过后，把用户信息挂到 req.user
+- PostController 里直接用 @Req() / @User() 拿到当前用户
+- PostService 用用户 id 作为 authorId 存文章
+- 调整自增id 
+  SELECT setval('posts_id_seq', (SELECT COALESCE(MAX(id), 0) FROM posts));
