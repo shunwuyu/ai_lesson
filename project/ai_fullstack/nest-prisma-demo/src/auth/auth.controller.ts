@@ -1,5 +1,5 @@
 // src/auth/auth.controller.ts
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Headers, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 
@@ -16,7 +16,11 @@ export class AuthController {
   // 新增：刷新 Token 接口
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refresh(@Body('refresh_token') refreshToken: string) {
+  async refresh(@Headers('authorization') authHeader: string) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException('Refresh token missing');
+    }
+    const refreshToken = authHeader.substring(7); // 去掉 'Bearer '
     return this.authService.refreshToken(refreshToken);
   }
 }

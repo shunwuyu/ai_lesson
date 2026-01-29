@@ -36,3 +36,16 @@ export const fetchPosts = async (
     throw error;
   }
 };
+
+export const createPosts = async () => {
+  try {
+    const response = await axios.post('/posts', {
+      title: '1212121212',
+      content: "2222222dcccccc",
+    });
+    return response.data;
+  } catch(err) {
+    console.error('Failed to create posts:', err);
+    throw err;
+  }
+}

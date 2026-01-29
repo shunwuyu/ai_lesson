@@ -1,11 +1,13 @@
 // src/pages/ChatPage.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useChatbot } from '@/hooks/use-chatbot';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { createPosts } from '@/api/post'
+
 
 export default function ChatPage() {
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChatbot();
@@ -18,6 +20,12 @@ export default function ChatPage() {
     handleSubmit(e);
     setIsSubmitting(false);
   };
+
+  useEffect(() => {
+    (async () => {
+      // await createPosts();
+    })()
+  }, [])
 
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto p-4">

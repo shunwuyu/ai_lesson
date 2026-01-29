@@ -6,6 +6,12 @@ const instance = axios.create({
   baseURL: 'http://localhost:3000/api'
 });
 
+// 专门用来刷新 token
+export const refreshInstance = axios.create({
+  baseURL: 'http://localhost:3000/api',
+  timeout: 10000
+})
+
 // 标记是否正在刷新 Token 的标志
 let isRefreshing = false;
 // 存储因为等待刷新 Token 而挂起的请求队列
@@ -26,13 +32,16 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use(
   (res) => res,
   async (error) => {
+    console.log(error, "///////////")
     const { config, response } = error;
 
-    // 如果状态码是 401，且不是刷新 Token 本身的接口报错
+    // // 如果状态码是 401，且不是刷新 Token 本身的接口报错
     if (response?.status === 401 && !config._retry) {
-      
+      console.log('//////////');
       // 如果已经在刷新中了，把后续请求加入队列
       if (isRefreshing) {
+        // 暂停当前请求，返回一个未 resolve 的 Promise，让 axios 等待。
+        // 这样当前请求不会立即失败，而是“挂起”，直到新 Token 获取成功后才继续。
         return new Promise((resolve) => {
           requestsQueue.push((token: string) => {
             config.headers.Authorization = `Bearer ${token}`;
@@ -45,28 +54,34 @@ instance.interceptors.response.use(
       isRefreshing = true;
 
       try {
+        console.log(useUserStore.getState(), '>>>>>>>>>>>>>')
         const { refreshToken } = useUserStore.getState();
-        
-        // 调用后端刷新接口
-        // 注意：这里使用原生 axios 或创建一个不带拦截器的实例，防止进入死循环
-        const res = await axios.post('/auth/refresh', {}, {
+        console.log(refreshToken, "??????");
+        // // 调用后端刷新接口
+        // // 注意：这里使用原生 axios 或创建一个不带拦截器的实例，防止进入死循环
+        const res = await refreshInstance.post('/auth/refresh', {}, {
           headers: { Authorization: `Bearer ${refreshToken}` }
         });
+        // console.log(res, "??????????")
 
-        const { access_token, refresh_token } = res.data.data; // 根据你后端返回结构调整
+        const { access_token, refresh_token } = res.data; // 根据你后端返回结构调整
 
-        // 核心：更新 Zustand Store（会自动触发 persist 存入 localStorage）
+        // // 核心：更新 Zustand Store（会自动触发 persist 存入 localStorage）
         useUserStore.setState({
           accessToken: access_token,
           refreshToken: refresh_token,
           isLogin: true
         });
 
-        // 刷新成功，执行队列里的请求
+        // // 刷新成功，执行队列里的请求
         requestsQueue.forEach((callback) => callback(access_token));
         requestsQueue = [];
 
-        // 执行当前报错的请求
+        // // 执行当前报错的请求
+        // 在刷新 Token 成功后，使用新的 Access Token 重新发送最初因 
+        // 401 失败的那个请求，并将结果返回给原始调用者。
+        // requestsQueue 中存放的是 后续 的 401 请求（即在刷新过程中新到来的请求），
+        // 而当前正在处理的这个 401 请求 并不在队列中，它是触发刷新的那个“第一个”请求。
         config.headers.Authorization = `Bearer ${access_token}`;
         return instance(config);
 

@@ -5,8 +5,8 @@ import { PrismaService } from '../prisma/prisma.service'; // 假设你已有 Pri
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 
 @Injectable()
@@ -18,14 +18,14 @@ export class AuthService {
 
   // 封装：生成双 Token 的公共方法
   private async generateTokens(id: string, name: string) {
-    // sub 是 JWT 标准中约定的「主题（subject）」字段，通常用来存放令牌
+    // sub 是 JWT 标准中约定的「主题（subject）」字段
     // 对应的唯一主体标识（这里就是用户 ID）
     // 具备通用性和可读性，方便后续解析令牌时快速获取用户核心标识。
     const payload = { sub: id, name };
-    
+    console.log(process.env.TOKEN_SECRET, "??????");
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        expiresIn: '15m',
+        expiresIn: '1m',
         secret: process.env.TOKEN_SECRET,
       }),
       this.jwtService.signAsync(payload, {
