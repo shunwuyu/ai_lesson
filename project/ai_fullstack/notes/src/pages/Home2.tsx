@@ -3,17 +3,13 @@ import {
 } from 'react';
 
 import {  Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import Header from '@/components/Header';
+import Header from '@/components/Header';
 import Slideshow from "@/components/SlideShow";
 import InfiniteScroll from '@/components/InfiniteScroll';
 import PostItem from '@/components/PostItem';
 import { useHomeStore } from '@/store/home';
-import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
-  const navigate = useNavigate();
   const { bannerData, posts, loading, hasMore, loadMore } = useHomeStore();
   useEffect(() => {
     loadMore();
@@ -21,19 +17,10 @@ export default function Home() {
 
   return (
     <>
-    <div
-      className="px-4 py-2"
-      onClick={() => navigate("/search")}
-    >
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          readOnly
-          placeholder="搜索你感兴趣的内容"
-          className="pl-9 rounded-full cursor-pointer bg-muted"
-        />
-      </div>
-    </div>
+    <Header 
+      title="首页"
+      showBackBtn={true}
+    />
     <div className="p-4 space-y-4">
     <Slideshow slides={bannerData} autoPlayDelay={4000} />
     {/* space 子元素间的间距 */}

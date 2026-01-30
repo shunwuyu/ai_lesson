@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ChatOpenAI, OpenAI } from '@langchain/openai';
+import { ChatDeepSeek } from '@langchain/deepseek';
 import { HumanMessage, SystemMessage, AIMessage } from '@langchain/core/messages';
 import { ChatDto, type Message } from './dto/chat.dto';
 
@@ -21,14 +21,14 @@ function convertToLangChainMessages(messages: Message[]): (HumanMessage | AIMess
 
 @Injectable()
 export class AIService {
-  private chatModel: ChatOpenAI;
+  private chatModel: ChatDeepSeek;
   constructor() {
-    this.chatModel = new ChatOpenAI({
+    this.chatModel = new ChatDeepSeek({
       configuration:{
-        apiKey: process.env.OPENAI_API_KEY,
-        baseURL: process.env.OPENAI_BASE_URL
+        apiKey: process.env.DEEPSEEK_API_KEY,
+        baseURL: process.env.DEEPSEEK_BASE_URL
       },
-      model: 'gpt-3.5-turbo', // 性价比高
+      model: 'deepseek-chat', // 性价比高
       streaming: true,
       temperature: 0.7,
     });

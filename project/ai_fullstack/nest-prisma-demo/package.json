@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@langchain/core": "^1.1.15",
+    "@langchain/deepseek": "^1.0.7",
     "@langchain/openai": "^1.2.2",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",

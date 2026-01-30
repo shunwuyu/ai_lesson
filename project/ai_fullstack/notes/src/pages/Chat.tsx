@@ -2,23 +2,25 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+// 提供chatbot 需要的
 import { useChatbot } from '@/hooks/use-chatbot';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+// 滚动区域组件 在内容溢出时提供美观、可控的滚动条，常用于替代浏览器默认滚动
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { createPosts } from '@/api/post'
-
+import Header  from '@/components/Header'
 
 export default function ChatPage() {
+  // 抽象 messages 数组
+  // input 输入值 
+  // isLoading AI 正在生成回复
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChatbot();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
-    setIsSubmitting(true);
     handleSubmit(e);
-    setIsSubmitting(false);
   };
 
   useEffect(() => {
@@ -28,13 +30,8 @@ export default function ChatPage() {
   }, [])
 
   return (
-    <div className="flex flex-col h-screen max-w-4xl mx-auto p-4">
-      <header className="py-4 text-center">
-        <h1 className="text-2xl font-bold">DeepSeek Chat (Frontend Only)</h1>
-        <p className="text-sm text-muted-foreground">
-          ⚠️ API Key exposed in frontend — for demo only!
-        </p>
-      </header>
+    <div className="flex flex-col h-screen max-w-4xl mx-auto px-4 pb-2">
+      <Header title="ChatBot" showBackBtn={true}/>
 
       <ScrollArea className="flex-1 border rounded-lg p-4 mb-4 bg-background">
         {messages.length === 0 ? (
@@ -75,7 +72,7 @@ export default function ChatPage() {
           value={input}
           onChange={handleInputChange}
           placeholder="Type your message..."
-          disabled={isLoading || isSubmitting}
+          disabled={isLoading}
           className="flex-1"
         />
         <Button type="submit" disabled={isLoading || !input.trim()}>

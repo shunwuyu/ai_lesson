@@ -18,7 +18,9 @@ export class ChatDto {
   id: string;
 
   @IsArray()
+  // 这个属性是一个嵌套对象（或对象数组），请递归地验证它的内部字段
   @ValidateNested({ each: true })
+  // 这个属性的值应该被转换成 Message 类的实例
   @Type(() => Message)
   messages: Message[];
 }

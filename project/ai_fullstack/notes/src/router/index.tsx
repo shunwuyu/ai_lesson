@@ -14,7 +14,7 @@ const Register = lazy(() => import('@/pages/Register'));
 const PostDetail = lazy(() => import('@/pages/PostDetail'));
 const Chat = lazy(()=> import('@/pages/Chat'));
 const PostLayout = lazy(() => import('@/pages/PostLayout'));
-
+const Search = lazy(() => import('@/pages/Search'));
 export default function RouterConfig() {
   return (
     <Router>
@@ -23,6 +23,7 @@ export default function RouterConfig() {
           <Routes>
             {/* 登录页独立，不带底部栏 */}
             <Route path="/login" element={<Login />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/register" element={<Register />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/post" element={<PostLayout />}>
