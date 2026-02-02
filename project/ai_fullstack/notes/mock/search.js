@@ -145,12 +145,14 @@ export default [
   {
     url: '/api/search',
     method: 'get',
-    timeout: 2000,
+    timeout: 200,
     response: (req, res) => {
-      // 1. 从请求 URL 中获取查询参数 keyword
+      console.log(req.url, '????')
+      // 将字符串形式的 URL 解析为结构化对象
+      // 需 base URL 才能正确解析完整地址
       const url = new URL(req.url, 'http://localhost:5173'); // 第二个参数是 base，用于解析相对 URL
       const keyword = url.searchParams.get('keyword')?.trim() || '';
-
+      console.log(keyword, "???");
       // 2. 如果 keyword 为空，返回全部或空数组（这里返回全部）
       let filteredPosts = posts;
       if (keyword) {
@@ -158,11 +160,10 @@ export default [
         filteredPosts = posts.filter(post =>
           post.title.toLowerCase().includes(lowerKeyword) ||
           post.category.toLowerCase().includes(lowerKeyword)
-        );
+        ).map(post => post.title);
       }
 
       // 3. 返回 JSON 响应
-      
       return {
           success: true,
           data: filteredPosts,

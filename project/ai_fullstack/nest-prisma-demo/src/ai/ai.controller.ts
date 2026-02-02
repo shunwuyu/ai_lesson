@@ -13,7 +13,8 @@ export class AIController {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8'); // 注意：Vercel SDK 协议通常用 text/plain 或 text/event-stream
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
-
+    // 类型改了
+    console.log(chatDto.messages, typeof chatDto.messages);
     try {
       // 调用 Service
       await this.aiService.chat(chatDto.messages, (token) => {
@@ -21,6 +22,8 @@ export class AIController {
          * 关键点：匹配图1的格式
          * 格式为：0:加JSON字符串化的内容再加换行符
          */
+        console.log(token, "/////////");
+        // 0: 通常代表 消息内容片段（delta），即模型正在生成的文本。ai sdk 需求
         res.write(`0:${JSON.stringify(token)}\n`);
       });
 

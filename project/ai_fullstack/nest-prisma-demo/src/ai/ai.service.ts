@@ -35,7 +35,7 @@ export class AIService {
   }
   async chat(messages: Message[], onToken: (token: string) => void) {
     const langChainMessages = convertToLangChainMessages(messages);
-    
+    console.log(langChainMessages, '/////');
     // 使用 .stream 方法获取流
     const stream = await this.chatModel.stream(langChainMessages);
 
