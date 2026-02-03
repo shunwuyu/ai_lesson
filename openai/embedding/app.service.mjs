@@ -4,6 +4,6 @@ dotenv.config({path: '.env'});
 
 export const client = new OpenAI({
     apiKey:process.env.OPENAI_KEY,
-    baseURL:'https://api.gptsapi.net/v1'
+    baseURL:'https://api.302.ai/v1'
 })
 
