@@ -9,5 +9,5 @@ export const doLogin = (data: { name: string; password: string }) => {
 } 
 
 export const getAiAvatar = () => {
-    return axios.get('/user/gen_avatar');
+    return axios.get('/users/avatar');
 }

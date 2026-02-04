@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Mine() {
   const { user, isLogin, logout } = useUserStore();
+  // console.log(user, '//////')
   const navigate = useNavigate();
 
   // 虽然 Tab 栏做了拦截，但为了安全，页面内部也做一个检查（双重保险）

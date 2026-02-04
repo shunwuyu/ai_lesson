@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { doLogin, getUser, getAiAvatar } from '../api/user';
+import { doLogin,  getAiAvatar } from '../api/user';
 import type { User } from '../types/index';
 
 interface UserStore {
@@ -10,13 +10,12 @@ interface UserStore {
   refreshToken: string | null; // 新增
   login: (credentials: { name: string; password: string }) => Promise<void>;
   logout: () => void;
-  getUser: () => void;
   aiAvatar: () => void;
 }
 
 export const useUserStore = create<UserStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       isLogin: false,
       accessToken: null, // 初始化
@@ -24,9 +23,9 @@ export const useUserStore = create<UserStore>()(
 
       login: async ({ name = '', password = '' }) => {
         const res = await doLogin({ name, password });
-        
+        console.log(res, "/////////");
         // 假设返回结构中包含 access_token 和 refresh_token
-        const { access_token, refresh_token, data: user } = res.data;
+        const { access_token, refresh_token, user } = res.data;
 
         // 直接在 set 中更新，persist 插件会自动帮你存入 localStorage
         set({
@@ -47,21 +46,15 @@ export const useUserStore = create<UserStore>()(
         });
       },
 
-      getUser: async () => {
-        // 可以直接从当前 store 的 get() 中获取（或者继续看 localStorage）
-        // 这里沿用你的逻辑，但建议之后改用 store 内部的 accessToken
-        if (!localStorage.getItem('user-store')) return; 
-
-        const data = await getUser();
-        set({
-          isLogin: true,
-          user: data.data.data
-        });
-      },
-
       aiAvatar: async () => {
         const res = await getAiAvatar();
         console.log(res, '???');
+        set({
+          user: {
+            ...get().user,
+            avatar: res.data.avatar,
+          },
+        })
       }
     }),
     {

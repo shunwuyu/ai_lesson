@@ -3,6 +3,7 @@ import { AIService } from './ai.service';
 import { ChatDto } from './dto/chat.dto';
 import type { Response } from 'express';
 
+
 @Controller('ai')
 export class AIController {
   constructor(private readonly aiService: AIService) {}
@@ -35,5 +36,10 @@ export class AIController {
       console.error(error);
       res.status(500).end();
     }
+  }
+
+  @Post('git')
+  async git(@Body() {diff}:{diff:string}) {
+    return this.aiService.git(diff)
   }
 }

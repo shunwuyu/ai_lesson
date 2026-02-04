@@ -1,6 +1,7 @@
-import { Controller, Get, Query, Post, Body } from '@nestjs/common';
+import { Controller, Get, Query, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -23,8 +24,11 @@ export class UserController {
     return this.userService.register(createUserDto);
   }
 
-  @Get('/gen-avatar')
-  async genAvatar() {
-    
+  @Get('/avatar')
+  @UseGuards(JwtAuthGuard)
+  async genAvatar(@Req() req) {
+    console.log(req.user);
+    const { name } = req.user;
+    return this.userService.genAvatar(name);
   }
 }

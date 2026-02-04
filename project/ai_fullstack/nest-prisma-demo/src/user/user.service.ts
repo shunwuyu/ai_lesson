@@ -1,12 +1,16 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { AIService } from '../ai/ai.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   // prisma 实例
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private aiService: AIService
+  ) {}
 
   async findUsers(page: number, pageSize: number) {
     const skip = (page - 1) * pageSize;
@@ -73,5 +77,13 @@ export class UserService {
     });
 
     return user;
+  }
+
+  async genAvatar(name: string) {
+    const avatar = await this.aiService.genAvatar(name);
+    console.log(avatar, "////")
+    return {
+      avatar
+    }
   }
 }
