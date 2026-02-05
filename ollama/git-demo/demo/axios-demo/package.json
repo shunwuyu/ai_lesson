@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-     "react-dom": "^18.2.0",
-      "axios": "^1.6.0",
-     "vue": "^3.3.4"
+    "react-dom": "^18.2.0",
+    "axios": "^1.6.5",
+    "vue": "^3.3.4"
   },
   "keywords": [],
   "author": "",
