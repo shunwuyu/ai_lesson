@@ -16,6 +16,8 @@ const Chat = lazy(()=> import('@/pages/Chat'));
 const PostLayout = lazy(() => import('@/pages/PostLayout'));
 const Search = lazy(() => import('@/pages/Search'));
 const Git = lazy(() => import('@/pages/Git'));
+const RAG = lazy(() => import('@/pages/RAG'));
+
 export default function RouterConfig() {
   return (
     <Router>
@@ -28,6 +30,7 @@ export default function RouterConfig() {
             <Route path="/register" element={<Register />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/git" element={<Git />} />
+            <Route path="/rag" element={<RAG />} />
             <Route path="/post" element={<PostLayout />}>
               <Route path=":id" element={<PostDetail />} />
             </Route>

@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ChatDeepSeek } from '@langchain/deepseek';
-import { DallEAPIWrapper } from '@langchain/openai'
+import { DallEAPIWrapper, OpenAIEmbeddings } from '@langchain/openai'
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { HumanMessage, SystemMessage, AIMessage } from '@langchain/core/messages';
 import { ChatDto, type Message } from './dto/chat.dto';
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
+import { Document } from "@langchain/core/documents";
 
 
 function convertToLangChainMessages(messages: Message[]): (HumanMessage | AIMessage | SystemMessage)[] {
@@ -26,6 +28,7 @@ function convertToLangChainMessages(messages: Message[]): (HumanMessage | AIMess
 export class AIService {
   private chatModel: ChatDeepSeek;
   private imageGenerator: DallEAPIWrapper;
+  private embeddings: OpenAIEmbeddings;
   constructor() {
     this.chatModel = new ChatDeepSeek({
       configuration:{
@@ -42,6 +45,14 @@ export class AIService {
       n: 1,
       size: '1024x1024', // 支持: '1024x1024', '1792x1024', '1024x1792'
       quality: 'hd', // 可选: 'standard' 或 'hd'
+    });
+
+    this.embeddings = new OpenAIEmbeddings({
+      configuration:{
+        apiKey: process.env.OPENAI_API_KEY,
+        baseURL: process.env.OPENAI_BASE_URL
+      },
+      model: 'text-embedding-ada-002'
     });
   }
   async chat(messages: Message[], onToken: (token: string) => void) {
@@ -87,6 +98,46 @@ export class AIService {
     return {
       result
     }
+  }
+
+  async rag(question: string) {
+    // 这段代码是用 LangChain 的内存向量库（MemoryVectorStore）
+    // 把三段文本“喂”给 AI。它会先用嵌入模型（embeddings）
+    // 把每句话转成向量，存进内存里，后续就能根据语义相似度快速检索相关内容，
+    // 比如回答“什么是 RAG？”时自动找出对应句子。整个过程不依赖数据库，适合轻量级或测试场景。
+    const vectorStore = await MemoryVectorStore.fromDocuments(
+      [
+        new Document({
+          pageContent: "React 是一个用于构建用户界面的 JavaScript 库。",
+        }),
+        new Document({
+          pageContent: "NestJS 是一个用于构建服务端应用的 Node.js 框架。",
+        }),
+        new Document({
+          pageContent: "RAG 通过检索外部知识增强大模型的回答能力。",
+        }),
+      ],
+      this.embeddings
+    );
+    // 根据用户提的问题（question），在向量库中找 1 个最相关的文档片段。
+    // 它会把问题也转成向量，然后和之前存的文本向量比对，返回语义最接近的那一条
+    const docs = await vectorStore.similaritySearch(question, 1);
+    console.log(docs);
+    const context = docs.map(d => d.pageContent).join("\n");
+    // 基于资料问问题
+    const prompt = `
+    你是一个专业助教，请基于下面资料回答问题。
+
+    资料：
+    ${context}
+
+    问题：
+    ${question}
+    `;
+
+    const res = await this.chatModel.invoke(prompt);
+    // console.log(res);
+    return res.content;
   }
 }
 

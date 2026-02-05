@@ -867,3 +867,10 @@ Authorization: Bearer <access_token>
 - PostService 用用户 id 作为 authorId 存文章
 - 调整自增id 
   SELECT setval('posts_id_seq', (SELECT COALESCE(MAX(id), 0) FROM posts));
+
+##  RAG
+RAG 全称是 Retrieval-Augmented Generation，中文译为 检索增强生成。
+RAG（检索增强生成）是一种让大模型“先查资料再回答”的智能架构：它先从私有知识库中精准检索相关片段，再将结果注入生成过程，既避免幻觉，又实现知识实时更新——相当于给AI配了个会思考的“外挂大脑”。
+
+
+
