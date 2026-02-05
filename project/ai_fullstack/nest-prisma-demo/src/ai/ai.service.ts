@@ -124,6 +124,7 @@ export class AIService {
     const docs = await vectorStore.similaritySearch(question, 1);
     console.log(docs);
     const context = docs.map(d => d.pageContent).join("\n");
+    
     // 基于资料问问题
     const prompt = `
     你是一个专业助教，请基于下面资料回答问题。
