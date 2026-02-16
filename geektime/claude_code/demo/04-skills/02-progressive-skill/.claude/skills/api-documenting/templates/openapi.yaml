@@ -1,0 +1,94 @@
+# OpenAPI Template
+# Use this as a starting point for generating OpenAPI specs
+
+openapi: 3.0.0
+
+info:
+  title: API Title
+  description: API description goes here
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://staging-api.example.com/v1
+    description: Staging server
+
+paths:
+  /example:
+    get:
+      summary: Example endpoint
+      description: Detailed description of what this endpoint does
+      operationId: getExample
+      tags:
+        - Examples
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Example'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Example:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+        name:
+          type: string
+          description: Resource name
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Error message
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Examples
+    description: Example endpoints

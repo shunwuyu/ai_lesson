@@ -153,3 +153,4 @@ __pycache__/
 # IDE / OS
 .vscode/
 .DS_Store
+CLAUDE.local.md

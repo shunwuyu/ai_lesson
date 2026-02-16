@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>西安市主要旅游景点导览</title>
+  <!-- 技术规范：按 prompt 引用以下资源 -->
+  <link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/2.2.19/tailwind.min.css" />
+  <link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-100-M/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <script defer src="https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js"></script>
+  <style>
+    /* 文化复古风格：仿古纸张纹理、复古色、宋体氛围 */
+    :root {
+      --paper: #f5f0e6;
+      --ink: #2c2416;
+      --accent: #6b4423;
+      --border: #d4c4a8;
+      --card: #faf8f3;
+    }
+    body {
+      font-family: 'Noto Sans SC', 'Noto Serif SC', serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    }
+    .font-serif { font-family: 'Noto Serif SC', serif; }
+    .font-sans { font-family: 'Noto Sans SC', sans-serif; }
+    /* 标题：书法感、棕色 */
+    h1 { color: var(--accent); font-family: 'Noto Serif SC', serif; font-weight: 600; }
+    /* 卡片式景点项 */
+    .spot-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .spot-name { color: var(--accent); font-family: 'Noto Serif SC', serif; font-weight: 500; }
+    /* 音频按钮：统一风格 */
+    .btn-audio {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--paper);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-audio:focus { outline: none; }
+    .detail-content { border-top: 1px dashed var(--border); }
+    .detail-content p, .detail-content ul { margin-bottom: 0.75rem; }
+    .detail-content ul { padding-left: 1.25rem; }
+    [x-cloak] { display: none !important; }
+  </style>
+</head>
+<body class="p-4 pb-12 max-w-lg mx-auto" x-data="guideApp()">
+  <!-- 全局音频：仅一个 audio，通过切换 src 实现播放；切换新音频时打断当前播放 -->
+  <audio id="globalAudio" @play="currentPlayingId = currentId" @pause="if(currentPlayingId === currentId) currentPlayingId = null" @ended="currentPlayingId = null"></audio>
+
+  <header class="text-center py-6">
+    <h1 class="text-2xl font-serif">西安市主要旅游景点导览</h1>
+    <p class="text-sm text-gray-600 mt-2 font-sans">点击景区名称展开介绍，点击右侧按钮收听语音导览</p>
+  </header>
+
+  <!-- 按类别分组的景区列表 -->
+  <main class="space-y-6">
+    <template x-for="category in categories" :key="category.title">
+      <section>
+        <h2 class="text-lg font-serif text-gray-700 border-b border-gray-300 pb-1 mb-3" x-text="category.title"></h2>
+        <div class="space-y-2">
+          <template x-for="spot in category.spots" :key="spot.id">
+            <div class="spot-card">
+              <!-- 景区名称 + 音频按钮行 -->
+              <div class="flex items-center justify-between gap-3 p-3">
+                <button
+                  type="button"
+                  class="flex-1 text-left spot-name text-base"
+                  @click="toggleDetail(spot.id)"
+                  :aria-expanded="expandedId === spot.id"
+                >
+                  <span x-text="spot.name"></span>
+                  <i class="fas fa-chevron-down ml-1 text-xs transition-transform" :class="expandedId === spot.id ? 'rotate-180' : ''"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn-audio"
+                  :aria-label="currentPlayingId === spot.id ? '暂停' : '播放语音导览'"
+                  @click="toggleAudio(spot.id)"
+                >
+                  <template x-if="currentPlayingId === spot.id">
+                    <i class="fas fa-pause"></i>
+                  </template>
+                  <template x-if="currentPlayingId !== spot.id">
+                    <i class="fas fa-play"></i>
+                  </template>
+                </button>
+              </div>
+              <!-- 默认收缩的详细介绍：点击名称后展开 -->
+              <div
+                class="detail-content px-3 pb-3 font-sans text-sm text-gray-800 leading-relaxed"
+                x-show="expandedId === spot.id"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                x-cloak
+              >
+                <p><strong>地址：</strong><span x-text="spot.address"></span></p>
+                <p x-show="spot.level"><strong>等级：</strong><span x-text="spot.level"></span></p>
+                <div class="prose-custom" x-html="spot.desc"></div>
+                <div x-show="spot.practical" class="mt-2 text-gray-700" x-html="spot.practical"></div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </section>
+    </template>
+  </main>
+
+  <footer class="text-center text-xs text-gray-500 py-6 font-sans">
+    数据来源于高德地图 POI、百度百科等，开放时间与门票以景区当日公告为准。
+  </footer>
+
+  <script>
+    function guideApp() {
+      const audioEl = () => document.getElementById('globalAudio');
+      return {
+        currentId: null,
+        currentPlayingId: null,
+        expandedId: null,
+
+        toggleDetail(id) {
+          this.expandedId = this.expandedId === id ? null : id;
+        },
+
+        toggleAudio(id) {
+          const audio = audioEl();
+          if (!audio) return;
+          // 若正在播放的是当前项，则暂停
+          if (this.currentPlayingId === id) {
+            audio.pause();
+            this.currentPlayingId = null;
+            return;
+          }
+          // 否则：打断任何正在播放的音频，播放当前项（或继续已暂停的当前项）
+          audio.pause();
+          this.currentId = id;
+          audio.src = `voice_guides/${String(id).padStart(2, '0')}.mp3`;
+          audio.play();
+        },
+
+        categories: [
+          {
+            title: '一、世界遗产与 5A 级核心景点',
+            spots: [
+              { id: 1, name: '秦始皇帝陵博物院', address: '西安市临潼区秦陵北路', level: '国家5A级旅游景区、国家一级博物馆', desc: '<p>说起西安，很多人第一反应就是<strong>兵马俑</strong>。秦始皇帝陵博物院由「秦始皇兵马俑博物馆」和「秦始皇陵遗址公园（丽山园）」组成，两处各需约 1.5 小时，建议至少留出大半天。</p><p>这里是世界上最大的地下军事博物馆。三个兵马俑坑呈品字形排列，总面积超过 1.9 万平方米，陶俑、陶马共计 8000 多件。一号坑最大，长 230 米、宽 62 米，置身其中，仿佛能听见两千多年前秦军的号角。</p>', practical: '<strong>实用信息</strong><ul><li>门票：120 元/人（以官方为准）</li><li>开放：3 月 16 日–11 月 15 日 08:30–18:00；11 月 16 日–次年 3 月 15 日 08:30–17:00</li><li>建议：提前线上分时预约，尽量赶早避开人流。</li></ul>' },
+              { id: 2, name: '大雁塔', address: '西安市雁塔区慈恩路 1 号大慈恩寺内', level: '世界文化遗产、全国重点文物保护单位、5A 景区', desc: '<p>大雁塔是西安最醒目的文化地标之一，也是玄奘法师取经归来后的「成果展示中心」。唐永徽三年（652 年），玄奘为保存从印度带回的经卷与佛像，主持修建此塔，初为五层，武则天时改为七层，至今塔高约 64.5 米。</p><p>塔内嵌有《雁塔圣教序》碑，登塔可俯瞰曲江与城市轮廓，傍晚配合北广场音乐喷泉，古今交融。</p>', practical: '<strong>实用信息</strong><ul><li>开放：3–10 月 08:00–18:30；11–2 月 08:30–17:40</li><li>建议：与大慈恩寺一并参观，傍晚可顺道看北广场喷泉与大唐不夜城。</li></ul>' },
+              { id: 3, name: '华清宫（华清池）', address: '西安市临潼区华清路 38 号', level: '国家5A级旅游景区、世界遗产', desc: '<p>南依骊山、北临渭水，华清宫有 6000 年温泉利用史和 3000 年皇家园林史。白居易笔下「春寒赐浴华清池，温泉水滑洗凝脂」，说的就是杨贵妃在此沐浴的故事。</p><p>景区内唐御汤遗址博物馆中，「海棠汤」为杨贵妃专用，「莲花汤」为玄宗所用。大型实景舞剧《长恨歌》在此常年上演。</p>', practical: '<strong>实用信息</strong><ul><li>门票：约 120–150 元/人</li><li>开放：约 07:00–17:30</li><li>建议：与兵马俑安排东线一日游，或傍晚看《长恨歌》。</li></ul>' },
+              { id: 4, name: '西安城墙', address: '西安市南大街 2 号（主城门之一为永宁门）', level: '全国重点文物保护单位、国家5A级旅游景区', desc: '<p>西安城墙是中国现存规模最大、保存最完整的古代城垣之一，周长约 13.74 千米，墙高 12 米。四座主城门：东长乐、南永宁、西安定、北安远；护城河、箭楼、角楼等一应俱全。</p><p>骑行或步行一圈，是体验「城在脚下、历史在眼前」的最佳方式。</p>', practical: '<strong>实用信息</strong><ul><li>开放：约 08:00–22:00/23:00</li><li>建议：从永宁门（南门）上城，可租自行车环城，傍晚夜景更佳。</li></ul>' },
+              { id: 5, name: '大唐芙蓉园', address: '西安市曲江新区芙蓉西路 99 号', level: '国家5A级旅游景区', desc: '<p>大唐芙蓉园坐落在曲江新区、大雁塔东侧，占地约 1000 亩，是中国首个全方位展示盛唐风貌的大型皇家园林式文化主题公园。</p><p>园内紫云楼、仕女馆、御宴宫等按十二个文化主题分区呈现，每晚有全球最大水幕电影及《梦回大唐》诗乐舞剧，夜晚灯火璀璨。</p>', practical: '<strong>实用信息</strong><ul><li>开放：09:00–22:00，节假日至 23:00</li><li>建议：下午入园，先逛园再赏夜场演出与灯光。</li></ul>' },
+              { id: 6, name: '大明宫国家遗址公园', address: '西安市新城区自强东路 585 号', level: '国家5A级旅游景区、世界遗产', desc: '<p>大明宫始建于唐贞观八年（634 年），是唐长安城「三大内」中最辉煌的一组，自唐高宗起先后有 17 位皇帝在此理政。遗址公园以丹凤门—含元殿—宣政殿—紫宸殿为中轴，分为殿前区、宫殿区、宫苑区。</p><p>丹凤门遗址博物馆、宫殿区为收费区，外围为免费开放区，适合散步、跑步和亲子户外。</p>', practical: '<strong>实用信息</strong><ul><li>开放：约 08:30–18:00</li></ul>' }
+            ]
+          },
+          {
+            title: '二、古建筑与城市地标',
+            spots: [
+              { id: 7, name: '西安钟楼', address: '西安市中心，地铁 2 号线钟楼站 C 出口附近', level: '全国重点文物保护单位', desc: '<p>西安钟楼始建于明洪武十七年（1384 年），是中国现存体量最大、保存最完整的钟楼。总高约 36 米，基座下十字券洞与东西南北四条大街相通。万历十年曾整体迁至现址，在世界建筑史上极为罕见。</p>', practical: '<strong>实用信息</strong><ul><li>可登楼参观，与鼓楼联票更划算；地铁「钟楼」站出站即到。</li></ul>' },
+              { id: 8, name: '西安鼓楼', address: '西安市北院门 74 号', level: '全国重点文物保护单位', desc: '<p>鼓楼比钟楼早建四年，通高约 34 米，全楼斗拱结构无一铁钉。南侧匾额「文武盛地」、北侧「声闻于天」，楼周陈列 24 面节气鼓。鼓楼北侧紧邻回民街，逛完鼓楼顺道吃美食，是多数游客的标准动线。</p>', practical: '<strong>实用信息</strong><ul><li>与钟楼可一并购票参观；傍晚亮灯后与回民街一起拍摄效果最佳。</li></ul>' }
+            ]
+          },
+          {
+            title: '三、寺庙与宗教文化',
+            spots: [
+              { id: 9, name: '大慈恩寺', address: '西安市雁塔区慈恩路 1 号', level: '全国重点文物保护单位、世界文化遗产（大雁塔）、4A 景区', desc: '<p>大慈恩寺创建于唐贞观二十二年（648 年），是太子李治为追念母亲文德皇后而建，中国佛教八宗之一「唯识宗」（慈恩宗）的祖庭。玄奘法师在此主持寺务、领管译场十余年，寺内大雁塔即由玄奘督造。</p><p>参观大雁塔通常从大慈恩寺山门进入，先寺后塔，建议预留 2–3 小时。</p>', practical: '' },
+              { id: 10, name: '广仁寺', address: '西安市莲湖区西北一路 152 号（城墙西北角内）', level: '全国重点寺院、国家4A级旅游景区', desc: '<p>广仁寺是陕西境内唯一的藏传佛教格鲁派寺院，清康熙四十四年（1705 年）由康熙敕建，素有「汉地雪莲」之誉。寺内绿度母殿为全国唯一的绿度母主道场；千佛殿有明代木雕佛像 1200 尊。目前免费开放，农历正月酥油花展、十月燃灯节都很有特色。</p>', practical: '' },
+              { id: 11, name: '大兴善寺', address: '西安市雁塔区小寨兴善寺西街 55 号', level: '全国重点文物保护单位、全国重点开放寺院', desc: '<p>大兴善寺始建于西晋泰始二年（266 年），至今 1700 余年，是西安现存历史最悠久的佛寺之一，中国佛教密宗祖庭。印度僧人善无畏、金刚智、不空等曾在此译经传密。现有五殿二堂、佛学院、藏经楼及百年紫藤，闹中取静。</p>', practical: '' }
+            ]
+          },
+          {
+            title: '四、博物馆与遗址',
+            spots: [
+              { id: 12, name: '西安博物院（小雁塔）', address: '西安市碑林区友谊西路 72 号', level: '国家一级博物馆', desc: '<p>西安博物院由博物馆主体、唐代荐福寺遗址和小雁塔三部分组成。馆藏文物约 11.4 万件/套，唐三彩腾空马、秦代云纹高足玉杯等为镇馆之宝。小雁塔历经 70 余次地震仍屹立。</p><p>博物院免费开放（需预约），周二闭馆，旺季 08:30–18:00、淡季 09:00–17:30。</p>', practical: '' },
+              { id: 13, name: '汉长安城未央宫国家考古遗址公园', address: '西安市未央区大兴西路一带', level: '世界遗产、国家考古遗址公园、3A 景区', desc: '<p>未央宫由萧何主持修建，始建于汉高帝七年（前 200 年），是西汉的朝寝正宫，使用达 360 多年。遗址含未央宫前殿、椒房殿、天禄阁、石渠阁等 162 处展示区。公园免费开放，适合对汉代历史与考古感兴趣的游客做半日深度游。</p>', practical: '' }
+            ]
+          },
+          {
+            title: '五、遗址公园与滨水风景区',
+            spots: [
+              { id: 14, name: '汉城湖旅游风景区', address: '西安市未央区北二环与朱宏路交汇处西北角', level: '国家4A级旅游景区、国家水利风景区', desc: '<p>汉城湖水域约 850 亩，全长 6.27 公里，左岸紧邻汉长安城遗址。有天汉雄风浮雕、大风阁、音乐喷泉及八座风格各异的桥梁。免费开放，春夏季 06:00–22:00、秋冬季 07:00–21:00。</p>', practical: '' },
+              { id: 15, name: '曲江池遗址公园', address: '西安市雁塔区曲江新区东南部', level: '国家5A级旅游景区', desc: '<p>曲江池遗址公园占地约 1500 亩，其中水面约 500 亩，是西北地区首个集历史保护、生态园林与休闲旅游于一体的大型山水园林式遗址公园。阅江楼、畅观楼等围绕曲江水面展开，全年免费开放，可与大唐芙蓉园、大雁塔串联为一日曲江线。</p>', practical: '' }
+            ]
+          },
+          {
+            title: '六、美食与文化街区',
+            spots: [
+              { id: 16, name: '回民街（北院门等）', address: '西安市莲湖区北院门一带（钟楼地铁站步行约 430 米）', level: '美食文化街区、多座清真寺', desc: '<p>回民街由北院门、北广济街、西羊市、大皮院等组成，俗称「坊上」。牛羊肉泡馍、腊牛羊肉、镜糕等近 300 种小吃应有尽有。免费、全天开放，建议预留 3–5 小时边逛边吃，傍晚至夜间最热闹。</p>', practical: '' },
+              { id: 17, name: '永兴坊', address: '西安市新城区东乐巷 15 号（城墙中山门西北角）', level: '陕西省商旅名街、全国非遗与旅游融合发展优选项目', desc: '<p>永兴坊相传为唐代魏征府邸旧址，以「非遗美食文化」为主线，汇聚陕西 11 地市、107 区县的文化与美食。镜鉴广场、唐 108 坊微缩景观、秦腔皮影老腔演出和摔碗酒都值得体验。免费开放，商户一般 10:00–22:00 营业。</p>', practical: '' }
+            ]
+          },
+          {
+            title: '七、主题乐园与度假区',
+            spots: [
+              { id: 18, name: '华夏文旅西安度假区', address: '西安市浐灞国际港华文路 1518 号', level: '文化演艺、海洋公园、水世界、广运小镇', desc: '<p>华夏文旅西安度假区集演艺、观光、餐饮、娱乐于一体。核心有会跑的实景演艺《驼铃传奇》秀、华夏文旅海洋公园、水世界和广运小镇。适合安排一整天轻松日，与市区古迹行程交替进行。</p>', practical: '' }
+            ]
+          }
+        ]
+      };
+    }
+  </script>
+</body>
+</html>
