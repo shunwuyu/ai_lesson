@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js 粒子波浪动画</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            text-align: center;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        #info h1 {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        #info p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            color: #0ff;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .btn.active {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div id="info">
+        <h1>粒子波浪动画</h1>
+        <p>移动鼠标改变视角 | 滚轮缩放</p>
+    </div>
+
+    <div id="controls">
+        <button class="btn active" onclick="setWaveType('sine')">正弦波</button>
+        <button class="btn" onclick="setWaveType('ripple')">涟漪</button>
+        <button class="btn" onclick="setWaveType('spiral')">螺旋</button>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // 场景设置
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.002);
+
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        camera.position.set(0, 50, 100);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // 粒子系统参数
+        const PARTICLE_COUNT = 15000;
+        const FIELD_SIZE = 200;
+        let waveType = 'sine';
+        let time = 0;
+
+        // 创建粒子几何体
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(PARTICLE_COUNT * 3);
+        const colors = new Float32Array(PARTICLE_COUNT * 3);
+        const sizes = new Float32Array(PARTICLE_COUNT);
+
+        // 初始化粒子位置
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            const x = (Math.random() - 0.5) * FIELD_SIZE;
+            const z = (Math.random() - 0.5) * FIELD_SIZE;
+            const y = 0;
+
+            positions[i * 3] = x;
+            positions[i * 3 + 1] = y;
+            positions[i * 3 + 2] = z;
+
+            // 颜色 - 青色到紫色渐变
+            const color = new THREE.Color();
+            color.setHSL(0.5 + Math.random() * 0.2, 0.8, 0.5);
+            colors[i * 3] = color.r;
+            colors[i * 3 + 1] = color.g;
+            colors[i * 3 + 2] = color.b;
+
+            sizes[i] = Math.random() * 2 + 1;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+        // 粒子材质
+        const material = new THREE.PointsMaterial({
+            size: 2,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending,
+            sizeAttenuation: true
+        });
+
+        // 创建粒子系统
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+
+        // 保存原始位置
+        const originalPositions = positions.slice();
+
+        // 更新波浪动画
+        function updateWave() {
+            time += 0.02;
+            const positions = particles.geometry.attributes.position.array;
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const x = originalPositions[i * 3];
+                const z = originalPositions[i * 3 + 2];
+                let y = 0;
+
+                switch (waveType) {
+                    case 'sine':
+                        // 正弦波
+                        y = Math.sin(x * 0.05 + time) * 5 +
+                            Math.cos(z * 0.05 + time * 0.8) * 5;
+                        break;
+
+                    case 'ripple':
+                        // 涟漪效果
+                        const dist = Math.sqrt(x * x + z * z);
+                        y = Math.sin(dist * 0.1 - time * 2) * 8 * Math.exp(-dist * 0.02);
+                        break;
+
+                    case 'spiral':
+                        // 螺旋效果
+                        const angle = Math.atan2(z, x);
+                        const radius = Math.sqrt(x * x + z * z);
+                        y = Math.sin(angle * 3 + radius * 0.1 - time) * 6;
+                        break;
+                }
+
+                positions[i * 3 + 1] = y;
+            }
+
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            // 缓慢旋转粒子系统
+            particles.rotation.y += 0.001;
+        }
+
+        // 设置波浪类型
+        window.setWaveType = (type) => {
+            waveType = type;
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        };
+
+        // 鼠标交互
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.1;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.1;
+        });
+
+        // 滚轮缩放
+        document.addEventListener('wheel', (e) => {
+            camera.position.z += e.deltaY * 0.1;
+            camera.position.z = Math.max(50, Math.min(200, camera.position.z));
+        });
+
+        // 窗口大小调整
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // 动画循环
+        function animate() {
+            requestAnimationFrame(animate);
+
+            updateWave();
+
+            // 摄像机跟随鼠标
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (50 + mouseY * 0.5 - camera.position.y) * 0.05;
+            camera.lookAt(0, 0, 0);
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
