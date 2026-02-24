@@ -5,6 +5,7 @@ import { executeCommandTool, listDirectoryTool, readFileTool, writeFileTool } fr
 import chalk from 'chalk';
 
 const model = new ChatOpenAI({ 
+    // qwen-plus 比 qwen-coder-turbo 更强大
     modelName: "qwen-plus",
     apiKey: process.env.OPENAI_API_KEY,
     temperature: 0,
@@ -47,7 +48,8 @@ async function runAgentWithTools(query, maxIterations = 30) {
 回复要简洁，只说做了什么`),
         new HumanMessage(query)
     ];
-
+    // ReAct 
+    // 循环也是agent 的核心
     for (let i = 0; i < maxIterations; i++) {
         console.log(chalk.bgGreen('⏳ 正在等待 AI 思考...'));
         const response = await modelWithTools.invoke(messages);

@@ -1,7 +1,11 @@
 import { tool } from '@langchain/core/tools';
+// Node.js 自带的文件操作工具箱，专门用来异步读写文件， 不会阻塞主线程。
 import fs from 'node:fs/promises';
+// path 模块提供了处理文件路径的工具，包括拼接、解析、规范化等操作。
 import path from 'node:path';
+// 创建子进程
 import { spawn } from 'node:child_process';
+// Zod 是一个用于数据验证的库，它可以帮助我们检查数据是否符合预期，避免数据错误。
 import { z } from 'zod';
 
 // 1. 读取文件工具
@@ -29,8 +33,13 @@ const readFileTool = tool(
 const writeFileTool = tool(
   async ({ filePath, content }) => {
     try {
+      // 获取文件路径的目录部分
+      // 比如 /a/b/c.txt 的目录部分是 /a/b
       const dir = path.dirname(filePath);
+      // 创建目录，如果目录不存在则创建
+      // recursive: true 表示如果目录不存在，则创建它和它的所有父目录
       await fs.mkdir(dir, { recursive: true });
+      // 写入文件
       await fs.writeFile(filePath, content, 'utf-8');
       console.log(`  [工具调用] write_file("${filePath}") - 成功写入 ${content.length} 字节`);
       return `文件写入成功: ${filePath}`;
@@ -51,7 +60,9 @@ const writeFileTool = tool(
 
 // 3. 执行命令工具（带实时输出）
 const executeCommandTool = tool(
+ // 执行命令工具，支持指定工作目录，实时显示输出
   async ({ command, workingDirectory }) => {
+    // 获取工作目录，如果未指定则使用当前工作目录
     const cwd = workingDirectory || process.cwd();
     console.log(`  [工具调用] execute_command("${command}")${workingDirectory ? ` - 工作目录: ${workingDirectory}` : ''}`);
 
