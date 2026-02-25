@@ -30,3 +30,5 @@
 - tool-test
     pnpm i @langchain/openai
     引入dotenv
+
+- 可以看到 AI 返回的消息是 AIMessage 实例 带tool
