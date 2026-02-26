@@ -17,7 +17,7 @@ const mcpClient = new MultiServerMCPClient({
         'my-mcp-server': {
             command: "node",
             args: [
-                "/Users/guang/code/tool-test/src/my-mcp-server.mjs"
+                "/Users/shunwuyu/workspace/lesson/ai_lesson/guang/04/tool-test/my-mcp-server.mjs"
             ]
         }
     }
@@ -72,7 +72,7 @@ async function runAgentWithTools(query, maxIterations = 30) {
 }
 
 
-await runAgentWithTools("查一下用户 002 的信息");
-// await runAgentWithTools("MCP Server 的使用指南是什么");
+// await runAgentWithTools("查一下用户 002 的信息");
+await runAgentWithTools("MCP Server 的使用指南是什么");
 
 await mcpClient.close();

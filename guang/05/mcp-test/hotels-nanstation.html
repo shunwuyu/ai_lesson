@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>北京南站附近酒店 - 图片展示</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #1a1a2e; color: #eee; }
+    h1 { font-size: 1.5rem; margin-bottom: 24px; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tabs a { padding: 10px 16px; background: #16213e; color: #eee; text-decoration: none; border-radius: 8px; }
+    .tabs a:hover, .tabs a.active { background: #0f3460; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .panel h2 { margin-top: 0; font-size: 1.25rem; }
+    .panel img { max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .panel p { color: #aaa; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>北京南站附近 · 最近 3 家酒店</h1>
+  <div class="tabs">
+    <a href="#hotel1" class="tab active" data-panel="hotel1">米家青年酒店(北京南站店)</a>
+    <a href="#hotel2" class="tab" data-panel="hotel2">北京佳伟来福宾馆</a>
+    <a href="#hotel3" class="tab" data-panel="hotel3">北京永鑫宾馆</a>
+  </div>
+  <div id="hotel1" class="panel active">
+    <h2>米家青年酒店(北京南站店)</h2>
+    <p>地址：右外东庄21号楼</p>
+    <img src="https://store.is.autonavi.com/showpic/357bcafee9e1ab90ac1460eb0bda5150" alt="米家青年酒店" />
+  </div>
+  <div id="hotel2" class="panel">
+    <h2>北京佳伟来福宾馆</h2>
+    <p>地址：南站幸福路东庄小区20号楼</p>
+    <img src="https://store.is.autonavi.com/showpic/6c9008e5c66fc1b34df92daa631c20ed" alt="北京佳伟来福宾馆" />
+  </div>
+  <div id="hotel3" class="panel">
+    <h2>北京永鑫宾馆</h2>
+    <p>地址：幸福三巷</p>
+    <img src="https://store.is.autonavi.com/showpic/260da22f7025709aeff4470843ad435f" alt="北京永鑫宾馆" />
+  </div>
+  <script>
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', e => {
+        e.preventDefault();
+        const id = tab.getAttribute('data-panel');
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        tab.classList.add('active');
+        document.title = tab.textContent + ' - 北京南站附近酒店';
+      });
+    });
+  </script>
+</body>
+</html>
