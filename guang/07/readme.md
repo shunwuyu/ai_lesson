@@ -43,3 +43,16 @@ https://docs.langchain.com/oss/python/integrations/document_loaders
 - TextLoader
 
     最基础的加载器，用于读取 纯文本文件 (.txt)，通常用于加载已经预处理好的文本或简单的笔记文件，支持自定义编码格式。
+
+
+你可以把各种知识来源通过 loader 转化为文档存入知识库。当然，有的文档可能会很大，比如一个 pdf 文件可能是一本书的大小。这种很明显不能直接把转化后的 Document 向量化，需要先拆分文档。也就是需要 Splitter
+
+
+大的文档经过 TextSplitter 分割后，变成一个个小文档，再给到嵌入模型做向量化。分割最简单的就是按照字符，比如换行符 \n但并不是每一行一个 Document，而是要设置一个 chunk size，按照换行符分割好的内容加入到这个 Chunk，当达到 chunk size 后，再继续生成下个 Chunk。
+
+
+
+这个 Chunk 也是 Document 对象，只是文档内容是分割好的一个个大小合适的块。我们写代码来跑一边这个流程。
+
+
+
