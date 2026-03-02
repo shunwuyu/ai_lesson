@@ -99,6 +99,6 @@ async function runAgentWithTools(query, maxIterations = 30) {
 
 
 // await runAgentWithTools("北京南站附近的酒店，以及去的路线");
-// await runAgentWithTools("北京南站附近的2个酒店，以及去的路线，路线规划生成文档保存到 /Users/shunwuyu/Desktop 的一个 md 文件");
-await runAgentWithTools("北京南站附近的酒店，最近的 3 个酒店，拿到酒店图片，打开浏览器，展示每个酒店的图片，每个 tab 一个 url 展示，并且在把那个页面标题改为酒店名");
+await runAgentWithTools("北京南站附近的2个酒店，以及去的路线，路线规划生成文档保存到 /Users/shunwuyu/Desktop 的一个 md 文件");
+// await runAgentWithTools("北京南站附近的酒店，最近的 3 个酒店，拿到酒店图片，打开浏览器，展示每个酒店的图片，每个 tab 一个 url 展示，并且在把那个页面标题改为酒店名");
 await mcpClient.close();

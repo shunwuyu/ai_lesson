@@ -1,0 +1,22 @@
+{
+  "name": "memory-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@langchain/community": "^1.1.20",
+    "@langchain/core": "^1.1.29",
+    "@langchain/openai": "^1.2.11",
+    "@zilliz/milvus2-sdk-node": "^2.6.10",
+    "dotenv": "^17.3.1",
+    "js-tiktoken": "^1.0.21",
+    "langchain": "^1.2.28"
+  }
+}
