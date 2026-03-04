@@ -1,11 +1,12 @@
 const http = require('http');
 const whiteList = [
-    'http://127.0.0.1:5501'
+    'http://127.0.0.1:57353'
 ]
 const server = http.createServer((req, res) => {
     const origin = req.headers.origin;
-    console.log(origin)
+    console.log(origin,whiteList, whiteList.includes(origin))
   if (whiteList.includes(origin)) {
+    console.log('////////////////////////////////////')
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');

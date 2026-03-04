@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Beforeunload 测试</title>
+</head>
+<body>
+    <h1>试着关闭这个标签页，或者刷新页面</h1>
+    <p>你应该会看到一个浏览器自带的弹窗问你“是否要离开此网站？”</p>
+
+    <script>
+    window.addEventListener('beforeunload', function (e) {
+        console.log('✅ beforeunload 事件已触发！');
+        
+        // 必须加上这两行才能看到弹窗
+        e.preventDefault();
+        e.returnValue = ''; 
+        
+        // 为了调试，你可以加个断点，看看代码是否停在这里
+        // debugger; 
+    });
+
+    // 补充监听 pagehide，以防是 bfcache 导致的
+    window.addEventListener('pagehide', function (e) {
+        if (e.persisted) {
+            console.log('⚠️ 页面进入 bfcache (未触发 beforeunload)，这是正常的浏览器优化。');
+        } else {
+            console.log('✅ 页面正常卸载流程。');
+        }
+    });
+    </script>
+</body>
+</html>

@@ -7,7 +7,15 @@
 </head>
 <body>
 <script>
-fetch('http://localhost:3000/')
+// fetch('http://localhost:3000/')
+//     .then(data => data.json())
+//     .then(data => {
+//         console.log(data);
+//     })
+
+fetch('http://localhost:3000/', {
+    method: 'POST',
+})
     .then(data => data.json())
     .then(data => {
         console.log(data);
