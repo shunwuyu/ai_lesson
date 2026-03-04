@@ -19,16 +19,16 @@ const server = http.createServer((req, res) => {
   
 
   // 对于预检请求（OPTIONS），立即响应
-//   if (req.method === 'OPTIONS') {
-//     res.writeHead(204); // No Content
-//     res.end();
-//   } else {
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204); // No Content 成功但无数据
+    res.end();
+  } else {
     // 对于其他请求类型，处理并返回数据
     res.writeHead(200, {'Content-Type': 'text/json'});
     res.end(JSON.stringify({
         message: 'Hello, World!'
     }));
-//   }
+  }
 });
 
 server.listen(3000, () => {
