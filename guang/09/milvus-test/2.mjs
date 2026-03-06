@@ -4,10 +4,10 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 
 // ================= 配置区域 =================
 // 1. 替换为你的云端 URI (在控制台集群详情页找 "Public Endpoint")
-const ADDRESS = 'https://in03-73f880f0149c55e.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn'; 
+const ADDRESS = process.env.MILVUS_ADDRESS; 
 
 // 2. 替换为你的 API Key (点击右上角 "API 密钥" 复制)
-const TOKEN = 'ee677c8daab3a42cbef237144af547ba935be17cdd6b00124e745635f530857ef61047f15d598bf91218ebf42cfaa6ecd4b601c0'; 
+const TOKEN = process.env.MILVUS_TOKEN; 
 // ===========================================
 
 
@@ -46,27 +46,27 @@ async function main() {
     }
     console.log('🎉 连接成功！集群状态正常。');
 
-    // await client.createCollection({
-    //     collection_name: COLLECTION_NAME,
-    //     fields: [
-    //         { name: 'id', data_type: DataType.VarChar, max_length: 50, is_primary_key: true },
-    //         { name: 'vector', data_type: DataType.FloatVector, dim: VECTOR_DIM },
-    //         { name: 'content', data_type: DataType.VarChar, max_length: 5000 },
-    //         { name: 'date', data_type: DataType.VarChar, max_length: 50 },
-    //         { name: 'mood', data_type: DataType.VarChar, max_length: 50},
-    //         { name: 'tags', data_type: DataType.Array, element_type: DataType.VarChar, max_capacity: 10, max_length: 50 }
-    //     ]
-    // });
+    await client.createCollection({
+        collection_name: COLLECTION_NAME,
+        fields: [
+            { name: 'id', data_type: DataType.VarChar, max_length: 50, is_primary_key: true },
+            { name: 'vector', data_type: DataType.FloatVector, dim: VECTOR_DIM },
+            { name: 'content', data_type: DataType.VarChar, max_length: 5000 },
+            { name: 'date', data_type: DataType.VarChar, max_length: 50 },
+            { name: 'mood', data_type: DataType.VarChar, max_length: 50},
+            { name: 'tags', data_type: DataType.Array, element_type: DataType.VarChar, max_capacity: 10, max_length: 50 }
+        ]
+    });
     // console.log('Collection created');
     // 创建索引
     // console.log('\nCreating index...');
-    // await client.createIndex({
-    //     collection_name: COLLECTION_NAME,
-    //     field_name: 'vector',
-    //     index_type: IndexType.IVF_FLAT,
-    //     metric_type: MetricType.COSINE,
-    //     params: { nlist: 1024 }
-    // });
+    await client.createIndex({
+        collection_name: COLLECTION_NAME,
+        field_name: 'vector',
+        index_type: IndexType.IVF_FLAT, // 推荐使用 AUTOINDEX，智能选择最合适的索引类型 为了加速查询
+        metric_type: MetricType.COSINE,
+        params: { nlist: 1024 } // 
+    });
     // console.log('Index created');
     console.log('\nLoading collection...');
     await client.loadCollection({ collection_name: COLLECTION_NAME });

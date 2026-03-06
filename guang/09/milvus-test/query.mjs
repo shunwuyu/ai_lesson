@@ -5,13 +5,13 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 const COLLECTION_NAME = 'ai_diary';
 const VECTOR_DIM = 1024;
 
+// ================= 配置区域 =================
 // 1. 替换为你的云端 URI (在控制台集群详情页找 "Public Endpoint")
-const ADDRESS = 'https://in03-73f880f0149c55e.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn'; 
+const ADDRESS = process.env.MILVUS_ADDRESS; 
 
 // 2. 替换为你的 API Key (点击右上角 "API 密钥" 复制)
-const TOKEN = 'ee677c8daab3a42cbef237144af547ba935be17cdd6b00124e745635f530857ef61047f15d598bf91218ebf42cfaa6ecd4b601c0'; 
+const TOKEN = process.env.MILVUS_TOKEN; 
 // ===========================================
-
 
 
 
@@ -40,7 +40,7 @@ async function getEmbedding(text) {
 async function main() {
   try {
     console.log('Connecting to Milvus...');
-    await client.connectPromise;
+    await client.connectPromise; // 连接 Milvus
     console.log('✓ Connected\n');
 
     // 向量搜索

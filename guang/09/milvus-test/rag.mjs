@@ -4,14 +4,17 @@ import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 
 const COLLECTION_NAME = 'ai_diary';
 const VECTOR_DIM = 1024;
-const ADDRESS = 'https://in03-73f880f0149c55e.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn'; 
-// 2. 替换为你的 API Key (点击右上角 "API 密钥" 复制)
-const TOKEN = 'ee677c8daab3a42cbef237144af547ba935be17cdd6b00124e745635f530857ef61047f15d598bf91218ebf42cfaa6ecd4b601c0'; 
+// ================= 配置区域 =================
+// 1. 替换为你的云端 URI (在控制台集群详情页找 "Public Endpoint")
+const ADDRESS = process.env.MILVUS_ADDRESS; 
 
+// 2. 替换为你的 API Key (点击右上角 "API 密钥" 复制)
+const TOKEN = process.env.MILVUS_TOKEN; 
+// ===========================================
 
 // 初始化 OpenAI Chat 模型
 const model = new ChatOpenAI({
-  temperature: 0.7,
+  temperature: 0.1,
   model: process.env.MODEL_NAME,
   apiKey: process.env.OPENAI_API_KEY,
   configuration: {
@@ -140,6 +143,7 @@ AI 助手的回答:`;
 async function main() {
   try {
     console.log('连接到 Milvus...');
+    await client.connectPromise;
     console.log('✓ 已连接\n');
 
     await answerDiaryQuestion("我最近做了什么让我感到快乐的事情？", 2);
