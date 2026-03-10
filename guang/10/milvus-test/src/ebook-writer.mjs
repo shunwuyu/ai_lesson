@@ -159,6 +159,8 @@ try {
     // 创建文本拆分器，拆分到 500 个字符
     const textSplitter = new RecursiveCharacterTextSplitter({
       chunkSize: CHUNK_SIZE,
+      // 默认的 separators \n\n 双换行符，段落级
+      // \n 单换行符，行级
       chunkOverlap: 50, // 重叠 50 个字符，保持上下文连贯性
     });
 
