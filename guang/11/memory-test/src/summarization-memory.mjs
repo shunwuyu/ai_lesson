@@ -89,6 +89,7 @@ async function summarizeHistory(messages) {
   if (messages.length === 0) return "";
 //   将结构化的消息对象数组（Message Objects），转换成模型能直接阅读的纯文本字符串
   const conversationText = getBufferString(messages, {
+    // 用于指定消息中的人类消息和 AI 消息的文本前缀。
     humanPrefix: "用户",
     aiPrefix: "助手",
   });

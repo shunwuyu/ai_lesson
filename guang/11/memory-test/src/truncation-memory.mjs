@@ -52,7 +52,7 @@ function countTokens(messages, encoder) {
 // ========== 2. 按 token 数量截断（使用 js-tiktoken 计数） ==========
 async function tokenCountTruncation() {
   const history = new InMemoryChatMessageHistory();
-  const maxTokens = 100; // 限制最多 100 个 token
+  const maxTokens = 120; // 限制最多 100 个 token
   
   const enc = getEncoding("cl100k_base");
 
@@ -79,9 +79,12 @@ async function tokenCountTruncation() {
   let allMessages = await history.getMessages();
   
   // 使用 trimMessages API：使用 js-tiktoken 计算 token 数量
+  // 指定截断后剩余消息允许占用的最大 Token 数量。
   const trimmedMessages = await trimMessages(allMessages, {
     maxTokens: maxTokens,
+    // 用于计算给定消息数组的 Token 数量
     tokenCounter: async (msgs) => countTokens(msgs, enc),
+    // 保留最后部分
     strategy: "last", // 保留最近的消息
   });
   

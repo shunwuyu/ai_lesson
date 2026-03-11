@@ -32,24 +32,24 @@ async function inMemoryDemo() {
 
     // 第二轮对话（基于历史记录）
     console.log("[第二轮对话 - 基于历史记录]");
-    const userMessage2 = new HumanMessage(
-            "好吃吗？"
-          );
-    await history.addMessage(userMessage2);
-    const messages2 = [systemMessage, ...(await history.getMessages())];
-    const response2 = await model.invoke(messages2);
-    await history.addMessage(response2);
-    console.log(`用户: ${userMessage2.content}`);
-    console.log(`助手: ${response2.content}\n`);
+    const userMessage2 = new HumanMessage(
+            "好吃吗？"
+          );
+    await history.addMessage(userMessage2);
+    const messages2 = [systemMessage, ...(await history.getMessages())];
+    const response2 = await model.invoke(messages2);
+    await history.addMessage(response2);
+    console.log(`用户: ${userMessage2.content}`);
+    console.log(`助手: ${response2.content}\n`);
     // 展示所有历史消息
-  console.log("[历史消息记录]");
-  const allMessages = await history.getMessages();
-  console.log(`共保存了 ${allMessages.length} 条消息：`);
-  allMessages.forEach((msg, index) => {
-    const type = msg.type;
-    const prefix = type === 'human' ? '用户' : '助手';
-    console.log(`  ${index + 1}. [${prefix}]: ${msg.content.substring(0, 50)}...`);
-  });
+  console.log("[历史消息记录]");
+  const allMessages = await history.getMessages();
+  console.log(`共保存了 ${allMessages.length} 条消息：`);
+  allMessages.forEach((msg, index) => {
+    const type = msg.type;
+    const prefix = type === 'human' ? '用户' : '助手';
+    console.log(`  ${index + 1}. [${prefix}]: ${msg.content.substring(0, 50)}...`);
+  });
 }
 
 inMemoryDemo().catch(console.error);

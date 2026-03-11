@@ -1,4 +1,209 @@
-[](https://pomb.us/build-your-own-react/)
+[Build your own React](https://pomb.us/build-your-own-react/)
+
+想要深入掌握 React，理解它的实现原理也是必要的。
+
+理解 React 实现原理的最好方式就是写一个 Mini React。
+
+## 基本概念
+
+```
+<!-- element 由JSX 定义 
+  并不是合格的JS, 怎么转成可执行的JS?
+  转移, babel  babel-transfer-demo
+-->
+const element = <h1 title="foo">Hello</h1> // JSX
+const container = document.getElementById("root") // DOM elements 
+ReactDOM.render(element, container) // React
+```
+
+```
+const element = React.createElement(
+  "h1", //tag name
+  { title: "foo" }, // props
+  "Hello" // children
+)
+```
+React.createElement  根据参数返回一个对象，即VDOM element 
+
+```
+const element = {
+  type: "h1",
+  props: {
+    title: "foo",
+    children: "Hello",
+  },
+}
+```
+
+## vdom
+
+type and props(children)
+
+type 是我们要创建的DOM节点的tagName, 当然也可以是一个函数， 当它是个组件的时候。
+
+props 是另一个对象，  JSX 所有的属性都会在这以塑性和值的方式出现。
+
+还有个特殊属性children
+
+- ReactDOM.render 
+  React code 需要编写
+
+  - render 是react 改变DOM, 我们来更新
+  比如丛 root -> 第一次render
+  状态改变后 update
+
+  - 创建节点， 设置属性 
+  ```
+  const node = document.createElement(element.type)
+  node["title"] = element.props.title
+
+  const text = document.createTextNode("")
+  text["nodeValue"] = element.props.children
+
+  node.appendChild(text)
+  container.appendChild(node)
+
+  ```
+  ![](1.png)
+  我们就有了不需要react 的同样的代码。
+
+## createElement 函数
+
+让我们来编写自己的createElement 方法
+
+```
+const element = (
+  <div id="foo">
+    <a>bar</a>
+    <b />
+  </div>
+)
+const container = document.getElementById("root")
+ReactDOM.render(element, container)
+```
+
+```
+const element = React.createElement(
+  "div",
+  { id: "foo" },
+  React.createElement("a", null, "bar"),
+  React.createElement("b")
+)
+```
+element 就是一个type 和props 的对象 ，函数的指责就是创建对象。
+
+```
+function createElement(type, props, ...children) {
+  return {
+    type,
+    props: {
+      ...props,
+      children,
+    },
+  }
+}
+```
+
+For example, createElement("div") returns:
+
+{
+  "type": "div",
+  "props": { "children": [] }
+}
+createElement("div", null, a) returns:
+
+{
+  "type": "div",
+  "props": { "children": [a] }
+}
+and createElement("div", null, a, b) returns:
+
+{
+  "type": "div",
+  "props": { "children": [a, b] }
+}
+
+- children 数组 可以是字符串或对象
+  ```
+  props: {
+      ...props,
+      children: children.map(child =>
+        typeof child === "object"
+          ? child
+          : createTextElement(child)
+      ),
+    }
+  ```
+  - 字符串
+  createTextElement
+  function createTextElement(text) {
+  return {
+    type: "TEXT_ELEMENT",
+    props: {
+      nodeValue: text,
+      children: [],
+    },
+  }
+}
+
+  ```
+  const element = React.createElement(
+  "div",
+  { id: "foo" },
+  React.createElement("a", null, "bar"),
+  React.createElement("b")
+  )
+  ```
+  
+- Didact 像react,手写
+
+```
+const Didact = {
+  createElement,
+  render 
+}
+
+const element = Didact.createElement(
+  "div",
+  { id: "foo" },
+  Didact.createElement("a", null, "bar"),
+  Didact.createElement("b")
+)
+
+/** @jsx Didact.createElement */
+const element = (
+  <div id="foo">
+    <a>bar</a>
+    <b />
+  </div>
+)
+```
+
+## The render Function 
+
+```
+function render(element, container) {
+  const dom = document.createElement(element.type)
+  const dom =
+    element.type == "TEXT_ELEMENT"
+      ? document.createTextNode("")
+      : document.createElement(element.type)
+
+      const isProperty = key => key !== "children"
+  Object.keys(element.props)
+    .filter(isProperty)
+    .forEach(name => {
+      dom[name] = element.props[name]
+    })
+​  element.props.children.forEach(child =>
+    render(child, dom)
+  )
+  container.appendChild(dom)
+}
+```
+
+ react-scripts 它封装了构建 React 应用所需的所有底层配置（如 Babel、Webpack、Jest 等）
+
 
 - Step I: The createElement Function
 - Step II: The render Function 
