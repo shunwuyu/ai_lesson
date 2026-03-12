@@ -218,6 +218,50 @@ function render(element, container) {
 
 ## Concurrent Mode 并发模式
 
+- 从问题开始
+
+```
+function render(element, container) {
+    // console.log(element, container);
+    const dom = 
+        element.type == 'TEXT_ELEMENT'
+        ? document.createTextNode('')
+        : document.createElement(element.type);
+    // 过滤 children 属性
+    const isProperty = key => key !== "children";
+    Object.keys(element.props)
+        .filter(isProperty)
+        .forEach(name => {
+            // console.log(name, '/////')
+            dom[name] = element.props[name];
+        })
+    element.props.children.forEach(child => render(child, dom));
+    container.appendChild(dom);
+}
+```
+element.props.children.forEach(child => render(child, dom)); 这个递归调用会有问题。
+
+电商商品详情页的复杂组件树结构（覆盖多层嵌套、文本节点、空节点、重复组件类型等场景）
+
+目前情况是 当我们开始渲染， 那么不渲染完成就不会停歇。如果虚拟DOM 树 太大，![](2.png)
+
+将会阻塞主线程太久。 如果浏览器需要执行**更优先**的工作，例如用户输入、滚动屏幕、animation动画，
+必须等待递归的渲染完成,会明显的出现 掉帧、卡顿等。
+
+- 怎么办？
+
+将工作拆封成小的单元， 每完成一个单元后，浏览器可以停下渲染，去check是否有更优先的任务需要执行。
+
+- 理解 Event Loop原理。
+
+介入讲解
+
+
+
+
+
+
+
 React 的 Concurrent Mode 中的‘并发’，并不是多线程意义上的并行，而是指 React 能够将渲染任务拆分成小块，通过调度器在浏览器空闲时执行，并支持中断、优先级调度和多版本 UI 准备。它让高优先级更新（如用户输入）能够及时响应，避免页面卡顿。从 React 18 起，只要使用 createRoot，就默认启用了并发模式。
 
 把一次性深度遍历变成 可中断的工作队列。用 requestIdleCallback（教学用，React 实际使用 scheduler）把渲染分割为一小块一小块做。

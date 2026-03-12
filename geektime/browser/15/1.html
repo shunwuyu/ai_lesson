@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+console.log('同步代码 1');
+
+setTimeout(() => {
+  console.log('setTimeout 1');
+  Promise.resolve().then(() => {
+    console.log('setTimeout 1 内部微任务');
+  });
+}, 0);
+
+const promise1 = new Promise((resolve) => {
+  console.log('Promise 构造函数');
+  resolve();
+  console.log('Promise 构造函数内 resolve 后');
+});
+
+promise1.then(() => {
+  console.log('Promise.then 1');
+  setTimeout(() => {
+    console.log('Promise.then 1 内部 setTimeout');
+  }, 0);
+});
+
+async function asyncFn() {
+  console.log('async 函数同步部分');
+  await Promise.resolve();
+  console.log('await 后微任务');
+}
+
+asyncFn();
+
+console.log('同步代码 2');
+// queueMicrotask 是 JavaScript 提供的手动向微任务队列添加任务的标准 API
+queueMicrotask(() => {
+  console.log('queueMicrotask 微任务');
+});
+
+// 额外增加 DOM 监听类微任务（前端特有）
+const observer = new MutationObserver(() => {
+  console.log('MutationObserver 微任务');
+});
+const div = document.createElement('div');
+observer.observe(div, { attributes: true });
+div.setAttribute('data-test', '1'); // 触发 MutationObserver
+</script>
+</body>
+</html>
