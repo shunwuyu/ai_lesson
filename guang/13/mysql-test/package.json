@@ -1,0 +1,19 @@
+{
+  "name": "mysql-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@langchain/core": "^1.1.32",
+    "dotenv": "^17.3.1",
+    "mysql2": "^3.19.1",
+    "zod-to-json-schema": "^3.25.1"
+  }
+}
