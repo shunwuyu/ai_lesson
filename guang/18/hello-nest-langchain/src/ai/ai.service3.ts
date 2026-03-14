@@ -3,16 +3,25 @@ import { ChatOpenAI } from'@langchain/openai';
 import { PromptTemplate } from'@langchain/core/prompts';
 import type { Runnable } from'@langchain/core/runnables';
 import { StringOutputParser } from'@langchain/core/output_parsers';
+import { ConfigService } from '@nestjs/config';
+
 
 @Injectable()
 export class AiService {
   private readonly chain: Runnable;
-    // 注入 ChatModel， 通过 @Inject 注入，自定义 provider 名称 CHAT_MODEL
-    // 实现model 和 service 的解耦
-    constructor(@Inject('CHAT_MODEL') private readonly model: ChatOpenAI) {
+
+    constructor(@Inject(ConfigService) configService: ConfigService) {
         const prompt = PromptTemplate.fromTemplate(
         '请回答以下问题：\n\n{query}',
         );
+        const model = new ChatOpenAI({
+            temperature: 0.7,
+            modelName: configService.get('MODEL_NAME'),
+            apiKey: configService.get('OPENAI_API_KEY'),
+            configuration: {
+                baseURL: configService.get('OPENAI_BASE_URL')
+            },
+        });
         this.chain = prompt.pipe(model).pipe(new StringOutputParser());
     }
 
@@ -20,15 +29,10 @@ export class AiService {
         return this.chain.invoke({ query });
     }
     // 生成器语法
-    // 用生成器能把 AI 回复拆成小片段逐个吐，前端不用等整段内容，实现边生成边显示
     async *streamChain(query: string): AsyncGenerator<string> {
-        // this.chain.stream 流式输出，返回一个 stream 对象
-        // stream 是 AI 边生成边吐的数据流
         const stream = await this.chain.stream({ query });
-        // for await 逐个接
         for await (const chunk of stream) {
-            // yield 立刻把内容推出去，实现边生成边输出
-            yield chunk;
+          yield chunk;
         }
     }
 }

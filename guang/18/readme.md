@@ -84,6 +84,20 @@ Nest 还支持 DI（Dependency Injection） 依赖注入
     服务端返回的 Content-Type 是 text/event-stream，这是一个流，可以多次返回内容。
 
     
+## 总结
+
+这节我们学了 Nest + LangChain 来开发 ai 接口。
+
+Nest 是一个 Node.js 生态最主流的后端开发框架，提供了 MVC、DI 等特性。
+
+- 通过 module 来拆分代码，每个 module 包含 service、controller 等。
+
+- 实现了 Dependency Injection 依赖注入，通过 @Injectable 声明的 Service，通过 useFactory 创建的对象，都可以作为 provider 来注入。
+
+    缺啥就说
+
+注入方式包含构造器注入，也就是声明在参数里，以及属性注入，也就是 @Inject 的方式注入
+
 
 
 

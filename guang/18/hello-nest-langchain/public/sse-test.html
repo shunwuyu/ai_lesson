@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSE 流式接口测试</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 640px;
+        margin: 2rem auto;
+        padding: 01rem;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+      button {
+        padding: 0.6rem1.2rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      button.primary {
+        background: #2563eb;
+        color: white;
+      }
+      button.primary:hover {
+        background: #1d4ed8;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .output {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #f9fafb;
+        min-height: 120px;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .output:empty::before {
+        content: "回复将显示在这里...";
+        color: #9ca3af;
+      }
+      .status {
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        color: #6b7280;
+      }
+    </style>
+</head>
+<body>
+    <h1>SSE 流式接口测试</h1>
+    <label for="apiUrl">API 地址</label>
+    <input
+      type="text"
+      id="apiUrl"
+      value="http://localhost:3000"
+      placeholder="http://localhost:3000"
+    />
+    <label for="query">问题</label>
+    <input
+      type="text"
+      id="query"
+      placeholder="例如：什么是 LangChain？"
+      value="什么是 LangChain？"
+    />
+    <button type="button" id="btn" class="primary">开始流式请求</button>
+    <p class="status" id="status"></p>
+    <div class="output" id="output"></div>
+
+    <script>
+      const apiUrlInput = document.getElementById("apiUrl");
+      const queryInput = document.getElementById("query");
+      const btn = document.getElementById("btn");
+      const output = document.getElementById("output");
+      const status = document.getElementById("status");
+
+      btn.addEventListener("click", () => {
+        // replace(/\/$/, "") 去掉末尾的 /
+        const baseUrl = apiUrlInput.value.replace(/\/$/, "");
+        const q = queryInput.value.trim();
+        if (!q) {
+          status.textContent = "请输入问题";
+          return;
+        }
+        // encodeURIComponent 编码 URL 参数，防止特殊字符导致 URL 解析错误
+        // 比如中文、空格、特殊符号等 转义成 % 开头，防止 URL 解析错误
+        const url = `${baseUrl}/ai/chat/stream?query=${encodeURIComponent(q)}`;
+        output.textContent = "";
+        btn.disabled = true;
+        status.textContent = "连接中...";
+
+        const eventSource = new EventSource(url);
+
+        eventSource.onmessage = ({ data }) => {
+          console.log(data,'data-------------')
+          output.textContent += data;
+          status.textContent = "接收中...";
+        };
+
+        eventSource.onerror = () => {
+          eventSource.close();
+          btn.disabled = false;
+          status.textContent = "连接已结束";
+        };
+
+        eventSource.addEventListener("done", () => {
+          eventSource.close();
+          btn.disabled = false;
+          status.textContent = "完成";
+        });
+      });
+    </script>
+</body>
+</html>

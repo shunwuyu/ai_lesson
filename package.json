@@ -4,6 +4,7 @@
     "@langchain/core": "^1.1.28",
     "@langchain/openai": "^1.2.10",
     "@modelcontextprotocol/sdk": "^1.9.0",
+    "@nestjs/serve-static": "^5.0.4",
     "@playwright/mcp": "^0.0.10",
     "@prisma/client": "^7.2.0",
     "@vercel/remix-builder": "^5.4.3",
