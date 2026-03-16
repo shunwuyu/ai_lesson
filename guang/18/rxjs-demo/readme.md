@@ -52,4 +52,61 @@ Observable
    └─ 数据4
 
 - demo1
+流程
+Observable 创建数据
+       ↓
+subscribe 订阅
+       ↓
+接收数据
 
+
+三、Observable 像什么？
+
+AI回复
+
+你好
+你好，我是
+你好，我是AI助手
+你好，我是AI助手，很高兴见到你
+
+流式返回
+
+这就是 Observable 的用武之地。
+
+四、最常用的创建方式
+
+1 from
+
+把数组 / Promise / iterable 变成数据流。
+
+import { from } from 'rxjs';
+
+const stream = from([1,2,3]);
+
+stream.subscribe(v => console.log(v));
+
+五、管道 pipe（最重要）
+
+RxJS 最强的能力：
+
+数据流加工
+
+就像：
+
+自来水厂
+
+水源 → 过滤 → 消毒 → 输送 → 家庭
+
+RxJS：
+
+数据 → pipe → 加工 → 输出
+
+import { from, map } from 'rxjs';
+
+from([1,2,3])
+  .pipe(
+    map(x => x * 2)
+  )
+  .subscribe(console.log);
+
+  

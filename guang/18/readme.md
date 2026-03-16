@@ -5,7 +5,7 @@
 
 - 什么是nest?
     Node.js + Typescript 的最主流的框架
-    底层是 Express，封装后提供了 MVC、DI（依赖注入）等架构特性。
+    底层是 Express，封装后提供了 MVC Dependence Injection DI（依赖注入）等架构特性。
 
 - 创建项目
 
@@ -97,6 +97,15 @@ Nest 是一个 Node.js 生态最主流的后端开发框架，提供了 MVC、DI
     缺啥就说
 
 注入方式包含构造器注入，也就是声明在参数里，以及属性注入，也就是 @Inject 的方式注入
+
+我们基于 LangChain 写了几个 ai 接口：
+
+ChatModel 用 useFactory 创建 provider 来注入。
+
+- chain 定义在构造器里，避免重复创建。
+- 同步和流式分别调用 invoke 和 stream 方法。
+- 在 service 里用生成器语法异步返回内容，然后在 controller 创建了一个 sse 的接口，用 rxjs 的 Observable 返回流式数据。
+
 
 
 
