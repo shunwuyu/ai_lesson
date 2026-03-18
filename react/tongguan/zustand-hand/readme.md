@@ -83,4 +83,15 @@ redux 经常被人诟病它的使用繁琐
         ? nextState
         : Object.assign({}, state, nextState)
 - 第五步：实现 Zustand 的 create API
+    Zustand 的使用方式：
+
+    const useStore = create((set, get) => ({
+    count: 0,
+    inc: () => set(state => ({ count: state.count + 1 }))
+    }))
+    所以 create 需要：
+    接受 createState
+    返回 store
+
+    
 

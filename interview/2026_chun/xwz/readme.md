@@ -655,3 +655,678 @@ const foo = myAsync(function* () {
 });
 
 foo().then(console.log); // 3
+
+## 平时使用的开发框架，react的组件通信，用过哪些hooks，自己封装过哪些hoos和组件，表单和表格在封装时要注意哪些信息
+
+### 平时使用的开发框架
+- 前端的话，我主要是基于 React 技术栈在做项目
+  组件库这块我用过 shadcn/ui 和 Vant，后台开发使用 阿里的Ant Design。
+  - shadcn/ui 按需加载，且代码直接可定制，可维护性和个性化设计非常友好，适合中后台之外的项目或者需要深度定制 UI 的场景。
+  - [Vant](https://react-vant.3lang.dev/components/flex) 我主要用在移动端项目，它的组件对触摸交互、适配等做得很好，开箱即用，开发效率很高。
+  - [Ant Design](https://ant-design.antgroup.com/components/overview-cn/) 更多是在中后台场景，它的组件体系非常完整，设计规范统一，适合快速搭建企业级应用。
+
+- 后端的话我主要使用 NestJS
+  - 它是基于依赖注入和MVC模块化设计的，结构上很清晰，适合做中大型项目
+  - 基于 TypeScript，类型安全
+  - 生态丰富
+- AI 相关我有用过 LangChain
+  - 它帮我把大模型调用做了工程化封装，比如 promptTemplate 管理、chain 组合、工具调用等
+  - 在做一些“AI + 业务”的功能（比如对话、文本处理）时，可以快速把逻辑串起来，而不是只停留在简单调用 API
+  - 我也尝试过把它和后端服务结合，比如在 NestJS 里封装 AI 服务层
+  
+- 未来的计划
+  移动端RN开发框架 [expo](https://docs.expo.dev/)
+
+  桌面端开发框架 [Tauri](https://tauri.app/?spm=5176.28103460.0.0.39f27551pJK3Rt)
+
+### react的组件通信
+
+不要一种一种去介绍， 得有思想，逻辑和组织
+
+- 核心思想
+React 组件通信本质是基于 **单向数据流（props down, events up）**的设计。
+  - 父组件通过 props 向下传数据
+  - 子组件通过 回调函数向上通知
+  好处是：数据流清晰、可预测，方便维护和调试（这是 React 的核心设计哲学）
+
+- 二、父子通信
+  1. 父 → 子（props）
+  关键：props
+  本质：单向数据流
+  <Child count={count} />
+  2. 子 → 父（回调函数）
+  关键：函数 props
+  本质：事件回传（类似观察者思想）
+  <Child onChange={setCount} />
+  可以顺带说一句：
+  这其实是一种“轻量的发布-订阅思想”，子组件“发布”，父组件“订阅”。
+
+- 三、兄弟组件通信（一定会问）
+  本质：状态提升（lifting state up）
+  3. 把共享状态放到最近的公共父组件
+  再通过 props 分发
+  思想：集中状态，避免数据不一致
+
+- 四、跨层级通信（避免层层传 props）
+
+  4. Context
+  关键 API：createContext / useContext
+  const value = useContext(MyContext)
+  思想：
+  解决“props drilling（层层传参）”问题
+  但可以加一句（加分）：
+  Context 适合全局/稳定数据（主题、用户信息，登陆状态），不适合高频更新（容易引发性能问题）
+  鼠标实时坐标若放Context，每秒触发数十次更新，会导致全局组件疯狂重渲染。
+  ```
+  import { createContext, useState, useEffect } from 'react';
+
+// 1. 创建 Context
+export const ThemeContext = createContext();
+
+export const ThemeProvider = ({ children }) => {
+  // 2. 初始化状态 (优先读取 localStorage，默认为 'light')
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('app-theme') || 'light';
+  });
+
+  // 3. 切换主题函数
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('app-theme', newTheme); // 持久化
+  };
+
+  // 4. 副作用：当 theme 变化时，更新 HTML 标签的 class (配合 Tailwind 或 CSS 变量)
+  useEffect(() => {
+    document.documentElement.className = theme; 
+    // 如果是 Tailwind: document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+  ```
+  ```
+  import { ThemeProvider } from './ThemeContext';
+import App from './App';
+
+// 包裹你的应用
+<ThemeProvider>
+  <App />
+</ThemeProvider>
+  ```
+  ```
+  import { useContext } from 'react';
+import { ThemeContext } from './ThemeContext';
+
+const Header = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+  return (
+    <header style={{ 
+      background: theme === 'dark' ? '#333' : '#fff',
+      color: theme === 'dark' ? '#fff' : '#333',
+      padding: '20px'
+    }}>
+      <h1>当前模式: {theme}</h1>
+      
+      {/* 绑定点击事件 */}
+      <button onClick={toggleTheme}>
+        切换到 {theme === 'light' ? '深色' : '浅色'} 模式
+      </button>
+    </header>
+  );
+};
+
+export default Header;
+  ```
+- 更复杂通信（全局状态管理）
+  5. 关键：全局 store
+
+  本质：发布-订阅模式
+
+  👉 思想：
+
+  状态集中管理
+
+  组件订阅状态变化自动更新
+  zustand , 更轻量简单，用 hook 就可以订阅状态
+
+- ref 通信（面试加分点）
+  父操作子组件
+  6. 关键 API：useRef + forwardRef + useImperativeHandle
+
+- 事件总线（了解即可）
+  7. EventBus
+  本质：发布-订阅模式
+  React 官方不推荐，因为容易造成状态不可追踪, 不好管理
+
+- 总结
+  React 的通信方式本质可以归纳为三类：
+
+  单向数据流（props + 回调）
+
+  共享状态（Context / 状态管理）
+
+  发布-订阅（zustand / EventBus）
+
+### 自己封装过哪些hooks?
+
+- 在我做的 AI fullstack 项目里，其实有自己封装过一些 hooks
+  useChat（对话类核心 hook）
+
+👉 场景：AI 对话
+
+封装内容：
+
+消息列表 state（useState）
+
+发送请求（AI 接口）
+
+loading 状态
+
+关键 API：
+
+useState
+
+useEffect
+
+👉 思想：
+把“UI + 业务逻辑”拆开，组件只负责展示
+
+- useRequest（请求封装）
+场景：所有接口请求统一处理
+
+封装：
+
+loading / error / data
+
+请求触发逻辑
+
+类似 ahooks 的 useRequest
+
+- useDebounce / useThrottle（输入优化）
+
+- useLocalStorage（持久化）
+  把浏览器 API 抽象成 hook，提高复用性
+
+使用阿里 [ahooks](https://ahooks.js.org/zh-CN/)
+
+## 说一下数据类型，判断数据类型的方法，如何判断是一个数组
+- ES5 里一共是 6种数据类型：
+  - 基本类型（5个）
+  number
+  string
+  boolean
+  null
+  undefined
+  - 引用类型（1个）
+  object
+  其实像 Array、Function、Date 本质上都是 object 的子类型。
+  Object.prototype.toString.call()   [object Array]
+  统一使用“堆内存引用”机制来管理复杂数据结构
+  支持动态属性扩展，继承自Object原型，通过原型链共享方法，实现统一的多态与继承机制。
+
+- ES6+ 新增的数据类型
+  ES6 新增了 2种基本类型：
+  Symbol（唯一值，解决属性冲突）
+  BigInt（处理大整数）
+  总结一句：
+  JS 一共有 8种数据类型（7种基本类型 + 1种引用类型）
+
+- 三、判断数据类型的方法（重点）
+
+  typeof（最基础）
+  typeof 123        // 'number'
+typeof 'abc'      // 'string'
+typeof undefined  // 'undefined'
+typeof Symbol()   // 'symbol'
+
+  ❗ 缺点（亮点一定要说）：
+
+typeof null // 'object'  ← 历史遗留 bug
+typeof []   // 'object'
+
+只能准确判断基本类型（除了 null）
+
+- instanceof（判断构造函数）
+[] instanceof Array // true
+基于原型链判断（proto） 不能判断基本类型
+
+- Object.prototype.toString（最准确）
+Object.prototype.toString.call([]) 
+// "[object Array]"
+
+[object Number]
+[object String]
+[object Null]
+[object Undefined]
+Object.prototype.toString.call(arr) === '[object Array]'
+这是判断类型最标准、最通用的方法
+
+- Array.isArray（专门判断数组）
+
+Array.isArray([]) // true
+arr instanceof Array 可以用但不推荐
+
+专门为数组设计
+
+- 加分亮点
+
+判断数组本质上是在判断它的内部 [[Class]] 属性，
+Object.prototype.toString 就是通过读取这个内部标签来实现的。
+
+- 手写一个 type 判断工具函数（面试高频）给我
+
+基础版（推荐你面试写这个）
+function getType(value) {
+  return Object.prototype.toString
+    .call(value)
+    .slice(8, -1)
+    .toLowerCase()
+}
+
+- 进阶版（带缓存优化，面试亮点✨）
+
+```
+const typeMap = {}
+;[
+  'Number',
+  'String',
+  'Boolean',
+  'Null',
+  'Undefined',
+  'Array',
+  'Object',
+  'Function',
+  'Symbol',
+  'BigInt',
+  'Date',
+  'RegExp'
+].forEach(type => {
+  typeMap[`[object ${type}]`] = type.toLowerCase()
+})
+
+function getType(value) {
+  const typeStr = Object.prototype.toString.call(value)
+  return typeMap[typeStr] || 'unknown'
+}
+```
+
+- 加一个判断是否是“plain object”
+function isPlainObject(obj) {
+  return getType(obj) === 'object' && obj.constructor === Object
+}
+
+## 数组去重有哪些方式
+
+数组去重本质是：
+👉 判断“元素是否已经出现过”
+
+不同方案的区别主要在：
+
+- 是否支持复杂类型（对象）
+
+- 性能（时间 / 空间）
+
+- 代码简洁性
+
+###  常见方案（按推荐程度说）
+1. Set 去重（最常用，优先说）
+const result = [...new Set(arr)]
+
+优点：
+
+代码最简洁
+性能好（O(n)）
+原生支持
+
+缺点：
+
+不能去重对象（引用不同就不相等）
+[{a:1}, {a:1}] // 去不掉
+
+基础类型数组（最推荐）
+
+2. filter + indexOf（经典方案）
+
+const result = arr.filter((item, index) => {
+  return arr.indexOf(item) === index
+})
+
+优点：
+
+兼容性好（ES5）
+缺点：
+
+性能较差（O(n²)）
+
+逻辑上有重复查找
+
+3. includes + 新数组
+
+const result = []
+arr.forEach(item => {
+  if (!result.includes(item)) {
+    result.push(item)
+  }
+})
+
+优点：
+
+逻辑直观
+缺点：
+
+性能 O(n²)
+
+- Map / 对象 key 去重（重要！）
+
+const result = []
+const map = new Map()
+
+arr.forEach(item => {
+  const key = JSON.stringify(item)
+  if (!map.has(key)) {
+    map.set(key, true)
+    result.push(item)
+  }
+})
+
+优点：
+
+O(n) 可以去重对象
+
+可扩展（可以自定义 key）
+
+缺点：
+JSON.stringify 有局限（key 顺序、函数、undefined）
+
+- reduce（函数式写法，加分项）
+
+const result = arr.reduce((prev, cur) => {
+  if (!prev.includes(cur)) {
+    prev.push(cur)
+  }
+  return prev
+}, [])
+
+优点：
+
+函数式风格
+
+👎 缺点：
+
+本质还是 O(n²)
+
+## 对es6有哪些了解， 平时会用到哪些es6新特性
+ES6 对我来说不只是“语法升级”，而是让 JavaScript 具备工程化能力的一次重要演进。
+
+可以总结为三点：
+
+代码更优雅、简洁（声明式）
+
+更适合大型项目（模块化、类、作用域）
+
+提供了很多底层能力（Promise、Proxy、Symbol），可以支撑框架设计
+
+- 日常开发中高频使用的 ES6 特性
+
+1. let / const（块级作用域）
+
+👉 解决：
+
+变量提升
+
+闭包问题（for 循环）
+
+👉 本质：
+
+让作用域更可控，减少副作用
+
+2. 解构赋值
+
+const { data, error } = res
+
+优势：
+
+提高可读性
+
+减少样板代码
+
+👉 在项目中：
+API 返回值处理 / hooks 返回值特别常用
+
+3. 箭头函数
+
+👉 本质：
+
+不绑定 this
+
+👉 场景：
+
+回调函数
+
+React 组件内部函数
+
+- 模板字符串
+`Hello ${name}`
+
+👉 场景：
+
+拼接 UI 文案
+
+生成动态内容
+
+- 模块化（import / export）
+
+非常关键：
+
+支持按需加载
+
+支持 tree-shaking
+
+👉 对大型项目的意义：
+
+代码拆分 + 依赖管理
+
+- 异步方案的进化
+
+Promise（解决回调地狱）
+
+👉 本质：
+
+把异步变成“链式调用”
+
+fetch().then().catch()
+
+👉 优点：
+
+状态明确（pending / fulfilled / rejected）
+
+支持链式调用
+
+- Generator（过渡方案）
+
+function* gen() {
+  yield fetch()
+}
+
+👉 特点：
+
+可以“暂停函数执行”
+
+👉 但缺点：
+
+需要手动执行器（不直观）
+
+- async / await（最终形态）
+const res = await fetch()
+
+👉 本质：
+
+Promise 的语法糖
+
+👉 优势：
+
+写法接近同步代码
+
+可读性极强
+
+异步方案的演进，本质是在不断提高代码可读性和可维护性
+
+- Proxy
+拦截对象的读写操作
+
+new Proxy(obj, {
+  get(target, key) {},
+  set(target, key, value) {}
+})
+
+可以实现数据劫持
+
+Proxy 是实现现代响应式系统的底层能力之一
+
+- Symbol（源码级理解🔥）
+
+👉 特点：
+
+唯一值
+
+不会冲突
+
+1. 防止属性名冲突
+const key = Symbol()
+obj[key] = 'value'
+✅ 2. 源码中的“内部标识”
+
+👉 比如：
+
+React 内部用 Symbol 标识元素类型
+
+避免用户覆盖
+
+✅ 3. 实现“私有属性”
+
+👉 一种弱私有方案
+
+Symbol 是一种“安全的唯一标识”，在框架源码中非常常见
+
+项目中的高级用法
+
+用解构 + 默认值优化函数
+function fetchData({ url, method = 'GET' }) {}
+提高 API 可用性
+
+使用展开运算符
+setState(prev => ({ ...prev, count: prev.count + 1 }))
+
+
+使用 Map / Set 做数据处理
+
+👉 比 object 更语义化，性能更好
+
+可选链 + 空值合并（ES2020，但可以带一句）
+user?.profile?.name ?? 'default'
+
+- class 本质（一定要先讲清楚）
+
+👉 可以直接这样说：
+
+ES6 的 class 本质上是 构造函数 + 原型链的语法糖，并没有改变 JavaScript 的继承机制。
+
+- 字符串的 ES6+ 常用方法
+  includes / startsWith / endsWith
+
+  str.includes('abc')
+str.startsWith('hi')
+str.endsWith('.js')
+
+👉 优势：
+
+语义更清晰（替代 indexOf）
+
+👉 场景：
+
+搜索、匹配、校验
+
+'hi'.repeat(3) // 'hihihi'
+
+'5'.padStart(2, '0') // '05'
+
+👉 场景：
+
+时间格式化（很真实业务）
+
+
+- 数组的 ES6+ 方法
+
+Array.from（非常重要）
+Array.from('abc') // ['a','b','c']
+
+类数组 → 数组（NodeList、arguments）
+
+Array.from({ length: 5 }, (_, i) => i)
+
+Array.of
+
+Array.of(1,2,3)
+
+👉 解决：
+
+new Array(3) // [empty × 3]
+
+find / findIndex
+arr.find(item => item.id === 1)
+
+👉 优势：
+
+找到就返回（比 filter 高效）
+
+👉 场景：
+
+查找单个元素（非常常用）
+
+includes（数组版）
+arr.includes(1)
+
+👉 优势：
+
+可以判断 NaN
+
+👉 面试加分点：
+
+[NaN].includes(NaN) // true
+
+flat / flatMap（进阶🔥）
+[1, [2, [3]]].flat(2)
+arr.flatMap(x => [x * 2])
+
+场景：
+
+数据拍平（接口数据处理）
+
+for (let [index, value] of arr.entries()) {}
+
+👉 场景：
+
+遍历增强（更结构化）
+
+map reduce filter 
+
+这些方法其实也让 JavaScript 更接近函数式编程范式，这也是为什么在 React 这种框架里会特别常用。
+
+
+
+整体来说，我对 ES6 的理解不只是语法层面，而是：
+
+用它提升代码的可读性和表达能力
+
+用它支撑模块化和工程化开发
+
+同时理解它在框架中的作用，比如 Proxy 做响应式、Symbol 做内部标识
+
+
+
