@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{product_name}} - AI product landing page</title>
+    <meta name="description" content="{{product_tagline}}" />
+
+    <style>
+      :root{
+        --color-primary:#0057FF;
+        --color-bg:#0B1220;
+        --color-surface:#111B2E;
+        --color-text:#E5E7EB;
+        --color-muted:#9CA3AF;
+        --color-border:rgba(255,255,255,.12);
+        --color-soft:rgba(0,87,255,.15);
+
+        --font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        --radius:16px;
+        --shadow: 0 18px 45px rgba(0,0,0,.35);
+        --maxw: 1120px;
+      }
+
+      *{ box-sizing:border-box; }
+      body{
+        margin:0;
+        font-family: var(--font-family);
+        background: radial-gradient(900px 520px at 15% 5%, rgba(0,87,255,.22), transparent 55%),
+                    radial-gradient(700px 420px at 85% 15%, rgba(99,102,241,.18), transparent 60%),
+                    var(--color-bg);
+        color: var(--color-text);
+        line-height:1.5;
+      }
+
+      a{ color: inherit; text-decoration: none; }
+      a:hover{ text-decoration: underline; }
+
+      .container{
+        width:min(var(--maxw), calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      /* Top bar */
+      .topbar{
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        background: rgba(11,18,32,.65);
+        border-bottom: 1px solid rgba(255,255,255,.06);
+      }
+
+      .topbar-inner{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding: 14px 0;
+        gap: 14px;
+      }
+
+      .brand{
+        display:flex;
+        align-items:center;
+        gap: 10px;
+        font-weight: 700;
+        letter-spacing: .2px;
+      }
+
+      .logo{
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(0,87,255,.95), rgba(99,102,241,.8));
+        box-shadow: 0 12px 35px rgba(0,87,255,.22);
+      }
+
+      .nav{
+        display:flex;
+        align-items:center;
+        gap: 18px;
+        color: var(--color-muted);
+        font-size: 14px;
+      }
+
+      .nav a{
+        color: var(--color-muted);
+      }
+
+      .actions{
+        display:flex;
+        align-items:center;
+        gap: 12px;
+      }
+
+      .btn{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--color-border);
+        background: rgba(255,255,255,.04);
+        color: var(--color-text);
+        font-weight: 600;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+
+      .btn:focus{
+        outline: 3px solid rgba(0,87,255,.35);
+        outline-offset: 2px;
+      }
+
+      .btn-primary{
+        border-color: rgba(0,87,255,.45);
+        background: linear-gradient(180deg, rgba(0,87,255,.25), rgba(0,87,255,.12));
+        box-shadow: 0 14px 40px rgba(0,87,255,.18);
+      }
+
+      /* Hero */
+      .hero{
+        padding: 56px 0 26px;
+      }
+
+      .hero-grid{
+        display:grid;
+        grid-template-columns: 1.1fr .9fr;
+        gap: 30px;
+        align-items:center;
+      }
+
+      .kicker{
+        color: rgba(229,231,235,.9);
+        background: rgba(0,87,255,.12);
+        border: 1px solid rgba(0,87,255,.30);
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        width: fit-content;
+      }
+
+      h1{
+        margin: 14px 0 10px;
+        font-size: clamp(32px, 3.5vw, 52px);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+
+      .lead{
+        color: var(--color-muted);
+        font-size: 16px;
+        margin: 0 0 22px;
+      }
+
+      .cta-row{
+        display:flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items:center;
+      }
+
+      .trust{
+        margin-top: 22px;
+        display:flex;
+        gap: 12px;
+        align-items:center;
+        flex-wrap: wrap;
+        color: var(--color-muted);
+        font-size: 14px;
+      }
+
+      .pill{
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,.08);
+        background: rgba(255,255,255,.03);
+      }
+
+      /* Hero visual */
+      .panel{
+        border: 1px solid var(--color-border);
+        background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 18px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .panel::before{
+        content:"";
+        position:absolute;
+        inset:-2px;
+        background: radial-gradient(480px 220px at 20% 10%, rgba(0,87,255,.32), transparent 60%),
+                    radial-gradient(360px 200px at 85% 20%, rgba(99,102,241,.22), transparent 55%);
+        pointer-events:none;
+      }
+
+      .panel-inner{ position: relative; }
+
+      .mock-header{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .dots{ display:flex; gap: 8px; }
+      .dot{
+        width: 10px; height: 10px; border-radius: 999px;
+        background: rgba(255,255,255,.16);
+        border: 1px solid rgba(255,255,255,.12);
+      }
+
+      .mock-title{
+        color: rgba(229,231,235,.9);
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      .mock-body{
+        display:grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .mock-card{
+        background: rgba(11,18,32,.55);
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .bar{
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.08);
+        overflow:hidden;
+      }
+      .bar > i{
+        display:block;
+        height: 100%;
+        width: 60%;
+        background: linear-gradient(90deg, rgba(0,87,255,.85), rgba(99,102,241,.7));
+      }
+
+      .metric-row{
+        display:flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .metric{
+        flex: 1 1 120px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,.08);
+        background: rgba(255,255,255,.03);
+        padding: 12px;
+      }
+      .metric b{ display:block; font-size: 18px; }
+      .metric span{ color: var(--color-muted); font-size: 12.5px; }
+
+      /* Sections */
+      section{ padding: 34px 0; }
+      .section-title{
+        font-size: 22px;
+        margin: 0 0 10px;
+        letter-spacing: -0.01em;
+      }
+      .section-subtitle{
+        color: var(--color-muted);
+        margin: 0 0 18px;
+      }
+
+      .grid-3{
+        display:grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .card{
+        border: 1px solid var(--color-border);
+        background: rgba(255,255,255,.03);
+        border-radius: var(--radius);
+        padding: 18px;
+      }
+
+      .card h3{
+        margin: 10px 0 8px;
+        font-size: 16px;
+      }
+
+      .card p{
+        margin:0;
+        color: var(--color-muted);
+        font-size: 14px;
+      }
+
+      .steps{
+        display:grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .step{
+        position: relative;
+        overflow:hidden;
+      }
+      .step::after{
+        content:"";
+        position:absolute;
+        right: -40px;
+        top: -40px;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle at 30% 30%, rgba(0,87,255,.22), transparent 60%);
+        pointer-events:none;
+      }
+
+      .num{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        border: 1px solid rgba(0,87,255,.35);
+        background: rgba(0,87,255,.12);
+        font-weight: 800;
+        color: rgba(229,231,235,.95);
+      }
+
+      /* Pricing */
+      .pricing{
+        display:grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .price-top{
+        display:flex;
+        align-items:flex-start;
+        justify-content:space-between;
+        gap: 12px;
+      }
+
+      .price{
+        font-size: 36px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        margin: 6px 0 2px;
+      }
+      .per{
+        color: var(--color-muted);
+        font-size: 13px;
+        margin-left: 6px;
+        font-weight: 600;
+      }
+
+      .list{
+        margin: 14px 0 0;
+        padding: 0;
+        list-style:none;
+        display:flex;
+        flex-direction:column;
+        gap: 10px;
+      }
+
+      .li{
+        display:flex;
+        gap: 10px;
+        color: var(--color-muted);
+        font-size: 14px;
+        align-items:flex-start;
+      }
+      .check{
+        flex:0 0 auto;
+        width: 18px;
+        height: 18px;
+        margin-top: 1px;
+        border-radius: 6px;
+        border: 1px solid rgba(0,87,255,.35);
+        background: rgba(0,87,255,.12);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color: rgba(229,231,235,.95);
+        font-weight: 900;
+        font-size: 12px;
+      }
+
+      /* FAQ */
+      details{
+        border: 1px solid var(--color-border);
+        background: rgba(255,255,255,.03);
+        border-radius: var(--radius);
+        padding: 14px 16px;
+      }
+      details + details{ margin-top: 12px; }
+      summary{
+        cursor:pointer;
+        font-weight: 800;
+        font-size: 14.5px;
+      }
+      details p{
+        margin: 10px 0 0;
+        color: var(--color-muted);
+        font-size: 14px;
+      }
+
+      /* Footer */
+      footer{
+        padding: 26px 0 44px;
+        border-top: 1px solid rgba(255,255,255,.06);
+        color: var(--color-muted);
+      }
+
+      .footer-inner{
+        display:flex;
+        align-items:flex-start;
+        justify-content:space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .small-links{
+        display:flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        font-size: 14px;
+      }
+
+      /* Responsive */
+      @media (max-width: 980px){
+        .hero-grid{ grid-template-columns: 1fr; }
+        .grid-3{ grid-template-columns: 1fr; }
+        .steps{ grid-template-columns: 1fr; }
+        .pricing{ grid-template-columns: 1fr; }
+        .nav{ display:none; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="logo" aria-hidden="true"></div>
+            <div>{{company_name}}</div>
+          </div>
+
+          <nav class="nav" aria-label="Primary navigation">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How it works</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+
+          <div class="actions">
+            <a class="btn" href="#pricing">View pricing</a>
+            <a class="btn btn-primary" href="#get-started">Get started</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="kicker">{{product_kicker}}</div>
+            <h1>{{hero_headline}}</h1>
+            <p class="lead">
+              {{hero_subheadline}}
+            </p>
+
+            <div class="cta-row">
+              <a class="btn btn-primary" id="get-started" href="#pricing">Start free</a>
+              <a class="btn" href="#how-it-works">See how it works</a>
+            </div>
+
+            <div class="trust" aria-label="Social proof">
+              <span class="pill">{{trust_phrase}}</span>
+              <span class="pill">{{trust_metric_1}}</span>
+              <span class="pill">{{trust_metric_2}}</span>
+            </div>
+          </div>
+
+          <div class="panel" role="img" aria-label="Product preview">
+            <div class="panel-inner">
+              <div class="mock-header">
+                <div class="dots" aria-hidden="true">
+                  <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+                <div class="mock-title">{{ui_preview_title}}</div>
+              </div>
+
+              <div class="mock-body">
+                <div class="mock-card">
+                  <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
+                    <b style="font-size:14px;">{{metric_title}}</b>
+                    <span style="color: var(--color-muted); font-size: 13px; font-weight:700;">{{metric_value}}</span>
+                  </div>
+                  <div style="margin-top:10px;" class="bar" aria-hidden="true">
+                    <i></i>
+                  </div>
+                  <div class="metric-row">
+                    <div class="metric">
+                      <b>{{metric_1_value}}</b>
+                      <span>{{metric_1_label}}</span>
+                    </div>
+                    <div class="metric">
+                      <b>{{metric_2_value}}</b>
+                      <span>{{metric_2_label}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mock-card">
+                  <div style="display:flex; justify-content:space-between; gap:12px;">
+                    <b style="font-size:14px;">{{workflow_title}}</b>
+                    <span style="color: var(--color-muted); font-size: 13px; font-weight:700;">{{workflow_status}}</span>
+                  </div>
+                  <p style="margin:10px 0 0; color: var(--color-muted); font-size: 14px;">
+                    {{workflow_description}}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="features">
+        <div class="container">
+          <h2 class="section-title">Built for shipping reliable AI</h2>
+          <p class="section-subtitle">
+            Clear workflows, repeatable evaluations, and guardrails that keep outputs consistent across teams.
+          </p>
+
+          <div class="grid-3">
+            <div class="card">
+              <div class="num">1</div>
+              <h3>Workflow-driven prompts</h3>
+              <p>Turn ideas into repeatable AI steps with a guided structure you can review and reuse.</p>
+            </div>
+            <div class="card">
+              <div class="num">2</div>
+              <h3>Evaluation and testing</h3>
+              <p>Run quality checks on outputs so regressions are visible before they reach users.</p>
+            </div>
+            <div class="card">
+              <div class="num">3</div>
+              <h3>Safety guardrails</h3>
+              <p>Use policy constraints and fallback responses to reduce risky or off-brand results.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how-it-works">
+        <div class="container">
+          <h2 class="section-title">How it works</h2>
+          <p class="section-subtitle">A simple loop from setup to validated results.</p>
+
+          <div class="steps">
+            <div class="card step">
+              <div class="num">1</div>
+              <h3>Connect your workflow</h3>
+              <p>Define inputs, target outputs, and where your AI runs in the product or ops flow.</p>
+            </div>
+            <div class="card step">
+              <div class="num">2</div>
+              <h3>Evaluate and refine</h3>
+              <p>Test across scenarios, compare variants, and keep the best-performing configuration.</p>
+            </div>
+            <div class="card step">
+              <div class="num">3</div>
+              <h3>Deploy with confidence</h3>
+              <p>Release guarded behavior with visibility into quality and usage trends.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing">
+        <div class="container">
+          <h2 class="section-title">Pricing</h2>
+          <p class="section-subtitle">Start free and upgrade when you are ready to scale.</p>
+
+          <div class="pricing">
+            <div class="card">
+              <div class="price-top">
+                <div>
+                  <b style="font-size:16px;">Free</b>
+                  <div class="price">0<span class="per">/mo</span></div>
+                </div>
+                <span class="pill" style="border-color: rgba(255,255,255,.10);">For testing</span>
+              </div>
+              <ul class="list">
+                <li class="li"><span class="check">✓</span><span>Basic workflow templates</span></li>
+                <li class="li"><span class="check">✓</span><span>Lightweight evaluations</span></li>
+                <li class="li"><span class="check">✓</span><span>Email support</span></li>
+              </ul>
+              <div style="margin-top:16px;">
+                <a class="btn btn-primary" href="#get-started" style="width:100%;">Start free</a>
+              </div>
+            </div>
+
+            <div class="card" style="border-color: rgba(0,87,255,.40); background: rgba(0,87,255,.08);">
+              <div class="price-top">
+                <div>
+                  <b style="font-size:16px;">Pro</b>
+                  <div class="price">$29<span class="per">/mo</span></div>
+                </div>
+                <span class="pill" style="border-color: rgba(0,87,255,.35); background: rgba(0,87,255,.12);">Most teams</span>
+              </div>
+              <ul class="list">
+                <li class="li"><span class="check">✓</span><span>Advanced evaluation runs</span></li>
+                <li class="li"><span class="check">✓</span><span>Reusable component workflows</span></li>
+                <li class="li"><span class="check">✓</span><span>Priority support</span></li>
+              </ul>
+              <div style="margin-top:16px;">
+                <a class="btn btn-primary" href="#get-started" style="width:100%;">Upgrade to Pro</a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="price-top">
+                <div>
+                  <b style="font-size:16px;">Team</b>
+                  <div class="price">$99<span class="per">/mo</span></div>
+                </div>
+                <span class="pill" style="border-color: rgba(255,255,255,.10);">For orgs</span>
+              </div>
+              <ul class="list">
+                <li class="li"><span class="check">✓</span><span>Role-based access and audit trails</span></li>
+                <li class="li"><span class="check">✓</span><span>Governed rollout and reporting</span></li>
+                <li class="li"><span class="check">✓</span><span>Dedicated onboarding</span></li>
+              </ul>
+              <div style="margin-top:16px;">
+                <a class="btn" href="#get-started" style="width:100%;">Contact sales</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq">
+        <div class="container">
+          <h2 class="section-title">FAQ</h2>
+          <p class="section-subtitle">Answers to common questions.</p>
+
+          <details>
+            <summary>What does {{product_name}} help me do?</summary>
+            <p>{{product_faq_1}}</p>
+          </details>
+
+          <details>
+            <summary>Do you support evaluation and quality checks?</summary>
+            <p>{{product_faq_2}}</p>
+          </details>
+
+          <details>
+            <summary>How do you handle brand voice and safety?</summary>
+            <p>{{product_faq_3}}</p>
+          </details>
+
+          <details>
+            <summary>Can I start without a credit card?</summary>
+            <p>{{product_faq_4}}</p>
+          </details>
+
+          <details>
+            <summary>Is this suitable for non-technical teams?</summary>
+            <p>{{product_faq_5}}</p>
+          </details>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="card" style="padding: 22px;">
+            <h2 style="margin:0 0 8px; font-size: 22px;">Ready to ship with confidence?</h2>
+            <p class="section-subtitle" style="margin:0 0 16px;">
+              Start free and validate your AI workflow with evaluations and guardrails.
+            </p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="#pricing">Start free</a>
+              <a class="btn" href="#faq">Read FAQ</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-inner">
+          <div>
+            <b style="color: rgba(229,231,235,.95);">{{company_name}}</b><br />
+            <span>© {{year}}. All rights reserved.</span>
+          </div>
+
+          <div class="small-links" aria-label="Footer links">
+            <a href="#privacy">Privacy</a>
+            <a href="#terms">Terms</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

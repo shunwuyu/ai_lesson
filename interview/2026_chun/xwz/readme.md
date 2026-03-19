@@ -550,6 +550,8 @@ rejected（失败）
 
   ![手写](https://juejin.cn/post/7069805387490263047?searchId=20260316110731FEA05A60D5E915C17C64)
 
+
+
 - Promise 的链式调用
 
 每个 .then() 会返回一个新的 Promise，可以连续处理多个异步操作：
@@ -560,26 +562,32 @@ rejected（失败）
   .then(res3 => console.log('最终结果', res3))
   .catch(err => console.error('出错了', err));
   ```
+  
   上一步的结果会传递给下一步
 
   如果某一步失败，链条会跳到最近的 .catch()
 
 - 连续三条请求的处理方法
+
   方法一：链式 Promise（顺序依赖）
   ```
   function request1() { return fetch('/api/1'); }
-function request2(res1) { return fetch(`/api/2?id=${res1.id}`); }
-function request3(res2) { return fetch(`/api/3?id=${res2.id}`); }
+  function request2(res1) { return fetch(`/api/2?id=${res1.id}`); }
+  function request3(res2) { return fetch(`/api/3?id=${res2.id}`); }
 
-request1()
-  .then(res1 => request2(res1))
-  .then(res2 => request3(res2))
-  .then(res3 => console.log('结果', res3))
-  .catch(err => console.error('请求失败', err));
+  request1()
+    .then(res1 => request2(res1))
+    .then(res2 => request3(res2))
+    .then(res3 => console.log('结果', res3))
+    .catch(err => console.error('请求失败', err));
   ```
+
+
 - 方法二：async/await（语法糖，更清晰）
-  ```
+
+  ```js
   async function runRequests() {
+
   try {
     const res1 = await request1();
     const res2 = await request2(res1);
@@ -588,9 +596,11 @@ request1()
   } catch (err) {
     console.error('请求失败', err);
   }
-}
-runRequests();
+  runRequests();
   ```
+
+##
+
 - 并行请求（无顺序依赖）
   ```
   Promise.all([request1(), request2(), request3()])
@@ -1328,5 +1338,320 @@ map reduce filter
 
 同时理解它在框架中的作用，比如 Proxy 做响应式、Symbol 做内部标识
 
+## 手写快排
+
+- 递归思想
+
+  快速排序的递归核心是 “分治”：选一个基准值，将数组分成 “小于基准” 和 “大于基准” 的两部分（分区）；然后对这两个子数组递归执行同样操作，直到子数组长度为 1（递归终止条件）。每轮递归都让基准归位，最终所有元素有序。递归把大问题拆解成同逻辑的小问题，逐层解决后合并，就完成了排序。
+
+  总结
+  递归核心：分治思想，把数组拆分为基准两侧的子数组；
+  递归逻辑：子数组重复 “选基准 - 分区” 操作，直到子数组长度为 1；
+  最终结果：每轮基准归位，递归结束后整体有序。
+
+  分治是快排的核心思想，递归是实现分治的编程手段，递归拆解分治的子问题。
+  分治：快排的策略（拆分 - 解决 - 合并）；
+  递归：实现分治的技术（重复调用自身处理子问题）。
+
+  - 快
+  冒泡等O(n^2)
+  快排O(nlogn)
+
+  分治递归将数组拆 logn 层，每层遍历 n 个元素分区，总操作数 n×logn 即 O (nlogn)。
+
+  - js代码
+  ```
+  /**
+ * 快速排序（分治递归版）
+ * @param {Array} arr - 待排序的数组
+ * @returns {Array} - 排序后的新数组
+ */
+function quickSort(arr) {
+  // 递归终止条件：数组长度≤1时直接返回（无需排序）
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  // 1. 选基准值（这里选数组第一个元素，也可随机选优化最坏情况）
+  const pivot = arr[0];
+  // 2. 分治：拆分为小于基准、大于基准的两个子数组
+  const left = []; // 存放小于基准的元素
+  const right = []; // 存放大于基准的元素
+
+  // 遍历剩余元素（从第二个开始，跳过基准）
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+
+  // 3. 递归处理子数组 + 合并结果（左子数组排序 + 基准 + 右子数组排序）
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
+
+// 运行案例
+// 案例1：普通数字数组
+const arr1 = [5, 2, 9, 3, 7, 6, 1, 8, 4];
+console.log("案例1原始数组：", arr1);
+console.log("案例1排序结果：", quickSort(arr1)); // [1,2,3,4,5,6,7,8,9]
+
+// 案例2：含重复元素的数组
+const arr2 = [8, 4, 3, 8, 5, 9, 4, 2];
+console.log("\n案例2原始数组：", arr2);
+console.log("案例2排序结果：", quickSort(arr2)); // [2,3,4,4,5,8,8,9]
+
+// 案例3：已部分有序的数组
+const arr3 = [1, 3, 2, 5, 4, 7, 6, 9, 8];
+console.log("\n案例3原始数组：", arr3);
+console.log("案例3排序结果：", quickSort(arr3)); // [1,2,3,4,5,6,7,8,9]
+
+// 案例4：空数组/单元素数组（测试递归终止条件）
+const arr4 = [];
+const arr5 = [66];
+console.log("\n案例4空数组排序：", quickSort(arr4)); // []
+console.log("案例5单元素数组排序：", quickSort(arr5)); // [66]
+  ```
 
 
+## SKILLS
+- MCP 是什么？
+  MCP = 让 AI 连接外部世界（工具 / API / 数据）
+  例如：
+
+  - 调 GitHub API
+  - 查数据库
+  - 调支付接口
+  MCP 解决的是：“能做什么”
+
+  MCP 擅长标准化地连接和调度外部工具与数据源，却无法替代人类或高级智能体所具备的复杂情境判断、创造性策略制定以及跨领域模糊问题的综合决策能力。
+
+  比如 MCP能查股价，却无法像专家一样综合局势判断是否该现在抛售。
+
+
+Skills 技能， 指智能体自主规划与决策能力。
+
+Skills = 可复用的 AI 专业能力包（Prompt + 规则 + 工具 +资源）
+
+Skills 是一个文件夹
+
+里面包含：
+
+  - 指令（prompt）
+  - 脚本（可执行逻辑）
+  - 资源（模板/文档）
+
+- AI 在需要时动态加载这些能力
+
+类比：
+Prompt = 一次性对话 无状态， RAG 增强， Tool 任务
+Skills = “可复用的经验 + SOP” Standard Operating Procedure
+指将经验固化为可重复执行的规范步骤。
+
+在这个基础上 ， 小龙虾， 各种工作， 每种工作的做法就是一个SKILL
+
+### 为什么 Skills 会爆火
+
+1. 传统 Prompt 的问题
+
+新手很容易理解：
+
+帮我写一个 PRD
+帮我写一个 PRD（结构清晰）
+帮我写一个 PRD（符合公司规范）
+
+问题：
+
+每次都要重复描述
+
+不稳定（换模型就变）
+
+不可复用
+
+- Skills 解决什么？
+
+  - 可复用 一次写好，多次使用 
+  - 标准化 团队统一 AI 行为
+  - 可组合 多个 skill 组合成 agent
+  - 低成本 不需要开发服务
+Skills 是“instructions + scripts + resources 的组合”
+
+- Skills 是什么？
+  Skills = 教 AI 怎么做事情
+
+  Skills 解决的是：“怎么做更好”
+
+3. 对比总结（讲课用这个表）
+对比	MCP	Skills
+本质	工具连接协议	行为/流程封装
+形式	server	markdown 文件
+是否需要运行环境	✅ 需要	❌ 不需要
+解决问题	能力扩展	能力优化
+类型	动态	静态
+
+- Skills + MCP = 完整 AI Agent
+
+举个真实例子：
+
+用户：分析这个 Excel
+
+MCP：
+👉 读取 Excel 文件
+
+Skills：
+👉 按公司规则分析 + 输出报告
+
+
+### 官方Skill 示例
+
+- brand-guidelines
+https://github.com/anthropics/skills/tree/main/skills/brand-guidelines
+
+让 AI 输出“符合品牌规范的内容（颜色 + 字体 + 风格）”
+
+比如：
+
+UI 代码 → 自动套品牌色
+
+PPT → 自动统一视觉风格
+
+文档 → 自动符合设计系统
+
+每个 Skill 都是一个独立文件夹，核心结构遵循固定规范
+
+1. 必选核心文件：SKILL.md
+
+这是 Skill 的「入口文件」，是 Claude 识别和使用技能的唯一必需文件，包含两部分核心内容：
+
+（1）YAML 前置元数据（Frontmatter）
+YAML 是一种配置文件
+位于 SKILL.md 最顶部，是 Claude 判断「何时触发该技能」的关键，brand-guidelines 的元数据示例：
+渐进式加载， 省token
+
+---
+name: brand-guidelines
+description: Applies Anthropic's official brand colors and typography to any sort of artifact that may benefit from having Anthropic's look-and-feel. Use it when brand colors or style guidelines, visual formatting, or company design standards apply.
+license: Complete terms in LICENSE.txt
+---
+
+name：技能唯一标识，必须是「小写 + 连字符」格式（如 brand-guidelines），且需与技能文件夹名一致；
+description：核心是明确「技能功能 + 触发场景」，直接决定 Claude 何时调用该技能（比如用户要求「按 Anthropic 品牌规范调整文档样式」时，Claude 会匹配该描述并触发技能）；
+license（可选）：技能的许可协议，brand-guidelines 指向独立的 LICENSE.txt（Apache 2.0 协议）。
+
+（2）Markdown 主体内容
+元数据下方的 Markdown 内容，是 Claude 触发技能后执行的「操作指南」，核心是：
+明确技能的使用场景、核心流程（工作流）（如「如何应用品牌色值到不同类型的文档」）；
+关联可选的附属资源（如下文的 references/assets）；
+遵循「命令式 / 不定式」写作风格（如「To apply brand colors, use the hex values in references/color.md」，而非「你应该用...」）。
+
+Claude Skills 的本质是「领域能力封装包」：
+以 SKILL.md 为核心，通过「元数据 + 操作指南」定义技能的「触发规则 + 执行逻辑」；
+以「渐进式披露」为设计核心，按需加载资源，兼顾「能力完整性」和「上下文效率」；
+以 brand-guidelines 为例：该技能将「Anthropic 品牌视觉规范」封装为 Claude 可复用的能力，让 Claude 能精准、标准化地应用品牌样式，无需用户反复提供品牌规则。
+
+一个 Skill 长什么样？
+
+my-skill/
+├── SKILL.md        # 核心（必须）
+├── scripts/        # 可选（代码）
+└── references/     # 可选（资料）
+
+
+Skill 就是一个文件夹 + SKILL.md
+
+最重要的认知升级
+
+👉 Skills 的本质不是技术，而是：
+
+把“经验”变成“可执行资产”
+
+
+
+
+
+## 实战
+cursor中执行 Please install the "brand-guidelines" skill into my project
+.cursor/skills/brand-guidelines 中
+
+Use brand-guidelines skill
+
+Create a landing page for an AI product
+
+Use brand-guidelines skill to restyle this component
+
+### PDF Processor Skill
+pdf-processor/
+├── SKILL.md
+├── scripts/
+│   ├── extract_text.py
+│   ├── extract_tables.py
+│   └── merge_pdfs.py
+└── references/
+    └── FORMATS.md
+
+目录	作用
+SKILL.md	核心逻辑（AI怎么做）
+scripts/	真正执行的代码
+references/	文档 / 规范 / 说明
+
+
+这个 skill 是干嘛的？
+
+一句话：
+
+处理 PDF：提取文本、表格、合并文件
+
+官方描述：
+
+提取 PDF 文本
+
+提取表格
+
+合并多个 PDF
+
+
+SKILL.md（大脑）
+name: pdf-processor
+description: Extract text and tables from PDF files
+
+## When to use this skill
+- Needs to extract text from PDF
+- Needs to process PDF data
+
+👉 核心作用：
+
+告诉 AI：什么时候用我
+
+告诉 AI：怎么做
+
+scripts/（手和脚）
+scripts/
+├── extract_text.py
+├── extract_tables.py
+└── merge_pdfs.py
+
+Skill 不只是 prompt，还能“干活”
+
+# extract_text.py（简化理解）
+read_pdf()
+extract_text()
+return_text()
+
+
+references/（知识库）
+references/
+└── FORMATS.md
+
+
+定义输出格式
+
+存复杂规则
+
+避免 SKILL.md 太长
+
+Use pdf-processor skill to analyze this PDF
+
+Please install the "pdf" skill into my project
+
+Use pdf skill to analyze this PDF， 获得他的电话号码就好
