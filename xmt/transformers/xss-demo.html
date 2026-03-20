@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>纯 JS 模拟存储型 XSS</title>
+</head>
+<body>
+
+    <h2>💬 留言板 (模拟存储型 XSS)</h2>
+    
+    <!-- 输入框 -->
+    <input type="text" id="userInput" placeholder="输入留言..." style="width: 300px;">
+    <button onclick="postComment()">发布留言</button>
+    
+    <hr>
+    
+    <!-- 留言展示区 -->
+    <div id="commentBoard"></div>
+
+    <script>
+        // 1. 模拟数据库 (使用 localStorage)
+        const DB_KEY = 'xss_demo_comments';
+
+        // 初始化：如果数据库为空，放一条正常留言
+        if (!localStorage.getItem(DB_KEY)) {
+            localStorage.setItem(DB_KEY, JSON.stringify(['大家好，我是新用户！']));
+        }
+
+        // 2. 【漏洞函数】发布留言
+        function postComment() {
+            const input = document.getElementById('userInput');
+            const text = input.value;
+
+            if (!text) return alert("请输入内容");
+
+            // 获取旧数据
+            const comments = JSON.parse(localStorage.getItem(DB_KEY));
+            
+            // 存入新数据 (模拟后端存储，完全不过滤)
+            comments.push(text);
+            localStorage.setItem(DB_KEY, JSON.stringify(comments));
+
+            // 清空输入框并刷新显示
+            input.value = '';
+            renderComments();
+        }
+
+        // 3. 【核心漏洞点】渲染留言
+        function renderComments() {
+            const board = document.getElementById('commentBoard');
+            const comments = JSON.parse(localStorage.getItem(DB_KEY));
+            
+            board.innerHTML = ''; // 清空当前显示
+
+            comments.forEach(msg => {
+                const div = document.createElement('div');
+                div.style.margin = "10px 0";
+                div.style.padding = "10px";
+                div.style.background = "#f0f0f0";
+                div.style.border = "1px solid #ccc";
+
+                // ❌ 危险操作：直接使用 innerHTML 拼接用户数据
+                // 改用事件属性/JS 伪协议等方式，确保 XSS 能触发
+                div.innerHTML = msg; 
+
+                board.appendChild(div);
+            });
+        }
+
+        // 页面加载时渲染一次
+        renderComments();
+
+        // --- 攻击演示说明 ---
+        // 现在可以在输入框填入以下任意一条，都能触发 alert：
+        // 1. <img src=x onerror="alert('XSS攻击成功！你的Cookie：' + document.cookie)">
+        // 2. <a href="javascript:alert('XSS注入成功')">点击我试试</a>
+        // 3. <div onmouseover="alert('鼠标移过来就触发XSS')">移鼠标到我这</div>
+    </script>
+</body>
+</html>
+
+输出编码（核心）：在把用户输入的内容渲染到页面时，将特殊字符（如 <、>、"、'、&）转义成 HTML 实体，让浏览器把这些字符当作普通文本而非代码解析。
+
+使用安全的 API（替代方案）：避免使用 innerHTML，改用 textContent（纯文本渲染），适合只展示文本的场景。
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>防存储型 XSS 演示</title>
+</head>
+<body>
+    <h2>💬 安全的留言板 (防 XSS)</h2>
+    
+    <input type="text" id="userInput" placeholder="输入留言..." style="width: 300px;">
+    <button onclick="postComment()">发布留言</button>
+    
+    <hr>
+    
+    <div id="commentBoard"></div>
+
+    <script>
+        const DB_KEY = 'xss_demo_comments';
+
+        // 初始化
+        if (!localStorage.getItem(DB_KEY)) {
+            localStorage.setItem(DB_KEY, JSON.stringify(['大家好，我是新用户！']));
+        }
+
+        // 【关键】HTML 转义函数：把特殊字符转成实体
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe
+                .replace(/&/g, '&amp;')   // & → &amp;
+                .replace(/</g, '&lt;')    // < → &lt;
+                .replace(/>/g, '&gt;')    // > → &gt;
+                .replace(/"/g, '&quot;')  // " → &quot;
+                .replace(/'/g, '&#039;'); // ' → &#039;
+        }
+
+        // 发布留言（保留输入，仅做基础校验）
+        function postComment() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+
+            if (!text) return alert("请输入内容");
+
+            // 输入验证（辅助：限制长度，可选）
+            if (text.length > 200) return alert("留言长度不能超过200字");
+
+            const comments = JSON.parse(localStorage.getItem(DB_KEY));
+            comments.push(text); // 存储原始内容（也可存储转义后的，推荐输出时转义）
+            localStorage.setItem(DB_KEY, JSON.stringify(comments));
+
+            input.value = '';
+            renderComments();
+        }
+
+        // 渲染留言（核心防护：输出编码 + 安全 API）
+        function renderComments() {
+            const board = document.getElementById('commentBoard');
+            const comments = JSON.parse(localStorage.getItem(DB_KEY));
+            
+            board.innerHTML = '';
+
+            comments.forEach(msg => {
+                const div = document.createElement('div');
+                div.style.margin = "10px 0";
+                div.style.padding = "10px";
+                div.style.background = "#f0f0f0";
+                div.style.border = "1px solid #ccc";
+
+                // 方式1：用 textContent（推荐，纯文本场景）
+                // div.textContent = msg; 
+
+                // 方式2：用转义函数（适合需要保留部分 HTML 格式的场景）
+                div.innerHTML = escapeHtml(msg); 
+
+                board.appendChild(div);
+            });
+        }
+
+        // 页面加载渲染
+        renderComments();
+
+        // 测试：输入 <img src=x onerror="alert('XSS')"> 试试，只会显示文本，不会触发弹窗
+    </script>
+</body>
+</html>
+```
+

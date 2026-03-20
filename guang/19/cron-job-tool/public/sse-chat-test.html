@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI SSE Chat 测试</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+          'Segoe UI', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f5f5f5;
+        padding: 24px 16px;
+      }
+
+      .shell {
+        width: 100%;
+        max-width: 720px;
+      }
+
+      h1 {
+        font-size: 20px;
+        margin: 0 0 12px;
+      }
+
+      .card {
+        background: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+        padding: 16px 18px 18px;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 6px;
+        color: #6b7280;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 80px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        resize: vertical;
+        font-family: inherit;
+        font-size: 14px;
+        outline: none;
+      }
+
+      textarea::placeholder {
+        color: #9ca3af;
+      }
+
+      textarea:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        gap: 10px;
+      }
+
+      button {
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid #2563eb;
+        background: #3b82f6;
+        color: #ffffff;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      .status {
+        font-size: 12px;
+        color: #6b7280;
+      }
+
+      .output {
+        margin-top: 16px;
+        padding: 10px 10px;
+        border-radius: 8px;
+        background: #111827;
+        color: #e5e7eb;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          'Liberation Mono', 'Courier New', monospace;
+        white-space: pre-wrap;
+        max-height: 360px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="card">
+        <h1>AI SSE Chat 测试</h1>
+        <label for="query">输入你的问题：</label>
+        <textarea
+          id="query"
+          placeholder="请输入要发送给 AI 的问题..."
+        ></textarea>
+        <div class="controls">
+          <button id="sendBtn">开始对话（SSE）</button>
+          <div class="status" id="status">状态：待机</div>
+        </div>
+        <div class="output" id="output"></div>
+      </div>
+    </div>
+
+    <script>
+      const sendBtn = document.getElementById('sendBtn');
+      const queryInput = document.getElementById('query');
+      const outputEl = document.getElementById('output');
+      const statusEl = document.getElementById('status');
+
+      let es = null;
+
+      function closeEventSource() {
+        if (es) {
+          es.close();
+          es = null;
+        }
+
+        sendBtn.disabled = false;
+      }
+
+      sendBtn.onclick = () => {
+        const query = queryInput.value.trim();
+        if (!query) {
+          alert('请输入问题');
+          return;
+        }
+
+        closeEventSource();
+        outputEl.textContent = '';
+        sendBtn.disabled = true;
+        statusEl.textContent = '状态：连接中…';
+
+        const url = `/ai/chat/stream?query=${encodeURIComponent(query)}`;
+        es = new EventSource(url);
+
+        es.onopen = () => {
+          statusEl.textContent = '状态：已连接，流式接收中…';
+        };
+
+        es.onmessage = (event) => {
+          // 后端每个 chunk 用 data 发过来
+          outputEl.textContent += event.data;
+        };
+
+        es.onerror = () => {
+          statusEl.textContent = '状态：连接结束或发生错误';
+          closeEventSource();
+        };
+      };
+
+      window.addEventListener('beforeunload', closeEventSource);
+    </script>
+  </body>
+</html>

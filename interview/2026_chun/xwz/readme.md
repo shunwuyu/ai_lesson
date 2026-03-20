@@ -1655,3 +1655,128 @@ Use pdf-processor skill to analyze this PDF
 Please install the "pdf" skill into my project
 
 Use pdf skill to analyze this PDF， 获得他的电话号码就好
+
+## 跨域
+
+跨域本质是浏览器的同源策略限制：协议、域名、端口任一不同，就不能直接访问资源，这是为了防止像 XSS、CSRF 这类安全问题。前后端分离后，前端和接口常不在同一源，就会产生跨域需求，所以需要通过 CORS、代理等方式安全地“放行”请求。
+
+- CSRF（跨站请求伪造 Cross-Site Request Forgery ）攻击是诱导用户在已登录状态下，访问恶意网站并自动向目标站点发送非本意的请求（如转账、改密）。攻击者利用浏览器的自动携带Cookie机制，冒充用户身份执行操作，从而窃取数据或破坏系统。
+
+场景假设：
+用户已登录银行网站 bank.com，该网站通过 URL 参数执行转账（例如：bank.com/transfer?to=黑客账号&amount=1000），且未做 CSRF 防护。
+
+攻击代码（恶意网页）：
+攻击者制作一个网页，用户一旦访问，浏览器会自动向银行发送转账请求。
+
+```
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>正在加载图片...</h2>
+  <!-- 用户访问此页面时，浏览器会自动请求下面的 src 地址 -->
+  <!-- 如果用户已登录 bank.com，请求会携带 Cookie，转账立即生效 -->
+  <img src="http://bank.com/transfer?to=Attacker_Account&amount=10000" width="0" height="0" />
+</body>
+</html>
+```
+用户无需点击任何按钮，只要打开这个包含恶意代码的页面，浏览器就会自动在后台向 bank.com 发起转账请求。由于浏览器会自动附带用户在 bank.com 的登录 Cookie，服务器会认为这是用户本人的操作。
+
+怎么解决？
+
+- 服务器在表单或页面中生成一个随机且不可预测的 Token。
+- 提交请求时，必须携带这个 Token。
+- 攻击者无法获取这个 Token（因为同源策略禁止他们读取页面内容），因此无法构造合法的请求。
+```
+<!-- bank.com/transfer.html (正规页面) -->
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>银行转账</h1>
+  <!-- 服务器生成的随机令牌，比如: "a1b2c3d4" -->
+  <!-- 这个令牌存在页面的隐藏域中，用户看不见但浏览器提交时会带上 -->
+  <form action="http://bank.com/api/transfer" method="POST">
+    <input type="hidden" name="csrf_token" value="a1b2c3d4_RANDOM_SECRET">
+    
+    <label>收款人:</label>
+    <input type="text" name="to" value="Friend">
+    
+    <label>金额:</label>
+    <input type="number" name="amount" value="100">
+    
+    <button type="submit">转账</button>
+  </form>
+</body>
+</html>
+```
+
+```
+# 服务器收到请求时
+def handle_transfer(request):
+    # 1. 从表单里取出用户提交的 token
+    user_token = request.form.get('csrf_token')
+    
+    # 2. 从当前用户的会话（Session/Cookie）里取出服务器刚才生成的正确 token
+    correct_token = session.get('csrf_token') 
+    
+    # 3. 比对
+    if user_token != correct_token:
+        return "错误：非法请求！(CSRF 攻击被拦截)"
+    
+    # 如果一致，才执行转账
+    execute_transfer()
+```
+
+攻击者的恶意网站 (evil.com)
+攻击者想伪造上面的请求。他能做到吗？
+
+```
+<!-- evil.com (恶意页面) -->
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>免费领皮肤！点击领取...</h1>
+  
+  <!-- 攻击者试图伪造转账请求 -->
+  <form id="attackForm" action="http://bank.com/api/transfer" method="POST">
+    <input type="hidden" name="to" value="Attacker_Account">
+    <input type="hidden" name="amount" value="9999">
+    
+    <!-- ⚠️ 关键问题在这里 ⚠️ -->
+    <!-- 攻击者能填什么 token？ -->
+    <!-- 他不知道银行给用户生成的 "a1b2c3d4_RANDOM_SECRET" 是多少！ -->
+    <!-- 因为他没法通过 JavaScript 去读取 bank.com 页面上的内容（同源策略限制） -->
+    
+    <!-- 如果他不填，或者填个假的 "guess_123" -->
+    <input type="hidden" name="csrf_token" value="guess_123"> 
+  </form>
+
+  <script>
+    // 自动提交表单
+    document.getElementById('attackForm').submit();
+  </script>
+</body>
+</html>
+```
+假设攻击者试图用 JavaScript 去偷看银行页面上的 Token：
+
+```
+// 运行在 evil.com 的脚本
+const bankPage = window.open('http://bank.com/transfer.html');
+
+// ❌ 报错！同源策略阻止访问
+// Uncaught DOMException: Blocked a frame with origin "http://evil.com" 
+// from accessing a cross-origin frame.
+try {
+    const token = bankPage.document.querySelector('input[name="csrf_token"]').value;
+    console.log("偷到的Token:", token); 
+} catch (e) {
+    console.log("完蛋了，同源策略不让我看银行页面的内容！");
+    // 结果：攻击者依然不知道 Token 是什么，只能瞎猜
+}
+```
+
+- XSS
+
+XSS（跨站脚本攻击）是黑客在网页中注入恶意脚本。当其他用户浏览该页时，脚本在其浏览器执行，从而窃取Cookie、冒充用户或篡改页面内容。本质是利用网站对用户输入过滤不严，让恶意代码“合法”运行。
+
+xss-demo.html
