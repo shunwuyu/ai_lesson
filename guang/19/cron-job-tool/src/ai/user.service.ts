@@ -17,7 +17,7 @@ export class UserService {
     ['005', { id: '005', name: '刘备', email: 'liubei@example.com', role: 'owner' }],
     ['006', { id: '006', name: '黄忠', email: 'huangzhong@example.com', role: 'user' }],
   ]);
-
+  // 定义了 mock 的增删改查
   findAll(): User[] {
     return Array.from(this.users.values());
   }

@@ -50,3 +50,4 @@ star, 并fork
 
 http://localhost:3000/ai/chat?query=%E7%94%A8%E6%88%B7001
 
+- 打通了 tool 里调用 service
