@@ -9,10 +9,34 @@ import {
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: configService.get<'mysql'>('DB_TYPE') as any, // 类型断言或直接写 'mysql'
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+        
+        // 生产环境建议关闭 synchronize，这里根据环境变量控制
+        synchronize: configService.get<boolean>('DB_SYNC') === true || configService.get<string>('DB_SYNC') === 'true',
+        
+        logging: configService.get<boolean>('DB_LOGGING') === true || configService.get<string>('DB_LOGGING') === 'true',
+        
+        // 驱动包
+        connectorPackage: configService.get<string>('DB_DRIVER_PACKAGE') || 'mysql2',
+        // 实体是数据库中的一个表的映射
+        // 有了这个后可以自动加载实体 
+        entities: [User],
+      }),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -49,6 +73,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
       rootPath: join(__dirname, '..', 'public'),
     }),
     AiModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

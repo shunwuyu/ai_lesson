@@ -57,12 +57,17 @@ export class AiService {
 constructor(
     @Inject('CHAT_MODEL') model: ChatOpenAI,
     // any 类型 表示任何类型 
-    @Inject('QUERY_USER_TOOL') private readonly queryUserTool: StructuredTool,
+    // @Inject('QUERY_USER_TOOL') private readonly queryUserTool: StructuredTool,
     @Inject('SEND_MAIL_TOOL') private readonly sendMailTool: StructuredTool,
-    @Inject('WEB_SEARCH_TOOL') private readonly webSearchTool: StructuredTool
+    @Inject('WEB_SEARCH_TOOL') private readonly webSearchTool: StructuredTool,
+    @Inject('DB_USERS_CRUD_TOOL') private readonly dbUsersCrudTool: StructuredTool
 ) {
     // 然后替换下之前的 tool
-    this.modelWithTools = model.bindTools([this.queryUserTool, this.sendMailTool, this.webSearchTool]);
+    this.modelWithTools = model.bindTools([
+        // this.queryUserTool, 
+        this.sendMailTool, this.webSearchTool, 
+        this.dbUsersCrudTool
+    ]);
   }
 
 async runChain(query: string): Promise<string> {
@@ -91,15 +96,15 @@ async runChain(query: string): Promise<string> {
 
         if (toolName === 'query_user') {
             // 调用的也替换掉
-          const result = await this.queryUserTool.invoke(toolCall.args);
+        //   const result = await this.queryUserTool.invoke(toolCall.args);
 
-          messages.push(
-            new ToolMessage({
-              tool_call_id: toolCallId,
-              name: toolName,
-              content: result,
-            }),
-          );
+        //   messages.push(
+        //     new ToolMessage({
+        //       tool_call_id: toolCallId,
+        //       name: toolName,
+        //       content: result,
+        //     }),
+        //   );
         } else if (toolName === 'send_mail') {
             const result = await this.sendMailTool.invoke(toolCall.args);
             messages.push(
@@ -111,6 +116,16 @@ async runChain(query: string): Promise<string> {
             )
         } else if (toolName === 'web_search') {
             const result = await this.webSearchTool.invoke(toolCall.args);
+
+            messages.push(
+                new ToolMessage({
+                    tool_call_id: toolCallId,
+                    name: toolName,
+                    content: result,
+                })
+            )
+        } else if (toolName === 'db_users_crud') {
+            const result = await this.dbUsersCrudTool.invoke(toolCall.args);
 
             messages.push(
                 new ToolMessage({
@@ -174,15 +189,15 @@ async runChain(query: string): Promise<string> {
         const toolName = toolCall.name;
  
         if (toolName === 'query_user') {
-          const result = await this.queryUserTool.invoke(toolCall.args);
+        //   const result = await this.queryUserTool.invoke(toolCall.args);
  
-          messages.push(
-            new ToolMessage({
-              tool_call_id: toolCallId,
-              name: toolName,
-              content: result,
-            }),
-          );
+        //   messages.push(
+        //     new ToolMessage({
+        //       tool_call_id: toolCallId,
+        //       name: toolName,
+        //       content: result,
+        //     }),
+        //   );
         } else if (toolName === 'send_mail') {
             const result = await this.sendMailTool.invoke(toolCall.args);
 
@@ -195,6 +210,16 @@ async runChain(query: string): Promise<string> {
             )
         } else if (toolName === 'web_search') {
             const result = await this.webSearchTool.invoke(toolCall.args);
+
+            messages.push(
+                new ToolMessage({
+                    tool_call_id: toolCallId,
+                    name: toolName,
+                    content: result,
+                })
+            )
+        } else if (toolName === 'db_users_crud') {
+            const result = await this.dbUsersCrudTool.invoke(toolCall.args);
 
             messages.push(
                 new ToolMessage({
