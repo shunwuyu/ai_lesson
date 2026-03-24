@@ -142,7 +142,9 @@ import { MailerService } from '@nestjs-modules/mailer';
               const body = {
                 query,
                 freshness: 'noLimit',
+                // 摘要
                 summary: true,
+                // 返回数量
                 count: count ?? 10,
               };
       
@@ -171,7 +173,7 @@ import { MailerService } from '@nestjs-modules/mailer';
                 if (json.code !== 200 || !json.data) {
                   return`搜索 API 请求失败，原因是: ${json.msg ?? '未知错误'}`;
                 }
-      
+                // ?? 空值合并运算符。当左侧为 null 或 undefined 时返回右侧，否则返回左侧。
                 const webpages = json.data.webPages?.value ?? [];
                 if (!webpages.length) {
                   return'未找到相关结果。';
@@ -181,12 +183,12 @@ import { MailerService } from '@nestjs-modules/mailer';
                   .map(
                     (page: any, idx: number) =>
                       `引用: ${idx + 1}
-      标题: ${page.name}
-      URL: ${page.url}
-      摘要: ${page.summary}
-      网站名称: ${page.siteName}
-      网站图标: ${page.siteIcon}
-      发布时间: ${page.dateLastCrawled}`,
+                      标题: ${page.name}
+                      URL: ${page.url}
+                      摘要: ${page.summary}
+                      网站名称: ${page.siteName}
+                      网站图标: ${page.siteIcon}
+                      发布时间: ${page.dateLastCrawled}`,
                   )
                   .join('\n\n');
       

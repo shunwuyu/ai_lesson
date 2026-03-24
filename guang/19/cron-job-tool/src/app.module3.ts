@@ -1,9 +1,4 @@
-import { 
-    Module,
-    Inject,
-    // 生命周期 应用准备好接客之前”做最后的准备工作
-    OnApplicationBootstrap 
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AiModule } from './ai/ai.module';
@@ -17,14 +12,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
-import { ScheduleModule } from '@nestjs/schedule';
-import { JobModule } from './job/job.module';
-import { Job } from './job/entities/job.entity';
 
 @Module({
   imports: [
-    //引入后，可以自动加载定时任务
-    ScheduleModule.forRoot(),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -44,7 +34,7 @@ import { Job } from './job/entities/job.entity';
         connectorPackage: configService.get<string>('DB_DRIVER_PACKAGE') || 'mysql2',
         // 实体是数据库中的一个表的映射
         // 有了这个后可以自动加载实体 
-        entities: [User, Job],
+        entities: [User],
       }),
     }),
     ConfigModule.forRoot({
@@ -84,7 +74,6 @@ import { Job } from './job/entities/job.entity';
     }),
     AiModule,
     UsersModule,
-    JobModule,
   ],
   controllers: [AppController],
   providers: [AppService],

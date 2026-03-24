@@ -51,3 +51,31 @@ star, 并fork
 http://localhost:3000/ai/chat?query=%E7%94%A8%E6%88%B7001
 
 - 打通了 tool 里调用 service
+
+## 邮箱tool
+
+- 配置腾讯邮箱
+设置-> 账号与安全 -> 安全设置 拿到授权码
+- pnpm install nodemailer @nestjs-modules/mailer
+nodemailer让开发者能够轻松便捷地通过 SMTP 等协议发送电子邮件
+Simple Mail Transfer Protocol
+NestJS 官方推荐的邮件模块集成包 @nestjs-modules/mailer
+
+## 网络搜索的 tool
+https://open.bochaai.com/
+支持自然语言搜索
+
+
+## Nest + tool 实现 OpenClaw 同款定时任务功能（下）
+
+prisma 和 typeorm 只需要二选一
+
+ORM 是 Object Relational Mapping，对象关系映射，就是把对数据库表的操作转换为对对象的操作
+
+## corn 
+
+定时任务就是指定一个时间，到时会执行某个任务。
+
+cron 有一个表达式：
+秒 分 时 日 月 周
+7 12 13 10 * ? 

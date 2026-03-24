@@ -17,9 +17,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
-import { ScheduleModule } from '@nestjs/schedule';
-import { JobModule } from './job/job.module';
-import { Job } from './job/entities/job.entity';
+import { ScheduleModule, SchedulerRegistry, CronExpression } from '@nestjs/schedule';
+// 引入 cron 库 用于创建定时任务
+import { CronJob } from 'cron';
 
 @Module({
   imports: [
@@ -44,7 +44,7 @@ import { Job } from './job/entities/job.entity';
         connectorPackage: configService.get<string>('DB_DRIVER_PACKAGE') || 'mysql2',
         // 实体是数据库中的一个表的映射
         // 有了这个后可以自动加载实体 
-        entities: [User, Job],
+        entities: [User],
       }),
     }),
     ConfigModule.forRoot({
@@ -84,9 +84,37 @@ import { Job } from './job/entities/job.entity';
     }),
     AiModule,
     UsersModule,
-    JobModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements OnApplicationBootstrap {
+    @Inject(SchedulerRegistry)
+    schedulerRegistry: SchedulerRegistry;
+
+    async onApplicationBootstrap() {
+        // console.log('AppModule onApplicationBootstrap');
+        const job = new CronJob(CronExpression.EVERY_SECOND, () => {
+            console.log('Every second job');
+        })
+        this.schedulerRegistry.addCronJob('job1', job);
+        job.start();
+        setTimeout(() => {
+            this.schedulerRegistry.deleteCronJob('job1');
+        }, 5000);
+        const intervalRef = setInterval(() => {
+            console.log('run interval job');
+        }, 1000)
+        this.schedulerRegistry.addInterval('interval1', intervalRef);
+        setTimeout(() => {
+            this.schedulerRegistry.deleteInterval('interval1');
+        }, 5000);
+        const timeoutRef = setTimeout(() => {
+            console.log('run timeout job');
+        }, 3000);
+        this.schedulerRegistry.addTimeout('timeout1', timeoutRef);
+        setTimeout(() => {
+            this.schedulerRegistry.deleteTimeout('timeout1');
+        }, 5000)
+    }
+}
