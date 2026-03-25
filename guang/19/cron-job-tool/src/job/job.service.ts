@@ -1,40 +1,52 @@
 import {
     Inject,
     Injectable,
+    // 日志
     Logger,
+    // 未找到异常
     NotFoundException,
+    // 生命周期 应用准备好接客之前”做最后的准备工作
     OnApplicationBootstrap,
   } from'@nestjs/common';
+  // 引入调度器注册表
   import { SchedulerRegistry } from'@nestjs/schedule';
+  // 引入 cron 库
   import { CronJob } from'cron';
   import { EntityManager } from'typeorm';
   import { Job } from'./entities/job.entity';
-  
+  // implements OnApplicationBootstrap  是在应用启动后执行的方法
   @Injectable()
   export class JobService implements OnApplicationBootstrap {
+    // 日志
     private readonly logger = new Logger(JobService.name);
-  
+    // 注入实体管理器
     @Inject(EntityManager)
     private readonly entityManager: EntityManager;
-  
+    // 注入调度器注册表
     @Inject(SchedulerRegistry)
     private readonly schedulerRegistry: SchedulerRegistry;
-  
+  // 在应用启动后执行的方法
   async onApplicationBootstrap() {
+      // 获取所有启用的定时任务
       const enabledJobs = await this.entityManager.find(Job, {
         where: { isEnabled: true },
       });
+      // 获取所有 cron 类型的定时任务
       const cronJobs = this.schedulerRegistry.getCronJobs();
+      // 获取所有 interval 类型的定时任务
       const intervals = this.schedulerRegistry.getIntervals();
+      // 获取所有 timeout 类型的定时任务
       const timeouts = this.schedulerRegistry.getTimeouts();
   
       for (const job of enabledJobs) {
+        // has 是 Map 对象的方法，用于检查指定键是否存在
+        // includes 是数组的方法，用于检查指定值是否存在
         const alreadyRegistered =
           (job.type === 'cron' && cronJobs.has(job.id)) ||
           (job.type === 'every' && intervals.includes(job.id)) ||
           (job.type === 'at' && timeouts.includes(job.id));
         if (alreadyRegistered) continue;
-  
+        // 启动定时任务
         await this.startRuntime(job);
       }
     }
@@ -63,6 +75,8 @@ import {
     }
   
   async addJob(
+    // | 是联合类型，表示可以传入三种类型中的任意一种
+    // 第一个| 可以省略，因为已经指定了类型
       input:
         | {
             type: 'cron';

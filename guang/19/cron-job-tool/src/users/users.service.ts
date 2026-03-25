@@ -6,7 +6,8 @@ import { User } from'./entities/user.entity';
 
 @Injectable()
 export class UsersService {
-
+  // 注入实体管理器
+  // 实体管理器是 TypeORM 的核心概念，它提供了一组方法来操作数据库。
   @Inject(EntityManager)
 entityManager: EntityManager;
 

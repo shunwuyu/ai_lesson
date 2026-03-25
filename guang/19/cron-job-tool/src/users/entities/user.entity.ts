@@ -1,4 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from"typeorm";
+import { 
+    // 列
+    Column,
+    // 创建日期列
+    CreateDateColumn,
+    // 实体 表
+    Entity, 
+    // 主键生成策略
+    PrimaryGeneratedColumn, 
+    // 更新日期列
+    UpdateDateColumn 
+} from"typeorm";
 
 @Entity()
 export class User {

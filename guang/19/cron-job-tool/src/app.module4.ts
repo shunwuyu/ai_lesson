@@ -17,7 +17,14 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
-import { ScheduleModule, SchedulerRegistry, CronExpression } from '@nestjs/schedule';
+import { 
+  // 引入定时任务模块
+  ScheduleModule, 
+  // 引入调度器注册表
+  SchedulerRegistry, 
+  // 引入 Cron 表达式
+  CronExpression 
+} from '@nestjs/schedule';
 // 引入 cron 库 用于创建定时任务
 import { CronJob } from 'cron';
 
@@ -36,8 +43,9 @@ import { CronJob } from 'cron';
         database: configService.get<string>('DB_DATABASE'),
         
         // 生产环境建议关闭 synchronize，这里根据环境变量控制
+        // 将entities 同步到数据库中
         synchronize: configService.get<boolean>('DB_SYNC') === true || configService.get<string>('DB_SYNC') === 'true',
-        
+        // 打印sql
         logging: configService.get<boolean>('DB_LOGGING') === true || configService.get<string>('DB_LOGGING') === 'true',
         
         // 驱动包
@@ -89,15 +97,19 @@ import { CronJob } from 'cron';
   providers: [AppService],
 })
 export class AppModule implements OnApplicationBootstrap {
+    // 注入调度器注册表
     @Inject(SchedulerRegistry)
     schedulerRegistry: SchedulerRegistry;
 
     async onApplicationBootstrap() {
         // console.log('AppModule onApplicationBootstrap');
+        // CronJob 是 cron 库中的一个类，用于创建定时任务
+        // CronExpression.EVERY_SECOND 是 cron 库中的一个常量，表示每秒执行一次
         const job = new CronJob(CronExpression.EVERY_SECOND, () => {
             console.log('Every second job');
         })
         this.schedulerRegistry.addCronJob('job1', job);
+        // 启动定时任务
         job.start();
         setTimeout(() => {
             this.schedulerRegistry.deleteCronJob('job1');

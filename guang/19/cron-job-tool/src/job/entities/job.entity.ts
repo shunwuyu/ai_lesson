@@ -11,7 +11,7 @@ import {
     UpdateDateColumn,
     // Object-Relational Mapping 对象关系映射
   } from'typeorm';
-  
+  // 定时任务类型
   export type JobType = 'cron' | 'every' | 'at';
   
   @Entity()

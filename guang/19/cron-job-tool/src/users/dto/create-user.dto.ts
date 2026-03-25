@@ -1,3 +1,4 @@
+// class-validator 来做参数校验
 import { IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
 
 export class CreateUserDto {

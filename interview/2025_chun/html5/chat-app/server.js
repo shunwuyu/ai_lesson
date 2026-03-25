@@ -1,4 +1,5 @@
 const Koa = require('koa')
+// koa-websocket 是Koa的WebSocket插件，用于在Koa中使用WebSocket。
 const websocket = require('koa-websocket')
 
 // 创建支持WebSocket的Koa实例
@@ -36,8 +37,11 @@ app.use(async ctx => {
 })
 
 // 处理WebSocket连接
+// 何时执行？
+// 当有新的WebSocket连接时执行
 app.ws.use(async (ctx, next) => {
   // 新的WebSocket连接
+  // 将WebSocket连接添加到clients集合中
   clients.add(ctx.websocket)
   
   // 当收到消息时广播给所有客户端
