@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Session 登录演示</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+        .box { border: 1px solid #ccc; padding: 20px; margin-bottom: 20px; border-radius: 5px; }
+        .hidden { display: none; }
+        button { cursor: pointer; padding: 8px 15px; }
+        input { padding: 8px; margin-right: 5px; }
+        #msg { color: red; margin-top: 10px; }
+        #userInfo { color: green; }
+    </style>
+</head>
+<body>
+
+    <h2>🔐 原生 JS Session 登录演示</h2>
+
+    <!-- 登录区域 -->
+    <div id="loginBox" class="box">
+        <h3>请登录</h3>
+        <input type="text" id="username" placeholder="用户名 (admin)" value="admin">
+        <input type="password" id="password" placeholder="密码 (123)" value="123">
+        <button onclick="handleLogin()">登录</button>
+        <p id="loginMsg"></p>
+    </div>
+
+    <!-- 用户信息区域 (受保护) -->
+    <div id="userBox" class="box hidden">
+        <h3>✅ 已登录</h3>
+        <p id="userInfo">加载中...</p>
+        <button onclick="fetchProfile()">刷新个人信息 (调用受保护接口)</button>
+        <button onclick="handleLogout()" style="background:#fdd;">退出登录</button>
+    </div>
+
+    <script>
+        // 1. 登录函数
+        async function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const msgEl = document.getElementById('loginMsg');
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                    // 注意：这里不需要手动设置 Cookie，浏览器收到响应后会自动保存 HttpOnly Cookie
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    msgEl.style.color = 'green';
+                    msgEl.innerText = '登录成功！正在跳转...';
+                    checkStatus(); // 刷新界面状态
+                } else {
+                    msgEl.style.color = 'red';
+                    msgEl.innerText = data.error || '登录失败';
+                }
+            } catch (e) {
+                msgEl.innerText = '网络错误';
+            }
+        }
+
+        // 2. 获取受保护数据 (演示中间件和守卫)
+        async function fetchProfile() {
+            const infoEl = document.getElementById('userInfo');
+            infoEl.innerText = '正在请求服务器...';
+            
+            try {
+                // 浏览器会自动带上之前保存的 sessionId Cookie
+                const res = await fetch('/api/profile'); 
+                const data = await res.json();
+
+                if (res.ok) {
+                    infoEl.innerText = `欢迎, ${data.data.username}! 角色: ${data.data.role}`;
+                } else {
+                    infoEl.innerText = `获取失败: ${data.error}`;
+                    if(data.code === 'NO_SESSION') checkStatus(); // 如果没登录，刷新界面
+                }
+            } catch (e) {
+                infoEl.innerText = '请求出错';
+            }
+        }
+
+        // 3. 登出函数
+        async function handleLogout() {
+            await fetch('/api/logout', { method: 'POST' });
+            checkStatus();
+            alert('已退出');
+        }
+
+        // 4. 检查当前状态 (页面加载时调用)
+        async function checkStatus() {
+            const loginBox = document.getElementById('loginBox');
+            const userBox = document.getElementById('userBox');
+            const infoEl = document.getElementById('userInfo');
+
+            // 尝试访问受保护接口来检测是否登录
+            const res = await fetch('/api/profile');
+            
+            if (res.ok) {
+                const data = await res.json();
+                loginBox.classList.add('hidden');
+                userBox.classList.remove('hidden');
+                infoEl.innerText = `当前用户: ${data.data.username} (角色: ${data.data.role})`;
+            } else {
+                loginBox.classList.remove('hidden');
+                userBox.classList.add('hidden');
+            }
+        }
+
+        // 初始化检查
+        checkStatus();
+    </script>
+</body>
+</html>
