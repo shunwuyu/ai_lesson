@@ -312,39 +312,89 @@ rebase 的目标就是：让 Git 历史变成一条干净的时间线
 
 - 实际开发中我更倾向用 fetch + rebase，这样更安全、可控，也能保持提交历史整洁。
 
-## 小龙虾你怎么学习的
+## 你了解node多少
 
-- OpenClaw（小龙虾）是当下爆火的开源本地AI智能体；核心就是把你说的话直接变成实际操作，比如帮你操作电脑、浏览器、改代码、调接口这些；一般用 Node.js 和 TypeScript 来开发，支持插件扩展（Skills）和 MCP 协议。 我目前尝试过QClaw等。
+相比于Java/GO, Node.js 轻量高效生态丰富，稳居前端全栈（BFF Backend For Frontend，服务于前端的后端）与中间层主流；适合接口转发、实时通信、轻服务、AI 网关与管理后台开发。
 
-从 Skills 角度看，openclaw 的价值在于把企业里的经验和岗位能力沉淀成可复用模块，比如财务报账、架构设计、投资分析等，都可以变成 Skill 被调用和组合，从而提升整体效率，本质是在构建一个“AI 员工系统”。
+nodejs特性是  单线程高并发（单线程不空等 IO，文件 / 网络请求阻塞时，立刻切换处理新请求， 少量线程就能扛成千上万并发连接），IO 异步不阻塞，资源开销低吞吐强。
 
-通过 MCP 接入高德地图这种外部能力，openclaw 可以帮助旅游企业员工把“查资料 + 规划路线 + 输出方案”这一整套流程自动化执行，并邮件给客户。
+我对核心模块是比较熟悉的， 比如：fs：文件读写、流式处理，http、
+os等模块， 同时对 Node 的事件循环、异步模型（Promise / async-await）有比较深入理解。
 
-比如我早上在地铁上，只需要用手机发一句指令：
-👉 “帮我完成用户登录模块的开发，包括接口、前端页面、单元测试，并跑一遍测试，有问题直接修复，最后给我一份报告。”
+在后端开发上，我是基于 RESTful 思想做服务设计的，熟悉 MVC 分层。
 
-## 前端开发者怎么使用openclaw
+我主要使用 NestJS 来做后端开发，因为它在架构上比较清晰，天然支持模块化和依赖注入。
 
-- 把前端开发流程“Agent 化“
-   -  把 UI 开发能力封装成 Skill
-   根据 PRD 或设计稿生成 React 组件结构
-   基于tailwindcss生成基础样式
-   - 接口联调
-   自动 mock 数据（本地开发）
-   自动生成 API 请求代码
-   - 状态管理 & 逻辑拆分（工程能力）
-   zustand编写
-   自动拆分 hooks
-   - 代码重构 & 性能优化
-   把 JS 重构为 TypeScript
-   优化性能（减少重复渲染、代码分割）
+数据库 主要使用 MySQL 和 PostgreSQL，使用过prisma orm 开发。
 
-   我觉得 openclaw 对前端最大的改变是：
+我会基于 LangChain 去做接口开发，比如：封装 LLM 调用，构建工具调用（tools），实现简单的 Agent 流程。
 
-👉 把前端从“实现 UI 的角色”，变成“编排业务能力的角色”
+我写了一个rag 项目， 了解文档切分、向量化、向量数据库检索，用过milvus向量数据库。
 
-    比如我要开发一个商品列表页，我可以这样做：
+我从 Node 基础能力，到 NestJS 工程化，再到 AI 和 Agent 开发都有实践经验，我相信可以比较快地融入到公司的 AI Agent 或 openclaw 相关项目中。
 
-    👉 “生成一个商品列表页，包括接口请求、分页、筛选、单元测试”
+## nodejs event loop
 
-    
+Node.js 和前端的 Event Loop 本质相同，都是基于事件驱动的异步模型，但实现细节不同。前端主要分为宏任务（script、setTimeout）和微任务（Promise），每轮循环先执行宏任务，再清空微任务队列。
+Node.js 更复杂，事件循环分为多个阶段，比如 timers、poll、check 等，每个阶段处理不同类型的任务，同时也有 microtask（Promise、process.nextTick），其中 nextTick 优先级更高。
+
+可视化理解👇
+前端：
+
+宏任务(开始) → 微任务 → 渲染 → 下一轮
+
+Node：
+node-event-loop.js
+
+setTimeout (0) 不是真的 0ms，Node 最小会变成 1ms 延时；
+
+
+timers（定时器） → poll（轮询等待 I/O, 读取文件,网络请求） → check （Poll 空闲结束后，强制进入此阶段核查执行）→ ...  
+       ↘ microtasks（随阶段执行）
+
+所以 Node 更偏“多阶段调度”，前端更偏“宏微任务模型”。
+
+
+
+
+
+完整流程（超级清晰）
+1. 同步代码
+start
+end
+
+2. microtasks（优先级最高）
+nextTick
+promise
+
+process.nextTick > Promise
+
+3. timers 阶段
+timeout
+
+4. poll 阶段（I/O）
+readFile
+
+👉 执行 I/O 回调
+
+5. check 阶段
+immediate
+
+👉 setImmediate 在这里执行
+
+6. I/O 回调内部（重点）
+
+在 readFile 里面：
+
+setTimeout(...)
+setImmediate(...)
+
+👉 顺序变了：
+
+immediate in I/O
+timeout in I/O
+
+👉 原因：
+
+poll → check（先执行 setImmediate）
+下一轮才到 timers
