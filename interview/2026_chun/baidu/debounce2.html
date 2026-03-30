@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="input" placeholder="测试增强防抖" />
+    <script>
+    /**
+ * 增强版防抖函数 - 支持立即执行、取消、Promise返回值、trailing
+ * @param {Function} func - 要防抖的原函数
+ * @param {number} delay - 延迟时间(ms)
+ * @param {boolean} [leading=false] - 开始时是否立即执行
+ * @param {boolean} [trailing=true] - 结束时是否延迟执行
+ * @returns {Function} 增强后的防抖函数(自带cancel方法)
+ */
+function debounce(func, delay, leading = false, trailing = true) {
+  let timer = null;
+  let isInvoked = false;
+
+  const debounced = function (...args) {
+    return new Promise((resolve, reject) => {
+      clearTimeout(timer);
+
+      // ==================== leading 立即执行逻辑 ====================
+      if (leading && !isInvoked) {
+        try {
+          const result = func.apply(this, args);
+          resolve(result);
+          isInvoked = true;
+        } catch (err) {
+          reject(err);
+        }
+
+        // 开启 trailing 才继续延迟执行，否则直接 return
+        if (!trailing) return;
+      }
+
+      // ==================== trailing 延迟执行逻辑 ====================
+      timer = setTimeout(() => {
+        try {
+          isInvoked = false;
+          // 只有 trailing=true 才执行最后一次
+          if (trailing) {
+            const result = func.apply(this, args);
+            resolve(result);
+          }
+        } catch (err) {
+          reject(err);
+        }
+      }, delay);
+    });
+  };
+
+  // 取消功能
+  debounced.cancel = function () {
+    clearTimeout(timer);
+    timer = null;
+    isInvoked = false;
+  };
+
+  return debounced;
+}
+        
+    // 1. 原业务函数
+    function handleSearch(value) {
+        console.log("搜索：", value);
+        return "搜索结果：" + value;
+    }
+    
+    // 2. 创建防抖函数
+    // 第3参数：leading = true（立即执行）
+    // 第4参数：trailing = true（停止后再执行最后一次）
+    const debounceSearch = debounce(handleSearch, 500, true, true);
+    
+    // 3. 绑定事件
+    document.getElementById("input").addEventListener("input", function (e) {
+        debounceSearch(e.target.value).then((res) => {
+        console.log("返回值：", res);
+        });
+    });
+    </script>
+</body>
+</html>

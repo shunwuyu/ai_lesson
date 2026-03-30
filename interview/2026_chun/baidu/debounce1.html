@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 测试HTML -->
+<input type="text" id="input" placeholder="输入测试防抖">
+
+<script>
+/**
+ * 极简防抖函数
+ * @param {Function} func - 要防抖的函数
+ * @param {number} delay - 延迟时间（毫秒）
+ * @returns {Function} 防抖后的新函数
+ */
+ function debounce(func, delay) {
+  let timer = null; // 存储定时器ID
+
+  // 返回一个新的防抖函数
+  return function (...args) {
+    // 1. 清除上一次的定时器（频繁触发就重置计时）
+    clearTimeout(timer);
+    
+    // 2. 重新设置定时器，延迟执行目标函数
+    // 箭头函数没有this, 
+    // 使用外层作用域的this
+    // 使用外层作用域的arguments
+    // 保留 this 和参数
+    timer = setTimeout(() => {
+      func.apply(this, args); // 绑定this和参数，保证函数正常执行
+    }, delay);
+  };
+}
+// 1. 定义要执行的函数（比如搜索请求）
+function handleSearch(e) {
+  console.log("执行搜索：", e.target.value);
+}
+
+// 2. 创建防抖函数（延迟500毫秒）
+const debounceSearch = debounce(handleSearch, 500);
+
+// 3. 绑定事件
+document.getElementById("input").addEventListener("input", debounceSearch);
+</script>
+</body>
+</html>
