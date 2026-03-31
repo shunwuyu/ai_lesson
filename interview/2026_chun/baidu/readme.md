@@ -132,6 +132,9 @@
     - 先暂存自己代码
     git stash 暂存
 
+    为什么需要stash 
+    Git 不允许你带着未提交的修改切换分支，像游戏存档。
+
     - 切主分支合并远程
     git checkout main
     git merge origin/main
@@ -269,7 +272,7 @@ merge 会让提交历史变复杂，后期排查问题（git log）会很乱。
 四、如果用 rebase（重点来了）
 
 执行：
-
+变基
 git rebase origin/main
 
 Git 做了什么？
@@ -398,3 +401,471 @@ timeout in I/O
 
 poll → check（先执行 setImmediate）
 下一轮才到 timers
+
+## 讲一下http 协议
+
+HTTP HyperText Transfer Protocol 是基于TCP/IP 的应用层协议，是互联网数据通信与网页传输的基石，基于请求响应的简单协议，无状态，特别适合海量用户的网页访问与高并发互联网场景。
+
+随着互联网的发展， http 也在不断的进化。
+
+###  HTTP/0.9 是最原始雏形版本，仅支持GET 请求，无请求头与响应头；结构极简，最初只为满足科研机构简易文本互联通信而设计。
+
+### HTTP/1.0
+    - 支持多种方法：GET / POST/ HEAD 
+    HEAD 只拿响应头不拿正文
+    在下载大文件之前，客户端往往需要知道文件的详细信息，以决定是否继续下载。
+    比如你要下载一个 5GB 的游戏补丁，通过 HEAD 请求先拿到文件大小，如果磁盘空间不足，就可以立刻停止，而不必开始下载。
+    - 引入 Header
+        Cookie 携带客户端缓存的用户会话标识
+        User-Agent 标识客户端浏览器 / 设备信息
+        const ua = navigator.userAgent;
+        console.log(ua);
+        
+        Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+
+        Mozilla/5.0 几乎所有现代浏览器都以此开头
+        Macintosh; Intel Mac OS X 10_15_7 硬件设备、处理器架构以及操作系统版本
+        
+
+        AppleWebKit/537.36 浏览器渲染引擎版本号，用于解析网页代码并负责页面显示。
+
+        Chrome/146.0.0.0 浏览器标识，指你正在使用谷歌 Chrome 146 版本
+
+        Safari/537.36 兼容性标识，表明浏览器兼容 Safari 特性，不代表你正在使用 Safari。
+
+        Content-Type 请求体数据格式
+        Accept 可接收响应类型
+        Authorization 身份授权认证
+    - 短连接（每次请求都要 TCP 建连）
+
+
+    每个请求都要：
+    TCP 三次握手
+    四次挥手
+    👉 性能非常差
+
+### HTTP 1.1 
+    - 长连接（Keep-Alive）
+    一个 TCP 连接可以复用多个请求，是为适配网页资源变多（CSS/JS/ 图片）、提升加载速度、减少 TCP 握手开销的互联网发展需求。
+    - 管道化（Pipelining）
+    基于长连接，可以连续发多个请求
+    普通长连接：发一个请求 → 等响应回来 → 再发下一个。
+    
+    就算有 Keep-Alive 不用反复建连接，但还要挨个等待响应，网速还是浪费；
+    管道化：不用等上一个响应，一口气连续多发好几个请求，排队发给服务器。
+
+    但它有队头阻塞严重缺陷，实际浏览器基本都禁用了。
+    同一个 TCP 连接里，响应没有编号、不标序号， 多个请求就好像排队的车队一样， 虽然可以不断发车，但是前面一个堵车，后面全车排队堵死，再快也没用
+
+    马路不是给一个人跑的， 大家可以一起跑， 只不过要有序
+
+    - 缓存机制
+    强缓存（Cache-Control / Expires）
+    浏览器压根不发请求给服务器，直接用本地缓存加载资源，速度最快。
+
+    Expires: Wed, 31 Dec 2026 23:59:59 GMT
+    Cache-Control: max-age=86400
+
+    1. Expires：绝对过期时间（老版本 HTTP1.0）
+        它使用绝对时间，依赖客户端时间比对。若设备时间不准或时区不同步，会导致缓存误判。
+    2. Cache-Control: max-age = 秒数（HTTP1.1，优先级别更高）
+    相对时间， 
+
+
+    协商缓存（ETag / Last-Modified）
+
+    当强缓存失效后，浏览器并不会立刻下载新资源，而是会向服务器发起一个“询问”请求，这个过程就是协商缓存。它的核心是：发请求，问服务器，资源变没变？
+    如果服务器回答“没变”，则返回 304 Not Modified 状态码，浏览器继续使用本地缓存；如果回答“变了”，则返回 200 OK 和新的资源内容。
+
+    1. Last-Modified / If-Modified-Since（比较修改时间）
+    通过比较资源的最后修改时间来判断是否更新。
+
+    Last-Modified: Tue, 20 Feb 2026 08:00:00 GMT
+
+    2. 再次请求： 当强缓存失效，浏览器会再次请求，并在请求头中带上 If-Modified-Since，其值就是上次收到的 Last-Modified 时间。
+
+    3. 服务器判断
+
+    服务器比较 If-Modified-Since 的时间和资源当前的最后修改时间。
+    如果时间没有变化，返回 304，浏览器使用缓存。    
+    如果时间有变化，返回 200 和新资源。
+
+    缺点：
+    精度有限：时间精度只能到“秒”。如果在一秒内多次修改文件，可能无法准确判断。
+    可能误判：文件内容没变，但修改时间被更新了，会导致不必要的重新下载。
+
+   2. ETag / If-None-Match（比较内容唯一标识，更精准）
+    原理：通过比较资源的唯一标识（通常是根据文件内容生成的哈希值）来判断是否更新。
+
+    1. 首次请求：服务器在响应头中返回 ETag，作为资源的唯一“指纹”（例如：ETag: "abc123xyz"）。
+
+    2. 再次请求：当强缓存失效，浏览器会再次请求，并在请求头中带上 If-None-Match，其值就是上次收到的 ETag
+
+    3. 服务器判断：服务器比较 If-None-Match 的值和资源当前的 ETag。
+
+    如果值完全相同，说明内容没变，返回 304。
+    如果值不同，说明内容已更新，返回 200 和新资源。
+
+    优点：优先级高于 Last-Modified，因为它直接基于内容，不受修改时间影响，判断更精准。
+    缺点：生成 ETag 会增加服务器的计算开销。
+
+- 分块传输（chunked）
+边传边收
+    响应无固定长度，用 Transfer-Encoding:chunked 分块传输，服务器边生成边发，浏览器边收边解析，无需等完整文件。
+    SSE 就是借 HTTP 长连接 + chunked 实现的服务端单向流式推送。
+
+- Host 头
+    支持虚拟主机
+    一台服务器只有 1 个公网 IP，却要托管几十上百个网站（虚拟主机）。没 Host 头时，IP 只能对应一个站点；
+    有了Host 请求头携带域名，服务器靠它区分：同一 IP 下你要访问哪个网站，节省 IP 成本、盘活服务器资源。
+
+    假设服务器 IP 为 1.2.3.4，它上面托管了两个网站：
+    公司官网：www.example.com
+    个人博客：blog.example.com
+
+    GET / HTTP/1.1
+    Host: www.example.com
+
+    GET / HTTP/1.1
+    Host: blog.example.com
+
+    阿里云
+
+- OPTIONS、PUT/PATCH、DELETE：HTTP/1.1 正式标准定义；
+    OPTIONS 查询服务器接口支持的请求方法，用于跨域预检与权限探测校验。
+    非简单请求时，浏览器会先发 OPTIONS 预检。
+    请求方法：PUT/DELETE/PATCH 等非 GET/POST
+    自定义请求头：加 Authorization、Token 等
+    Content-Type：application/json（非表单默认值）
+    满足任意一条，必发 OPTIONS 跨域预检。
+    为了保护服务器和用户数据安全
+
+    HTTP/1.1 最大问题是应用层的队头阻塞。
+
+###  HTTP/2
+解决 HTTP/1.1 的性能瓶颈
+
+二进制分帧
+HTTP2 用二进制帧拆分数据，同连接多路复用，彻底解决队头阻塞问题
+帧里带流 ID，不同请求帧混传、按 ID 归类；一个流阻塞不影响其他，解决队头阻塞。就好像有车牌
+
+HTTP/1.1 纯文本明文传输，一锅数据分不清边界、没法插队；
+
+HTTP2 改成二进制 + 帧 + 流 ID，切小块编号混传，彻底破队头阻塞。
+帧就是 HTTP2 里最小的快递小包裹
+
+- 多路复用（最重要）
+一个 TCP 连接中可以并发多个请求
+不需要多个连接
+- 服务器推送（Server Push）
+    服务器主动推资源
+    主动塞资源。浏览器只请求 html，服务器主动把 css/js 提前推给浏览器，不用浏览器再发请求。
+
+- 丢一个包 → 整个 TCP 流都会卡住
+TCP 通道 = 一条唯一的单行隧道
+HTTP2 所有请求车流，全挤进这一条隧道
+隧道里任何一辆小车丢包抛锚，整条隧道必须停下等拖车重传修复；隧道堵死，里面所有车（全部请求）全部跟着停滞卡死。
+
+### HTTP/3
+
+HTTP/3 = HTTP/2 + QUIC（基于 UDP）
+
+使用 QUIC（基于 UDP）
+用户数据报协议 无连接、不重传、不管顺序，快但不可靠
+不再用 TCP
+
+彻底解决队头阻塞
+每个流独立
+丢包只影响当前流
+
+更快建立连接
+
+内置 TLS（安全 + 快） 把加密做成传输协议的一部分，不是额外插件
+
+HTTP/3 通过 QUIC 协议解决了 TCP 层的队头阻塞问题，同时降低了连接建立延迟。
+
+QUIC（Quick UDP Internet Connections） 基于 UDP 集成 TLS，0-RTT 快速建连，丢包仅影响单流，解决 HTTP2TCP 队头阻塞
+
+谷歌自研，基于 UDP，HTTP3 底层核心协议，集成加密 + 可靠传输。
+
+普通 1-RTT：进门先敲门→等主人开门确认，确认完再拎东西进屋（多等一轮）。
+0-RTT：老熟客带门禁钥匙，手拎东西直接推门进屋，不用等待确认，开门就传数据。
+
+HTTP/3 彻底抛弃 TCP，全程基于 UDP + QUIC
+没有 TCP 三次握手
+改用 QUIC 自定义可靠传输逻辑
+
+
+## 跨域 
+interview/2025_chun/js/cors
+
+## HTTPS 
+interview/2025_qiu/pdd/http&https
+
+## 多模态
+
+如果类比传统的文本大模型（LLM），它的输入和输出都是文本，而多模态模型可以理解为支持多种“信息形式”的模型，比如文本、图像(banana)、语音（tts）甚至视频（sora,Seedance）。
+
+文本模型是“只会读写文字的人”，而多模态模型是“能看、能听、还能说的人”。
+
+```
+{
+  "model": "gpt-4o",
+  "input": [
+    {
+      "role": "user",
+      "content": [
+        { "type": "input_text", "text": "这张图是什么？" },
+        { "type": "input_image", "image_url": "xxx.jpg" }
+      ]
+    }
+  ]
+}
+```
+输入不再是单一字符串，而是一个包含多种类型内容的结构化数组（text / image / audio）
+
+### 结合项目
+https://gitee.com/shunwuyu2020/lesson_zp/tree/master/project/capture_word/vue3-ts-cameraword
+在这个项目里，我用到了图像识别能力，用户通过摄像头拍照，模型会识别图片中的内容并转成单词。
+火山引擎的tts 又会把生成的例句转成语音。
+### 总结
+多模态模型相比传统文本模型，最大的区别是支持多种输入输出形式，在接口上体现为结构化的多内容输入，在应用上可以串联图像识别和语音生成，实现更接近真实人类感知的交互方式。
+
+## 从上传图片到tts输出完整的流程，图片怎么编码
+
+在 OpenAI 的多模态接口中，图片一般有两种传输方式：
+URL 引用 或 Base64 编码上传。
+
+把图片转成 Base64 字符串，然后通过 data URL 的方式传给模型。
+
+{
+  "type": "input_image",
+  "image_url": "data:image/jpeg;base64,xxxxxx"
+}
+
+```
+const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const data = reader.result as string;
+            imgPreview.value = data;
+            emit('updateImage', data);
+            resolve(data);
+        }
+        reader.onerror = (error) => {
+            reject(error);
+        }
+```
+
+## 讲一下embedding
+- llm 除了文本、多模态等生成类模型，还有表示类模型即Embedding Model，主要用来把文本转成向量，用于检索、相似度计算等场景。
+
+- embedding 本质是把“语义”映射到向量空间。
+
+- embedding 模型会把一段文本编码成一个高维向量，比如 768 维、1536 维（text-embedding-ada-002）。
+
+- 举个例子
+"猫喜欢鱼" → [0.12, -0.8, ..., 0.33]
+"狗喜欢骨头" → [0.10, -0.75, ..., 0.30]
+每一个语义在相应维度有个数值
+语义越接近 → 向量越接近
+
+- 相似度计算
+1. 余弦相似度
+衡量两个向量“方向”的相似程度
+[-1, 1] 1：完全相同，相似度最高 -1 完全相反
+2. 欧氏距离
+衡量两个向量在空间中的距离
+
+- embedding向量存储在向量数据库 
+    embedding 是高维向量，传统数据库不适合做高效相似度搜索。
+    用过Milvus做RAG知识库项目，对一本书的内容做问答
+
+- RAG 关键流程
+    - 文档切分（chunk）
+    - embedding 向量化
+    - 存储
+    - 用户提问 问题 → embedding
+    - 相似度检索 + LLM 生成
+        - 找最相似的 TopK 文档 检索
+        - 拼接到 prompt 增强
+        - 交给 LLM 生成答案 生成
+
+    RAG 的核心是：用 embedding 做语义检索，把相关知识补充给大模型，从而减少幻觉。
+
+    embedding 模型主要负责把文本转成向量，用于相似度计算和检索；
+    在工程上通常结合向量数据库实现高效搜索；
+    在 RAG 场景中，通过 embedding 检索相关知识，再交给生成模型回答，是当前企业落地大模型的主流方案。
+
+- function call在项目中怎么用的
+
+    function calling 是 OpenAI 提供的一种能力，本质上是让大模型不仅能“生成文本”，还能“决定调用哪个函数来执行任务”。
+
+    有了它 LLM 从“聊天工具”升级为“任务调度器”。
+
+    在 OpenAI 的 Chat/Responses API 中，我们可以提前定义一组函数（tools），并描述它们的参数结构（JSON Schema）。
+
+    await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: "北京现在天气怎么样？" }],
+    tools: [
+        {
+        type: "function",
+        function: {
+          name: "getWeather",
+          description: "查询指定城市实时天气",
+          parameters: {
+            type: "object",
+            properties: {
+              city: { type: "string", description: "城市中文名" }
+            },
+            required: ["city"]
+          }
+        }
+      }
+    ]
+
+    LLM 负责“决策”，代码负责“执行”
+
+    纯文本模型有一个问题：它只能“说”，不能“做”，比如：查数据库,调接口,执行业务逻辑
+    function calling 解决了：让模型具备“调用外部系统”的能力, 后面发展为MCP。
+
+- 使用langchain 来封装
+    在 LangChain 中，LLM 被当作 Agent，它可以根据用户输入，自动决定调用哪个 Tool，并组合多步操作完成复杂任务。
+
+    LangChain 在 function calling 之上做了一层“业务编排”。
+
+###  总结
+
+function calling 是 OpenAI 提供的接口能力，允许模型根据用户输入决定调用哪个函数，并生成参数，实际执行由后端完成；
+在 LangChain 中被抽象为 Tool 和 Agent，LLM 负责决策，Tool 负责执行；
+在项目中常用于调用外部 API，比如查天气、查订单，也可以结合业务实现自动化流程，是构建 AI Agent 的核心能力。
+
+## 最近公共祖先
+[二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/)
+
+LCA 全称是 Lowest Common Ancestor，中文翻译为 最近公共祖先。
+
+给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+
+“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+
+深度 从根节点走到当前节点，经过的层数（根深度 = 1）
+
+![](https://assets.leetcode.com/uploads/2018/12/14/binarytree.png)
+
+root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+
+- 丛上到下， 丛左到右， 用数组存二叉树的节点，包括null 
+- 左孩子索引 = 父节点索引 * 2 + 1
+- 右孩子索引 = 父节点索引 * 2 + 2
+
+root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+3
+节点 5 和节点 1 的最近公共祖先是节点 3 。
+
+![](https://assets.leetcode.com/uploads/2018/12/14/binarytree.png)
+root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+
+### 思路
+就是看 p 和 q 是不是分布在当前节点的左右子树，如果是，那当前节点就是 LCA。
+本质是一个“后序遍历（先左子树，再右子树，最后访问根节点遍历二叉树。）”的过程，每个节点都会根据左右子树的返回结果来判断自己是不是答案。
+这题的核心就是用递归在左右子树中查找 p 和 q，通过返回值判断当前节点是不是它们的最近公共祖先。
+
+### 假设这棵树：
+        3
+       / \
+      5   1
+     / \ / \
+    6  2 0  8
+      / \
+     7   4
+
+    我们要找：
+    p = 5
+    q = 1
+
+    我们从根节点 3 开始递归，整个过程可以理解为：
+每个节点都在问左右子树：你们有没有找到 p 或 q？
+
+    从根节点 3 开始
+    去左子树（5）
+    去右子树（1）
+    看左子树（节点 5）
+
+👉 发现：
+
+当前节点就是 p（5）
+    返回 5
+
+    看右子树（节点 1）
+    发现：
+
+当前节点就是 q（1）
+
+所以返回：
+
+    返回 1
+
+    回到根节点 3（关键点🔥）
+    左边返回：5（说明找到了 p）
+    右边返回：1（说明找到了 q）
+
+    左右子树都返回了非空，说明 p 和 q 分别在当前节点的两边，所以当前节点 3 就是最近公共祖先。
+
+    再换一个例子（更体现细节）
+
+👉 如果：
+    p = 5
+    q = 4
+
+    在节点 5：
+发现自己是 p → 返回 5
+继续往下找，在子树中找到 4
+
+👉 此时：
+
+左子树返回 null
+右子树返回 4
+
+在节点 5：
+
+一边是自己（p）
+一边找到了 q
+
+👉 所以：
+
+节点 5 就已经是 LCA，不会再往上变
+
+总结整个“递归逻辑”（面试一定要讲清）
+
+你可以用这段总结👇
+
+每个节点会从左右子树拿到两个结果：
+
+如果左右都有值，说明 p 和 q 分别在两边，当前节点就是 LCA；
+如果只有一边有值，就把这个值继续往上返回；
+如果都没有，就返回 null。
+
+所以这个过程本质是一个“自底向上汇报”的过程，LCA 就是第一个同时接收到 p 和 q 的节点。
+
+```
+function lowestCommonAncestor(root, p, q) {
+  // 1. 终止条件
+  if (root === null || root === p || root === q) {
+    return root
+  }
+
+  // 2. 去左右子树找
+  const left = lowestCommonAncestor(root.left, p, q)
+  const right = lowestCommonAncestor(root.right, p, q)
+
+  // 3. 根据返回值判断
+  if (left && right) {
+    return root // p 和 q 分别在两边
+  }
+
+  // 4. 只在一边找到
+  return left || right
+}
+```

@@ -1,16 +1,30 @@
-# jsop 有些古老了 有什么缺点？
+# 跨域
 
-JSONP（JSON with Padding）主要用于跨域请求，但存在多个缺点：
+浏览器同源策略是跨域根源。协议、域名、端口任一不同即跨域。它为保护用户数据安全，防止恶意网站窃取本地信息、篡改页面、发起非法请求，限制非同源网页读写资源与接口通信，后端服务器通信不受该策略约束。
 
-安全性差：容易遭受XSS攻击，因为它是通过<script>标签加载数据，无法有效验证来源。
+## jsop 有些古老了 有什么缺点？
+
+JSONP（JSON with Padding），主要用于跨域请求
+JSONP 最大的优点在于它极高的浏览器兼容性和实现的简单性。
+
+但存在多个缺点：
+
+安全性差：容易遭受XSS（ Cross-Site Scripting）攻击，因为它是通过<script>标签加载数据，无法有效验证来源。
 仅支持GET请求：限制了其在复杂场景中的应用，如提交表单或上传文件。
 错误处理弱：难以捕获和处理HTTP错误，回调函数通常只在成功时触发。
 性能问题：加载额外的<script>标签会阻塞页面渲染，影响性能。
 现代应用推荐使用CORS替代JSONP。
 
+案例 https://github.com/shunwuyu/ai_lesson/tree/8984bb879381ceb88f77d3a134627acb11809241/js/cross_domain/jsonp
+
 - 跨域方案
   - jsonp
   - cors
+    简单 https://github.com/shunwuyu/ai_lesson/tree/8984bb879381ceb88f77d3a134627acb11809241/js/cross_domain/simple-cors
+
+    复杂要预检的
+    https://github.com/shunwuyu/ai_lesson/tree/8984bb879381ceb88f77d3a134627acb11809241/js/cross_domain/cors-demo
+
     Access-Control-Allow-Origin
     示例：Access-Control-Allow-Origin: https://example.com
     Access-Control-Allow-Methods
@@ -26,7 +40,48 @@ JSONP（JSON with Padding）主要用于跨域请求，但存在多个缺点：
     - 使用了非简单方法（如PUT、DELETE等，而不是GET或POST）。
     - 使用了自定义的请求头（如X-Custom-Header）。
     - 请求内容类型不是application/x-www-form-urlencoded、multipart/form-data或text/plain。
-  - 代理
+
+    ```
+    const Koa = require('koa');
+    const cors = require('@koa/cors');
+    const app = new Koa();
+
+    app.use(cors({
+      origin: '*',
+      allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowHeaders: ['Content-Type', 'Authorization']
+    }));
+    ```
+
+  同源策略限制， 但为什么后端设置 Access-Control-Allow-Origin又可以？
+
+  - 同源策略是浏览器默认封杀跨域请求，安全锁先锁死；
+  - Access-Control-Allow-Origin 是后端主动给浏览器发通行证；
+  - 浏览器看到合法响应头，就知道是后端允许的，直接放行跨域，不再拦截。
+  本质：默认禁止 + 后端授权白名单，双向配合解除限制。
+
+  - 前端反向代理
+  vite_proxy
+  Nginx 核心配置代码（负载均衡）
+nginx
+# 负载均衡配置
+upstream backend {
+    server 127.0.0.1:3000;
+    server 127.0.0.1:3001;
+    server 127.0.0.1:3002;
+}
+
+代理转发
+server {
+    listen 80;
+    location / {
+        proxy_pass http://backend;
+        proxy_set_header Host $host;
+    }
+}
+负载均衡 一句话解释
+把用户的请求，均匀分给多台后端服务器，防止单台压力过大，让网站更稳、更快、扛得住高并发。
+
   - websocket
     websocket-demo
     WebSocket协议不遵循同源策略，允许跨域通信，因为它在建立连接时通过HTTP请求进行握手，之后的通信独立于原始的HTTP请求，直接在TCP层进行。
