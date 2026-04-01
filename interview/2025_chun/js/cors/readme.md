@@ -89,3 +89,52 @@ server {
     html5 特性
     postMessage是浏览器提供的API，允许不同源的窗口或iframe之间安全地发送消息，实现跨域通信。
     一个电商平台的主页面（域名为example.com）嵌入了一个支付服务提供商的iframe（域名为paymentservice.com）。通过postMessage，主页面可以安全地向iframe发送支付信息，而iframe可以返回支付状态更新给主页面，实现无缝的跨域交互。
+
+
+## 反向代理解决跨域和vite解决有什么区别？
+
+反向代理是通过服务器转发请求，使浏览器始终访问同源地址，从而绕过同源策略限制。
+Vite 解决跨域本质上也是使用了反向代理，只不过是开发阶段由 dev server 帮我们做了一层封装。
+两者的核心区别在于：Vite 代理只用于开发环境，而真正上线时通常需要通过 Nginx 等反向代理来实现跨域和流量控制。
+在生产环境中，反向代理不仅能解决跨域，还可以做负载均衡、缓存和安全控制，这是 Vite 无法替代的。
+
+浏览器 (http://localhost)
+        ↓
+Nginx (http://localhost/api)
+        ↓
+后端服务器 (https://api.example.com)
+
+```
+server {
+    listen 80;  # 监听端口
+    server_name localhost;  # 当前服务域名
+
+    # 前端静态资源（可选）
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html;
+    }
+
+    # 👇 核心：代理 /api 请求
+    location /api/ {
+
+        # 👉 目标服务器地址（后端接口）
+        proxy_pass https://api.example.com/;
+
+        # 👉 修改请求头中的 Host（避免后端识别错误）
+        proxy_set_header Host $host;
+
+        # 👉 获取真实客户端 IP（生产环境常用）
+        proxy_set_header X-Real-IP $remote_addr;
+
+        # 👉 转发客户端 IP 链（多层代理时用）
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # 👉 支持 https 场景（有些接口需要）
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # 👉 关闭缓存（调试接口时很重要）
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
