@@ -1126,3 +1126,668 @@ https://github.com/DrssXpro/virtualwaterfall-demo/tree/main
 1. 适配PC和移动端
 2. 滚动加载更多
 3. 图片懒加载
+
+## ts的联合类型和交叉类型
+
+- 联合类型（Union Type）：表示“或”的关系，一个值可以是多种类型之一
+- 交叉类型（Intersection Type）：表示“且”的关系，一个值必须同时满足多个类型
+
+```
+let value: string | number
+value = 'hello'
+value = 123
+
+function print(value: string | number) {
+    value.length
+}
+```
+
+案例1：接口返回数据（真实业务）
+
+```
+type Success = {
+  code: 200
+  data: string
+}
+
+type ErrorRes = {
+  code: 500
+  message: string
+}
+
+type Response = Success | ErrorRes
+
+function handle(res: Response) {
+  if (res.code === 200) {
+    console.log(res.data) // ✅
+  } else {
+    console.log(res.message) // ✅
+  }
+}
+
+```
+案例2：前端组件 props
+
+```
+type Props =
+  | { type: 'text'; value: string }
+  | { type: 'number'; value: number }
+
+function Input(props: Props) {
+  if (props.type === 'text') {
+    props.value // string
+  } else {
+    props.value // number
+  }
+}
+```
+
+### 交叉类型
+
+```
+type A = { name: string }
+type B = { age: number }
+
+type C = A & B
+// => { name: string; age: number }
+```
+
+案例1：组合对象
+
+```
+type User = {
+  id: number
+  name: string
+}
+
+type WithTimestamp = {
+  createdAt: string
+}
+
+type UserWithTime = User & WithTimestamp
+```
+
+案例2：React Props 复用
+
+```
+type BaseProps = {
+  className?: string
+}
+
+type ButtonProps = BaseProps & {
+  onClick: () => void
+}
+```
+
+函数返回增强
+
+```
+function withLoading<T>(data: T): T & { loading: boolean } {
+  return {
+    ...data,
+    loading: false
+  }
+}
+```
+用交叉类型实现“能力增强”
+
+联合类型 = 取一个（OR）
+交叉类型 = 全都要（AND）
+
+交叉类型冲突怎么办？
+
+```
+type A = { a: string }
+type B = { a: number }
+
+type C = A & B // => a: never ❗
+```
+
+TS 会推导为 never，因为类型冲突无法同时满足
+
+总结：
+
+在实际项目中，联合类型更多用于描述多种可能状态（如接口返回、组件 props），而交叉类型更多用于组合和扩展类型（如复用、增强能力）。
+两者结合可以构建非常灵活且安全的类型系统。
+
+## 手撕对象扁平化
+
+### 不是数组扁平化
+```
+const nestedArr = [1, [2, [3, 4]], 5];
+扁平后
+const flatArr = [1, 2, 3, 4, 5];
+1. 使用 ES6 原生 API flat() (最推荐)
+这是现代 JavaScript 中最简单、最高效的方法。
+
+const arr = [1, [2, [3, 4]], 5];
+// 完全扁平化
+const result = arr.flat(Infinity); 
+console.log(result); // [1, 2, 3, 4, 5]
+
+2. 递归法
+这是面试中考察最多的“手写”方法，主要考察对递归逻辑的理解。
+遍历数组，如果元素是数组，就递归调用函数继续展开；如果不是，就加入结果集。
+function flatten(arr) {
+  let result = [];
+  for (let item of arr) {
+    if (Array.isArray(item)) {
+      // 如果是数组，递归展开并合并
+      result = result.concat(flatten(item));
+    } else {
+      // 如果不是数组，直接加入
+      result.push(item);
+    }
+  }
+  return result;
+}
+
+3. 使用 reduce + 递归 (函数式写法)
+利用 reduce 的累加器特性，代码更简洁，显得更“高级”一点。
+function flatten(arr) {
+  return arr.reduce((acc, cur) => {
+    return acc.concat(Array.isArray(cur) ? flatten(cur) : cur);
+  }, []);
+}
+
+4. 字符串转换法
+只能处理数字或字符串等简单类型，且效率较低。
+arr.toString().split(',').map(Number);
+
+```
+
+```
+{
+  a: {
+    b: 1
+  }
+}
+扁平化
+{
+  "a.b": 1
+}
+
+const nestedObj = {
+  a: 1,
+  b: {
+    c: 2,
+    d: {
+      e: 3
+    }
+  }
+};
+
+扁平后
+const flatObj = {
+  a: 1,
+  'b.c': 2,
+  'b.d.e': 3
+};
+```
+
+对象扁平化的本质是：把嵌套结构转换成 key-path 的映射关系。
+核心思路是 DFS（深度优先遍历）对象，在遍历过程中记录路径，然后把值挂到结果对象上。
+
+ES6 + 递归
+
+```
+/**
+ * 对象扁平化函数
+ * @param {Object} obj - 需要被扁平化的源对象
+ * @param {String} prefix - 当前层级的键名前缀（用于递归拼接，如 'a.b'）
+ * @param {Object} res - 存储结果的容器对象
+ * @returns {Object} - 扁平化后的新对象
+ */
+function flatten(obj, prefix = '', res = {}) {
+  // 遍历对象的所有可枚举属性
+  for (const key in obj) {
+    // 1. 安全性检查：确保属性是对象自身的，而不是从原型链继承来的
+    if (!obj.hasOwnProperty(key)) continue
+
+    // 2. 键名拼接逻辑：
+    // 如果前缀存在（说明不是第一层），则用 "前缀.当前键"；否则直接使用 "当前键"
+    // 例如：prefix='a', key='b' -> newKey='a.b'
+    const newKey = prefix ? `${prefix}.${key}` : key
+    
+    // 获取当前属性的值
+    const value = obj[key]
+
+    // 3. 递归判断：
+    // 如果值是对象（且不为 null，因为 typeof null 也是 'object'），则继续递归
+    if (typeof value === 'object' && value !== null) {
+      // 递归调用：将当前拼接好的 newKey 作为下一层的 prefix 传入
+      flatten(value, newKey, res)
+    } else {
+      // 4. 赋值逻辑：
+      // 如果值是基本类型（如数字、字符串、布尔值等），直接存入结果对象
+      res[newKey] = value
+    }
+  }
+
+  // 返回最终累积的结果对象
+  return res
+}
+```
+
+- 用 prefix 记录路径
+- 每次递归拼接 key
+- 遇到基础类型就写入结果
+
+有什么没解决的地方？数组怎么办？
+
+```
+function flatten(obj, prefix = '', res = {}) {
+  for (const key in obj) {
+    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue
+
+    const value = obj[key]
+    const newKey = prefix ? `${prefix}.${key}` : key
+
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        flatten(item, `${newKey}[${index}]`, res)
+      })
+    } else if (typeof value === 'object' && value !== null) {
+      flatten(value, newKey, res)
+    } else {
+      res[newKey] = value
+    }
+  }
+
+  return res
+}
+```
+用栈代替递归
+```
+/**
+ * 扁平化嵌套对象（迭代/栈实现，非递归）
+ * 功能：将多层嵌套的对象，展平为单层对象，key 用 . 连接层级
+ * 示例：{a: {b: 1}} => { 'a.b': 1 }
+ * @param {Object} obj - 待扁平化的嵌套对象
+ * @returns {Object} 扁平化后的单层对象
+ */
+function flatten(obj) {
+  // 存储最终扁平化结果的单层对象
+  const res = {}
+
+  /**
+   * 栈结构：存储【待处理的子对象 + 对应的前缀key】
+   * 栈元素格式：{ obj: 待处理对象, prefix: 当前层级的key前缀 }
+   * 初始：把传入的根对象、空前缀入栈
+   */
+  const stack = [{ obj, prefix: '' }]
+
+  // 栈不为空，就持续处理（核心：迭代循环，而非递归调用）
+  while (stack.length) {
+    // 出栈：取出最后入栈的元素（后进先出，栈的特性）
+    // 解构出 当前要处理的对象 + 当前key前缀
+    const { obj, prefix } = stack.pop()
+
+    // 遍历当前对象的所有可枚举属性
+    for (const key in obj) {
+      // 安全校验：只处理对象自身拥有的属性，跳过原型链上的属性
+      if (!Object.prototype.hasOwnProperty.call(obj, key)) continue
+
+      // 获取当前属性的值
+      const value = obj[key]
+      // 拼接新的key：有前缀就用 前缀.属性名，无前缀直接用属性名
+      const newKey = prefix ? `${prefix}.${key}` : key
+
+      /**
+       * 判断值类型：
+       * 1. 如果是【对象/数组】且不为null → 嵌套结构，需要继续扁平化
+       * 2. 否则 → 基础类型（字符串/数字/布尔等），直接赋值到结果
+       */
+      if (typeof value === 'object' && value !== null) {
+        // 嵌套对象：压入栈中，等待后续循环处理
+        stack.push({ obj: value, prefix: newKey })
+      } else {
+        // 基础类型：直接存入结果对象，完成该属性的扁平化
+        res[newKey] = value
+      }
+    }
+  }
+
+  // 所有嵌套结构处理完毕，返回单层结果
+  return res
+}
+```
+
+- 避免了「调用栈溢出」
+迭代版：使用手动维护的栈（数组），不受引擎调用栈限制，嵌套再深都不会崩溃。
+
+- 内存开销更小
+递归：每递归一层，都会创建函数执行上下文（存储变量、作用域、返回地址等），大量嵌套会占用大量内存。
+迭代：全程只有一个循环，只使用一个栈数组存储待处理数据，内存复用率极高。
+
+## 如何设计prompt解决幻觉问题
+
+我会通过约束上下文 + 明确输出边界 + 可验证机制来降低幻觉。首先在 prompt 中提供权威上下文（如 schema、接口定义），避免模型凭空生成；其次要求只基于给定信息回答，不允许编造；再通过结构化输出（如 JSON / 类型约束）限制自由发挥；最后加入自检步骤（如“如果不确定请返回 unknown”）。本质是把 prompt 从“提问”变成“带规则的执行指令”。
+
+比如：
+
+帮我写一个登录接口的前端代码
+
+没有 API 定义 → 可能乱编字段
+没有限制技术栈 → 可能不用 React / axios
+没有约束返回结构 → token 字段可能乱写
+没有错误处理规范
+
+AI 很容易“编接口”、“编字段”，出现幻觉
+
+
+你是一个前端工程师，请基于以下约束实现登录功能：
+
+【技术栈】
+- React + axios + zustand
+
+【接口定义】
+POST /auth/login
+request:
+{
+  "username": string,
+  "password": string
+}
+response:
+{
+  "access_token": string
+}
+
+【要求】
+1. 封装 login API（axios）
+2. 登录成功后将 access_token 存入 zustand（使用 persist）
+3. 不允许编造接口字段，必须严格使用给定结构
+4. 如果信息不足，请返回 "unknown"
+5. 输出 TypeScript 代码
+
+【输出格式】
+- api.ts
+- store.ts
+- login.tsx
+
+
+bad prompt 的问题是缺乏上下文和约束，模型容易自由发挥；优化后的 prompt 通过提供接口契约、限制输出结构、禁止编造、增加兜底策略，把生成过程变成“受控执行”，从而显著降低幻觉。
+
+
+## harness 
+
+现在Harness已是AI业界的热词
+
+Harness 是 AI 智能体（Agent）的“马具”或“控制系统”，是继提示词工程(Prompt Engineering)、上下文工程(rag，mcp)后的新一代技术范式。它通过构建任务规划、工具调度、安全护栏、持久化记忆等外围系统，解决 AI 智能体不可控、易出错的问题，将其从“实验室玩具”转变为稳定可靠的企业级生产力工具。
+
+把 Harness 比作 AI 的“马具”，那安全护栏就是这套马具里的缰绳和嚼子。
+
+可以理解为：LLM 是员工，Harness 是主管。
+
+正常用 LLM 是这样：
+
+👉 你问一句 → 模型回一句
+问题是：
+
+容易胡说（幻觉）
+不稳定（同一个问题结果不一样）
+不知道对不对
+
+Harness 做了什么？
+
+👉 它帮你在模型外面“加了一层控制系统”：
+
+1️⃣ 多次调用（不信一次结果）
+
+同一个问题问多次 → 选最靠谱的答案
+
+👉 类似：
+
+“多找几个人问，再取共识”
+
+2️⃣ 自动评测（让 AI 给 AI 打分）
+
+一个模型生成，另一个模型来判断对不对
+
+👉 类似：
+
+“写完作业，让另一个人帮你检查”
+
+3️⃣ 加规则（防止乱来）
+
+强制要求输出格式、必须基于上下文、不允许编造
+
+👉 类似：
+
+“不给你瞎写的空间”
+
+4️⃣ 记录和对比（可观测性）
+
+每次结果都记录下来，可以对比哪个 prompt 更好
+
+👉 类似：
+
+“做 A/B 测试优化答案质量”
+
+
+一句话总结（面试必杀）
+
+Harness 本质是在 LLM 外层加了一套“评估 + 控制 + 反馈”的机制，把一次性、不可靠的生成过程，变成一个可验证、可优化、可迭代的系统。
+
+
+## 去重
+
+- 双循环去重
+
+双重for（或while）循环是比较笨拙的方法 因为它的时间复杂度是O(n^2)
+
+```
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!')
+        return
+    }
+    let res = [arr[0]]
+    for (let i = 1; i < arr.length; i++) {
+        let flag = true
+        for (let j = 0; j < res.length; j++) {
+            if (arr[i] === res[j]) {
+                flag = false;
+                break
+            }
+        }
+        if (flag) {
+            res.push(arr[i])
+        }
+    }
+    return res
+}
+不能处理多维数组，甚至连对象、引用类型都去不了重
+```
+
+- indexOf方法去重
+
+```
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!')
+        return
+    }
+    let res = []
+    for (let i = 0; i < arr.length; i++) {
+        if (res.indexOf(arr[i]) === -1) {
+            res.push(arr[i])
+        }
+    }
+    return res
+}
+
+```
+
+- indexOf方法去重2
+
+利用indexOf检测元素在数组中第一次出现的位置是否和元素现在的位置相等，如果不等则说明该元素是重复元素
+```
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!')
+        return
+    }
+    return Array.prototype.filter.call(arr, function(item, index){
+        return arr.indexOf(item) === index;
+    });
+}
+
+```
+
+- 相邻元素去重
+
+这种方法首先调用了数组的排序方法sort()，然后根据排序后的结果进行遍历及相邻元素比对，如果相等则跳过改元素，直到遍历结束
+
+```
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!')
+        return
+    }
+    arr = arr.sort()
+    let res = []
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] !== arr[i-1]) {
+            res.push(arr[i])
+        }
+    }
+    return res
+}
+
+```
+
+- 利用对象属性去重
+
+创建空对象，遍历数组，将数组中的值设为对象的属性，并给该属性赋初始值1，每出现一次，对应的属性值增加1，这样，属性值对应的就是该元素出现的次数了
+
+```
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!')
+        return
+    }
+    let res = [],
+        obj = {}
+    for (let i = 0; i < arr.length; i++) {
+        if (!obj[arr[i]]) {
+            res.push(arr[i])
+            obj[arr[i]] = 1
+        } else {
+            obj[arr[i]]++
+        }
+    }
+    return res
+}
+
+```
+
+- set与解构赋值去重
+
+```
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!')
+        return
+    }
+    return [...new Set(arr)]
+}
+
+```
+
+```
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!')
+        return
+    }
+    return Array.from(new Set(arr))
+}
+
+```
+
+```
+递归扁平化 + 去重
+/**
+ * 递归扁平化数组并去重
+ * @param {Array} arr 多维数组
+ * @param {Array} result 内部递归存储结果
+ * @returns {Array} 扁平化且去重后的一维数组
+ */
+function flattenUnique(arr, result = []) {
+  // 遍历每一项
+  for (const item of arr) {
+    // 如果是数组，递归处理
+    if (Array.isArray(item)) {
+      flattenUnique(item, result);
+    } else {
+      // 不是数组，判断是否已存在，不存在才 push
+      if (!result.includes(item)) {
+        result.push(item);
+    }
+  }
+  return result;
+}
+```
+
+## SKILLS 和 MCP
+
+- Skills（技能）
+就是把一段能力封装成一个“可复用模块”，让 LLM 在合适的时候调用
+告诉模型“可以做什么”
+登录逻辑、数据处理、UI 生成
+
+- MCP（Model Context Protocol）
+是一种标准协议，让 LLM 能连接外部系统（数据库 / API / 本地工具）
+告诉模型“怎么接外部世界”
+查数据库、调 API、读本地文件
+
+Skills 和 MCP 是互补关系：
+MCP 解决“模型如何接入外部能力”，Skills 解决“模型如何使用这些能力”。
+在实际系统中，通常是 MCP 提供数据通道，Skills 做能力编排。
+
+### frontend-design
+
+最常被推荐的前端 UI Skill 之一
+
+专门解决：AI 写 UI 太“模板化”的问题
+会强制：
+先做设计（配色 / typography / layout）
+再写代码
+输出更像“设计师级 UI”，而不是默认紫色渐变那种
+
+社区评价（总结）：
+
+没这个 skill，AI 做 UI 很普通；有了之后设计质量明显提升
+
+
+它到底帮你做什么？
+
+👉 普通 Claude：
+
+写一个登录页面
+
+👉 结果：
+
+千篇一律 UI 😅
+
+👉 加了这个 skill 后：
+
+Claude 会自动：
+
+先做设计方案（颜色 / spacing / 字体）
+定 UI 结构（layout）
+再生成代码（React / HTML）
+
+👉 本质：
+
+从“写代码” → 升级为“设计 + 代码”
+
+
+npx skills-installer install anthropics/claude-code/frontend-design --client claude-code
+
+claude
+
+/skills
+
+使用 frontend-design 帮我生成一个现代风格的个人主页，包含导航、简介、项目展示和联系表单
