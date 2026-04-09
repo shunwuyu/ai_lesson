@@ -1519,3 +1519,92 @@ components/ui/card/card.tsx
 整体就是把上传过程做成一个“可并发、可恢复、可校验”的系统，提高稳定性和用户体验。
 
 https://juejin.cn/post/7385098943942934582?searchId=20260409102233A4A0CBAB494B136C0794#heading-25
+
+## harness
+
+- Claude Code 是 Anthropic 推出的命令行编程Agent，优点是可直接在终端中高效生成和修改代码、上下文理解强、适合复杂项目开发。
+
+Claude Code 比cursor 更懂功能， 为什么这么说呢？
+也是 规范驱动编程  CLAUDE.md 技术栈啥的， 配 Skills， 加MCP，但更强。  答案藏在一个词里：Harness。
+
+Claude Code serves as the agentic harness around Claude: it provides the tools, context management, and execution environment that turn a language model into a capable coding agent.
+
+Claude Code 是一个智能体编排框架，包裹在 Claude 模型外面。它提供工具、上下文管理和执行环境，把一个语言模型变成一个有能力的编码 Agent。
+
+### 什么是harness?
+
+![](https://static001.geekbang.org/resource/image/92/66/92ec57e344e5f963467a4054f616c366.png)
+Harness 像“缰绳”，让大模型可控执行任务，提升安全性、稳定性与工程落地能力。
+
+定义里有三个关键词，工具、上下文管理、执行环境。模型本身只会生成文本。是 Harness 给了它读文件的能力、写代码的能力、搜索代码库的能力、在终端执行命令的能力。没有 Harness，Claude 就是一个只会说话的大脑——有智力，没有手脚。
+
+![](https://static001.geekbang.org/resource/image/5c/2b/5c73e5d6313819828d739eeb2bfca72b.png?wh=1536x1024)
+
+
+Agent Harness = 包裹 LLM 的运行时基础设施，管理工具调度、上下文工程、安全执行、状态持久化和会话连续性。LLM 只负责推理决策。2026 年的关键洞察：竞争差异化的重心已从 Model 转移到 Harness。
+
+Agent = Model + Harness。
+
+图中最核心的位置是  Model——那个蓝色芯片图标，代表 Claude 的大语言模型。但模型本身只是一个推理引擎，它不能独立行动。
+
+真正让它变成 Agent 的，是包裹在它周围的五个 Harness 组件。
+
+Tools（工具），模型的手脚。Read、Write、Edit、Bash、Grep……这些工具赋予模型与文件系统、终端、网络交互的能力。没有工具，模型只能说，不能做。
+
+Context（上下文），模型的记忆加载器。CLAUDE.md、系统提示词、对话历史、工具定义——这些上下文在每一轮循环中被注入模型，决定了模型看到什么、知道什么。上下文管理的精妙之处是，它不仅是被动的信息传递，还包括主动的压缩和重注入策略。
+
+Memory（记忆），模型的长期存储。跨会话的记忆持久化，让模型能“记住”你的偏好、项目规则和历史决策。CLAUDE.md 是显式记忆，自动记忆（~/.claude/memory/）是隐式记忆。没有 Memory，每次对话都从零开始。
+
+Hooks（钩子），模型的神经反射。事件驱动的自动化机制，在工具执行前后触发自定义逻辑。比如每次保存文件前自动格式化，每次提交前自动运行 lint。Hooks 让 Harness 有了“条件反射”的能力——不需要模型主动决策，某些行为会自动发生。
+
+回家先洗手、睡前刷牙，这些都是固定触发的习惯动作
+
+Permissions（权限）——模型的安全围栏。哪些工具可以自由使用，哪些需要人工审批，哪些完全禁止——权限系统是 Harness 的安全底线。它解决了一个核心矛盾：你希望 Agent 足够自主以提高效率，但又不希望它自主到失控。
+
+
+Model 在中心，五个组件围绕它排列，整体被一个名为 Harness 的边框包裹。这不是随意的布局，它精确表达了一个架构事实：模型不直接接触外部世界，所有交互都通过 Harness 的组件中转。Harness 是模型和现实之间的唯一接口。
+
+这五个组件也不是孤立的。Tools 的执行结果变成 Context 的一部分；Hooks 在 Tools 执行前后触发；Permissions 决定哪些 Tools 可以被调用；Memory 用于跨会话保留 Context 中的关键信息。它们构成了一个协同运转的系统，少了任何一个，Agent 的能力都会大打折扣。
+
+![](https://static001.geekbang.org/resource/image/20/b9/20ffc62d48e79a3f7beaee728bb21bb9.jpg?wh=2868x2150)
+
+Agentic Loop——Harness 的心脏如果 Harness 是一台机器，Agentic Loop 就是它的发动机。整个 Claude Code 的运转，归根到底就是一个循环：
+
+![](https://static001.geekbang.org/resource/image/22/dd/228da3c3689802fea8a444dab5a8aedd.jpg?wh=3247x2315)
+
+关键点在于步骤 ② 和步骤 ④  之间的循环。模型不是一次性给出最终答案的。它可能先读一个文件，看完结果后决定再搜索一下，搜索完又决定编辑某行代码，编辑完再运行测试——每一步都是一次循环。一个复杂任务可能跑几十轮循环。循环什么时候结束？满足下面两个条件之一即可：模型主动停止——Claude 认为任务完成，生成纯文本回复，不再请求工具调用。API 返回  stop_reason: "end_turn"。达到最大轮次——Harness 设置了  --max-turns  限制，防止无限循环。
+
+
+内置工具——Harness 的手脚Agentic Loop 是引擎，工具是车轮。Claude Code 内置了 20+ 个左右的工具，覆盖了软件工程的五个原子操作。
+
+工具设计背后有一个深刻的哲学，少而精。Claude Code 没有内置重构工具、测试工具、部署工具……它只给了最基础的原语。重构是 Read + Edit + Bash 的组合涌现；测试是 Bash + Read 的组合涌现；部署还是 Bash。这就像计算机只需要几条指令就能图灵完备一样。Harness 不需要为每种场景造一个工具，它只需要确保基础工具的组合空间足够大。但 Bash 是个例外。Bash 工具是一个图灵完备的逃逸舱。通过它，Claude 可以执行任何 Shell 命令：安装依赖、运行测试、调用 API、操作数据库。这意味着 Claude Code 的能力上限，理论上等于操作系统的能力上限。这也是为什么 Harness 需要权限控制的原因。
+
+
+上下文管理——被忽视的关键能力大多数人讨论 Agent 框架时，只关心工具和循环。但 Harness 最精巧的部分，其实是上下文管理。Claude 的上下文窗口是有限的（200K tokens）。一个真实的编码任务——读 20 个文件、搜索 50 次、执行 30 条命令——产生的对话历史会迅速膨胀到几十万 tokens。如果不管理，要么爆掉上下文窗口，要么模型开始“遗忘”早期信息。Claude Code 的解决方案是自动压缩。当对话历史接近上下文窗口的 92% 时，Harness 会触发一次压缩操作：
+
+对话历史（180K tokens）
+    │
+    ▼ 压缩触发
+┌────────────────────────────┐
+│ 保留：最近的消息（完整）      │
+│ 压缩：早期消息 → 摘要        │
+│ 重注入：CLAUDE.md 内容       │
+│ 重注入：系统提示词            │
+│ 重注入：工具定义              │
+└────────────────────────────┘
+    │
+    ▼
+压缩后对话历史（~80K tokens）
+    │
+    ▼ 继续工作
+
+注意最后三行，CLAUDE.md、系统提示词、工具定义在每次压缩后都会重新注入。这意味着即使对话历史被截断了，模型仍然知道项目的规则、自己有哪些工具、应该遵循什么约定。这就是为什么你在 CLAUDE.md 里写的东西那么“持久”——不是因为模型记住了它，而是 Harness 在每次压缩后都重新塞给模型。
+
+
+为什么 2026 年是 Harness 之年？2025 年的关键词是 Agent。2026 年的关键词是  Agent Harness。为什么？因为行业已经意识到。模型本身正在商品化——Claude、GPT、Gemini、DeepSeek 的能力差距在缩小。但同一个模型在不同 Harness 中的表现差距，远大于不同模型在同一个 Harness 中的差距。换句话说，Harness 比模型更重要。这不是我的臆断。有几个数据点足以佐证：Claude Code 在 2025 年 11 月达到  10 亿美元年化收入——这是一个 Harness 产品的收入，不是模型本身的收入。Anthropic 在 2026 年 3 月收购了  Bun（JavaScript 运行时），明确表示要加强 Claude Code 的基础设施。收购一个运行时来加强一个 Harness——这说明 Anthropic 把 Harness 视为战略级资产。开源社区出现了“Agent Harness“作为独立品类。GitHub 上以 “harness” 为关键词的新仓库数量在 2026 年 Q1 翻了三倍。对于我们开发者来说，这意味着什么？理解 Harness 比理解模型更重要。模型的能力由 Anthropic/OpenAI 决定，你无法改变。但 Harness 的配置——CLAUDE.md 怎么写、工具权限怎么设、Hooks 怎么接、MCP 怎么连——这些全在你手中。你前面学的每一讲，本质上都是在调教 Harness。
+
+
+动手验证：感受 Harness 的存在最后来一个非常简单的实验，只是感受 Harness 的作用（其实我们每天都在感受着这种不同）。用裸 API 和 Claude Code 分别执行同一个任务：# 方式一：裸 API 调用（没有 Harness）- 你可以换成Deepseek或GPT等任何模型curl https://api.anthropic.com/v1/messages \ -H "x-api-key: $ANTHROPIC_API_KEY" \ -H "content-type: application/json" \ -H "anthropic-version: 2023-06-01" \ -d '{ "model": "claude-sonnet-4-6-20260320", "max_tokens": 1024, "messages": [{"role":"user","content":"找出当前目录下所有 TODO 注释并列出文件名和行号"}] }'# 方式二：通过 Harness（Claude Code）claude -p "找出当前目录下所有 TODO 注释并列出文件名和行号" --output-format text裸 API 会怎么回答？它会告诉你“你可以用 grep 命令来搜索”——因为它没有手脚，只能说。Claude Code 会怎么做？它会直接执行  Grep  工具搜索 TODO，然后返回完整的文件名、行号和上下文——因为 Harness 给了它行动的能力。同一个大脑，有没有 Harness，结果天壤之别。
+
+
+总结一下这一讲我们从底层理解了 Claude Code 的真实身份——它是一个  Harness，一个包裹在 Claude 模型外面的智能体编排框架。我们再回顾一下核心要点。1.Harness = 工具 + 上下文管理 + 执行环境 + 权限控制。它把模型的智力转化为行动力。2.Agentic Loop 是 Harness 的心脏。“推理 → 工具调用 → 结果回注 → 继续推理”的循环是所有复杂行为的涌现基础。3.20+ 个内置工具覆盖 5 个原子操作（读、写、执行、联网、编排）。少而精的设计让组合空间最大化。4.上下文管理是被低估的关键能力。自动压缩 + CLAUDE.md 重注入，确保模型在长任务中不丢失关键信息。5.Claude Code 不是开源软件。核心 Harness 代码以编译后的 npm 包分发。Agent SDK 提供了可编程的 Harness 接口。6.2026 年是 Harness 之年。同一模型在不同 Harness 中的表现差距，大于不同模型在同一 Harness 中的差距。因此理解 Harness 比理解模型更重要。
