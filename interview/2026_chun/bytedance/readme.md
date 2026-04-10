@@ -1608,3 +1608,420 @@ Agentic Loop——Harness 的心脏如果 Harness 是一台机器，Agentic Loop
 
 
 总结一下这一讲我们从底层理解了 Claude Code 的真实身份——它是一个  Harness，一个包裹在 Claude 模型外面的智能体编排框架。我们再回顾一下核心要点。1.Harness = 工具 + 上下文管理 + 执行环境 + 权限控制。它把模型的智力转化为行动力。2.Agentic Loop 是 Harness 的心脏。“推理 → 工具调用 → 结果回注 → 继续推理”的循环是所有复杂行为的涌现基础。3.20+ 个内置工具覆盖 5 个原子操作（读、写、执行、联网、编排）。少而精的设计让组合空间最大化。4.上下文管理是被低估的关键能力。自动压缩 + CLAUDE.md 重注入，确保模型在长任务中不丢失关键信息。5.Claude Code 不是开源软件。核心 Harness 代码以编译后的 npm 包分发。Agent SDK 提供了可编程的 Harness 接口。6.2026 年是 Harness 之年。同一模型在不同 Harness 中的表现差距，大于不同模型在同一 Harness 中的差距。因此理解 Harness 比理解模型更重要。
+
+
+## 手写ts的pick
+工具类型 
+为了避免重复定义相似的类型，让你能基于一个已有的类型，像搭积木一样快速“改造”出新的类型。
+
+Pick 从类型里挑选部分字段
+Omit：从类型里排除某些字段
+Partial：把所有字段变成可选
+
+```
+interface User {
+  id: number
+  name: string
+  age: number
+}
+
+type UserName = Pick<User, 'name'>
+
+type UserWithoutAge = Omit<User, 'age'>
+
+
+type PartialUser = Partial<User>
+
+// 等价于：
+type PartialUser = {
+  id?: number
+  name?: string
+  age?: number
+}
+```
+
+### 手写 Pick（重点🔥）
+本质就是：
+
+遍历 K（你要的 key）
+从原类型 T 里取对应属性
+重新构造一个新类型
+
+👉 核心技术点：
+keyof
+映射类型（Mapped Types）
+in 遍历
+
+type MyPick<T, K extends keyof T> = {
+  [P in K]: T[P]
+}
+
+keyof T 代表 User 里所有合法的键
+这里的 extends 不是“继承”，而是“受限于”或“必须是...的子集”。
+你手里的 K ('name' | 'age') 是否都在 keyof User ('name' | 'age' | 'email') 的白名单里？
+
+## 手写发布者订阅， 加个Once
+
+- 发布订阅者模式：定义了一种一对多的依赖关系，让多个订阅者通过事件中心监听发布者的消息，实现对象之间的解耦通信。
+发布者无需关心订阅者是谁与数量，仅负责通知事件
+- 观察者模式：对象间一对多依赖关系，目标状态变化时自动通知并更新所有观察者。
+- 两者的区别
+  发布订阅通过事件中心转发消息，发布者不直接联系订阅者；观察者是对象直接订阅目标，变化时被直接通知
+
+  发布订阅模式：像用 微信 订阅公众号，公众号发消息是发到“平台”，平台再推给你，公众号根本不知道你是谁
+  观察者模式：像你关注某个 周杰伦，他一发动态直接通知你，是你和他之间的直接关系
+
+  发布订阅中间多了一层“中介（事件中心）”，观察者是“直接盯着目标”
+
+- 应用场景
+  发布订阅
+  DOM 事件机制（本质也是事件中心分发）
+  document.addEventListener('click', handler)
+  浏览器负责分发，元素不知道谁在监听
+  状态管理库 Zustand
+  组件只关心“订阅状态”，不关心谁改的
+  Event Bus mitt 
+  自定义事件 EventEmitter 自己实现的事件中心
+
+  Node.js
+  ```
+  // 1. 引入模块并创建实例
+const EventEmitter = require('events');
+const myEmitter = new EventEmitter();
+
+// 2. 注册监听器 (监听 'hello' 事件)
+myEmitter.on('hello', (name) => {
+  console.log(`👋 你好, ${name}!`);
+});
+
+// 3. 触发事件 (发射 'hello' 事件)
+myEmitter.emit('hello', 'Node.js'); 
+  ```
+✅ 发布订阅
+events 模块（核心）
+const EventEmitter = require('events')
+
+  观察者
+  IntersectionObserver
+  MutationObserver
+  ```
+  // 1. 选中目标节点 (假设页面上有个 id="app" 的元素)
+const target = document.getElementById('app');
+
+// 2. 创建观察者实例，定义发现变化后要做什么
+const observer = new MutationObserver((mutations) => {
+  console.log('🔥 发现DOM变化！', mutations);
+});
+
+// 3. 开始观察 (配置：只盯着子节点的增删)
+observer.observe(target, { childList: true });
+
+// --- 触发变化 ---
+// 执行这行代码，上面就会打印日志
+document.getElementById('app').innerHTML = '<p>新内容</p>'; 
+
+// 4. 停止观察 (不再需要时调用)
+// observer.disconnect(); 
+  ```
+  useEffect 监听 state / props
+  useEffect(() => {
+  // 响应 count 变化
+  }, [count])
+  组件“观察”数据变化直接响应
+  观察者
+  文件监听 fs.watch
+  流（stream）的数据监听
+
+一句话总结（面试收尾）
+
+👉 有“中间事件中心”就是发布订阅，直接盯对象变化就是观察者
+
+- 手写
+
+```
+// 手写发布订阅（EventEmitter）+ once
+
+class EventEmitter {
+  constructor() {
+    // 事件池：{ eventName: [fn1, fn2, ...] }
+    this.events = {}
+  }
+
+  // 订阅
+  on(event, fn) {
+    if (!this.events[event]) {
+      this.events[event] = []
+    }
+    this.events[event].push(fn)
+  }
+
+  // 只执行一次的订阅
+  once(event, fn) {
+    // 包一层函数，用来执行后自动卸载
+    const onceFn = (...args) => {
+      fn(...args)           // 执行原函数
+      this.off(event, onceFn) // 执行完移除自己
+    }
+
+    this.on(event, onceFn) // 复用 on
+  }
+
+  // 发布
+  emit(event, ...args) {
+    const fns = this.events[event]
+    if (!fns) return
+
+    // 拷贝一份，避免执行过程中被修改
+    fns.slice().forEach(fn => fn(...args))
+  }
+
+  // 取消订阅
+  off(event, fn) {
+    const fns = this.events[event]
+    if (!fns) return
+
+    this.events[event] = fns.filter(item => item !== fn)
+  }
+}
+
+
+/* ===== 使用示例 ===== */
+
+const bus = new EventEmitter()
+
+function fn(data) {
+  console.log('on:', data)
+}
+
+bus.on('test', fn)
+
+bus.once('test', (data) => {
+  console.log('once:', data)
+})
+
+bus.emit('test', 1)
+// on: 1
+// once: 1
+
+bus.emit('test', 2)
+// on: 2  （once 已被移除）
+```
+
+## 手写数组扁平化，再去用堆和栈的方 法
+考察数据结构和api 
+- ES6 提供的数组扁平化 API
+```
+const arr = [1, [2, [3, 4]]]
+arr.flat()        // 默认只扁平一层 → [1, 2, [3, 4]]
+arr.flat(2)       // 指定层数 → [1, 2, 3, 4]
+arr.flat(Infinity)
+```
+- reduce+concat
+```
+function flat(arr) {
+  return arr.reduce((acc, cur) => {
+    return acc.concat(Array.isArray(cur) ? flat(cur) : cur)
+  }, [])
+}
+```
+- toString + split
+面试点：只适用于纯数字/字符串数组
+
+const arr = [1, [2, [3, 4]]]
+
+arr.toString().split(',').map(Number)
+// [1, 2, 3, 4]
+
+优先用 flat，兼容性或考察实现就用 reduce，toString 只作为思路补充
+
+- 递归
+遇到数组就递归展开，否则直接 push
+
+```
+function flat(arr) {
+  const res = []
+
+  for (let item of arr) {
+    if (Array.isArray(item)) {
+      res.push(...flat(item)) // 递归展开
+    } else {
+      res.push(item)
+    }
+  }
+
+  return res
+}
+```
+
+二、用“栈”实现
+
+用栈模拟递归（DFS），不断展开数组
+
+```
+function flatWithStack(arr) {
+  const stack = [...arr] // 初始化栈
+  const res = []
+
+  while (stack.length) {
+    const item = stack.pop()
+
+    if (Array.isArray(item)) {
+      stack.push(...item) // 展开再压栈
+    } else {
+      res.push(item)
+    }
+  }
+
+  return res.reverse() // 注意顺序
+}
+```
+
+- 三、用“队列（很多人说堆，其实是队列）”实现
+```
+function flatWithQueue(arr) {
+  const queue = [...arr]
+  const res = []
+
+  while (queue.length) {
+    const item = queue.shift()
+
+    if (Array.isArray(item)) {
+      queue.unshift(...item) // 插到前面继续处理
+    } else {
+      res.push(item)
+    }
+  }
+
+  return res
+}
+```
+
+## 写一个函数，可以转化下划线命名到驼峰命名例:adb-cdf ->abdCdf;-qwe-try->qweTry
+
+### 正则
+什么是正则
+用来匹配和处理字符串的规则工具
+
+场景1：判断是不是手机号
+用户输入必须是 11 位数字
+const reg = /^1\d{10}$/
+console.log(Object.prototype.toString.call(reg))
+reg.test('13812345678') // true
+reg.test('123456')      // false
+
+^ 开头
+1 必须以1开头
+\d{10} 后面10位数字
+$ 结尾
+
+2. 场景2：提取字符串里的数字
+
+const str = '价格是100元'
+const result = str.match(/\d+/)
+
+console.log(result[0]) // 100
+
+\d+：1个或多个数字
+
+match 用来“找内容”
+
+场景3：替换字符串（驼峰转换核心🔥）
+
+const str = 'hello-world'
+
+const res = str.replace(/-(\w)/g, (_, c) => c.toUpperCase())
+
+console.log(res) // helloWorld
+
+-(\w)：匹配 - 后面的字符
+()：分组
+c：拿到分组内容
+
+- 场景4：去掉多余空格
+const str = '   hello world   '
+
+str.trim() // 简单情况
+
+// 或正则：
+str.replace(/^\s+|\s+$/g, '')
+
+\s：空白
+^ 开头空格
+$ 结尾空格
+| 或
+- 场景5：分割字符串
+const str = 'apple,banana orange'
+
+str.split(/[,\s]+/)
+// ["apple", "banana", "orange"]
+
+
+考察点（50字内）：
+👉 字符串处理、正则分组替换、边界处理、代码抽象能力
+业务场景
+CSS 属性转 JS 写法
+background-color → backgroundColor
+👉 操作 style 或写内联样式时需要转换
+
+```
+function toCamel(str) {
+  return str.replace(/[-_]+(\w)/g, (_, c) => c.toUpperCase())
+}
+```
+
+## 给定一个字符串形式表达式，请你实现一个计算器并返回结果，除法向下取整例输入“1+2”返回值3
+
+考察点（50字内）：
+👉 字符串解析、栈应用、运算符优先级处理、边界情况与代码实现能力
+
+再补一句面试加分解释👇
+👉 本质是把字符串转成“可计算结构”（如栈）并正确处理优先级与括号
+
+思路（面试要先说🔥）
+
+👉 用栈处理优先级：遇到 + - 入栈，* / 直接和栈顶计算
+核心是用栈“延迟计算低优先级，立即处理高优先级”
+```
+function calculate(s) {
+  const stack = []
+  let num = 0
+  let sign = '+' // 记录前一个运算符
+
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i]
+
+    // 构建数字（处理多位数）
+    if (ch >= '0' && ch <= '9') {
+      num = num * 10 + Number(ch)
+    }
+
+    // 遇到运算符 或 到字符串结尾
+    if ((isNaN(ch) && ch !== ' ') || i === s.length - 1) {
+      if (sign === '+') {
+        stack.push(num)
+      } else if (sign === '-') {
+        stack.push(-num)
+      } else if (sign === '*') {
+        stack.push(stack.pop() * num)
+      } else if (sign === '/') {
+        // 向下取整（关键点🔥）
+        const prev = stack.pop()
+        stack.push(Math.floor(prev / num))
+      }
+
+      sign = ch // 更新运算符
+      num = 0   // 重置数字
+    }
+  }
+
+  // 求和
+  return stack.reduce((a, b) => a + b, 0)
+}
+```
+
+## 手写一个confirm组件，用react + ts
+
+一、考察点（面试表达🔥）
+
+👉 组件设计能力、状态控制、异步交互（Promise）、Portal 渲染、类型设计（TS）、解耦调用方式
+
