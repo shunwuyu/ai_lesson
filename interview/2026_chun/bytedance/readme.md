@@ -2025,3 +2025,7 @@ function calculate(s) {
 
 👉 组件设计能力、状态控制、异步交互（Promise）、Portal 渲染、类型设计（TS）、解耦调用方式
 
+- 表达
+基于 React 18 createRoot 实现命令式调用。核心利用动态创建 DOM 挂载至 body 以突破层级限制，通过 Promise 封装支持 async/await 语法，并在交互后调用 unmount 彻底卸载，确保无内存泄漏。
+
+它是 React 18 的新入口 API，用于开启并发渲染模式，让 React 能智能暂停、中断或恢复渲染任务，从而大幅提升页面性能和响应速度。
