@@ -1,0 +1,11 @@
+.gallery-page {
+  min-height: 100vh;
+  margin: -20px;
+}
+
+/* Override default margins when used as a full page */
+@media (min-width: 1400px) {
+  .gallery-page {
+    margin: 0;
+  }
+}

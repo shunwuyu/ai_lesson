@@ -459,6 +459,99 @@ Lax 👉 部分允许（默认）
     - render 阶段html做了什么？
     HTML 在 render 阶段会被解析成 DOM 树，而且是流式解析（一边读取 HTML 字节流，一边逐步生成 DOM 节点，不是等全部解析完才一次性构建。），过程中遇到 script 可能阻塞并修改 DOM，同时为后续生成渲染树做准备
 
+### react中遍历数组，key有什么作用。
+
+- 开门见山
+key 的本质作用：帮 React 在 diff 过程中“识别节点身份”，提高复用能力，避免错误更新。
+
+React 在更新 UI 的时候，并不是整个 DOM 全部重新渲染，而是做一个“新旧虚拟 DOM 的对比（diff）”，然后只更新变化的部分。
+
+如果是一个数组，比如列表渲染，React 怎么知道哪个元素是“原来的那个”，哪个是“新加的”？
+
+key 就是“身份证”
+
+有 key：React 知道谁是谁，可以复用节点
+没 key 或乱用 key：React 只能“猜”，可能会误删误建
+
+
+1. diff算法原则一
+只比较同一层的节点
+如果节点的 type 变了（比如 div → span）
+👉 React 会直接认为是“两个完全不同的节点”，不会再往下比子节点，直接销毁重建
+
+2. 结合 key 讲
+在同一层级里，如果是列表结构，React 会根据 key 来做匹配：
+key 相同 → 认为是同一个节点 → 尝试复用
+key 不同 → 认为是新节点 → 删除旧的 + 创建新的
+
+3. 简单 diff
+旧节点 ABCD → 新节点 DCAB
+旧子节点数组：[A, B, C, D]
+新子节点数组：[D, C, A, B]
+
+关键规则：按新数组顺序遍历，去旧数组找key 相同的节点，用lastIndex判断是否需要移动。
+
+lastIndex 记录的是：在当前遍历新数组的过程中，所有已复用的节点中，在旧数组里最大的那个下标。
+它的设计目标是：通过判断一个可复用节点在旧数组中的位置是否“落后”于之前所有已处理节点的最远位置，来决定它是否需要移动。
+
+分步执行过程
+
+1. 初始化lastIndex = 0（记录上一个复用节点在旧数组的最大下标）
+2. 遍历新数组第 1 个节点 D
+去旧数组找 key 相同的 D，找到旧下标3
+3 > lastIndex(0) → 不用移动
+更新lastIndex = 3
+
+3. 遍历新数组第 2 个节点 C
+  - 去旧数组找 key 相同的 C，找到旧下标2
+  2 < lastIndex(3) → 需要移动
+  移动到新数组第 2 位（前一个节点 D 的后面）
+
+4. 遍历新数组第 3 个节点 A
+  去旧数组找 key 相同的 A，找到旧下标0
+  0 < lastIndex(3) → 需要移动
+移动到新数组第 3 位（前一个节点 C 的后面）
+
+5. 遍历新数组第 4 个节点 B
+  去旧数组找 key 相同的 B，找到旧下标1
+  1 < lastIndex(3) → 需要移动
+  移动到新数组第 4 位（前一个节点 A 的后面）
+
+6. 清理旧节点
+遍历旧数组，检查节点是否在新数组中存在，无则删除
+
+但你要马上指出问题
+这种方式在“插入头部”的时候性能很差
+
+旧：A B C  
+新：D A B C
+
+简单来说，算法会执行 3 次移动操作（移动 A、B、C），而理论上其实 不需要移动任何节点，只需要在头部插入 D 即可。
+
+- 双端 diff
+
+React 在实际实现中，并不是简单的从左到右对比，而是做了一个优化 —— 双端 diff（头尾指针）
+
+它会同时从：
+
+新旧列表的头部
+新旧列表的尾部
+开始往中间收缩
+
+四种情况（不用太死板，讲思路就行）：
+
+会优先判断这几种情况：
+
+新头 vs 旧头
+新尾 vs 旧尾
+新尾 vs 旧头（节点右移）
+新头 vs 旧尾（节点左移）
+
+如果都匹配不上：
+
+就会用 key 建立一个 map，快速查找旧节点的位置，然后决定是移动还是新建
+
+
 ### react中 hooks 是怎么实现的？
 
 
@@ -724,321 +817,202 @@ bfs(tree)
 // 第2层：B, C
 // 第3层：D
 
-###
+## 深拷贝和浅拷贝，如何实现深拷贝
 
-### React 的 diff 算法
+- 浅拷贝
 
-React 的 diff 算法本质是：在同层节点中，通过 key 做对比，尽量复用 DOM，减少真实 DOM 操作。
+![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/9/1/16ce894a1f1b5c32~tplv-t2oaga2asx-jj-mark:3024:0:0:0:q75.png)
 
-![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9f0312e46cfa4d978397c429ab4c191b~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+创建一个新对象，这个对象有着原始对象属性值的一份精确拷贝。如果属性是基本类型，拷贝的就是基本类型的值，如果属性是引用类型，拷贝的就是内存地址 ，所以如果其中一个对象改变了这个地址，就会影响到另一个对象。
 
-两棵树做 diff，复杂度是 O(n^3) 的，因为每个节点都要去和另一棵树的全部节点对比一次，这就是 n 了，如果找到有变化的节点，执行插入、删除、修改也是 n 的复杂度。所有的节点都是这样，再乘以 n，所以是 O(n * n * n) 的复杂度。
+Array.prototype.concat()
+const arr = [1, 2, { a: 3 }];
+const newArr = arr.concat();
 
-这样的复杂度对于前端框架来说是不可接受的，这意味着 1000 个节点，渲染一次就要处理 1000 * 1000 * 1000，一共 10 亿次。
+newArr[0] = 99;       // 基本类型改不动原数组
+newArr[2].a = 100;    // 引用类型会一起变
 
-所以前端框架的 diff 约定了两种处理原则：只做同层的对比，type 变了就不再对比子节点。
+console.log(arr[2].a); // 100（浅拷贝，对象共享）
 
-因为 dom 节点做跨层级移动的情况还是比较少的，一般情况下都是同一层级的 dom 的增删改。
+Array.prototype.slice()
 
-这样只要遍历一遍，对比一下 type 就行了，是 O(n) 的复杂度，而且 type 变了就不再对比子节点，能省下一大片节点的遍历。另外，因为 vdom 中记录了关联的 dom 节点，执行 dom 的增删改也不需要遍历，是 O(1)的，整体的 diff 算法复杂度就是 O(n) 的复杂度。
+const arr = [1, 2, { x: 10 }];
+const newArr = arr.slice();
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5dbd325446ee4d219d6e8876219718c1~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+newArr[2].x = 20;
+console.log(arr[2].x); // 20
 
-原来的 <p> 和它的子节点 <span>'guang'</span> 会被整个删除（卸载），因为它们在右边新树中“对应位置”被替换成了一个全新的 <div> 结构 —— React 认为这是类型变更，直接销毁旧子树、创建新子树，不会尝试复用或移动。
+const arr = [1, 2, { name: 'tom' }];
+const newArr = [...arr];
 
-- 这样的算法虽然复杂度低了，却还是存在问题的。
+newArr[2].name = 'jack';
+console.log(arr[2].name); // jack
 
-type 变了就不再对比子节点的缺点
+Object.assign()
 
-比如一组节点，假设有 5 个，类型是 ABCDE，下次渲染出来的是 EABCD，这时候逐一对比，发现 type 不一样，就会重新渲染这 5 个节点。
+const obj = { a: 1, b: { c: 2 } };
+const newObj = Object.assign({}, obj);
 
-而且根据 type 不同就不再对比子节点的原则，如果这些节点有子节点，也会重新渲染。
+newObj.b.c = 99;
+console.log(obj.b.c); // 99
 
-dom 操作是比较慢的，这样虽然 diff 的算法复杂度是低了，重新渲染的性能也不高。
+对象展开运算符 ...
+const obj = { name: 'aa', info: { age: 18 } };
+const newObj = { ...obj };
 
-所以，diff 算法除了考虑本身的时间复杂度之外，还要考虑一个因素：dom 操作的次数。
+newObj.info.age = 20;
+console.log(obj.info.age); // 20
 
-上面那个例子的 ABCDE 变为 EABCD，很明显只需要移动一下 E 就行了，根本不用创建新元素。
+数组 map（也是浅拷贝）
 
-但是怎么对比出是同个节点发生了移动呢？
+const arr = [1, 2, { val: 3 }];
+const newArr = arr.map(item => item);
 
-判断 type 么？ 那不行，同 type 的节点可能很多，区分不出来的。
+newArr[2].val = 100;
+console.log(arr[2].val); // 100
 
-最好每个节点都是有唯一的标识。
+浅拷贝 = 只复制第一层，深层引用类型依然共用同一个地址。
 
-所以当渲染一组节点的时候，前端框架会让开发者指定 key，通过 key 来判断是不是有点节点只是发生了移动，从而直接复用。
+- 深拷贝
+![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/9/1/16ce893a54f6c13d~tplv-t2oaga2asx-jj-mark:3024:0:0:0:q75.png)
 
-diff 算法处理一组节点的对比的时候，就要根据 key 来再做一次算法的优化。
+将一个对象从内存中完整的拷贝一份出来,从堆内存中开辟一个新的区域存放新对象,且修改新对象不会影响原对象
 
-我们会把基于 key 的两组节点的 diff 算法叫做多节点 diff 算法，它是整个 vdom 的 diff 算法的一部分。
 
-```
-// 旧节点列表 (Old Children)
-[
-  <li key="A">A</li>,
-  <li key="B">B</li>,
-  <li key="C">C</li>,
-  <li key="D">D</li>
-]
+- 乞丐版
+JSON.parse(JSON.stringify());
 
-// 新节点列表 (New Children) - 场景：删除了 B，插入了 E，顺序打乱
-[
-  <li key="A">A</li>,
-  <li key="C">C</li>,
-  <li key="E">E</li>, // 新增
-  <li key="D">D</li>
-]
+无法处理函数、undefined、Symbol 及 BigInt（直接丢失），将 Date 转为字符串、RegExp/Map/Set 转为空对象（类型丢失），不支持循环引用（直接报错），且会丢失原型链及不可枚举属性等多重致命缺陷
 
-// React 的处理结果 (逻辑示意)：
-// 1. A: 复用 (位置不变)
-// 2. B: 删除 (新列表中没有 key="B")
-// 3. C: 复用 (向前移动)
-// 4. E: 创建并插入
-// 5. D: 复用 (位置不变)
-```
+undefined 作为对象的属性值，该属性会被直接忽略（丢失）；如果作为数组的元素，则会被转换为 null
 
-#### 多节点 diff 算法
 
-### 简单 diff
+不可枚举属性
+const arr = [1, 2, 3];
 
-渲染 ABCD 一组节点，再次渲染是 DCAB
-多节点 diff 算法的目的是为了尽量复用节点，通过移动节点代替创建。
-所以新 vnode 数组的每个节点我们都要找下在旧 vnode 数组中有没有对应 key 的，有的话就移动到新的位置，没有的话再创建新的。
+// length 是数组的属性，但它是不可枚举的
+console.log(arr.length); // 输出: 3 (可以正常用)
 
-![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d5389c6be37443318d71a9c09aefde7e~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+// 遍历数组时，不会遍历出 'length'
+for (let key in arr) {
+  console.log(key); 
+}
+// 结果: 只打印 '0', '1', '2' (索引)，不会打印 'length'
 
-```
-// 获取旧虚拟 DOM 节点和新虚拟 DOM 节点的子节点列表
-const oldChildren = n1.children;
-const newChildren = n2.children;
 
-// lastIndex 用于记录当前已匹配到的旧节点中最大的索引位置
-// 目的是判断是否需要移动节点（如果新节点对应的旧节点索引小于 lastIndex，说明它被“提前”了，需要移动）
-let lastIndex = 0;
+const obj = { a: 1 };
 
-// ==================== 第一阶段：遍历新子节点列表 ====================
-for (let i = 0; i < newChildren.length; i++) {
-  const newNode = newChildren[i]; // 当前要处理的新节点
-  let j = 0;                      // 用于遍历旧子节点的指针
-  let find = false;               // 标记是否在新旧节点中找到 key 相同的节点
+// 定义一个不可枚举的属性 'b'
+Object.defineProperty(obj, 'b', {
+  value: 2,
+  enumerable: false  // 设置为不可枚举
+});
 
-  // ==================== 在旧子节点中查找是否有相同 key 的节点 ====================
-  for (j; j < oldChildren.length; j++) {
-    const oldNode = oldChildren[j]; // 当前正在比较的旧节点
 
-    // 如果找到 key 相同的节点 → 表示可以复用该节点
-    if (newNode.key === oldNode.key) {
-      find = true; // 标记找到了可复用的节点
+// 1. 定义一个类（构造函数）
+function Person(name) {
+  this.name = name;
+}
+// 2. 在原型上添加一个方法
+Person.prototype.sayHello = function() {
+  console.log(`你好，我是 ${this.name}`);
+};
 
-      // 调用 patch 函数更新这个节点的内容（属性、事件、子节点等）
-      patch(oldNode, newNode, container);
+// 3. 创建一个实例
+const original = new Person('张三');
 
-      // 判断是否需要移动 DOM 元素：
-      // 如果旧节点在原列表中的位置 j 小于 lastIndex，
-      // 说明这个节点在新列表中“提前出现”，需要向后移动以保持顺序
-      if (j < lastIndex) {
-        // 获取前一个新节点（即上一个已经处理过的新节点）
-        const prevVNode = newChildren[i - 1];
+// --- 使用 JSON 方法进行深拷贝 ---
+const copy = JSON.parse(JSON.stringify(original));
 
-        // 如果存在前一个节点，则把当前节点插入到它的下一个兄弟节点之前
-        if (prevVNode) {
-          const anchor = prevVNode.el.nextSibling; // 锚点：前一个节点的下一个兄弟
-          insert(newNode.el, container, anchor);   // 插入操作
-        }
-      } else {
-        // 否则，更新 lastIndex 为当前匹配的旧节点索引 j
-        // 表示到目前为止，我们按顺序匹配到了第 j 个旧节点
-        lastIndex = j;
-      }
+// --- 结果对比 ---
 
-      break; // 找到后跳出内层循环，继续处理下一个新节点
-    }
+// 1. 数据还在吗？在。
+console.log(copy.name); 
+// 输出: "张三"
+
+// 2. 方法还在吗？不在了！
+copy.sayHello(); 
+// 报错: TypeError: copy.sayHello is not a function
+// (因为 copy 变成了普通对象，找不到 sayHello 方法)
+
+// 3. 身份还在吗？不在了！
+console.log(copy instanceof Person); 
+// 输出: false
+// (copy 的构造函数变成了 Object，不再是 Person)
+
+- 手动实现一个递归函数。思路很简单：判断数据类型，如果是对象，就新建一个空对象，遍历原对象的属性，递归地把属性值复制进去。
+
+function deepClone(target) {
+  if (typeof target !== 'object') {
+    // 基本类型直接返回
+    return target;
   }
-
-  // ==================== 如果没有找到可复用的旧节点 → 创建新节点 ====================
-  if (!find) {
-    const prevVNode = newChildren[i - 1]; // 获取前一个新节点
-    let anchor = null;
-
-    // 确定插入位置：
-    // 如果有前一个节点，则插入到它的下一个兄弟之前
-    if (prevVNode) {
-      anchor = prevVNode.el.nextSibling;
-    } else {
-      // 如果是第一个节点，则插入到容器的第一个子节点之前（即开头）
-      anchor = container.firstChild;
-    }
-
-    // 调用 patch(null, newNode, ...) 表示这是一个全新的节点，需要创建并挂载
-    patch(null, newNode, container, anchor);
+  let cloneTarget = Array.isArray(target) ? [] : {}; // 兼容数组
+  for (let key in target) {
+    cloneTarget[key] = deepClone(target[key]);
   }
+  return cloneTarget;
 }
 
-// ==================== 第二阶段：清理未被使用的旧节点 ====================
-// 遍历所有旧子节点，检查它们是否在新子节点中存在（通过 key 匹配）
-for (let i = 0; i < oldChildren.length; i++) {
-  const oldVNode = oldChildren[i];
+- 解决循环引用
 
-  // 在新子节点列表中查找是否存在与当前旧节点 key 相同的节点
-  const has = newChildren.find(vnode => vnode.key === oldVNode.key);
+- 性能优化 
+  for...in，但其实它的效率比较低。
 
-  // 如果没找到 → 说明这个旧节点不再需要，应该卸载（从 DOM 移除 + 清理资源）
-  if (!has) {
-    unmount(oldVNode);
-  }
-}
-```
+  while 循环的性能是最好的。所以我会把遍历方式优化为 while，或者使用 Object.keys 配合 forEach，这样能体现出我对代码性能的关注。”
 
-diff 算法的目的是根据 key 复用 dom 节点，通过移动节点而不是创建新节点来减少 dom 操作。
-对于每个新的 vnode，在旧的 vnode 中根据 key 查找一下，如果没查找到，那就新增 dom 节点，如果查找到了，那就可以复用。
-复用的话要不要移动要判断下下标，如果下标在 lastIndex 之后，就不需要移动，因为本来就在后面，反之就需要移动。
-最后，把旧的 vnode 中在新 vnode 中没有的节点从 dom 树中删除。
+- 全类型兼容
+  Map、Set、Date、RegExp、Error，还有 Symbol 作为键的情况。
 
-### 双端 diff
-
-简单 diff 算法能够实现 dom 节点的复用，但有的时候会做一些没必要的移动。双端 diff 算法解决了这个问题，它是从两端进行对比。
-
-原来的顺序是 A, B, C, D，现在变成了 D, C, B, A。
-
-简单 Diff 算法（单端对比）的表现
-策略：只从头部开始对比。
-第1步：新头 D vs 旧头 A → 不匹配。
-第2步：在旧列表中找 D，发现它在最后。
-操作：把 D 从末尾移动到开头。
-此时内存/虚拟结构变为：D, A, B, C
-第3步：新第2个 C vs 旧第2个 A → 不匹配。
-第4步：在剩余旧列表找 C，发现它在最后。
-操作：把 C 移动到 D 后面。
-此时变为：D, C, A, B
-...以此类推
-结果：简单算法需要进行 3次移动操作（移动 D, C, B），效率较低。它没发现其实只是整体反过来了。
-
-#### 双端 diff
-
-简单 diff 算法能够实现 dom 节点的复用，但有的时候会做一些没必要的移动。双端 diff 算法解决了这个问题，它是从两端进行对比。
-
-我们需要 4 个指针，分别指向新旧两个 vnode 数组的头尾：
-
-![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/958ae402338c4cf0a4aa6ff5a5484754~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
-
-头和尾的指针向中间移动，直到 oldStartIdx <= oldEndIdx 并且 newStartIdx <= newEndIdx，说明就处理完了全部的节点。
-
-```
-// 获取旧虚拟 DOM 节点和新虚拟 DOM 节点的子节点列表
-const oldChildren = n1.children;
-const newChildren = n2.children;
-
-// ==================== 初始化四个指针 ====================
-let oldStartIdx = 0;                          // 旧子节点列表的起始索引（头）
-let oldEndIdx = oldChildren.length - 1;       // 旧子节点列表的结束索引（尾）
-let newStartIdx = 0;                          // 新子节点列表的起始索引（头）
-let newEndIdx = newChildren.length - 1;       // 新子节点列表的结束索引（尾）
-
-// 获取当前四个位置对应的虚拟节点
-let oldStartVNode = oldChildren[oldStartIdx];     // 旧头节点
-let oldEndVNode = oldChildren[oldEndIdx];         // 旧尾节点
-let newStartVNode = newChildren[newStartIdx];     // 新头节点
-let newEndVNode = newChildren[newEndIdx];         // 新尾节点
-
-// ==================== 主循环：当新旧列表都还有未处理节点时继续 ====================
-while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
-
-  // 【边界检查】如果旧头节点已被标记为 undefined（已移动），则跳过它，前进旧头指针
-  if (!oldStartVNode) {
-    oldStartVNode = oldChildren[++oldStartIdx];
-  }
-  // 【边界检查】如果旧尾节点已被标记为 undefined，则跳过它，后退旧尾指针
-  else if (!oldEndVNode) {
-    oldEndVNode = oldChildren[--oldEndIdx];
+  /**
+ * 深拷贝函数
+ * @param {any} target - 需要被拷贝的目标对象
+ * @param {WeakMap} map - 缓存容器，用于解决循环引用问题 (默认参数初始化)
+ */
+function deepClone(target, map = new WeakMap()) {
+  // --- 1. 递归终止条件 (边界处理) ---
+  // 判断逻辑：如果是 null 或者 非对象类型 (如 string, number, boolean, undefined, symbol)
+  // 原理：基本数据类型是按值传递的，直接返回即可，不需要开辟新内存
+  if (typeof target !== 'object' || target === null) {
+    return target;
   }
 
-  // ==================== 情况一：新头 vs 旧头 → key 相同 ====================
-  else if (oldStartVNode.key === newStartVNode.key) {
-    // 复用节点，更新内容
-    patch(oldStartVNode, newStartVNode, container);
-    // 移动指针：旧头++，新头++
-    oldStartVNode = oldChildren[++oldStartIdx];
-    newStartVNode = newChildren[++newStartIdx];
+  // --- 2. 解决循环引用 (核心亮点) ---
+  // 场景：例如 obj.a = obj，如果不处理，递归会无限进行导致栈溢出 (Maximum call stack size exceeded)
+  // 逻辑：在每次递归前，先检查 WeakMap 中是否已经存在当前对象的映射
+  if (map.has(target)) {
+    // 如果存在，说明之前已经拷贝过了，直接返回那个“旧”的拷贝对象
+    // 作用：切断循环链条，复用已创建的内存地址
+    return map.get(target);
   }
 
-  // ==================== 情况二：新尾 vs 旧尾 → key 相同 ====================
-  else if (oldEndVNode.key === newEndVNode.key) {
-    // 复用节点，更新内容
-    patch(oldEndVNode, newEndVNode, container);
-    // 移动指针：旧尾--，新尾--
-    oldEndVNode = oldChildren[--oldEndIdx];
-    newEndVNode = newChildren[--newEndIdx];
-  }
+  // --- 3. 创建新容器 (初始化) ---
+  // 兼容性处理：区分 数组 和 普通对象
+  // 注意：这里只处理了最基础的两种类型。如果需要处理 Date/RegExp，需要在这里增加 instanceof 判断
+  const cloneTarget = Array.isArray(target) ? [] : {};
 
-  // ==================== 情况三：新尾 vs 旧头 → key 相同 ====================
-  // 说明旧头节点需要移动到末尾（因为新尾部是它）
-  else if (oldStartVNode.key === newEndVNode.key) {
-    // 复用节点，更新内容
-    patch(oldStartVNode, newEndVNode, container);
-    // 将旧头节点对应的 DOM 插入到旧尾节点的下一个兄弟之前（即移到末尾）
-    insert(oldStartVNode.el, container, oldEndVNode.el.nextSibling);
-    // 移动指针：旧头++，新尾--
-    oldStartVNode = oldChildren[++oldStartIdx];
-    newEndVNode = newChildren[--newEndIdx];
-  }
+  // --- 4. 建立映射关系 (关键步骤) ---
+  // 动作：将 [原对象, 新对象] 的键值对存入 WeakMap
+  // 为什么要在这里存，而不是递归结束后存？
+  // 解释：必须在递归属性之前存入！因为如果当前对象包含自引用 (obj.self = obj)，
+  // 递归调用 deepClone(obj.self) 时会再次进入这个函数，此时必须能立即从 map 中找到它，否则就会死循环。
+  map.set(target, cloneTarget);
 
-  // ==================== 情况四：新头 vs 旧尾 → key 相同 ====================
-  // 说明旧尾节点需要移动到开头（因为新头部是它）
-  else if (oldEndVNode.key === newStartVNode.key) {
-    // 复用节点，更新内容
-    patch(oldEndVNode, newStartVNode, container);
-    // 将旧尾节点对应的 DOM 插入到旧头节点之前（即移到开头）
-    insert(oldEndVNode.el, container, oldStartVNode.el);
-    // 移动指针：旧尾--，新头++
-    oldEndVNode = oldChildren[--oldEndIdx];
-    newStartVNode = newChildren[++newStartIdx];
-  }
+  // --- 5. 属性遍历与递归 (性能优化) ---
+  // 为什么不使用 for...in？
+  // 1. 性能：for...in 会遍历原型链上的属性，速度较慢。
+  // 2. 安全性：for...in 需要配合 hasOwnProperty 使用，否则可能拷贝到原型的污染数据。
+  // Object.keys 优势：只遍历对象自身的、可枚举的属性，性能更好，代码更干净。
+  Object.keys(target).forEach(key => {
+    // 递归调用：将当前属性的值传入，继续深拷贝
+    // 注意：必须把 map 传递下去，保证整个递归过程共用同一个缓存容器
+    cloneTarget[key] = deepClone(target[key], map);
+  });
 
-  // ==================== 情况五：以上都不匹配 → 在旧列表中查找新头节点 ====================
-  else {
-    // 遍历旧子节点列表，寻找与 newStartVNode 拥有相同 key 的节点
-    const idxInOld = oldChildren.findIndex(
-      node => node && node.key === newStartVNode.key  // 注意：node 可能为 undefined
-    );
-
-    if (idxInOld > 0) {
-      // 找到了可复用的节点
-      const vnodeToMove = oldChildren[idxInOld];
-      // 更新该节点内容
-      patch(vnodeToMove, newStartVNode, container);
-      // 将该节点移动到当前旧头节点的位置（保持顺序）
-      insert(vnodeToMove.el, container, oldStartVNode.el);
-      // 标记原位置为 undefined，避免重复处理
-      oldChildren[idxInOld] = undefined;
-    } else {
-      // 没找到 → 创建新节点，插入到旧头节点之前
-      patch(null, newStartVNode, container, oldStartVNode.el);
-    }
-    // 无论是否找到，新头指针都要前进
-    newStartVNode = newChildren[++newStartIdx];
-  }
+  // --- 6. 返回结果 ---
+  return cloneTarget;
 }
 
-// ==================== 循环结束后，处理剩余节点 ====================
-
-// 如果旧列表先遍历完（oldEndIdx < oldStartIdx），但新列表还有剩余 → 添加新节点
-if (oldEndIdx < oldStartIdx && newStartIdx <= newEndIdx) {
-  for (let i = newStartIdx; i <= newEndIdx; i++) {
-    // 插入位置参考：oldStartVNode.el（此时它可能是下一个待处理节点或容器末尾）
-    patch(null, newChildren[i], container, oldStartVNode?.el || null);
-  }
-}
-
-// 如果新列表先遍历完（newEndIdx < newStartIdx），但旧列表还有剩余 → 移除旧节点
-else if (newEndIdx < newStartIdx && oldStartIdx <= oldEndIdx) {
-  for (let i = oldStartIdx; i <= oldEndIdx; i++) {
-    // 只卸载未被标记为 undefined 的节点（已被移动的节点不需要再卸载）
-    if (oldChildren[i]) {
-      unmount(oldChildren[i]);
-    }
-  }
-}
-```
 
 ## 了解SSR吗？
 
@@ -2066,3 +2040,38 @@ CoT本质是Prompt Engineering，不需要额外训练。
 数学推理
 逻辑推理
 多步骤问题
+
+### 再讲 ReAct（重点）
+“ReAct = Reason（推理） + Act（行动）”
+
+它不仅会想，还可以调用工具，比如查数据库、调API。
+
+问题：
+
+“东京今天天气怎么样？适不适合跑步？”
+
+只有 CoT
+
+模型只能“猜天气”
+
+ReAct
+
+模型流程：
+
+Thought: 我需要获取东京天气
+Action: 调用天气API
+Observation: 返回天气数据
+Thought: 根据天气判断是否适合跑步
+Final Answer: ...
+
+JS + OpenAI（函数调用实现 ReAct）
+
+现在用 function calling / tools
+
+“ReAct其实就是让LLM具备Agent能力，通过工具调用，把‘思考’和‘执行’结合起来。”
+
+ReAct.py
+
+这段代码使用 LangChain 构建了一个基于 ReAct 框架的智能体。
+它首先加载了搜索和计算工具，并定义了标准的 ReAct 提示词模板。接着，通过 create_react_agent 创建智能体，并用 AgentExecutor 进行封装。
+最后，它执行了一个任务：让智能体自主调用工具搜索玫瑰花价格，并计算加价 5% 后的定价，最终输出结果。
