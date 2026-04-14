@@ -1013,6 +1013,73 @@ function deepClone(target, map = new WeakMap()) {
   return cloneTarget;
 }
 
+- 三数之和
+思路
+先排序，然后固定一个数，剩下的用双指针向中间逼近。
+关键点：去重
+题目要求不能有重复的三元组。因为数组已经排序了，重复的数字会挨在一起，所以去重很简单：
+固定数去重：如果 nums[i] 和 nums[i-1] 一样，说明刚才已经算过这一轮了，直接 continue。
+指针去重：当找到一组解后，移动 left 和 right 时，如果遇到和刚才一样的数字，继续跳过。
+```
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var threeSum = function(nums) {
+    const res = [];
+    const len = nums.length;
+    
+    // 边界情况：数组为空或长度小于3，直接返回
+    if (!nums || len < 3) return res;
+
+    // 1. 排序：这是双指针策略的基础
+    // 注意：JS默认sort是按字符编码排序，必须传入(a,b)=>a-b实现数值升序
+    nums.sort((a, b) => a - b);
+
+    // 2. 遍历固定第一个数
+    for (let i = 0; i < len; i++) {
+        const target = nums[i];
+
+        // 【剪枝优化1】如果当前固定的数已经大于0，后面的数肯定都大于0，三数之和不可能为0
+        if (target > 0) break;
+
+        // 【去重核心1】如果当前数字和前一个数字相同，说明已经处理过以该数字开头的组合，跳过
+        if (i > 0 && target === nums[i - 1]) continue;
+
+        // 3. 双指针寻找另外两个数
+        let left = i + 1;
+        let right = len - 1;
+
+        while (left < right) {
+            const sum = target + nums[left] + nums[right];
+
+            if (sum === 0) {
+                // 找到答案
+                res.push([target, nums[left], nums[right]]);
+
+                // 【去重核心2 & 3】找到答案后，需要跳过左右指针指向的重复元素
+                // 跳过左侧重复值
+                while (left < right && nums[left] === nums[left + 1]) left++;
+                // 跳过右侧重复值
+                while (left < right && nums[right] === nums[right - 1]) right--;
+
+                // 找到答案后，双指针同时收缩，继续寻找下一组
+                left++;
+                right--;
+            } else if (sum < 0) {
+                // 和太小，左指针右移（找更大的数）
+                left++;
+            } else {
+                // 和太大，右指针左移（找更小的数）
+                right--;
+            }
+        }
+    }
+
+    return res;
+};
+```
+
 
 ## 了解SSR吗？
 
@@ -2075,3 +2142,67 @@ ReAct.py
 这段代码使用 LangChain 构建了一个基于 ReAct 框架的智能体。
 它首先加载了搜索和计算工具，并定义了标准的 ReAct 提示词模板。接着，通过 create_react_agent 创建智能体，并用 AgentExecutor 进行封装。
 最后，它执行了一个任务：让智能体自主调用工具搜索玫瑰花价格，并计算加价 5% 后的定价，最终输出结果。
+
+## Promise.race
+谁先“有结果”settle（resolve 或 reject），就返回谁的结果。
+不是谁先“成功”，而是谁先“结束”
+
+- 记忆关键点
+1）返回一个新的 Promise
+race 本身就是返回 Promise
+2）遍历传入的 iterable
+支持数组或类数组结构
+3）对每一项做 Promise.resolve 包装
+因为传入的不一定是 Promise，可能是普通值
+Promise.resolve(item)
+4）只要有一个先执行，就直接触发外层 resolve / reject
+
+边界情况
+空数组 → 返回的 Promise 永远 pending
+非 Promise 值 → 会被 Promise.resolve 包装后立即 resolve
+多个同时 resolve → 只认第一个触发的
+
+```
+Promise.myRace = function (iterable) {
+  return new Promise((resolve, reject) => {
+    for (const item of iterable) {
+      Promise.resolve(item).then(resolve, reject);
+    }
+  });
+};
+```
+
+Promise.race（包括 Promise.all 等）并不会“取消”其他 Promise，只是忽略它们的结果。
+
+## 写一个函数输入0返回1输入1返回0有多少种写法
+
+考察对 能否用多种方式（if、三元、位运算、数组映射等）实现同一逻辑，体现代码表达能力与灵活性。
+
+- 基础写法
+function fn(x) {
+  if (x === 0) return 1;
+  if (x === 1) return 0;
+}
+
+- 三元表达式
+const fn = x => (x === 0 ? 1 : 0);
+
+- 数组映射
+const fn = x => [1, 0][x];
+
+- 位运算（加分🔥）
+异或运算^  0-》1 1-》0
+const fn = x => x ^ 1;
+
+## 大模型为什么是无状态的，无记忆的
+
+大模型本质是基于 Transformer 的概率生成模型，每次推理只依赖当前输入 token，并不会在内部长期保存用户状态，所以是“无状态、无记忆”的。
+
+Transformer 就是现在所有大语言模型（LLM）的核心骨架，靠注意力机制看懂上下文、理解语言，让 AI 能流畅聊天写文章。
+
+上下文其实是通过 prompt 临时拼进去的，而不是模型真的记住了。
+
+解决方案一般有几种：一是上下文编程，把历史对话拼进 prompt；二是做 RAG（检索增强生成），通过 embedding 检索相关内容再喂给模型；三是做 memory 管理，比如对历史做截断、摘要压缩，或者向量化存储实现长期记忆。
+
+本质就是：模型不记忆，记忆在AI工程侧。
+
