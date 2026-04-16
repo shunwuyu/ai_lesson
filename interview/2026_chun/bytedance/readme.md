@@ -3024,7 +3024,152 @@ MCP全称是模型上下文协议，由Anthropic公司推出。它如同AI界的
   2. MCP clients
   智能调度层，结合 LLM 做语义决策并发起调用
   mcp 配置列表， 预先加载， llm 语义加载相应mcp 
-  
+
   3. MCP Server
   MCP Server 就是被动的“工具提供方”，它封装了具体的数据源或功能（如本地文件、数据库、API），在后台时刻准备着响应 Client 的请求并返回结果。
 
+- SSE断连重传处理
+  sse-retry
+  - SSE 为什么会断
+  SSE 是长连接，长时间没数据、网不稳、服务端嫌你挂太久，就会自动断掉。
+  - 怎么处理
+  图片
+  服务端发送：
+  id: 123
+  data: hello
+  客户端断连后会自动带上：
+  Last-Event-ID: 123
+
+  正确的“断连重传设计”
+
+  服务端要能根据 Last-Event-ID 重新推数据：
+
+  ```
+  app.get('/events', (req, res) => {
+    const lastId = req.headers['last-event-id'];
+
+    // 从消息队列 / 数据库中补发
+    const missedEvents = getEventsAfter(lastId);
+
+    missedEvents.forEach(event => {
+      res.write(`id: ${event.id}\n`);
+      res.write(`data: ${event.data}\n\n`);
+    });
+  });
+  ```
+  客户端：自动重连 + 幂等处理
+  幂等就是防止重复干活、保证多刷几次结果也不变。
+  浏览器原生：
+
+const es = new EventSource('/events');
+
+es.onmessage = (e) => {
+  console.log(e.data);
+};
+
+## 向Ilm聊天框中提出一个问题(我的微信小店今天有点跌幅，分析一下问题)的整个
+agent响应流程，越详细越好
+
+![](https://static001.geekbang.org/resource/image/96/af/9697d298c3132c33e94c6b2eac1e1eaf.png?wh=1408x768)
+
+结合你图里的 Harness 结构，逻辑会非常完整：
+
+用户在聊天框输入“微信小店今天跌幅”，Agent 首先通过 context + memory 做意图识别：结合历史对话和用户店铺信息，判断这是一个“电商经营分析”任务，同时补充上下文（时间范围、店铺维度等）。
+
+接着进入 Model（LLM）决策阶段：LLM 基于当前 context，规划调用 MCP 工具，决定先查数据再分析。
+
+在 tools 层，MCP Client 调用数据库工具，从 Server 拉取订单、流量、转化率、客单价等核心指标数据。
+
+数据返回后，触发 数据分析 skill：该 skill 由 skill.md 定义能力边界（GMV、转化率、ROI 等），并通过渐进式加载补充指标口径、分析原则等资源，避免上下文过大。
+
+具体计算不由 LLM 完成，而是通过 scripts（JS/Python） 做环比、同比、漏斗计算，保证结果准确。
+
+在执行过程中，hooks 负责日志、异常处理和重试；permissions 控制数据访问范围（比如只能查当前店铺）。
+
+最后 LLM 基于计算结果做归因分析（流量下降还是转化问题），并通过流式输出边分析边返回结论和优化建议，形成完整闭环。，
+
+## LRU Cache 
+
+LRU（Least Recently Used）是最近最少使用缓存策略：优先淘汰“最久没被访问”的数据。
+
+LRU = 哈希表 + 双向链表 
+哈希表：O(1) 查找
+双向链表：维护访问顺序
+
+```
+// 1. 节点构造函数
+function Node(key, value) {
+  this.key = key;
+  this.value = value;
+  this.prev = null;
+  this.next = null;
+}
+
+// 2. LRU 构造函数
+function LRUCache(capacity) {
+  this.capacity = capacity;
+  // O(1)
+  this.map = new Map();
+
+  // 虚拟头尾
+  this.head = new Node(0, 0);
+  this.tail = new Node(0, 0);
+  this.head.next = this.tail;
+  this.tail.prev = this.head;
+}
+
+// ==================== 所有方法挂在 prototype 上 ====================
+
+// 添加节点到头部
+LRUCache.prototype.addToHead = function (node) {
+  node.next = this.head.next;
+  node.prev = this.head;
+  this.head.next.prev = node;
+  this.head.next = node;
+};
+
+// 删除节点
+LRUCache.prototype.removeNode = function (node) {
+  node.prev.next = node.next;
+  node.next.prev = node.prev;
+};
+
+// 移到头部
+LRUCache.prototype.moveToHead = function (node) {
+  this.removeNode(node);
+  this.addToHead(node);
+};
+
+// 删除尾部
+LRUCache.prototype.removeTail = function () {
+  const tail = this.tail.prev;
+  this.removeNode(tail);
+  return tail;
+};
+
+// get 方法
+LRUCache.prototype.get = function (key) {
+  if (!this.map.has(key)) return -1;
+  const node = this.map.get(key);
+  this.moveToHead(node);
+  return node.value;
+};
+
+// put 方法
+LRUCache.prototype.put = function (key, value) {
+  if (this.map.has(key)) {
+    const node = this.map.get(key);
+    node.value = value;
+    this.moveToHead(node);
+  } else {
+    const node = new Node(key, value);
+    this.map.set(key, node);
+    this.addToHead(node);
+
+    if (this.map.size > this.capacity) {
+      const removeNode = this.removeTail();
+      this.map.delete(removeNode.key);
+    }
+  }
+};
+```
