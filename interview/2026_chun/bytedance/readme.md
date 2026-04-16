@@ -2857,3 +2857,174 @@ const onResize = (index: number, height: number) => {
     onResize={onResize}
   />
 ))}
+
+## 实现一个倒计时组件 CountDown，接收一个 seconds 参数，实时显示剩余时间（如 10s），倒计时结束后显示“结束了”。
+
+```
+import React, { useState, useEffect, useRef } from 'react';
+
+const CountDown = ({ seconds }) => {
+  // 1. 状态管理：剩余时间
+  const [timeLeft, setTimeLeft] = useState(seconds);
+  // 2. 状态管理：是否结束（用于控制显示文案）
+  const [isFinished, setIsFinished] = useState(false);
+  
+  // 使用 useRef 存储定时器 ID，避免闭包陷阱和内存泄漏
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    // 初始化或重置时，清除旧的定时器
+    if (timerRef.current) clearInterval(timerRef.current);
+    
+    // 重置状态
+    setTimeLeft(seconds);
+    setIsFinished(false);
+
+    // 启动倒计时
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        // 核心逻辑：如果时间归零
+        if (prev <= 1) {
+          clearInterval(timerRef.current); // 清除定时器
+          setIsFinished(true); // 触发结束状态
+          return 0;
+        }
+        return prev - 1; // 否则时间减 1
+      });
+    }, 1000);
+
+    // 3. 清理副作用：组件卸载或 seconds 变化时清除定时器
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [seconds]); // 依赖项：当父组件传入的秒数变化时，重新计时
+
+  // 4. 渲染逻辑
+  if (isFinished) {
+    return <div>结束了</div>;
+  }
+
+  return <div>{timeLeft}s</div>;
+};
+
+export default CountDown;
+```
+
+倒计时逻辑：组件能够从一个由父组件传入的初始秒数（seconds）开始，每秒自动递减，直到归零
+
+状态显示：能够实时向用户展示剩余的秒数。
+
+结束状态：当倒计时结束时，界面会从显示剩余时间切换为显示“结束了”的文本。
+
+响应式更新：利用 useState 来管理 timeLeft（剩余时间）和 isFinished（是否结束）的状态。当状态改变时，组件会自动重新渲染，更新用户界面。
+
+副作用管理：使用 useEffect 来启动定时器，并将 seconds 作为依赖项。这意味着每当父组件传入一个新的 seconds 值时，倒计时都会自动重置并开始新一轮计时。
+
+避免闭包陷阱：在 setInterval 的回调函数中，通过 setTimeLeft((prev) => ...) 的函数式更新方式来获取上一次的 state 值。这确保了每次递减操作都是基于最新的状态，避免了因闭包导致的计数错误。
+  定时器回调捕获了初始值，导致每次更新都基于旧值计算，结果始终不变。
+
+防止内存泄漏：使用 useRef 来存储 setInterval 返回的定时器 ID。在 useEffect 的清理函数（return 部分）中，通过 clearInterval 清除定时器。这确保了在组件卸载或 seconds 变化时，旧的定时器会被正确清理，从而防止内存泄漏。
+
+## 斐波那契
+
+提到斐波那契数列，最直接的思路就是递归。
+F(n) = F(n-1) + F(n-2)
+
+function fib(n) {
+  if (n <= 1) return n
+  return fib(n - 1) + fib(n - 2)
+}
+
+问题
+调用深度 O(n) → 容易 栈溢出（stack overflow）
+重复计算 → 时间复杂度 O(2ⁿ)
+
+- Map 版 记忆化递归
+
+// Map 作为缓存容器
+const memoMap = new Map();
+
+function fib(n) {
+    if (n <= 1) return n;
+
+    // 命中缓存直接返回
+    if (memoMap.has(n)) {
+        return memoMap.get(n);
+    }
+
+    const res = fib(n - 1) + fib(n - 2);
+    // 存入 Map 缓存
+    memoMap.set(n, res);
+    return res;
+}
+
+纯暴力递归：大量重复计算，时间复杂度 O(2n)
+记忆化递归：算过的子问题只算一次，时间复杂度 O(n)
+
+
+- 把递归改成迭代
+
+// 定义一个函数 fib，参数 n 代表求第 n 项斐波那契数
+function fib(n) {
+  // 递归/边界条件：如果 n 小于等于 1，直接返回 n（斐波那契第0项是0，第1项是1）
+  if (n <= 1) return n
+
+  // 初始化两个变量：
+  // a 代表第 i-2 项斐波那契数，初始是 0（第0项）
+  // b 代表第 i-1 项斐波那契数，初始是 1（第1项）
+  let a = 0, b = 1
+
+  // 从第 2 项开始，循环计算到第 n 项
+  for (let i = 2; i <= n; i++) {
+    // 临时变量保存当前项：当前项 = 前两项之和
+    const temp = a + b
+    // a 向后移动一位，变成原来的 b（即前一项）
+    a = b
+    // b 向后移动一位，变成刚算出的当前项
+    b = temp
+  }
+
+  // 循环结束后，b 就是第 n 项斐波那契数，返回它
+  return b
+}
+
+属于 动态规划（DP）的迭代写法
+
+1. 为什么它是动态规划
+动态规划核心三要素：
+
+重叠子问题：求 f(n) 依赖 、，重复用到前面结果
+最优子结构：当前项 = 前两项最优解之和
+状态转移方程：f(n)=f(n−1)+f(n−2)
+
+用 a、b 保存历史状态（缓存子问题结果）
+从底向上递推（自底向上 DP）
+避免了递归重复计算，就是标准 DP
+
+- agent的工作原理
+我一般把 Agent 理解为：Agent = Harness + LLM。
+
+LLM 负责“思考和决策”，Harness 负责“执行和约束”，其中 Harness 可以拆成五个核心组件：tools、memory、context、hooks、permissions。
+
+用户输入 → context 组织上下文 → LLM 做决策（是否调用工具） →
+通过 tools 执行 → hooks 做过程控制 → memory 读写 → permissions 做安全约束 → 返回结果
+
+AI Agent 的工作原理，本质上就是将“大模型的思考能力”与“外部工具的执行能力”通过“记忆”串联起来。
+它不再是一个简单的聊天机器人，而是一个能够自主感知环境、制定计划、使用工具并自我修正的智能系统。这就是为什么它能帮你写代码、做数据分析，甚至管理复杂的业务流程的原因。
+
+## .mcp server和mcp client各自有什么特点
+
+MCP全称是模型上下文协议，由Anthropic公司推出。它如同AI界的“USB-C接口”，通过标准化连接，解决了大模型无法直接调用外部工具和数据的问题。
+
+![](https://wx1.sinaimg.cn/mw1024/0063NKlSly4i0ojkjldeoj31aa0u0kfp.jpg)
+
+- mcp 分成哪几方？
+  1. MCP hosts
+  Cursor 集成了大模型的 Agent
+  2. MCP clients
+  智能调度层，结合 LLM 做语义决策并发起调用
+  mcp 配置列表， 预先加载， llm 语义加载相应mcp 
+  
+  3. MCP Server
+  MCP Server 就是被动的“工具提供方”，它封装了具体的数据源或功能（如本地文件、数据库、API），在后台时刻准备着响应 Client 的请求并返回结果。
+
