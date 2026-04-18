@@ -82,6 +82,7 @@ func divide(a, b int) (int, error) {
     if b == 0 {
         return 0, fmt.Errorf("divide by zero")
     }
+    // nil 代表空值
     return a / b, nil
 }
 
@@ -89,6 +90,7 @@ func divide(a, b int) (int, error) {
 
 return [result, error]
 四、结构体（代替 class）
+Go 无 class，用 struct 替代
 type User struct {
     Name string
     Age  int
@@ -113,35 +115,67 @@ func updateAge(age *int) {
 
 👉 核心理解一句话：
 👉 Go 默认是值拷贝，指针用于修改原数据
+Go 指针是存储变量内存地址的安全变量，支持获取地址，但禁止指针运算。
 
+六、 goroutine（协程）
+可以理解为：“同时做多件事的能力”
+如果说线程是操作系统眼中CPU调度的最小单元，那么协程就是用户态下程序自主调度的最小执行单元。
 
-六、并发（Go 核心优势🔥）
-goroutine（轻量线程）
-go func() {
-    fmt.Println("async")
-}()
-channel（通信）
-ch := make(chan int)
+go xxx() = 开启一个协程
+不写 go → 同步执行
+写了 go → 并发执行 
 
-go func() {
-    ch <- 1
-}()
+线程 (Thread) 就像一位厨师。雇佣一位新厨师（创建线程）成本很高，而且厨房空间有限，能容纳的厨师数量是有限的。
+协程 (Coroutine) 就像厨师手里要做的一道道菜。
 
-fmt.Println(<-ch)
+没有协程（同步阻塞）
+一位厨师一次只做一道菜。如果这道菜需要炖煮20分钟，厨师就会傻站在锅边干等，什么事也干不了，非常浪费时间。
 
-👉 对比 JS：
+使用协程（异步非阻塞）
+一位厨师可以同时照看好几道菜（多个协程）。
+他先把“红烧肉”下锅炖上（启动协程1）。
+在等待红烧肉炖煮的间隙（协程1挂起/阻塞），他不会闲着，而是转身去切“土豆丝”（切换到协程2）。
+切完土豆丝，他又去给“清蒸鱼”调味（切换到协程3）。
+等红烧肉炖好了（协程1恢复），他再回来出锅。
 
-goroutine ≈ async task
-channel ≈ 更安全的消息队列（比 Promise 更底层）
+Promise 是异步， 不是真正的并发， 协程是真正的并发，用于高并发调度。
+吊打java 
+
+package main
+
+import (
+	"fmt" 
+	"time"
+)
+
+func sayHello() {
+	fmt.Println("hello")
+}
+
+func main() {
+	go sayHello() // 开启一个协程
+	time.Sleep(time.Second) // 等一会，不然程序直接结束
+}
+
+channel（通道）是什么？
+可以理解为：协程之间传数据的管道
+
+3.go
+
 七、包管理（类似 npm）
 
 初始化：
+在当前目录下创建一个名为 go.mod 的依赖管理文件，将该项目初始化为一个名为 demo 的独立 Go 模块。
 
 go mod init demo
 
 安装依赖：
 
 go get github.com/gin-gonic/gin
+
+Gin 是一个基于 Go 语言的高性能、轻量级 HTTP Web 框架，以其极快的路由速度和简洁易用的 API 设计而著称，非常适合构建高并发的 RESTful 服务。
+相当于express
+
 八、实战案例（重点🔥）
 案例1：HTTP 服务（类似 Node）
 package main
@@ -193,10 +227,3 @@ func main() {
 
 👉 类似：
 
-Express / Koa
-案例3：读取 JSON（常用）
-
-type User struct {
-    Name string `json:"name"`
-    Age  int    `json:"age"`
-}
