@@ -559,3 +559,108 @@ Array.prototype.myReduce = function(callback, initialValue) {
   return accumulator;
 };
 ```
+
+### useReducer 将组件状态视作“累加器”，通过纯函数 Reducer 将分散的 Action 归约为确定性的新状态，实现逻辑的集中与可预测。
+
+```js
+import React, { useReducer, useState } from 'react';
+
+// 1. 定义初始状态 (Initial State)
+const initialState = {
+  todos: [
+    { id: 1, text: '学习 useReducer', done: false },
+    { id: 2, text: '掌握函数式编程', done: true }
+  ]
+};
+
+// 2. 定义 Reducer (纯函数：State + Action -> New State)
+// 这里体现了“归约”的思想：根据 action 类型，计算出新的 todos 数组
+function todoReducer(state, action) {
+  switch (action.type) {
+    case 'ADD':
+      // 不可变性：返回新数组，而不是 push 到旧数组
+      return {
+        ...state,
+        todos: [...state.todos, { id: Date.now(), text: action.payload, done: false }]
+      };
+    
+    case 'TOGGLE':
+      // 映射：找到对应 ID 的项，翻转其 done 状态
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.payload ? { ...todo, done: !todo.done } : todo
+        )
+      };
+
+    case 'DELETE':
+      // 过滤：移除指定 ID 的项
+      return {
+        ...state,
+        todos: state.todos.filter(todo => todo.id !== action.payload)
+      };
+
+    default:
+      // 未知操作，返回原状态
+      return state;
+  }
+}
+
+// 3. 组件实现
+export default function TodoApp() {
+  const [state, dispatch] = useReducer(todoReducer, initialState);
+  const [inputValue, setInputValue] = useState('');
+
+  // 处理添加
+  const handleAdd = () => {
+    if (!inputValue.trim()) return;
+    // 发送指令（Action），而不是直接修改数据
+    dispatch({ type: 'ADD', payload: inputValue });
+    setInputValue('');
+  };
+
+  return (
+    <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+      <h2>useReducer TodoList</h2>
+      
+      {/* 输入区域 */}
+      <div style={{ marginBottom: '20px' }}>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="输入待办事项..."
+          style={{ padding: '8px', width: '70%' }}
+        />
+        <button onClick={handleAdd} style={{ padding: '8px 16px', marginLeft: '10px' }}>
+          添加
+        </button>
+      </div>
+
+      {/* 列表区域 */}
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {state.todos.map(todo => (
+          <li key={todo.id} style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            padding: '10px', 
+            borderBottom: '1px solid #eee',
+            textDecoration: todo.done ? 'line-through' : 'none',
+            color: todo.done ? '#999' : '#333'
+          }}>
+            <span onClick={() => dispatch({ type: 'TOGGLE', payload: todo.id })} style={{ cursor: 'pointer' }}>
+              {todo.text}
+            </span>
+            <button 
+              onClick={() => dispatch({ type: 'DELETE', payload: todo.id })}
+              style={{ color: 'red', border: 'none', background: 'none', cursor: 'pointer' }}
+            >
+              删除
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
