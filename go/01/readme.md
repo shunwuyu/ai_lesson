@@ -227,3 +227,8 @@ func main() {
 
 👉 类似：
 
+## Eino 
+Eino 是字节跳动开源的、面向 Go 语言的工业级 AI Agent 开发框架，通过组件化设计和图编排引擎，帮助开发者像搭积木一样构建高性能、可扩展的大模型应用。
+
+https://github.com/cloudwego/eino-examples
+

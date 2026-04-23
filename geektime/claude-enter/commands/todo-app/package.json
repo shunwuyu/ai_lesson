@@ -1,0 +1,14 @@
+{
+  "name": "todo-console-app",
+  "version": "1.0.0",
+  "description": "Simple console TODO app with JSON storage",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node src/test.js"
+  },
+  "keywords": ["todo", "console", "cli"],
+  "author": "",
+  "license": "MIT"
+}
