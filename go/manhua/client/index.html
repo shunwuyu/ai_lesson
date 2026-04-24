@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多人聊天室</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+        }
+        .login-screen {
+            padding: 60px 40px;
+            text-align: center;
+        }
+        .login-screen h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .login-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+        .login-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        .chat-screen {
+            display: none;
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .status-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        #messages {
+            height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .message-content {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 70%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .message-sender {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .message-text {
+            color: #333;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        .message.system .message-content {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        .message.system .message-sender {
+            color: #856404;
+        }
+        #input-area {
+            padding: 20px;
+            background: white;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        #messageInput {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+        #messageInput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        #sendBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        #sendBtn:hover {
+            transform: translateY(-2px);
+        }
+        #sendBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="login-screen">
+            <h1>🎉 欢迎来到聊天室</h1>
+            <input
+                type="text"
+                id="usernameInput"
+                class="login-input"
+                placeholder="请输入你的昵称..."
+                maxlength="20"
+                autofocus
+            />
+            <br>
+            <button onclick="connect()" class="login-btn">进入聊天室</button>
+        </div>
+
+        <!-- Chat Screen -->
+        <div id="chatScreen" class="chat-screen">
+            <div class="chat-header">
+                <h1>💬 多人聊天室</h1>
+                <div id="status" class="status-badge">未连接</div>
+            </div>
+            <div id="messages"></div>
+            <div id="input-area">
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="输入消息..."
+                    disabled
+                />
+                <button id="sendBtn" onclick="sendMessage()" disabled>发送</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+let ws = null;
+let username = '';
+
+const loginScreen = document.getElementById('loginScreen');
+const chatScreen = document.getElementById('chatScreen');
+const usernameInput = document.getElementById('usernameInput');
+const statusDiv = document.getElementById('status');
+const messagesDiv = document.getElementById('messages');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+
+function addMessage(content, isSystem = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message${isSystem ? ' system' : ''}`;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+
+    if (isSystem) {
+        contentDiv.textContent = content;
+    } else {
+        // Parse "username: message" format
+        const colonIndex = content.indexOf(':');
+        if (colonIndex !== -1) {
+            const sender = content.substring(0, colonIndex).trim();
+            const text = content.substring(colonIndex + 1).trim();
+
+            const senderDiv = document.createElement('div');
+            senderDiv.className = 'message-sender';
+            senderDiv.textContent = sender;
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            textDiv.textContent = text;
+
+            contentDiv.appendChild(senderDiv);
+            contentDiv.appendChild(textDiv);
+        } else {
+            contentDiv.textContent = content;
+        }
+    }
+
+    msgDiv.appendChild(contentDiv);
+    messagesDiv.appendChild(msgDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function updateStatus(text, isConnected) {
+    statusDiv.textContent = text;
+    statusDiv.style.background = isConnected ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)';
+}
+
+function connect() {
+    username = usernameInput.value.trim();
+
+    if (!username) {
+        alert('请输入昵称！');
+        return;
+    }
+
+    // Build WebSocket URL with username parameter
+    const wsUrl = `ws://localhost:8080/ws/chat?username=${encodeURIComponent(username)}`;
+    console.log('[WebSocket] 连接到:', wsUrl);
+
+    ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+        console.log('[WebSocket] ✅ 连接成功！');
+        updateStatus('已连接', true);
+
+        // Switch to chat screen
+        loginScreen.style.display = 'none';
+        chatScreen.style.display = 'block';
+        messageInput.disabled = false;
+        sendBtn.disabled = false;
+        messageInput.focus();
+
+        addMessage(`欢迎来到聊天室，${username}！`, true);
+    };
+
+    ws.onmessage = (e) => {
+        console.log('[WebSocket] 收到消息:', e.data);
+        addMessage(e.data, e.data.startsWith('系统:'));
+    };
+
+    ws.onerror = (error) => {
+        console.error('[WebSocket] 错误:', error);
+        updateStatus('连接错误', false);
+    };
+
+    ws.onclose = () => {
+        console.log('[WebSocket] 连接已关闭');
+        updateStatus('连接已关闭', false);
+        messageInput.disabled = true;
+        sendBtn.disabled = true;
+        addMessage('与服务器断开连接', true);
+    };
+}
+
+function sendMessage() {
+    const msg = messageInput.value.trim();
+
+    if (!msg) {
+        return;
+    }
+
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(msg);
+        messageInput.value = '';
+    } else {
+        addMessage('无法发送：连接未建立', true);
+    }
+}
+
+// Handle Enter key
+usernameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        connect();
+    }
+});
+
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+</script>
+</body>
+</html>
