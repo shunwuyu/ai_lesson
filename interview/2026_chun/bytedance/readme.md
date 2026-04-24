@@ -4100,3 +4100,412 @@ function reverse(head) {
     return prev; // 返回新的头节点
 }
 ```
+
+## 怎么实现拖拽功能，需要什么样的api或能力
+
+1. 拖拽是什么
+
+前端拖拽 = 用户用鼠标 / 手指按住元素，移动后松开，完成交互的完整行为。
+
+2. 拖拽体验的核心好处
+
+- 直观零学习成本：符合现实世界操作习惯（拖文件、拖东西），不用教用户就会用。 IPAD, 手机触屏，小孩子不用交
+- 操作效率翻倍：减少点击、选择、确认等多步操作，一步完成
+- 支持文件、元素、列表排序、布局拖拽等几乎所有交互场景
+
+## 经典案例 GitHub 拖拽上传 VS 普通上传
+
+GitHub 拖拽上传（你上传文件到仓库时的拖拽框）：
+直接把电脑里的文件 / 文件夹拖进浏览器，松手就上传
+支持批量拖拽、文件夹拖拽
+全程不用打开文件选择器、不用找文件路径
+
+拖拽上传把3~5 步操作压缩成 1 步，对用户来说是极致顺滑，这也是现代 Web 应用（百度网盘、腾讯文档、语雀、Figma）全部标配拖拽的原因。
+
+二、 API
+
+HTML5 原生拖拽 API
+
+1. 被拖拽元素（源）事件：
+- dragstart：开始拖拽时触发（初始化数据 / 样式）
+- drag：拖拽过程中持续触发
+- dragend：拖拽结束时触发（清理样式 / 状态）
+
+2. 放置目标区域（容器）事件：
+
+- dragover：拖拽元素在目标上移动时触发（必须阻止默认行为，否则无法放置）
+- dragenter：进入目标区域
+- dragleave：离开目标区域
+- drop：松开鼠标完成放置
+
+draggable="true"：HTML 元素必须加这个属性才能被拖拽
+dataTransfer：拖拽数据载体（传递 id、文本、文件等数据）
+
+- 文件拖拽 API
+
+dataTransfer.files：获取用户拖拽的文件列表（File 对象数组）
+
+FileReader / FormData：配合实现文件预览、上传后端
+
+- drag/
+
+## 如果有一个提交请求，如果请求的是图片或文件是怎么上传的
+
+- 普通请求
+
+普通请求传 json 文本，文件上传需用FormData，请求头指定multipart/form-data，传输二进制流，数据格式、编码方式完全不同。
+
+```
+// 构造表单数据，普通参数+文件一起传
+const formData = new FormData();
+formData.append('username', 'test');
+formData.append('password', '123456');
+formData.append('file', file); // 图片文件
+
+// axios发送，不用手动改请求头
+axios.post('/login', formData);
+```
+
+- 文件 / 图片上传，本质就是前端把二进制文件打包，后端接收并存储，最后返回可访问地址。
+
+普通表单上传、 大文件分片上传（处理大视频 / 大压缩包）。
+
+- 普通表单上传
+
+1. 用 form 表单，必须加 enctype="multipart/form-data"，这是告诉后端 “我传的是文件，不是普通文本”；
+
+2. 用 input type="file" 选择文件，通过 AJAX/axios 提交给后端。
+
+```
+<!-- 表单必须加这个编码格式 -->
+<form enctype="multipart/form-data">
+  <input type="file" name="file" accept="image/*" />
+  <button type="button" onclick="upload()">上传图片</button>
+</form>
+
+<script>
+async function upload() {
+  // 1. 创建FormData，专门装文件
+  const formData = new FormData();
+  // 把选中的文件放进去
+  formData.append('file', document.querySelector('input[type=file]').files[0]);
+
+  // 2. 发请求
+  const res = await axios.post('/api/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+  
+  console.log("上传成功，图片地址：", res.data.url);
+}
+</script>
+```
+
+2. 后端怎么做
+
+- 接收前端传来的 multipart 格式数据；
+- 解析出二进制文件；
+- 存到本地 / 云存储（OSS/COS），返回访问 URL。
+  static 服务器， public 目录下
+
+### 大文件分片上传
+
+如果传几百 M 的视频、安装包，普通上传容易超时、断传就得重传。
+
+- 前端把文件切成一片一片（比如每片 5MB）；
+  http 多路复用
+  失败仅重传分片
+  ```
+  const fileInput = document.querySelector('input[type="file"]');
+const chunkSize = 5 * 1024 * 1024; // 5MB 一片
+
+fileInput.onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // 新建 WebWorker
+  const worker = new Worker('./hash.worker.js');
+
+  // 通知 worker 开始切割+计算文件md5
+  worker.postMessage({ file, chunkSize });
+
+  // 接收 worker 返回的分片数组 + 文件唯一hash
+  worker.onmessage = (e) => {
+    const { chunks, fileHash } = e.data;
+    console.log('文件唯一标识：', fileHash);
+    console.log('所有分片：', chunks);
+
+    // 后续并行上传分片、后端合并、秒传判断
+    uploadChunks(chunks, fileHash);
+  };
+};
+
+// 分片并行上传
+async function uploadChunks(chunks, fileHash) {
+  for (const chunk of chunks) {
+    const fd = new FormData();
+    fd.append('chunk', chunk.blob);
+    fd.append('index', chunk.index);
+    fd.append('fileHash', fileHash);
+    axios.post('/api/chunk-upload', fd);
+  }
+}
+
+importScripts('https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js');
+
+// 监听主线程消息
+self.onmessage = async (e) => {
+  const { file, chunkSize } = e.data;
+  const chunks = [];
+  const spark = new SparkMD5.ArrayBuffer();
+  const reader = new FileReader();
+
+  let cur = 0;
+
+  // 循环切片
+  while (cur < file.size) {
+    const blob = file.slice(cur, cur + chunkSize);
+    chunks.push({
+      blob,
+      index: cur / chunkSize
+    });
+    cur += chunkSize;
+  }
+
+  // 读取文件计算整体 MD5 哈希
+  reader.readAsArrayBuffer(file);
+  reader.onload = (ev) => {
+    spark.append(ev.target.result);
+    const fileHash = spark.end(); // 文件唯一指纹
+
+    // 把结果回传给主线程
+    self.postMessage({ chunks, fileHash });
+  };
+};
+
+const Koa = require('koa');
+const Router = require('koa-router');
+const multer = require('@koa/multer');
+const fs = require('fs');
+const path = require('path');
+const fse = require('fs-extra');
+
+const app = new Koa();
+const router = new Router();
+
+app.use(require('koa-body')());
+
+// 目录配置
+const UPLOAD_DIR = path.resolve(__dirname, 'upload');
+const CHUNK_DIR = path.resolve(UPLOAD_DIR, 'chunks');
+fse.ensureDirSync(UPLOAD_DIR);
+fse.ensureDirSync(CHUNK_DIR);
+
+const upload = multer({ dest: CHUNK_DIR });
+
+// ======================
+// 1. 秒传接口 + 查询已上传分片（断点重传核心）
+// ======================
+router.post('/api/check-file', async (ctx) => {
+  const { fileHash, filename } = ctx.request.body;
+  const ext = filename.split('.').pop();
+  const finalPath = path.join(UPLOAD_DIR, `${fileHash}.${ext}`);
+
+  // 【秒传】文件已存在，直接返回地址
+  if (fs.existsSync(finalPath)) {
+    ctx.body = {
+      code: 200,
+      shouldUpload: false,
+      url: `http://localhost:3000/upload/${fileHash}.${ext}`
+    };
+    return;
+  }
+
+  // 【断点重传】查询该文件已经上传了哪些分片
+  const chunkDir = path.join(CHUNK_DIR, fileHash);
+  let uploadedChunks = [];
+  if (fs.existsSync(chunkDir)) {
+    uploadedChunks = await fse.readdir(chunkDir);
+    uploadedChunks = uploadedChunks.map(Number).sort((a, b) => a - b);
+  }
+
+  ctx.body = {
+    code: 200,
+    shouldUpload: true,
+    uploadedChunks // 前端拿到后，只上传缺失的分片
+  };
+});
+
+// ======================
+// 2. 接收单个分片
+// ======================
+router.post('/api/chunk', upload.single('chunk'), async (ctx) => {
+  const { fileHash, index } = ctx.request.body;
+  const chunkDir = path.join(CHUNK_DIR, fileHash);
+  await fse.ensureDir(chunkDir);
+
+  const chunkPath = path.join(chunkDir, index);
+  await fse.move(ctx.file.path, chunkPath);
+
+  ctx.body = { code: 200, msg: '分片上传成功' };
+});
+
+// ======================
+// 3. 合并所有分片
+// ======================
+router.post('/api/merge', async (ctx) => {
+  const { fileHash, filename } = ctx.request.body;
+  const ext = filename.split('.').pop();
+  const chunkDir = path.join(CHUNK_DIR, fileHash);
+  const finalPath = path.join(UPLOAD_DIR, `${fileHash}.${ext}`);
+
+  // 读取分片并排序
+  let chunks = await fse.readdir(chunkDir);
+  chunks = chunks.map(Number).sort((a, b) => a - b);
+
+  // 流合并
+  const writeStream = fs.createWriteStream(finalPath);
+  for (const index of chunks) {
+    const chunkPath = path.join(chunkDir, index);
+    const readStream = fs.createReadStream(chunkPath);
+    await new Promise(resolve => {
+      readStream.pipe(writeStream, { end: false });
+      readStream.on('end', resolve);
+    });
+  }
+  writeStream.end();
+
+  // 删除临时分片文件夹
+  await fse.remove(chunkDir);
+
+  ctx.body = {
+    code: 200,
+    url: `http://localhost:3000/upload/${fileHash}.${ext}`
+  };
+});
+
+app.use(router.routes());
+app.listen(3000, () => console.log('服务 3000 启动'));
+  ```
+
+- 一片一片传给后端；
+- 后端全部接收完，通知后端合并所有分片；
+- 合并完成返回最终地址。
+
+核心优势：断点续传、失败重传、大文件稳定上传。
+
+## 文章列表倾向用哪种图片形式
+- 常见图片格式
+1. JPG：有损压缩，体积小，无透明，适合照片、信息流封面。
+2. PNG：无损压缩，支持透明，体积偏大，适合图标、logo。
+3. GIF：仅 256 色，支持简单动图，画质差体积大。
+4. WebP：新一代格式，有损无损都支持、透明动画一体，体积远更小。
+5. AVIF：压缩率最优，画质更高体积更小，兼容性稍差。
+6. SVG：矢量图，无限放大不失真，适合图标线条。
+7. Base64：图片转字符串嵌入代码，无需额外请求，小图适用。
+
+WebP 2010 年发布，AVIF 2019 年定稿；压缩更强、兼容性稍弱，目前做AVIF 优先→WebP 降级→JPG 兜底。
+
+WebP 比 JPG 体积节省 25%~34%，肉眼画质几乎无差。补：AVIF 比 JPG 省约 50%，压缩更强。
+
+- 文章列表倾向用哪种图片形式
+用webp/avif juejin 36kr 
+jd https://img12.360buyimg.com/babel/jfs/t1/423704/16/7434/22941/69e9c0b2Fd44a20d4/0276400140b77d2d.png.avif
+
+<picture>
+  <source srcset="image.avif" type="image/avif">
+  <source srcset="image.webp" type="image/webp">
+  <img src="image.jpg" alt="示例图" loading="lazy">
+</picture>
+
+现代浏览器：加载 AVIF（最小体积、最好画质）
+较旧浏览器：加载 WebP（平衡体积与兼容）
+古董浏览器：加载 JPEG（保底可用）
+
+- 前端工程师是怎么批量去转的
+
+npm init -y
+npm install sharp
+
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
+
+// 输入目录（放你要转的图片）
+const inputDir = path.join(__dirname, 'imgs');
+// 输出目录（自动生成 webp 图片）
+const outputDir = path.join(__dirname, 'webp');
+
+// 自动创建输出文件夹
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir);
+}
+
+// 读取所有图片
+fs.readdir(inputDir, async (err, files) => {
+  if (err) return console.error('读取失败:', err);
+
+  const images = files.filter(f =>
+    f.toLowerCase().endsWith('.jpg') ||
+    f.toLowerCase().endsWith('.jpeg') ||
+    f.toLowerCase().endsWith('.png')
+  );
+
+  for (const file of images) {
+    const inputPath = path.join(inputDir, file);
+    const outputPath = path.join(outputDir, path.parse(file).name + '.webp');
+
+    await sharp(inputPath)
+      .webp({ quality: 80 }) // 画质 80%，可改
+      .toFile(outputPath);
+
+    console.log('✅ 转换完成:', file);
+  }
+
+  console.log('\🎉 全部批量转换完成！');
+});
+
+- 怎么实现PC端的导航栏在上面一行，
+但在移动端在右上角
+mobile-menu
+PC 用 flex 让导航横向排列。移动端通过媒体查询，隐藏原菜单、右上角展示汉堡按钮，菜单改为绝对定位放右上角，JS 控制点击展开收起。
+
+## 性能优化
+
+- 资源优化
+
+1. 图片优化：项目里批量将 JPG/PNG 转 WebP、AVIF，用picture降级兼容；图片统一懒加载，大幅减少首屏体积。
+
+2. 静态资源压缩：打包压缩图片、字体、图标，删除无用静态资源，图标改用 SVG + 字体图标替代图片。
+
+- 网络优化
+1. 分包与按需加载：路由、组件做路由懒加载、代码分割，非核心代码按需引入，减小首屏打包体积。
+  配合服务端开启压缩，JS、CSS、静态资源体积直接砍半，全网通用刚需优化。
+
+2. 缓存策略：合理配置强缓存、协商缓存，静态资源加 hash 命名，避免重复请求。
+
+列表、字典、常量数据存在内存 /localStorage，重复页面不重复请求接口。
+
+3. 请求优化：合并接口请求、减少多余轮询，接口做节流，避免高频无效网络请求。
+页面别拆成好几个单独接口分开发，多个小请求合成一个接口一次性拿数据。减少请求次数、减少 HTTP 握手开销，降低网络耗时。
+不用无脑定时器一直刷接口。不需要实时的场景，拉长轮询间隔；不用就直接关掉，避免后台和前端无效刷屏。websocket?
+像搜索联想、输入框实时查询这类高频操作，做节流 / 防抖。
+
+vue、react、lodash 等大件依赖剥离打包，用 CDN 引入，减小项目打包体积。
+
+CSS 优化：减少层级、杜绝内联大量样式简化选择器层级，避免 * 通配符、深层嵌套，降低浏览器样式计算开销。
+
+合理使用 CSS3 硬件加速固定动画、悬浮元素加 transform: translateZ(0)，开启 GPU 加速，动画更丝滑。
+
+
+
+
+- 三、渲染优化
+减少重排重绘：项目里避免频繁操作 DOM，批量修改样式；复杂布局用transform、opacity做动画，不走重排。
+虚拟滚动：长列表用虚拟列表，只渲染可视区域 DOM，解决大量列表卡顿问题。
+
+首屏骨架屏 + 占位优化避免白屏等待，提升用户感知性能，属于体验类核心优化。
+
+- 代码 & 运行优化
+8. 打包优化：剔除无用依赖、Tree-Shaking、压缩混淆代码，移除 console 和冗余代码。
+9. 避免内存泄漏：定时器、事件监听、订阅手动销毁，防止页面长期运行卡顿。
+10. 主线程减负：复杂计算丢给 Web Worker，避免长任务阻塞主线程，提升页面交互流畅度。

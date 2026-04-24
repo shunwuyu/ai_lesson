@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>拖拽上传（GitHub同款）</title>
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui;}
+    body {padding: 40px; max-width: 800px; margin: 0 auto;}
+    
+    /* 拖拽上传区域样式 */
+    .upload-area {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 60px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 20px;
+    }
+    .upload-area.active {
+      border-color: #0969da; /* GitHub 蓝 */
+      background: #f6f8fa;
+    }
+    .upload-area p {font-size: 16px; color: #656d76; margin-top: 10px;}
+    
+    /* 文件列表 */
+    .file-list {margin-top: 20px;}
+    .file-item {
+      padding: 12px;
+      background: #f6f8fa;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <h2>拖拽上传文件（GitHub 风格）</h2>
+  <!-- 拖拽区域 -->
+  <div class="upload-area" id="uploadArea">
+    <h3>将文件拖到此处，或<u>点击选择</u></h3>
+    <p>支持图片、文档、压缩包等任意文件</p>
+    <input type="file" id="fileInput" multiple hidden>
+  </div>
+
+  <div class="file-list" id="fileList"></div>
+
+  <script>
+    const uploadArea = document.getElementById('uploadArea')
+    const fileInput = document.getElementById('fileInput')
+    const fileList = document.getElementById('fileList')
+
+    // ========== 1. 拖拽区域样式交互 ==========
+    // 拖入区域
+    uploadArea.addEventListener('dragenter', () => {
+      uploadArea.classList.add('active')
+    })
+    // 拖离区域
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('active')
+    })
+    // 拖拽移动（必须阻止默认）
+    // 默认是讲拖拽的文件显示在页面上
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault()
+    })
+
+    // ========== 2. 核心：放置文件（松手触发） ==========
+    uploadArea.addEventListener('drop', (e) => {
+        
+      e.preventDefault()
+      uploadArea.classList.remove('active')
+      
+      // 获取拖拽的文件（关键API）
+      const files = e.dataTransfer.files
+      if (files.length) handleFiles(files)
+    })
+
+    // ========== 3. 点击选择文件兼容 ==========
+    uploadArea.addEventListener('click', () => {
+      fileInput.click()
+    })
+    fileInput.addEventListener('change', () => {
+      handleFiles(fileInput.files)
+    })
+
+    // ========== 4. 处理文件（预览+上传） ==========
+    function handleFiles(files) {
+      fileList.innerHTML = ''
+      Array.from(files).forEach(file => {
+        // 显示文件信息
+        const item = document.createElement('div')
+        item.className = 'file-item'
+        item.innerHTML = `
+          <span>${file.name} (${formatSize(file.size)})</span>
+          <span style="color:#0969da">上传中...</span>
+        `
+        fileList.appendChild(item)
+
+        // 模拟上传后端（真实项目用 axios/fetch 发送 FormData）
+        setTimeout(() => {
+          item.querySelector('span:last-child').textContent = '上传成功'
+        }, 1500)
+      })
+    }
+
+    // 文件大小格式化
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B'
+      else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB'
+      else return (bytes / 1048576).toFixed(1) + ' MB'
+    }
+  </script>
+</body>
+</html>

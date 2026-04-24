@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <!-- 关键：移动端适配必须加 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>导航适配</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      list-style: none;
+      text-decoration: none;
+    }
+
+    /* 导航外层容器 */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      background: #333;
+      color: #fff;
+    }
+
+    /* PC端：菜单横向排列 */
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-menu a {
+      color: #fff;
+    }
+
+    /* 移动端汉堡按钮：PC端隐藏 */
+    .nav-btn {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    /* ========== 移动端适配 阈值768px ========== */
+    @media (max-width: 768px) {
+      /* 隐藏横向菜单 */
+      .nav-menu {
+        /* 固定定位 右上角 */
+        position: absolute;
+        top: 60px;
+        right: 0;
+        flex-direction: column;
+        background: #333;
+        width: 120px;
+        padding: 1rem;
+        display: none; /* 默认收起 */
+      }
+
+      /* 显示汉堡按钮 */
+      .nav-btn {
+        display: block;
+      }
+
+      /* 菜单激活展开 */
+      .nav-menu.show {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="logo">LOGO</div>
+    <!-- 导航菜单 -->
+    <ul class="nav-menu">
+      <li><a href="#">首页</a></li>
+      <li><a href="#">产品</a></li>
+      <li><a href="#">关于</a></li>
+      <li><a href="#">联系</a></li>
+    </ul>
+    <!-- 移动端右上角按钮 -->
+    <div class="nav-btn" id="menuBtn">☰</div>
+  </nav>
+
+  <script>
+    // 简单点击切换展开/收起
+    const btn = document.getElementById('menuBtn')
+    const menu = document.querySelector('.nav-menu')
+
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('show')
+    })
+  </script>
+</body>
+</html>
