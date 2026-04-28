@@ -1936,6 +1936,67 @@ function flatWithQueue(arr) {
   return res
 }
 ```
+### 对象扁平化（支持 a.b 嵌套 key）
+
+实现一个 flatten 函数，将多层嵌套对象，拍平为单层对象，key 用 . 拼接，要求：
+多层嵌套无限层级
+键名拼接使用 .
+不处理数组、只处理纯对象
+保持原有值
+
+```
+const obj = {
+  a: 1,
+  b: {
+    c: 2,
+    d: { e: 3 }
+  }
+};
+```
+
+{ "a": 1, "b.c": 2, "b.d.e": 3 }
+
+递归遍历对象每个键值
+维护前缀路径，嵌套时拼接 .
+值为普通类型：直接挂载到结果
+值为对象：递归继续深入遍历
+
+```
+function flatten(obj) {
+  const res = {};
+
+  // 递归函数：当前对象 + 前置key
+  function dfs(target, prefix = '') {
+    for (const key in target) {
+      // 拼接新key
+      const newKey = prefix ? `${prefix}.${key}` : key;
+      const val = target[key];
+
+      // 判断是否为纯对象，递归
+      if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+        dfs(val, newKey);
+      } else {
+        res[newKey] = val;
+      }
+    }
+  }
+
+  dfs(obj);
+  return res;
+}
+
+// 测试
+const obj = {
+  a: 1,
+  b: {
+    c: 2,
+    d: { e: 3 }
+  }
+};
+console.log(flatten(obj));
+// { a: 1, 'b.c': 2, 'b.d.e': 3 }
+```
+
 
 ## 写一个函数，可以转化下划线命名到驼峰命名例:adb-cdf ->abdCdf;-qwe-try->qweTry
 
