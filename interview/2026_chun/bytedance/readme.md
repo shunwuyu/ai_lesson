@@ -4804,3 +4804,277 @@ QUIC 内置加密、0-RTT 快速建连，握手更快，移动端、弱网环境
 底层承载用 UDP，天然无 TCP 串行强制排队；
 QUIC 内部按独立流隔离数据，流与流互不阻塞；
 在 UDP 之上自研：重传、校验、乱序重组、拥塞控制，自己实现可靠性。
+
+## 删除链表的倒数第 N 个结点
+
+[删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/description/)
+
+给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+
+### 不要基于解题
+
+链表只能从头往后单向遍历，不能从尾部往前倒着找，所以没法直接定位倒数第几个，只能先转成正数第几个来做。
+
+- 新手最容易想到的笨办法（我先告诉你，再给你最优解）
+先遍历一遍链表，数出来总共有多少个节点
+再算出来：正数第几个要删掉（比如总共 5 个，删倒数第 2 个 = 正数第 4 个）
+len - n + 1
+总长减倒数名次，算出前面有几个，再加 1 才是它自己的正数位置。
+再遍历一遍，找到那个节点删掉
+缺点：要走两遍链表，麻烦一点。
+
+### 快慢指针法
+
+链表就是一条直路，我们派快、慢两个人走：
+
+快的人 先走 n 步
+然后两个人一起匀速往前走
+等到快的人走到路的尽头
+✅ 慢的人刚好站在 要删除节点的前一个！
+
+### 完整思路（极简版）
+
+加一个虚拟头节点（防止删第一个节点时出错，超级好用）
+慢指针、快指针，都从虚拟头开始
+快指针先走 n 步
+快慢一起走，直到快指针到最后
+慢指针.next = 慢指针.next.next（删除节点）
+返回真正的头节点
+
+```js
+function ListNode(val, next) {
+    this.val = (val === undefined ? 0 : val);
+    this.next = (next === undefined ? null : next);
+}
+
+var removeNthFromEnd = function(head, n) {
+    let dummy = new ListNode(0, head);
+    let fast = dummy;
+    let slow = dummy;
+
+    // 快指针先走 n 步
+    for(let i = 0; i < n; i++){
+        fast = fast.next;
+    }
+
+    // 快慢一起走，快到尾巴停
+    while(fast.next){
+        fast = fast.next;
+        slow = slow.next;
+    }
+
+    // 删除下一个节点
+    slow.next = slow.next.next;
+    return dummy.next;
+};
+```
+
+## 场景题：
+项目采用 Access Token + Refresh Token 双令牌鉴权：
+Access Token 有效期短（如 15 分钟），用于接口请求
+Refresh Token 有效期长（如 7 天），仅用于刷新 Access Token
+
+Token 存在 localStorage 就极易被 XSS 窃取，拿到就能伪造请求盗用身份，这就是 AccessToken 不安全的核心原因。
+
+短时效 AccessToken 保接口安全，长时效 RefreshToken 无感续期，减少频繁登录、降低盗号风险。
+
+问题：
+当 Access Token 已过期时，页面同时发起 多个异步请求（例如 3～5 个接口一起调用）。
+所有请求几乎同时收到 401 未授权。
+
+进入个人中心首页，页面一加载同时并发请求这 5 个接口：
+获取用户基本信息接口
+获取我的订单列表接口
+获取我的收藏列表接口
+获取账户余额 / 优惠券接口
+获取 消息未读数量 接口
+此时 AccessToken 刚好过期，5 个接口同时 401，就触发双 Token 并发排队刷新的场景题。
+
+若直接在响应拦截器里遇到 401 就调用 /refreshToken，会导致什么问题？
+
+多个并发 401 请求会重复触发刷新 Token 接口，造成多次无效刷新，浪费资源还可能引发令牌错乱、登录异常。
+
+
+请设计方案：
+在 Refresh Token 有效时，只发一次刷新请求
+刷新期间，其他请求要挂起、排队
+刷新成功后，所有排队请求用新 Token 自动重发
+刷新失败（Refresh Token 也过期），统一跳登录、清空队列
+
+
+1. 全局状态变量（先写这几行）
+// 是否正在刷新token 锁
+let isRefreshing = false;
+// 等待重发的请求队列
+let requestQueue = [];
+
+2. 请求拦截器（统一带 Token）
+
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+})
+
+3. 响应拦截器（核心手写重点）
+
+axios.interceptors.response.use(
+  res => res.data,
+  async err => {
+    const res = err.response;
+    const config = err.config;
+
+    // 401 token过期
+    if (res.status === 401) {
+      // 情况1：已经在刷新中 -> 把当前请求加入队列
+      if (isRefreshing) {
+        return new Promise(resolve => {
+          requestQueue.push(config);
+        })
+      }
+
+      // 情况2：开始第一次刷新
+      isRefreshing = true;
+      try {
+        // 拿刷新令牌
+        const refreshToken = localStorage.getItem('refreshToken');
+        // 调用刷新接口
+        const { accessToken } = await axios.post('/refreshToken', { refreshToken });
+        
+        // 存新token
+        localStorage.setItem('accessToken', accessToken);
+
+        // 遍历队列，全部重发
+        requestQueue.forEach(cfg => {
+          cfg.headers.Authorization = `Bearer ${accessToken}`;
+          axios(cfg);
+        });
+        // 清空队列
+        requestQueue = [];
+
+        // 把当前失败的请求也重发一次
+        config.headers.Authorization = `Bearer ${accessToken}`;
+        return axios(config);
+
+      } catch (e) {
+        // 刷新失败：清空缓存、清队列、跳登录
+        localStorage.clear();
+        requestQueue = [];
+        location.href = '/login';
+        return Promise.reject(e);
+      } finally {
+        // 解锁
+        isRefreshing = false;
+      }
+    }
+    return Promise.reject(err);
+  }
+)
+
+## 题目：实现一个 AI 对话消息管理器要求：
+定义 Message 类型，包含 role（string，如 user/assistant/system）和 content（string）。
+实现类 / 对象，提供 3 个方法：
+addMessage(role: string, content: string): void
+新增消息；如果消息总数超过设定的最大限制 maxCount，从最早的消息开始删除，直到数量 ≤ maxCount。
+getMessageCount(): number
+返回当前消息总数。
+getAllMessages(): Message[]
+返回所有消息（按添加顺序）。
+最大限制 maxCount 可通过构造函数传入（例如默认 20）。
+
+```
+// 1. 定义 Message 类型
+interface Message {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+}
+
+// 2. 实现消息管理器
+class MessageManager {
+  // 用 private 保护数组，避免外部直接修改
+  private messages: Message[] = [];
+  private maxCount: number;
+
+  // 构造函数：设置最大消息数，默认20
+  constructor(maxCount = 20) {
+    this.maxCount = maxCount;
+  }
+
+  // 新增消息 + 自动删最早
+  addMessage(role: Message['role'], content: string): void {
+    this.messages.push({ role, content });
+    // 超上限 → 从头删
+    while (this.messages.length > this.maxCount) {
+      this.messages.shift();
+    }
+  }
+
+  // 获取总数
+  getMessageCount(): number {
+    return this.messages.length;
+  }
+
+  // 查询所有消息
+  getAllMessages(): Message[] {
+    // 返回副本防外部篡改
+    return [...this.messages];
+  }
+
+  // 清空所有会话
+  clearAll() {
+    this.list = []
+  }
+
+  // 删除最后一条消息
+  popLastMessage() {
+    this.list.pop()
+  }
+}
+
+// 3. 测试（面试常要求写）
+const manager = new MessageManager(3); // 最多存3条
+manager.addMessage('user', '你好');
+manager.addMessage('assistant', '你好！');
+manager.addMessage('user', '介绍下AI');
+manager.addMessage('assistant', 'AI是...'); // 第4条 → 自动删第1条
+
+console.log(manager.getMessageCount()); // 3
+console.log(manager.getAllMessages());
+// 输出：[
+//   {role:'assistant',content:'你好！'},
+//   {role:'user',content:'介绍下AI'},
+//   {role:'assistant',content:'AI是...'}
+// ]
+```
+
+不限制条数，限制总字符 / Token 总数，超了就从头删历史消息，控制上下文窗口大小。
+
+class MessageStore {
+  private list: Message[] = []
+  private maxToken: number
+
+  constructor(maxToken = 2000) {
+    this.maxToken = maxToken
+  }
+
+  // 简易估算token：按字符数近似
+  calcTokens(content: string) {
+    return content.length
+  }
+
+  getTotalTokens() {
+    return this.list.reduce((sum, item) => sum + this.calcTokens(item.content), 0)
+  }
+
+  addMessage(role: Message['role'], content: string) {
+    this.list.push({ role, content })
+    // 超token就从头删
+    while (this.getTotalTokens() > this.maxToken) {
+      this.list.shift()
+    }
+  }
+
+  // 其余方法同上
+}
