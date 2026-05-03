@@ -5078,3 +5078,365 @@ class MessageStore {
 
   // 其余方法同上
 }
+
+## React 合成事件 vs 原生事件
+
+- React 封装了一套**合成**事件(SyntheticEvent)
+Synthetic 合成的、人造的
+
+它核心利用了两个浏览器  特性
+
+1. 事件委托（事件冒泡 + 事件池）
+  - 几乎所有事件都委托挂载到 document 上统一管理
+    利用事件冒泡机制， 将所有子元素的事件统一委托给父级（如 document）监听，
+    通过 event.target 识别实际触发源并分发处理，极大减少内存占用，并能自动支持动态新增的元素。
+  - 不是给每个 DOM 单独绑事件，而是统一分发
+    
+    事件委托将大量监听器缩减为一个，极大降低了浏览器的内存占用。
+    JS 引擎和浏览器渲染引擎之间进行大量的交互和计算
+    完美支持动态元素，避免重复绑定
+    
+
+2. 事件池（Event Pooling）
+合成事件对象会被复用、回收，避免频繁创建销毁 GC 压力
+
+React 事件池其实就是个“事件对象回收站”，把用完的事件对象擦干净反复循环利用，省得频繁创建和销毁拖慢速度。
+好像餐馆的消毒柜， 餐具用完， 洗干净，放消毒柜。
+
+
+一句话总结：
+
+React 合成事件 = 基于原生事件做的跨浏览器兼容封装 + 全局事件委托 + 对象池优化。
+
+```js
+// 模拟 React 的合成事件（SyntheticEvent）跨浏览器兼容封装
+class SyntheticEvent {
+  constructor(nativeEvent) {
+    // 保存底层的原生事件对象
+    this.nativeEvent = nativeEvent;
+    // 统一获取触发事件的真实 DOM 元素（抹平浏览器差异）
+    this.target = nativeEvent.target;
+    this.type = nativeEvent.type;
+  }
+
+  // 统一封装阻止事件冒泡的方法
+  stopPropagation() {
+    // 兼容旧版 IE 的 cancelBubble 属性
+    if (this.nativeEvent.cancelBubble) {
+      this.nativeEvent.cancelBubble = true;
+    }
+    // 调用标准浏览器的 stopPropagation 方法
+    if (this.nativeEvent.stopPropagation) {
+      this.nativeEvent.stopPropagation();
+    }
+  }
+
+  // 统一封装阻止浏览器默认行为的方法
+  preventDefault() {
+    // 兼容旧版 IE 的 returnValue 属性
+    this.nativeEvent.returnValue = false;
+    // 调用标准浏览器的 preventDefault 方法
+    if (this.nativeEvent.preventDefault) {
+      this.nativeEvent.preventDefault();
+    }
+  }
+}
+
+// 模拟 React 在根节点上的全局事件委托处理
+function dispatchEvent(nativeEvent) {
+  // 将原生事件包装成跨浏览器兼容的合成事件
+  const syntheticEvent = new SyntheticEvent(nativeEvent);
+  
+  // 后续 React 会根据 nativeEvent.target 找到对应的组件并执行回调
+  // 开发者在组件中拿到的 event，就是这个抹平差异后的合成事件对象
+  console.log('触发合成事件：', syntheticEvent);
+}
+
+// 绑定到真实 DOM 上测试（模拟 React 内部自动绑定的过程）
+document.addEventListener('click', dispatchEvent);
+```
+```js
+import React from 'react';
+
+function EventPoolingDemo() {
+  const handleClick = (e) => {
+    // 1. 同步访问：此时事件对象还在手中，能正常打印
+    console.log('同步访问：', e.type); // 输出: "click"
+
+    // 2. 异步访问：事件处理函数执行完后，事件对象被回收并清空了属性
+    setTimeout(() => {
+      console.log('异步访问（未持久化）：', e.type); // 输出: null (因为对象被回收清空了)
+    }, 100);
+
+    // 3. 调用 persist() 将事件对象从池中“取出”，阻止被回收清空
+    e.persist();
+
+    // 4. 再次异步访问：因为调用了 persist，属性被保留了下来
+    // setTimeout(() => {
+    //   console.log('异步访问（已持久化）：', e.type); // 输出: "click"
+    // }, 200);
+  };
+
+  return <button onClick={handleClick}>点击测试事件池</button>;
+}
+
+export default EventPoolingDemo;
+```
+
+- 因为现在浏览器性能变强了，事件池省下的那点内存根本不值一提，反而总让异步数据变 null 坑人。所以 React 17 直接把它砍了，让开发更省心！
+
+```js
+// 1. 事件池（就是一个存放闲置事件对象的数组）
+const eventPool = [];
+
+// 2. 获取事件对象（复用逻辑）
+function getPooledEvent() {
+  // 如果池子里有闲置对象，直接拿出来复用（pop出来）
+  if (eventPool.length > 0) {
+    const instance = eventPool.pop();
+    // 重新给这个旧对象赋值当前的事件属性
+    // instance.constructor.call(instance, ...当前事件数据);
+    return instance;
+  }
+  // 如果池子是空的，只能老老实实 new 一个新对象
+  return new SyntheticEvent();
+}
+
+// 3. 释放/回收事件对象（回收与清空逻辑）
+function releasePooledEvent(event) {
+  // 核心坑点：把事件对象的所有属性清空（置为 null）
+  event.dispatchConfig = null;
+  event._targetInst = null;
+  event.nativeEvent = null;
+  // ...把所有属性都擦干净
+  
+  // 如果池子还没满，把这个擦干净的“空壳”对象扔回池子里，等待下次复用
+  if (eventPool.length < 10) {
+    eventPool.push(event);
+  }
+}
+
+// 4. 模拟一次点击事件的完整生命周期
+function simulateClick() {
+  // 第一步：从池子里拿对象（可能是复用的旧对象）
+  const event = getPooledEvent();
+  
+  // 第二步：执行你写的 onClick 回调函数
+  // 在这里你可以正常访问 event.type, event.target 等属性
+  console.log('事件处理中...', event.type);
+  
+  // 第三步：你的回调执行完，React 立刻回收并清空它
+  releasePooledEvent(event);
+  
+  // 此时如果你再打印 event.type，就已经是 null 了
+}
+```
+事件池机制
+
+![](f.png)
+
+## React 通用弹窗 Modal 组件
+
+### 组件设计思想
+
+复用、可控、体验、性能
+
+### 面试官心里
+
+除了 CSS 和单例模式，面试官其实更想看你对 React Portal（传送门）、全局状态管理、动画过渡以及无障碍访问（如 ESC 关闭、点击遮罩层关闭）的掌握。
+
+Modal 虽小，但五脏俱全，能一次性考察你对 React 高级 API、JS 设计模式、CSS 布局以及用户体验细节的综合把控能力。
+
+
+1. 可控显示隐藏
+
+采用受控组件设计，通过父组件传入visible属性控制弹窗显示/隐藏，同时暴露onClose回调，让父组件完全掌控弹窗状态，符合React单向数据流理念。这样设计既能保证组件状态统一，又能避免子组件擅自修改状态，便于父组件做联动逻辑（比如弹窗关闭后重置表单、请求接口）。
+
+2. 遮罩层设计（兼顾体验和交互）
+遮罩层单独封装，使用fixed定位全屏覆盖，设置合理的层级（z-index）避免被其他元素遮挡，同时添加半透明背景实现视觉隔离，提升弹窗存在感。支持点击遮罩关闭，同时做了防误触处理——点击弹窗内容区不会触发关闭，只有点击遮罩空白区域才生效，兼顾交互合理性和用户体验。
+
+3. ESC 键关闭（提升易用性）
+监听全局keydown事件，只有当弹窗处于显示状态时，才响应ESC键关闭，避免弹窗隐藏时监听事件浪费性能。同时在组件卸载时清除事件监听，防止内存泄漏，这是大厂面试重点关注的细节，体现对组件生命周期和性能的把控。
+
+4. 插槽内容（高复用、高灵活）
+采用React.children和自定义插槽（如title、footer）结合的方式，既支持直接传入子元素作为弹窗内容，也支持单独传入标题、底部按钮区，满足不同业务场景（比如确认弹窗、表单弹窗、提示弹窗）。这样设计让组件摆脱固定结构限制，复用性大大提升，不用为不同弹窗单独写组件。
+
+5. 额外优化（面试官眼前一亮的点）
+添加弹窗动画（淡入淡出+缩放），提升视觉体验；做滚动穿透处理（弹窗显示时禁止页面滚动，关闭时恢复），避免弹窗滚动时页面跟着滚动；添加防重复渲染优化（memo包裹组件、useCallback缓存回调），提升性能；支持自定义弹窗宽高、遮罩透明度，增强扩展性。
+
+useMemo 的作用是缓存复杂计算的结果
+useCallback 的作用是缓存函数的引用
+
+
+```js
+// memo 是一个高阶组件，用于缓存函数组件的渲染结果，只有当其 props 发生变化时才重新渲染，
+// 从而避免父组件更新时引发的子组件无效重复渲染
+import React, { useEffect, useCallback, memo } from 'react';
+import PropTypes from 'prop-types'; // 大厂必备：类型校验，提升代码健壮性
+
+// 用memo包裹，防止父组件无关状态更新导致弹窗重复渲染（性能优化）
+const Modal = memo(({
+  visible, // 父组件传入：控制弹窗显示/隐藏（受控）
+  onClose, // 父组件传入：弹窗关闭时的回调（必传）
+  title, // 可选：弹窗标题
+  children, // 可选：弹窗主体内容（插槽）
+  footer, // 可选：弹窗底部内容（自定义插槽，如确认/取消按钮）
+  maskClosable = true, // 可选：点击遮罩是否关闭，默认true
+  escClosable = true, // 可选：ESC键是否关闭，默认true
+  maskOpacity = 0.5, // 可选：遮罩透明度，默认0.5
+  width = 500, // 可选：弹窗宽度，默认500px
+  zIndex = 1000 // 可选：弹窗层级，默认1000（避免被遮挡）
+}) => {
+  // 1. ESC键关闭逻辑：监听全局keydown事件
+  const handleEscClose = useCallback((e) => {
+    // 只有弹窗显示、开启ESC关闭，才响应ESC键
+    if (visible && escClosable && e.key === 'Escape') {
+      onClose?.(); // 可选链操作，避免onClose未传入报错（细节优化）
+    }
+  }, [visible, escClosable, onClose]); // 依赖项缓存，避免每次渲染重新生成函数
+
+  // 2. 监听/清除ESC事件（生命周期管理，防止内存泄漏）
+  useEffect(() => {
+    // 弹窗显示时，添加全局监听
+    if (visible) {
+      window.addEventListener('keydown', handleEscClose);
+    }
+    // 组件卸载/弹窗隐藏时，清除监听
+    return () => {
+      window.removeEventListener('keydown', handleEscClose);
+    };
+  }, [visible, handleEscClose]);
+
+  // 3. 点击遮罩关闭逻辑
+  const handleMaskClick = (e) => {
+    // 只有点击遮罩本身（不包含弹窗内容），且开启遮罩关闭，才触发关闭
+    // e.target === 遮罩DOM，避免点击弹窗内容误触关闭（关键细节）
+    if (maskClosable && e.target === e.currentTarget) {
+      onClose?.();
+    }
+  };
+  // 这是为了解决滚动穿透问题。防止用户在弹窗上滑动时，触发底层页面的
+  // 滚动，从而破坏交互体验，确保弹窗的独立性和沉浸感。
+  // 4. 滚动穿透处理：弹窗显示时禁止页面滚动，关闭时恢复
+  useEffect(() => {
+    const body = document.body;
+    if (visible) {
+      // 保存原始overflow值，关闭时恢复（避免影响其他页面逻辑）
+      body._originalOverflow = body.style.overflow;
+      body.style.overflow = 'hidden'; // 禁止滚动
+    } else {
+      // 恢复原始overflow，避免页面一直无法滚动
+      body.style.overflow = body._originalOverflow || '';
+    }
+    // 组件卸载时，兜底恢复body滚动（防止异常场景下残留）
+    return () => {
+      body.style.overflow = body._originalOverflow || '';
+    };
+  }, [visible]);
+
+  // 弹窗未显示时，不渲染任何内容（性能优化，避免无效DOM）
+  if (!visible) return null;
+
+  return (
+    {/* 遮罩层：fixed全屏，z-index比弹窗低1，避免遮挡弹窗内容 */}
+    <div
+      className="modal-mask"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: `rgba(0, 0, 0, ${maskOpacity})`,
+        zIndex: zIndex - 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: 'background-color 0.3s ease' // 遮罩淡入淡出动画
+      }}
+      onClick={handleMaskClick}
+    >
+      {/* 弹窗主体：居中显示，可自定义宽高，添加缩放动画 */}
+      <div
+        className="modal-content"
+        style={{
+          width: `${width}px`,
+          backgroundColor: '#fff',
+          borderRadius: '8px', // 圆角设计，贴合现代UI
+          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)', // 阴影提升层次感
+          zIndex: zIndex,
+          transition: 'transform 0.3s ease, opacity 0.3s ease',
+          transform: 'scale(0.95)', // 初始缩放
+          opacity: 0, // 初始透明
+          animation: 'modalShow 0.3s ease forwards' // 动画生效
+        }}
+      >
+        {/* 弹窗标题区：有title才渲染，否则不显示（按需渲染，优化DOM） */}
+        {title && (
+          <div className="modal-title" style={{
+            padding: '16px 20px',
+            borderBottom: '1px solid #eee',
+            fontSize: '18px',
+            fontWeight: 600
+          }}>
+            {title}
+          </div>
+        )}
+
+        {/* 弹窗内容区：默认padding，支持自定义子元素 */}
+        <div className="modal-body" style={{
+          padding: '20px',
+          minHeight: '80px' // 最小高度，避免内容过短时弹窗过矮
+        }}>
+          {children}
+        </div>
+
+        {/* 弹窗底部区：有footer才渲染，支持自定义按钮（如确认/取消） */}
+        {footer && (
+          <div className="modal-footer" style={{
+            padding: '16px 20px',
+            borderTop: '1px solid #eee',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: '12px' // 按钮间距，提升美观度
+          }}>
+            {footer}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
+// 大厂重点：类型校验，明确props类型和必填项，提升代码可维护性
+Modal.propTypes = {
+  visible: PropTypes.bool.isRequired, // 必传：控制显示隐藏
+  onClose: PropTypes.func.isRequired, // 必传：关闭回调
+  title: PropTypes.node, // 可选：标题（支持文本、React元素）
+  children: PropTypes.node, // 可选：主体内容
+  footer: PropTypes.node, // 可选：底部内容
+  maskClosable: PropTypes.bool, // 可选：点击遮罩关闭
+  escClosable: PropTypes.bool, // 可选：ESC关闭
+  maskOpacity: PropTypes.number, // 可选：遮罩透明度
+  width: PropTypes.number, // 可选：弹窗宽度
+  zIndex: PropTypes.number // 可选：层级
+};
+
+// 导出组件，支持按需引入
+export default Modal;
+
+// 补充：动画样式（可单独抽离到css文件，面试时可简单写在组件内或说明）
+// 弹窗显示动画：缩放+淡入
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes modalShow {
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+`;
+document.head.appendChild(style);
+
+```
+
