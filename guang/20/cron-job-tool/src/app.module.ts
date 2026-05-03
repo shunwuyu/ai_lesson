@@ -20,6 +20,8 @@ import {
 import { CronJob } from 'cron';
 import { JobModule } from './job/job.module';
 import { Job } from './job/entities/job.entity';
+import { ToolModule } from './tool/tool.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -45,9 +47,35 @@ import { Job } from './job/entities/job.entity';
       logging: true,
       synchronize: true,
     }),
+    MailerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService:ConfigService) => ({
+          // transport 传输方式
+          transport: {
+              // 邮件主机
+              host: configService.get<string>('MAIL_HOST'),
+              // 邮件端口
+              port: Number(configService.get<string>('MAIL_PORT')),
+              // 是否使用 SSL/TLS
+              secure: configService.get<string>('MAIL_SECURE') === 'true',
+              // 邮件认证
+              auth: {
+                  // 邮件用户名
+                  user: configService.get<string>('MAIL_USER'),
+                  // 
+                  pass: configService.get<string>('MAIL_PASS'),
+              }
+          },
+          defaults: {
+              // 默认发件人
+              from: configService.get<string>('MAIL_FROM'),
+          }
+      })
+    }),
     UsersModule,
     AiModule,
-    JobModule
+    JobModule,
+    ToolModule
   ],
   controllers: [AppController],
   providers: [AppService],

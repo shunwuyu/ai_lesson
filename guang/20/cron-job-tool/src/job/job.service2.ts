@@ -4,12 +4,11 @@ import {
     Logger,
     NotFoundException,
     OnApplicationBootstrap,
-  } from '@nestjs/common';
-  import { SchedulerRegistry } from '@nestjs/schedule';
-  import { CronJob } from 'cron';
-  import { EntityManager } from 'typeorm';
-  import { Job } from './entities/job.entity';
-  import { JobAgentService } from '../ai/job-agent.service';
+  } from'@nestjs/common';
+  import { SchedulerRegistry } from'@nestjs/schedule';
+  import { CronJob } from'cron';
+  import { EntityManager } from'typeorm';
+  import { Job } from'./entities/job.entity';
   
   @Injectable()
   export class JobService implements OnApplicationBootstrap {
@@ -21,10 +20,7 @@ import {
     @Inject(SchedulerRegistry)
     private readonly schedulerRegistry: SchedulerRegistry;
   
-    @Inject(JobAgentService)
-    private readonly jobAgentService: JobAgentService;
-  
-    async onApplicationBootstrap() {
+  async onApplicationBootstrap() {
       const enabledJobs = await this.entityManager.find(Job, {
         where: { isEnabled: true },
       });
@@ -43,7 +39,7 @@ import {
       }
     }
   
-    async listJobs() {
+  async listJobs() {
       const jobs = await this.entityManager.find(Job, {
         order: { createdAt: 'DESC' },
       });
@@ -66,7 +62,7 @@ import {
       });
     }
   
-    async addJob(
+  async addJob(
       input:
         | {
             type: 'cron';
@@ -106,7 +102,7 @@ import {
       return saved;
     }
   
-    async toggleJob(jobId: string, enabled?: boolean) {
+  async toggleJob(jobId: string, enabled?: boolean) {
       const job = await this.entityManager.findOne(Job, { where: { id: jobId } });
       if (!job) throw new NotFoundException(`Job not found: ${jobId}`);
   
@@ -151,15 +147,6 @@ import {
         const ref = setInterval(async () => {
           this.logger.log(`run job ${job.id}, ${job.instruction}`);
           await this.entityManager.update(Job, job.id, { lastRun: new Date() });
-  
-          try {
-            const result = await this.jobAgentService.runJob(job.instruction);
-            this.logger.log(`[job ${job.id}] ${result}`);
-          } catch (e) {
-            this.logger.error(
-              `job ${job.id} agent execution error: ${(e as Error).message}`,
-            );
-          }
         }, job.everyMs);
   
         this.schedulerRegistry.addInterval(job.id, ref);
@@ -181,16 +168,6 @@ import {
             lastRun: new Date(),
             isEnabled: false, // at 类型只执行一次：执行完自动停用
           });
-  
-          try {
-            const result = await this.jobAgentService.runJob(job.instruction);
-            this.logger.log(`[job ${job.id}] ${result}`);
-          } catch (e) {
-            this.logger.error(
-              `job ${job.id} agent execution error: ${(e as Error).message}`,
-            );
-          }
-  
           try {
             this.schedulerRegistry.deleteTimeout(job.id);
           } catch {
@@ -235,15 +212,6 @@ import {
       return new CronJob(cronExpr, async () => {
         this.logger.log(`run job ${job.id}, ${job.instruction}`);
         await this.entityManager.update(Job, job.id, { lastRun: new Date() });
-  
-        try {
-          const result = await this.jobAgentService.runJob(job.instruction);
-          this.logger.log(`[job ${job.id}] ${result}`);
-        } catch (e) {
-          this.logger.error(
-            `job ${job.id} agent execution error: ${(e as Error).message}`,
-          );
-        }
       });
     }
   }
