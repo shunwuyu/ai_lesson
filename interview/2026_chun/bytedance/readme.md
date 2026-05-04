@@ -5440,3 +5440,334 @@ document.head.appendChild(style);
 
 ```
 
+## 在定义 AI 接口返回的嵌套数据结构（如多轮对话、工具调用结果）时，如何用 TypeScript 的泛型与条件类型实现灵活的类型推导？
+
+### 什么叫ts 条件类型
+
+TypeScript 条件类型就是类型版的三元运算符  
+
+T extends U ? X : Y
+
+type IsString<T> = T extends string ? true : false
+
+### 多轮会话
+
+AI 多轮会话就是把每一轮用户提问和 AI 回复都保存成上下文消息，AI 能记住前面聊天、工具调用记录，连贯理解后续提问，不是单次孤立问答。
+
+有各种类型的
+
+type ToolCall = {
+  id: string;
+  name: string;
+  args: Record<string, unknown>;
+}
+type MessageType = 'system' | 'human' | 'ai' | 'tool'
+// tool 返回的结果类型是未知的。
+// unknown 安全，必须先校验类型才能使用；any 关闭类型检查，易引发错误，TS 无法提示、保护代码。
+type MessageContent<T extends MessageType> = 
+  T extends 'system' ? { prompt: string } :
+  T extends 'tool' ? { tool: string; result: unknown } :
+  T extends 'ai' ? { content: string; toolCalls?: ToolCall[] } :
+  { content: string }
+
+interface Message<T extends MessageType> {
+  type: T
+  data: MessageContent<T>
+}
+
+// 多轮对话消息数组
+type Messages = Message<MessageType>[]
+
+type ChatResponse = {
+  messages: Messages
+  hasToolCall: boolean
+}
+
+
+// 最终接口返回结构
+type ChatResponse = {
+  messages: Messages
+  hasToolCall: boolean // 继续循环
+}
+
+
+// unknown 必须校验
+function test(res: unknown) {
+  // res.toString() // 报错！不让直接用
+  if (typeof res === 'string') {
+    console.log(res.toUpperCase()) // 安全
+  }
+}
+
+// any 随便用，报错不提示
+function testAny(res: any) {
+  res.xxx() // 不报错，运行直接崩
+}
+
+## CSS 中如何实现一个无限旋转的Loading动画，用于表示 AI正在思考？
+spinn.html
+
+## 数组转树结构：Al Agent 的任务拆解通常是树状的，请写一个函数将扁平的任务列表转为嵌套树。
+利用哈希表缓存节点引用，遍历一次数组，直接将子节点归位到父节点的 children 中。
+AI 无法直接一步执行“去日本玩 7 天”这种模糊且庞大的指令。它必须将抽象的大目标（根节点），拆解为具体的子目标（中间节点），最后落地为可执行的原子操作（叶子节点）。
+具体例子：用户指令“帮我规划去日本的 7 天行程”
+这个任务在 AI Agent 内部会被拆解成如下的树状结构：
+根节点（总目标）：日本 7 日游规划
+分支 A（行前准备）
+叶子节点 1：查询日本近期签证政策
+叶子节点 2：查询当前日元汇率
+叶子节点 3：列出必备物品清单（电源转换器、Sim 卡等）
+分支 B（大交通预订）
+叶子节点 1：搜索往返机票（北京 -> 东京）
+叶子节点 2：比价并锁定航班
+分支 C（每日行程规划） —— 这是最复杂的子树
+子节点 C1（第 1-3 天：东京）
+叶子节点：搜索浅草寺开放时间
+叶子节点：预订涩谷 Sky 观景台门票
+叶子节点：查找新宿区高评分居酒屋
+子节点 C2（第 4-5 天：京都）
+叶子节点：查询东京到京都的新干线时刻表
+叶子节点：预订祗园附近的酒店
+叶子节点：查找金阁寺周边景点
+分支 D（输出报告）
+叶子节点 1：汇总所有信息生成 PDF
+叶子节点 2：发送邮件给用户
+
+list2tree.js
+
+## 解释 Promise.all 和 Promise.allSettled 的区别，在并行调用多个 AI 模型时你选哪个？
+Promise.all：要么全赢，要么全输
+- 行为：它接受一组 Promise，只有当所有 Promise 都成功（resolved）时，它才会返回成功的结果数组。
+- 失败机制：只要其中任何一个 Promise 失败（rejected），它会立即抛出错误，后续的结果将被忽略。
+- 适用场景：强依赖场景。比如“下单支付”，必须同时扣库存、扣余额、生成订单，缺一不可。
+
+Promise.allSettled：不管成败，我要结果
+
+行为：它接受一组 Promise，会等待所有 Promise 都“结束”（无论是成功还是失败）。
+结果格式：返回一个数组，每个元素都是一个对象，包含 status（'fulfilled' 或 'rejected'）和对应的 value 或 reason。
+适用场景：弱依赖/互不干扰场景。比如“获取首页数据”，即使“推荐列表”挂了，“轮播图”和“广告位”依然要显示。
+
+### 在并行调用多个 AI 模型时选哪个？
+绝大多数情况下选 Promise.allSettled。
+为什么？
+AI 模型调用属于不稳定的外部服务，且通常用于辅助决策或对比。
+容错性（鲁棒性）：
+如果你并行调用 GPT-4、Claude 3 和 Llama 3 来生成文案。
+如果用 Promise.all：一旦 Llama 3 的服务器超时或报错，整个请求直接崩溃，用户什么都看不到。
+如果用 Promise.allSettled：即使 Llama 3 挂了，你依然可以拿到 GPT-4 和 Claude 3 的结果展示给用户，并在 Llama 的位置显示“生成失败，请重试”。
+
+业务价值：
+AI 结果往往具有随机性。拿到“部分结果”通常比“完全没有结果”要有价值得多。
+
+## 在 TypeScript 中，如何定义一个支持多种 AI 模型配置的通用接口？
+在 TypeScript 里搞定这件事，最优雅的方式就是利用 泛型 把“通用逻辑”和“特定配置”解耦。简单来说，就是把接口定义成 BaseConfig<T>，让调用方来决定 T 具体是哪种模型的配置。
+这里有一套从基础到进阶的实战方案：
+核心思路：泛型 + 交叉类型
+我们定义一个基础接口，包含所有模型共有的字段（如 apiKey, timeout），然后留一个泛型插槽 T 给具体模型的独有配置。
+
+// 1. 定义具体模型的配置接口
+interface OpenAIOptions {
+  model: 'gpt-4' | 'gpt-3.5-turbo';
+  temperature: number;
+  user?: string;
+}
+
+interface ClaudeOptions {
+  model: 'claude-3-opus' | 'claude-3-sonnet';
+  max_tokens: number;
+  stop_sequences?: string[];
+}
+
+// 2. 定义通用基础接口 (利用泛型)
+interface BaseAIConfig<T> {
+  provider: 'openai' | 'anthropic' | 'google'; // 厂商标识
+  apiKey: string;
+  baseUrl?: string; // 可选的代理地址
+  
+  // 核心：特定配置由泛型 T 决定
+  options: T;
+}
+
+// 3. 定义联合类型，形成最终的通用接口
+// 排版好看
+type AIModelConfig = 
+  | BaseAIConfig<OpenAIOptions> 
+  | BaseAIConfig<ClaudeOptions>;
+
+## 请说明在处理 AI 流式输出（Streaming）时，Fetch API 与传统 XMLHttpRequest 的区别？
+
+- AJAX 是统称异步请求技术，平时说的 AJAX 特指 XMLHttpRequest；Fetch 是 ES6 新的原生异步请求 API，用来替代 XHR。
+
+- 区别
+  XHR 回调地狱、写法繁琐
+
+
+
+```js
+async function fetchAIStream() {
+  const response = await fetch('/api/ai-chat', {
+    method: 'POST',
+    body: JSON.stringify({ prompt: "你好" }),
+  });
+
+  if (!response.ok) throw new Error("Network response was not ok");
+
+  // 1. 获取读取器
+  const reader = response.body.getReader();
+  
+  // 2. 创建解码器 (处理中文关键)
+  const decoder = new TextDecoder('utf-8');
+  let buffer = ''; // 用于缓存可能被截断的字符
+
+  while (true) {
+    const { done, value } = await reader.read();
+    
+    if (done) break;
+
+    // 3. 解码数据块
+    const chunk = decoder.decode(value, { stream: true });
+    buffer += chunk;
+
+    // 4. 处理 SSE 格式 (假设后端返回的是 data: {...}\n\n)
+    // 这里需要简单的字符串分割逻辑来提取完整的 JSON 或文本
+    const lines = buffer.split('\n');
+    
+    // 保留最后一行，因为它可能是不完整的
+    buffer = lines.pop(); 
+
+    lines.forEach(line => {
+      if (line.startsWith('data:')) {
+        const data = line.replace('data:', '').trim();
+        if (data === '[DONE]') return;
+        console.log('收到流式片段:', JSON.parse(data));
+        // 更新 UI...
+      }
+    });
+  }
+}
+```
+
+## 请说明在处理 AI流式输出（Streaming）时，Fetch API 与传统 XMLHttpRequest 的区别？
+
+
+
+## 如何在前端实现一个 “流式 Markdown 解析器”，在 AI 逐字输出过程中实时渲染标题、列表、代码块，并避免标签截断？
+
+### 流式输出
+
+AI 流式输出就是后端边生成答案边推送，前端实时接收、逐字显示，不用等完整结果，体验像打字机。核心是后端用异步生成器 yield 推送片段，Nest 的 @Sse + from(stream) 做了一件事， 它自动订阅、监听这个生成器，就像一直盯着 “吐数据” 的口。前端通过 EventSource 监听 SSE 流，实时渲染.
+yield 把数据给生成器 → from 监听生成器 → Sse 转发给前端
+前端通过 EventSource 监听 SSE 流，实时渲染。
+后端核心：async *run (){for await (const chunk of stream) yield chunk.content}
+const stream = this.aiService.runChainStream(query);
+    return from (stream)
+      .pipe(map((chunk) => ({
+        data: chunk
+      }))) as Observable<MessageEvent>
+前端核心：const es = new EventSource ('/api/stream')es.onmessage = (e) => div.innerHTML += e.data
+
+### 流式 Markdown 解析器
+
+流式 Markdown 解析器，比普通流式输出多了实时格式化。普通输出只是堆文字，它会边接收边解析：标题、加粗、列表、代码块自动渲染，不会等全文结束，也不会出现标签截断，让内容边出边排版，界面更美观规范。
+
+不等待完整文本，边接收字符边解析语法，实时渲染，而不是拼接完再转 HTML。
+
+咱们先挑最常用、最容易实现的核心语法：标题（#）、加粗（**）、斜体（*）、换行（\n）
+
+- 先明确流式解析的核心（面试必强调）：咱们不用把整个testMarkdown一次性读透，而是for循环逐字符遍历，每读一个字符就判断它是什么，边读边处理，这样就算是很大的Markdown文本，也不会占用太多内存，这是大厂关注的性能点。
+- 状态变量的作用（大厂高频考点：状态机）：比如isBold，一开始是false，说明没在加粗状态；当遇到两个*时，就把isBold改成true，同时输出<b>；再遇到两个*时，改成false，输出</b>，这样就实现了加粗的切换，斜体、标题也是一样的逻辑，用状态标记“当前处于什么模式”。
+- 缓存buffer的作用：比如我们读“加”“粗”“文”“本”这四个字，这时候还没遇到*，就先存在buffer里；等遇到两个*时，再把buffer里的“加粗文本”拼到output里，再加上<b>标签，避免频繁拼接字符串，提升性能（大厂关注细节，这点一定要说）。
+
+- 容错处理（大厂看重鲁棒性）：循环结束后，要判断有没有未闭合的标签，比如用户只写了一个**，没写结尾的**，我们就自动加上</b>，避免解析出错误的HTML，这是体现代码严谨性的地方。
+
+```js
+// 大厂面试手写版 - 流式Markdown解析器（核心版）
+// 核心思路：逐字符遍历（流式）+ 状态机（标记当前解析状态）+ 字符缓存（拼接普通文本）
+function streamMarkdownParser(input) {
+  // 1. 输出结果：最终要返回的HTML字符串（边解析边拼接）
+  let output = '';
+  // 2. 状态变量：标记当前是否处于某个Markdown标签中（大厂考点：状态机）
+  let isBold = false; // 标记是否在**加粗**中
+  let isItalic = false; // 标记是否在*斜体*中
+  let isTitle = false; // 标记是否在#标题中
+  let titleLevel = 0; // 标记标题级别（1-6级，#是1级，##是2级，以此类推）
+  // 3. 字符缓存：缓存当前未处理的普通文本（避免频繁拼接，提升性能，大厂关注细节）
+  let buffer = '';
+
+  // 流式核心：逐字符遍历输入（不一次性加载全文，低内存）
+  for (const char of input) {
+    // 先处理标题：判断当前字符是不是#，且是行首（避免中间的#被误判）
+    // 这里做个简单判断：如果buffer是空的，且当前字符是#，就是标题开头
+    if (buffer === '' && char === '#') {
+      isTitle = true; // 进入标题状态
+      titleLevel++; // 标题级别+1（每多一个#，级别+1）
+      continue; // 跳过当前#，不存入buffer，后续统一拼接标题标签
+    }
+
+    // 处理标题结束：遇到空格，说明#输入完成，结束标题状态
+    if (isTitle && char === ' ') {
+      // 拼接标题标签：<h1>到<h6>，超过6级按普通文本处理
+      output += titleLevel <= 6 ? `<h${titleLevel}>` : '';
+      isTitle = false; // 退出标题状态
+      continue; // 跳过空格，不存入buffer
+    }
+
+    // 处理加粗：判断当前字符是不是*，且下一个字符也是*（避免和斜体混淆）
+    // 这里用input.indexOf获取下一个字符，流式中可接受（简单易实现，面试优先）
+    const nextChar = input[input.indexOf(char) + 1];
+    if (char === '*' && nextChar === '*') {
+      // 先把缓存的普通文本拼接到输出
+      output += buffer;
+      buffer = ''; // 清空缓存
+      isBold = !isBold; // 切换加粗状态（true→false，false→true）
+      // 拼接加粗标签：<b>或</b>
+      output += isBold ? '<b>' : '</b>';
+      // 跳过下一个*（因为两个*才是加粗标记，避免重复处理）
+      input = input.slice(input.indexOf(char) + 2);
+      continue;
+    }
+
+    // 处理斜体：判断当前字符是*，且下一个字符不是*（和加粗区分开）
+    if (char === '*' && nextChar !== '*') {
+      output += buffer;
+      buffer = '';
+      isItalic = !isItalic; // 切换斜体状态
+      output += isItalic ? '<i>' : '</i>';
+      // 跳过当前*，避免重复处理
+      input = input.slice(input.indexOf(char) + 1);
+      continue;
+    }
+
+    // 处理换行：遇到\n，拼接换行标签<br/>
+    if (char === '\n') {
+      output += buffer + '<br/>';
+      buffer = ''; // 清空缓存，准备处理下一行
+      // 重置标题相关状态（换行后，新的一行可能不是标题）
+      titleLevel = 0;
+      continue;
+    }
+
+    // 普通字符：既不是标记，也不是换行，存入缓存
+    buffer += char;
+  }
+
+  // 循环结束后，拼接剩余的缓存文本（避免最后一段文本丢失）
+  output += buffer;
+  // 处理未闭合的标签（容错处理，大厂关注鲁棒性）
+  if (isBold) output += '</b>';
+  if (isItalic) output += '</i>';
+  if (titleLevel <= 6) output += `</h${titleLevel}>`;
+
+  return output;
+}
+
+// 测试用例（面试时一定要写，证明代码可运行，大厂看重落地能力）
+const testMarkdown = `# 这是1级标题
+## 这是2级标题
+**加粗文本** *斜体文本*
+这是普通文本，换行\n这是换行后的文本`;
+
+// 执行解析，打印结果（面试时可模拟输出，说明代码逻辑）
+console.log(streamMarkdownParser(testMarkdown));
+// 预期输出：<h1>这是1级标题</h1><br/><h2>这是2级标题</h2><br/><b>加粗文本</b> <i>斜体文本</i><br/>这是普通文本，换行<br/>这是换行后的文本`
+```
