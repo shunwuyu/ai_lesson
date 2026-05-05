@@ -105,145 +105,145 @@ import {
   
       return saved;
     }
-  
+
     async toggleJob(jobId: string, enabled?: boolean) {
-      const job = await this.entityManager.findOne(Job, { where: { id: jobId } });
-      if (!job) throw new NotFoundException(`Job not found: ${jobId}`);
-  
-      const nextEnabled = enabled ?? !job.isEnabled;
-      if (job.isEnabled !== nextEnabled) {
-        job.isEnabled = nextEnabled;
-        await this.entityManager.save(Job, job);
+        const job = await this.entityManager.findOne(Job, { where: { id: jobId } });
+        if (!job) throw new NotFoundException(`Job not found: ${jobId}`);
+    
+        const nextEnabled = enabled ?? !job.isEnabled;
+        if (job.isEnabled !== nextEnabled) {
+          job.isEnabled = nextEnabled;
+          await this.entityManager.save(Job, job);
+        }
+    
+        if (job.isEnabled) {
+          await this.startRuntime(job);
+        } else {
+          this.stopRuntime(job);
+        }
+    
+        return job;
       }
-  
-      if (job.isEnabled) {
-        await this.startRuntime(job);
-      } else {
-        this.stopRuntime(job);
-      }
-  
-      return job;
-    }
-  
-    private async startRuntime(job: Job) {
-      if (job.type === 'cron') {
-        const cronJobs = this.schedulerRegistry.getCronJobs();
-        const existing = cronJobs.get(job.id);
-        if (existing) {
-          existing.start();
+    
+      private async startRuntime(job: Job) {
+        if (job.type === 'cron') {
+          const cronJobs = this.schedulerRegistry.getCronJobs();
+          const existing = cronJobs.get(job.id);
+          if (existing) {
+            existing.start();
+            return;
+          }
+    
+          const runtimeJob = this.createCronJob(job);
+          this.schedulerRegistry.addCronJob(job.id, runtimeJob);
+          runtimeJob.start();
           return;
         }
-  
-        const runtimeJob = this.createCronJob(job);
-        this.schedulerRegistry.addCronJob(job.id, runtimeJob);
-        runtimeJob.start();
-        return;
-      }
-  
-      if (job.type === 'every') {
-        const names = this.schedulerRegistry.getIntervals();
-        if (names.includes(job.id)) return;
-  
-        if (typeof job.everyMs !== 'number' || job.everyMs <= 0) {
-          throw new Error(`Invalid everyMs for job ${job.id}`);
-        }
-  
-        const ref = setInterval(async () => {
-          this.logger.log(`run job ${job.id}, ${job.instruction}`);
-          await this.entityManager.update(Job, job.id, { lastRun: new Date() });
-  
-          try {
-            const result = await this.jobAgentService.runJob(job.instruction);
-            this.logger.log(`[job ${job.id}] ${result}`);
-          } catch (e) {
-            this.logger.error(
-              `job ${job.id} agent execution error: ${(e as Error).message}`,
-            );
+    
+        if (job.type === 'every') {
+          const names = this.schedulerRegistry.getIntervals();
+          if (names.includes(job.id)) return;
+    
+          if (typeof job.everyMs !== 'number' || job.everyMs <= 0) {
+            throw new Error(`Invalid everyMs for job ${job.id}`);
           }
-        }, job.everyMs);
-  
-        this.schedulerRegistry.addInterval(job.id, ref);
-        return;
-      }
-  
-      if (job.type === 'at') {
-        const names = this.schedulerRegistry.getTimeouts();
-        if (names.includes(job.id)) return;
-  
-        if (!job.at) {
-          throw new Error(`Invalid at for job ${job.id}`);
+    
+          const ref = setInterval(async () => {
+            this.logger.log(`run job ${job.id}, ${job.instruction}`);
+            await this.entityManager.update(Job, job.id, { lastRun: new Date() });
+    
+            try {
+              const result = await this.jobAgentService.runJob(job.instruction);
+              this.logger.log(`[job ${job.id}] ${result}`);
+            } catch (e) {
+              this.logger.error(
+                `job ${job.id} agent execution error: ${(e as Error).message}`,
+              );
+            }
+          }, job.everyMs);
+    
+          this.schedulerRegistry.addInterval(job.id, ref);
+          return;
         }
-  
-        const delay = Math.max(0, job.at.getTime() - Date.now());
-        const ref = setTimeout(async () => {
-          this.logger.log(`run job ${job.id}, ${job.instruction}`);
-          await this.entityManager.update(Job, job.id, {
-            lastRun: new Date(),
-            isEnabled: false, // at 类型只执行一次：执行完自动停用
+    
+        if (job.type === 'at') {
+          const names = this.schedulerRegistry.getTimeouts();
+          if (names.includes(job.id)) return;
+    
+          if (!job.at) {
+            throw new Error(`Invalid at for job ${job.id}`);
+          }
+    
+          const delay = Math.max(0, job.at.getTime() - Date.now());
+          const ref = setTimeout(async () => {
+            this.logger.log(`run job ${job.id}, ${job.instruction}`);
+            await this.entityManager.update(Job, job.id, {
+              lastRun: new Date(),
+              isEnabled: false, // at 类型只执行一次：执行完自动停用
+            });
+    
+            try {
+              const result = await this.jobAgentService.runJob(job.instruction);
+              this.logger.log(`[job ${job.id}] ${result}`);
+            } catch (e) {
+              this.logger.error(
+                `job ${job.id} agent execution error: ${(e as Error).message}`,
+              );
+            }
+    
+            try {
+              this.schedulerRegistry.deleteTimeout(job.id);
+            } catch {
+              // ignore
+            }
+          }, delay);
+    
+          this.schedulerRegistry.addTimeout(job.id, ref);
+          return;
+        }
+      }
+    
+      private stopRuntime(job: Job) {
+        if (job.type === 'cron') {
+          const cronJobs = this.schedulerRegistry.getCronJobs();
+          const runtimeJob = cronJobs.get(job.id);
+          if (runtimeJob) runtimeJob.stop();
+          return;
+        }
+
+        if (job.type === 'every') {
+            try {
+              this.schedulerRegistry.deleteInterval(job.id);
+            } catch {
+              // ignore
+            }
+            return;
+          }
+      
+          if (job.type === 'at') {
+            try {
+              this.schedulerRegistry.deleteTimeout(job.id);
+            } catch {
+              // ignore
+            }
+            return;
+          }
+        }
+      
+        private createCronJob(job: Job) {
+          const cronExpr = job.cron ?? '';
+          return new CronJob(cronExpr, async () => {
+            this.logger.log(`run job ${job.id}, ${job.instruction}`);
+            await this.entityManager.update(Job, job.id, { lastRun: new Date() });
+      
+            try {
+              const result = await this.jobAgentService.runJob(job.instruction);
+              this.logger.log(`[job ${job.id}] ${result}`);
+            } catch (e) {
+              this.logger.error(
+                `job ${job.id} agent execution error: ${(e as Error).message}`,
+              );
+            }
           });
-  
-          try {
-            const result = await this.jobAgentService.runJob(job.instruction);
-            this.logger.log(`[job ${job.id}] ${result}`);
-          } catch (e) {
-            this.logger.error(
-              `job ${job.id} agent execution error: ${(e as Error).message}`,
-            );
-          }
-  
-          try {
-            this.schedulerRegistry.deleteTimeout(job.id);
-          } catch {
-            // ignore
-          }
-        }, delay);
-  
-        this.schedulerRegistry.addTimeout(job.id, ref);
-        return;
-      }
-    }
-  
-    private stopRuntime(job: Job) {
-      if (job.type === 'cron') {
-        const cronJobs = this.schedulerRegistry.getCronJobs();
-        const runtimeJob = cronJobs.get(job.id);
-        if (runtimeJob) runtimeJob.stop();
-        return;
-      }
-  
-      if (job.type === 'every') {
-        try {
-          this.schedulerRegistry.deleteInterval(job.id);
-        } catch {
-          // ignore
         }
-        return;
       }
-  
-      if (job.type === 'at') {
-        try {
-          this.schedulerRegistry.deleteTimeout(job.id);
-        } catch {
-          // ignore
-        }
-        return;
-      }
-    }
-  
-    private createCronJob(job: Job) {
-      const cronExpr = job.cron ?? '';
-      return new CronJob(cronExpr, async () => {
-        this.logger.log(`run job ${job.id}, ${job.instruction}`);
-        await this.entityManager.update(Job, job.id, { lastRun: new Date() });
-  
-        try {
-          const result = await this.jobAgentService.runJob(job.instruction);
-          this.logger.log(`[job ${job.id}] ${result}`);
-        } catch (e) {
-          this.logger.error(
-            `job ${job.id} agent execution error: ${(e as Error).message}`,
-          );
-        }
-      });
-    }
-  }
