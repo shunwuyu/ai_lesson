@@ -1,0 +1,195 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    overflow: hidden;
+    font-family:
+      Inter,
+      "PingFang SC",
+      "Microsoft YaHei",
+      sans-serif;
+  
+    background:
+      radial-gradient(circle at top, #fff6e9, #efe3cf);
+  
+    color: #3c342c;
+  }
+  
+  #webgl {
+    position: fixed;
+    inset: 0;
+  }
+  
+  /* =========================
+     Glass
+  ========================= */
+  
+  .glass {
+    background: rgba(255,255,255,0.45);
+  
+    backdrop-filter: blur(16px);
+  
+    border: 1px solid rgba(255,255,255,0.35);
+  
+    box-shadow:
+      0 8px 30px rgba(0,0,0,0.08);
+  
+    border-radius: 22px;
+  }
+  
+  /* =========================
+     Top
+  ========================= */
+  
+  .top-bar {
+    position: fixed;
+  
+    top: 20px;
+    left: 20px;
+    right: 20px;
+  
+    padding: 16px 20px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  
+    z-index: 20;
+  }
+  
+  .title {
+    font-size: 22px;
+    font-weight: 700;
+  }
+  
+  .save-panel {
+    display: flex;
+    gap: 10px;
+  }
+  
+  button,
+  select {
+    border: none;
+    outline: none;
+  
+    background: rgba(255,255,255,0.7);
+  
+    padding: 10px 14px;
+  
+    border-radius: 12px;
+  
+    font-size: 14px;
+  
+    cursor: pointer;
+  
+    transition: 0.2s;
+  }
+  
+  button:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* =========================
+     Toolbar
+  ========================= */
+  
+  .toolbar {
+    position: fixed;
+  
+    left: 50%;
+    bottom: 22px;
+  
+    transform: translateX(-50%);
+  
+    display: flex;
+    gap: 10px;
+  
+    padding: 12px;
+  
+    z-index: 20;
+  }
+  
+  .tool {
+    width: 86px;
+  
+    padding: 10px;
+  
+    border-radius: 16px;
+  
+    text-align: center;
+  
+    cursor: pointer;
+  
+    transition: 0.2s;
+  
+    background: rgba(255,255,255,0.45);
+  }
+  
+  .tool:hover {
+    transform: translateY(-2px);
+  }
+  
+  .tool.active {
+    background: rgba(255,255,255,0.95);
+  
+    box-shadow:
+      0 4px 16px rgba(0,0,0,0.12);
+  }
+  
+  .tool-emoji {
+    font-size: 24px;
+  }
+  
+  .tool-label {
+    margin-top: 6px;
+    font-size: 13px;
+  }
+  
+  /* =========================
+     Minimap
+  ========================= */
+  
+  .minimap {
+    position: fixed;
+  
+    right: 20px;
+    bottom: 20px;
+  
+    padding: 10px;
+  
+    z-index: 20;
+  }
+  
+  #minimap {
+    width: 160px;
+    height: 160px;
+  
+    border-radius: 12px;
+  }
+  
+  /* =========================
+     Hint
+  ========================= */
+  
+  #hint {
+    position: fixed;
+  
+    left: 50%;
+    top: 90px;
+  
+    transform: translateX(-50%);
+  
+    padding: 12px 20px;
+  
+    z-index: 30;
+  
+    transition: 1s;
+  }
+  
+  #hint.hide {
+    opacity: 0;
+    pointer-events: none;
+  }

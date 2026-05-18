@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini World Editor</title>
+
+  <link rel="stylesheet" href="./style.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+</head>
+<body>
+
+  <canvas id="webgl"></canvas>
+
+  <!-- 顶部 -->
+  <div class="top-bar glass">
+    <div class="title">
+      🧱 Mini World Editor
+    </div>
+
+    <div class="save-panel">
+      <select id="slotSelect">
+        <option value="1">世界 1</option>
+        <option value="2">世界 2</option>
+        <option value="3">世界 3</option>
+      </select>
+
+      <button id="resetBtn">随机村庄</button>
+      <button id="clearBtn">清空</button>
+    </div>
+  </div>
+
+  <!-- 工具栏 -->
+  <div class="toolbar glass" id="toolbar"></div>
+
+  <!-- 小地图 -->
+  <div class="minimap glass">
+    <canvas id="minimap" width="160" height="160"></canvas>
+  </div>
+
+  <!-- 提示 -->
+  <div id="hint" class="glass">
+    拖拽旋转 / 滚轮缩放 / 点击放置
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
