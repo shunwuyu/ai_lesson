@@ -1,14 +1,14 @@
 # 用于网页设计的 Claude Code
 
 做一个食品外卖移动应用的落地页
-
+=
 用户第一次看到这个产品时，这个页面应该怎么讲故事、怎么建立信任、怎么促使下载。
 
 第一轮 prompt，我故意写得很简单
 
 code a landing page for a food delivery mobile app called Foodiez
 为一款名为 Foodiez 的外卖送餐手机应用编写一个落地页代码
-
+=
 
 原型最大的价值，不是“完美”，而是“马上能改”
 
@@ -158,3 +158,29 @@ Return:
 - No placeholder lorem ipsum — use realistic marketing 
 copy for a food delivery product
 ```
+
+我是怎么把这个 prompt 喂给 Claude 的？
+
+rebuild this page following this prompt
+
+为什么这么做？因为 Claude 已经知道我前面在做什么了。它对产品、页面方向和当前上下文都有记忆，所以没必要完全从零开始。
+
+
+
+Claude 会提示我继续补上完整 prompt。 这时，我再把上面那份详细要求整段粘进去。
+
+
+
+回车之后，Claude 会先把 prompt 接收、整理进任务上下文里，然后开始真正执行。
+
+这一轮为什么会慢很多？
+和前面的快速原型不同，这一轮的等待时间会明显更长，大概在 15 到 20 分钟左右。
+
+原因也不神秘：你要求它做的事情变多了。
+
+它不再只是拉一个静态页面，而是要：
+
+按指定技术栈搭环境； 用 React + TypeScript 做组件化结构； 用 Tailwind CSS 实现样式； 加上 Framer Motion 动画； 同时兼顾响应式和无障碍要求； 还要输出尽量接近生产可用的代码结构。
+
+在我这次的例子里，Claude 总共花了 18 分钟左右，把 React 环境和页面代码都搭了起来。好消息是，这里面绝大多数重活都由 Claude 自己完成了。整个过程基本接近自动执行，我只是在关键代码改动时做了一些必要批准。
+
