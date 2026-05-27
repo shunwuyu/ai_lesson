@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+    /* .box 设置了粘性定位，滚动时距离顶部小于 100px 会固定，超出父容器范围后解除固定，未脱离文档流。
+总结
+粘性定位是相对定位 + 固定定位的结合，不脱离文档流，滚动到阈值才吸附。 */
         body {
             height: 2000px;
         }

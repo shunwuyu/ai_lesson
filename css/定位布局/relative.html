@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        /* relative（相对定位）：肉身还在原地，只是影子挪走了。
+文档流里的位置：保留（别人都得给它让位）
+视觉显示位置：偏移（眼睛看到它跑了） */
+        * {
+            margin: 0;
+            padding: 0;
+        }
         .parent {
             width: 500px;
             height: 500px;
@@ -19,7 +26,7 @@
             background-color: skyblue;
         }
         .box {
-            width: 100px;
+            width: 200px;
             height: 100px;
             background-color: palegreen;
         }
