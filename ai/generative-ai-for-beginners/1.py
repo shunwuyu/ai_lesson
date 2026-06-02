@@ -1,3 +1,4 @@
+# tiktoken 是 OpenAI 官方开源的文本分词 / 计数工具
 !pip install tiktoken
 !pip install openai
 import tiktoken

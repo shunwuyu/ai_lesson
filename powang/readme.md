@@ -26,36 +26,19 @@
 - 每个角色可以单独调整三个参数。
   还要能控制重音语气，之后可以独立音轨。
 
+## 安装环境
+国内能直接访问的工具来搭建
+AI IDE  trae.cn
+模型 DeepSeek, Qwen Coder 配好
+仓库 Gitee
 
-## 环境准备
+和国际比有点差距，和25年7月年中国际水平
 
-中文互联网环境 相当于25年7月国际水平
+## 项目初期分析
+- 进入项目开发
+- 项目初始分析
+- 技能， skill创建
 
-AI IDE trae.cn
-  可以自定义模型， 如果出现卡顿， 排队切换就好
-模型： DeepSeek, Qwen Code
-仓库： Gitee
-
-
-### 配置模型
-- 添加deepseek 两个模型
-- 添加qwen coder 
-
-### 搭建仓库
-仓库： 多角色配音软件 Multi-role-dubbing-software
-设置路径 Multi-role-dubbing-software
-创建 项目
-trae 智能体调到solo 模式 
-Trae 的 Solo 模式是一种AI 主导的全流程自动化开发模式，你只需用自然语言提需求，AI 就自主完成从规划、编码、调试到预览部署的全过程，你只负责验收结果
-prompt:
-https://gitee.com/shunwuyu2020/multi-role-dubbing-software.git 这个是我的远程仓库地址，你来帮我搭建git仓库。
-
-- 切换到ide 模式
-添加一个1 文件
-内容 多角色配音软件
-点击编辑器左侧 github 小图标，
-输入 “测试仓库” commit
-再点击提交 
 
 
 

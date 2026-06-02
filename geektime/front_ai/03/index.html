@@ -24,7 +24,7 @@ async function loadModelAndPredict() {
   // 使用MobileNet模型提取特征  
   const prediction = model.predict(tensor);    
   // 输出特征  
-  prediction.print();   // Tensor :[[1e-7, 0.0002893, 0.0000012, ..., 0.0000016, 0.0004594, 0.0000652],]
+  console.log(prediction.print());   // Tensor :[[1e-7, 0.0002893, 0.0000012, ..., 0.0000016, 0.0004594, 0.0000652],]
 }
 loadModelAndPredict();
 </script>
