@@ -1,0 +1,151 @@
+// ==============================================
+// Normalize Reset for Stylus (基于 normalize.css v8.0.1)
+// 兼容所有现代浏览器，自带基础重置 + 统一默认样式
+// ==============================================
+
+
+
+// 1. 统一盒模型
+*
+  box-sizing border-box
+  &::before,
+  &::after
+    box-sizing border-box
+
+// 2. 移除默认边距
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1, h2, h3, h4, h5, h6,
+p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video
+  margin 0
+  padding 0
+  border 0
+  font-size 100%
+  vertical-align baseline
+
+// 3. HTML5 元素默认样式
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section
+  display block
+
+// 4. 修正行内元素样式
+audio,
+canvas,
+progress,
+video
+  display inline-block
+  vertical-align baseline
+
+// 5. 移除列表默认样式
+ol,
+ul
+  list-style none
+
+// 6. 移除引用默认样式
+blockquote,
+q
+  quotes none
+
+// 7. 表格样式重置
+table
+  border-collapse collapse
+  border-spacing 0
+  width 100%
+
+// 8. 全局根元素样式
+html
+  line-height $base-line-height
+  -webkit-text-size-adjust 100% // 防止iOS旋转字体变大
+  font-size $base-font-size
+
+body
+  font-family $base-font-family
+  color $text-color
+  background-color $bg-color
+  min-height 100vh
+  text-rendering optimizeLegibility
+
+// 9. 链接样式重置
+a
+  background-color transparent
+  text-decoration none
+  color inherit
+
+// 10. 图片/表单元素重置
+img
+  border-style none
+  max-width 100%
+  height auto
+  vertical-align middle
+
+button,
+input,
+optgroup,
+select,
+textarea
+  font-family inherit
+  font-size inherit
+  line-height inherit
+  margin 0
+  outline none
+
+// 11. 按钮样式统一
+button,
+[type="button"],
+[type="reset"],
+[type="submit"]
+  -webkit-appearance button
+  cursor pointer
+  border none
+  background none
+
+// 12. 清除输入框内边距/边框
+input
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button
+    height auto
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration
+    -webkit-appearance none
+
+// 13. 文本域禁止横向拉伸
+textarea
+  resize vertical
+  overflow auto
+
+// 14. 表单边框统一
+fieldset
+  padding 0.35em 0.75em 0.625em
+legend
+  box-sizing border-box
+  color inherit
+  display table
+  max-width 100%
+  padding 0
+  white-space normal

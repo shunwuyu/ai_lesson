@@ -1,0 +1,68 @@
+.weui-cells__title+.weui-cells
+  margin-top 0
+.weui-cells
+  margin-top 8px
+  background-color $bg-color2
+  overflow hidden
+  position relative
+  &__title 
+    margin-top 16px
+    margin-bottom 3px
+    padding-left 16px
+    padding-right 16px
+    color $fc-1
+    font-size $font-size-1
+    font-weight 400
+    line-height 1.4
+  &::before, &::after
+    content 'xx'
+    position absolute
+    left 0
+    right 0
+    height 1px
+    color $fg-3
+  &::before
+    top 0
+    border-top 1px solid $fg-3
+    transform-origin 0 0
+    transform scaleY(.5)
+  &::after
+    bottom 0
+    border-bottom: 1px solid $fg-3
+    transform-origin 0 100%
+    transform scaleY(.5)
+
+.weui-cell
+  padding 16px
+  position relative
+  display flex
+  align-items center
+  line-height 1.41176471
+  font-size 17px
+  color $fc-0
+  &__bd
+    flex: 1;
+    min-width: 0;
+  &__ft
+    text-align right
+    color $fc-0
+  &__desc
+    font-size: 12px;
+    color $fc-2;
+    line-height: 1.4
+    padding-top: 4px;
+  &_access
+    .weui-cell__ft
+      padding-right: 24px;
+      position: relative;
+      &::after
+        content " "
+        display: block
+        width: 12px;
+        height: 12px;
+        border 1px solid black;
+        border-left-color transparent
+        border-bottom-color transparent
+        transform: rotate(45deg)
+
+

@@ -1,0 +1,298 @@
+* {
+  box-sizing: border-box;
+}
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section {
+  display: block;
+}
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  font-size: 16px;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #333;
+  background-color: #ededed;
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+}
+a {
+  background-color: transparent;
+  text-decoration: none;
+  color: inherit;
+}
+img {
+  border-style: none;
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  outline: none;
+}
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  height: auto;
+}
+input::-webkit-search-cancel-button,
+input::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+textarea {
+  resize: vertical;
+  overflow: auto;
+}
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+}
+legend {
+  box-sizing: border-box;
+  color: inherit;
+  display: table;
+  max-width: 100%;
+  padding: 0;
+  white-space: normal;
+}
+html,
+body {
+  height: 100vh;
+}
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+  background-color: #ededed;
+}
+.page__hd {
+  padding: 40px;
+}
+.page__title {
+  text-align: left;
+  font-size: 20px;
+  font-weight: 400;
+}
+.page__desc {
+  margin-top: 4px;
+  color: rgba(0,0,0,0.55);
+}
+.weui-cells__title+.weui-cells {
+  margin-top: 0;
+}
+.weui-cells {
+  margin-top: 8px;
+  background-color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+.weui-cells__title {
+  margin-top: 16px;
+  margin-bottom: 3px;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: rgba(0,0,0,0.55);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.weui-cells::before,
+.weui-cells::after {
+  content: 'xx';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  color: rgba(0,0,0,0.1);
+}
+.weui-cells::before {
+  top: 0;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  transform-origin: 0 0;
+  transform: scaleY(0.5);
+}
+.weui-cells::after {
+  bottom: 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  transform-origin: 0 100%;
+  transform: scaleY(0.5);
+}
+.weui-cell {
+  padding: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  line-height: 1.41176471;
+  font-size: 17px;
+  color: rgba(0,0,0,0.9);
+}
+.weui-cell__bd {
+  flex: 1;
+  min-width: 0;
+}
+.weui-cell__ft {
+  text-align: right;
+  color: rgba(0,0,0,0.9);
+}
+.weui-cell__desc {
+  font-size: 12px;
+  color: $fc-2;
+  line-height: 1.4;
+  padding-top: 4px;
+}
+.weui-cell_access .weui-cell__ft {
+  padding-right: 24px;
+  position: relative;
+}
+.weui-cell_access .weui-cell__ft::after {
+  content: " ";
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #000;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotate(45deg);
+}
