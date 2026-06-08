@@ -1,0 +1,18 @@
+'Log files:
+/Users/shunwuyu/workspace/lesson/ai_lesson/geektime/front_ai/02/demo2/npm-cache/_logs/2026-06-08T03_12_28_661Z-debug-0.log
+
+# npm resolution error report
+
+While resolving: vue-vite-app@1.0.0
+Found: vite@undefined
+node_modules/vite
+  dev vite@"^6.5.0" from the root project
+
+Could not resolve dependency:
+peer vite@"^5.0.0 || ^6.0.0" from @vitejs/plugin-vue@5.2.4
+node_modules/@vitejs/plugin-vue
+  dev @vitejs/plugin-vue@"^5.0.4" from the root project
+
+Fix the upstream dependency conflict, or retry
+this command with --force or --legacy-peer-deps
+to accept an incorrect (and potentially broken) dependency resolution.
