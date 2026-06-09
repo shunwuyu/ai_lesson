@@ -1,0 +1,11 @@
+# 忽略所有 .log 文件
+*.log
+
+# 忽略整个 build 目录
+/build/
+
+# 忽略特定的配置文件
+secrets.json
+
+# 环境变量
+.env
