@@ -1,0 +1,26 @@
+{
+  "name": "hello-agent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc test.ts",
+    "dev": "tsc test2.ts",
+    "start": "tsx hello-agent.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/deepseek": "^2.0.0",
+    "@types/node": "^25.9.2",
+    "ai": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.0",
+    "typescript": "^5.7.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
