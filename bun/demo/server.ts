@@ -1,7 +1,8 @@
 // 内存数据存储
+// 接口 定义数据结构
 interface Todo {
   id: string;
-  title: string;
+  title: string;=
   completed: boolean;
   createdAt: Date;
 }
@@ -24,6 +25,7 @@ let todos: Todo[] = [
 // 启动服务
 const server = Bun.serve({
   port: 3000,
+  // 处理请求 req 是请求对象
   async fetch(req) {
     const url = new URL(req.url);
     const method = req.method;
