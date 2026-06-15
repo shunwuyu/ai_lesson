@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- width/height是画布实际像素尺寸 -->
+  <canvas id="myCanvas" width="600" height="400" style="border:1px solid #333;">
+  你的浏览器不支持Canvas（旧IE会显示这段文字）
+  </canvas>
+  <script>
+  // 1. 获取画布元素
+  const canvas = document.getElementById('myCanvas');
+  // 2. 拿到2D画笔对象
+  const ctx = canvas.getContext('2d');
+  // 设置填充颜色
+  ctx.fillStyle = '#4299e1';
+  // 填充矩形：起点(20,20) 宽100 高80
+  ctx.fillRect(20,20,100,80);
+
+  // 设置描边颜色、线条粗细
+  ctx.strokeStyle = '#f56565';
+  ctx.lineWidth = 4;
+  // 空心矩形
+  ctx.strokeRect(150,20,100,80);
+  // 擦除中间一小块
+  ctx.clearRect(50,50,40,30);
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>矩形从左向右移动</title>
+</head>
+<body>
+  <canvas id="myCanvas" width="600" height="400" style="border:1px solid #333;">
+    你的浏览器不支持Canvas
+  </canvas>
+  <script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // 矩形初始位置与尺寸
+    let x = 20;
+    const y = 20;
+    const width = 100;
+    const height = 80;
+    // 移动速度
+    const speed = 3;
+
+    // 动画循环函数
+    function animate() {
+      // 清空整个画布，不然会拖影
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 绘制方块
+      ctx.fillStyle = '#4299e1';
+      ctx.fillRect(x, y, width, height);
+
+      // x坐标增加，向右移动
+      x += speed;
+
+      // 跑出画布右侧后重置回到左边循环
+      if (x > canvas.width) {
+        x = -width;
+      }
+
+      // 下一帧继续执行动画
+      // 浏览器提供的适配屏幕刷新率的高效动画帧调度函数，替代定时器，画面更流畅、性能更低耗。
+      // 1s 60帧
+      requestAnimationFrame(animate);
+    }
+
+    // 启动动画
+    animate();
+  </script>
+</body>
+</html>

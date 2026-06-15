@@ -4,7 +4,7 @@ from openai import OpenAI
 # ====== 配置 API Key ======
 # 方式1：从环境变量读取（推荐）
 client = OpenAI(
-  api_key='sk-565c61f59d59467e8a0c2f1c72642204',
+  api_key='',
   base_url="https://api.deepseek.com/v1",
 )
 

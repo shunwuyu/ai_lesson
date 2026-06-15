@@ -3,7 +3,7 @@ from openai import OpenAI
 import json
 
 client = OpenAI(
-  api_key='sk-565c61f59d59467e8a0c2f1c72642204',
+  api_key='',
   base_url="https://api.deepseek.com/v1",
 )
 
@@ -50,10 +50,14 @@ def run_conversation(user_query: str):
 
     # 初始化对话历史
     messages = [{"role": "user", "content": user_query}]
+    # 模型下发工具指令时，每一条 tool_call 自带唯一 id
+    # 你执行完工具、把结果塞回对话上下文，必须在 role: tool 的消息里填入完全一致的 tool_call_id；
+    # 大模型靠这个 ID 精准识别：这条搜索 / 接口结果，对应我刚才哪一次工具请求。
 
     # 第一次调用：让模型决定是否调用工具
     response = client.chat.completions.create(
-        model="deepseek-reasoner",  # 或 "gpt-4-turbo", "gpt-3.5-turbo"
+        model="deepseek-v4-flash",
+        reasoning_effort="high",  # 或 "gpt-4-turbo", "gpt-3.5-turbo"
         messages=messages,
         tools=tools,
         tool_choice="auto",  # 自动选择是否调用工具

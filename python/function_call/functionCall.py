@@ -2,7 +2,7 @@ import json
 from openai import OpenAI
 
 client = OpenAI(
-  api_key='sk-8d1436c7a2b74d6ca98d73276c58fd5a',
+  api_key='',
   base_url="https://api.deepseek.com/v1",
 )
 # 启用了工具调用功能
@@ -12,7 +12,8 @@ client = OpenAI(
 # 无法获取最新信息的局限。
 def send_message(messages):
   response = client.chat.completions.create(
-    model='deepseek-reasoner',
+    model='deepseek-v4-flash',
+    reasoning_effort='high', # 推理努力
     messages=messages,
     tools=tools,
     tool_choice='auto'
@@ -81,11 +82,14 @@ if response.choices[0].message.tool_calls != None:
     # 调用参数（JSON 字符串）解析为 Python 字典
     arguments_dict = json.loads(tool_call.function.arguments)  # {"name": "青岛啤酒"}
     price = get_closing_price(arguments_dict['name'])
+    # 模型下发工具指令时，每一条 tool_call 自带唯一 id
+    # 你执行完工具、把结果塞回对话上下文，必须在 role: tool 的消息里填入完全一致的 tool_call_id；
+    # 大模型靠这个 ID 精准识别：这条搜索 / 接口结果，对应我刚才哪一次工具请求。
 
     messages.append({
       "role": "tool",
       "content": price,
-      "tool_call_id": tool_call.id
+      "tool_call_id": tool_call.id # 工具调用ID
     })
 
   print("messages:", messages)

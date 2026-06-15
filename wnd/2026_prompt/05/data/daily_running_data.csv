@@ -1,0 +1,66 @@
+Date,Activity Type,Time,Distance,Calories,Activity Time,Elapsed Time,Avg Pace,Training Week Number,Day of Week,Running Type
+26/11/2024,Running,16:39:54,4.12,238,0 days 00:28:37,0 days 00:28:37,417,1,Tuesday,Easy run
+28/11/2024,Running,16:16:30,2.29,126,0 days 00:17:41,0 days 00:17:41,463,1,Thursday,Easy run
+30/11/2024,Running,11:21:01,6.29,338,0 days 00:41:42,0 days 00:41:42,398,1,Saturday,Long run
+03/12/2024,Running,15:48:55,4.3,232,0 days 00:29:30,0 days 00:29:30,411,2,Tuesday,Easy run
+05/12/2024,Running,16:26:45,3.34,185,0 days 00:25:53,0 days 00:25:53,464,2,Thursday,Easy run
+07/12/2024,Running,10:40:53,6.22,311,0 days 00:40:43,0 days 00:40:43,393,2,Saturday,Long run
+10/12/2024,Running,16:05:38,5.29,274,0 days 00:35:19,0 days 00:35:19,401,3,Tuesday,Easy run
+12/12/2024,Running,16:36:20,4.26,224,0 days 00:28:23,0 days 00:28:23,400,3,Thursday,Easy run
+14/12/2024,Running,09:59:36,8.04,397,0 days 00:52:27,0 days 00:52:27,391,3,Saturday,Long run
+16/12/2024,Running,12:14:14,5.11,248,0 days 00:34:17,0 days 00:34:17,402,4,Monday,Easy run
+19/12/2024,Running,15:47:07,4.15,227,0 days 00:28:56,0 days 00:28:56,418,4,Thursday,Easy run
+21/12/2024,Running,10:17:09,8.26,414,0 days 00:51:49,0 days 00:51:49,376,4,Saturday,Long run
+24/12/2024,Running,14:00:17,6.45,317,0 days 00:44:33,0 days 00:44:33,414,5,Tuesday,Easy run
+26/12/2024,Running,11:18:34,6.44,302,0 days 00:38:49,0 days 00:38:49,362,5,Thursday,Tempo run
+28/12/2024,Running,11:05:34,10.89,471,0 days 01:13:41,0 days 01:13:41,406,5,Saturday,Long run
+31/12/2024,Running,15:55:35,6.23,340,0 days 00:43:13,0 days 00:43:13,416,6,Tuesday,Easy run
+02/01/2025,Running,16:28:03,7.26,390,0 days 00:47:53,0 days 00:47:53,396,6,Thursday,Tempo run
+04/01/2025,Running,11:19:38,10.66,561,0 days 01:09:10,0 days 01:09:10,389,6,Saturday,Long run
+07/01/2025,Running,16:19:27,7.63,344,0 days 00:50:15,0 days 00:50:15,395,7,Tuesday,Easy run
+09/01/2025,Running,16:29:52,8.07,399,0 days 00:50:12,0 days 00:50:12,373,7,Thursday,Tempo run
+11/01/2025,Running,10:32:43,11.65,568,0 days 01:14:53,0 days 01:14:53,386,7,Saturday,Long run
+14/01/2025,Running,16:46:21,7.04,345,0 days 00:48:22,0 days 00:48:22,412,8,Tuesday,Easy run
+16/01/2025,Running,16:10:23,6.21,318,0 days 00:40:58,0 days 00:40:58,396,8,Thursday,Speedwork
+18/01/2025,Running,10:25:49,12.42,627,0 days 01:20:44,0 days 01:20:44,390,8,Saturday,Long run
+21/01/2025,Running,16:25:18,8.61,402,0 days 00:59:59,0 days 00:59:59,418,9,Tuesday,Easy run
+23/01/2025,Running,16:32:22,9.03,480,0 days 00:58:26,0 days 00:58:26,389,9,Thursday,Tempo run
+25/01/2025,Running,09:53:25,13.08,695,0 days 01:25:51,0 days 01:25:51,394,9,Saturday,Long run
+28/01/2025,Running,15:43:23,8.41,405,0 days 00:54:48,0 days 00:54:48,391,10,Tuesday,Easy run
+30/01/2025,Running,16:18:19,7.34,359,0 days 00:46:11,0 days 00:46:11,378,10,Thursday,Speedwork
+01/02/2025,Running,10:18:01,14.12,735,0 days 01:31:49,0 days 01:31:49,390,10,Saturday,Long run
+02/02/2025,Running,09:36:22,6.38,309,0 days 00:42:49,0 days 00:42:49,402,10,Sunday,Recovery run
+04/02/2025,Running,15:49:16,9.04,435,0 days 00:58:02,0 days 00:58:02,385,11,Tuesday,Easy run
+06/02/2025,Running,16:24:27,10.11,533,0 days 01:02:44,0 days 01:02:44,372,11,Thursday,Tempo run
+08/02/2025,Running,08:38:40,15.06,825,0 days 01:36:15,0 days 01:36:15,384,11,Saturday,Long run
+11/02/2025,Running,16:09:16,9.06,434,0 days 00:59:27,0 days 00:59:27,394,12,Tuesday,Easy run
+13/02/2025,Running,15:00:00,7,373,0 days 00:43:00,0 days 00:43:00,369,12,Thursday,Speedwork
+15/02/2025,Running,08:30:53,16.33,913,0 days 01:45:19,0 days 01:45:19,387.1090018,12,Saturday,Long run
+18/02/2025,Running,15:49:10,10.05,462,0 days 01:02:36,0 days 01:02:36,374,13,Tuesday,Easy run
+22/02/2025,Running,10:24:24,18.01,898,0 days 01:53:30,0 days 01:53:30,378.0571904,13,Saturday,Long run
+25/02/2025,Running,15:53:55,8.03,389,0 days 00:52:09,0 days 00:52:09,390,14,Tuesday,Easy run
+27/02/2025,Running,15:45:00,10.07,502,0 days 01:01:42,0 days 01:01:42,368,14,Thursday,Tempo run
+01/03/2025,Running,07:18:26,18.09,928,0 days 01:53:21,0 days 01:53:21,376.0591487,14,Saturday,Long run
+08/03/2025,Running,08:52:38,14.74,849,0 days 01:34:08,0 days 01:34:08,383.6227951,15,Saturday,Long run
+11/03/2025,Running,15:57:53,9.2,462,0 days 00:59:27,0 days 00:59:27,388,16,Tuesday,Easy run
+15/03/2025,Running,14:13:32,9.64,472,0 days 01:00:53,0 days 01:00:53,379,16,Saturday,Long run
+16/03/2025,Running,07:13:36,5.24,270,0 days 00:32:47,0 days 00:32:47,375,16,Sunday,Recovery run
+18/03/2025,Running,18:45:56,11.02,508,0 days 01:15:43,0 days 01:15:43,412,17,Tuesday,Easy run
+22/03/2025,Running,08:35:21,24.19,1266,0 days 02:31:05,0 days 02:31:05,374.7515502,17,Saturday,Long run
+25/03/2025,Running,16:06:58,13.77,696,0 days 01:27:53,0 days 01:27:53,383,18,Tuesday,Easy run
+29/03/2025,Running,08:32:14,22.97,1217,0 days 02:20:16,0 days 02:20:16,366.6787114,18,Saturday,Long run
+30/03/2025,Running,11:24:11,5.2,279,0 days 00:39:00,0 days 00:39:00,450,18,Sunday,Recovery run
+02/04/2025,Running,15:44:57,7.19,405,0 days 00:47:56,0 days 00:47:56,400,19,Wednesday,Speedwork
+05/04/2025,Running,08:31:41,23.39,1177,0 days 02:26:53,0 days 02:26:53,377.1513467,19,Saturday,Long run
+06/04/2025,Running,16:57:59,5.49,299,0 days 00:39:24,0 days 00:39:24,430,19,Sunday,Recovery run
+08/04/2025,Running,19:21:13,9.05,486,0 days 00:55:18,0 days 00:55:18,367,20,Tuesday,Tempo run
+12/04/2025,Running,08:33:22,25.03,1328,0 days 02:46:38,0 days 02:46:38,399.6032761,20,Saturday,Long run
+15/04/2025,Running,16:57:31,5.04,253,0 days 00:32:01,0 days 00:32:01,381,21,Tuesday,Easy run
+18/04/2025,Running,10:32:47,7.79,469,0 days 00:52:06,0 days 00:52:06,401,21,Friday,Speedwork
+19/04/2025,Running,08:29:17,20.11,1053,0 days 01:59:04,0 days 01:59:04,355.4430632,21,Saturday,Long run
+23/04/2025,Running,15:48:45,6.62,334,0 days 00:39:25,0 days 00:39:25,357,22,Wednesday,Easy run
+24/04/2025,Running,20:00:00,7,374,0 days 00:41:00,0 days 00:41:00,351,22,Thursday,Tempo run
+26/04/2025,Running,08:25:34,12.24,619,0 days 01:07:52,0 days 01:07:52,333,22,Saturday,Long run
+29/04/2025,Running,19:38:44,6.35,305,0 days 00:39:04,0 days 00:39:04,369,23,Tuesday,Easy run
+01/05/2025,Running,17:27:11,6,326,0 days 00:40:25,0 days 00:40:25,404,23,Thursday,Easy run
+04/05/2025,Running,09:15:42,22.43,1158,0 days 02:03:15,0 days 02:03:15,330,23,Sunday,Race Day
