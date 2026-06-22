@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 每日资讯 | 赛博资讯局</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card-bg: rgba(10, 10, 30, 0.85);
+      --cyan: #00f0ff;
+      --magenta: #ff00ff;
+      --yellow: #ffee00;
+      --green: #00ff88;
+      --border: rgba(0, 240, 255, 0.15);
+      --text: #c0c0d0;
+      --text-muted: #7880a0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 240, 255, 0.008) 2px,
+        rgba(0, 240, 255, 0.008) 4px
+      );
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Grid background */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 50px 20px 40px;
+      position: relative;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    }
+
+    .header-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: glitch 3s infinite;
+    }
+
+    .header h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.3));
+    }
+
+    .header .subtitle {
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      padding: 16px 20px;
+      margin-bottom: 30px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: rgba(0, 240, 255, 0.02);
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      color: var(--cyan);
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+
+    .stat-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+    }
+
+    /* News grid */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(10px);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 240, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow:
+        0 8px 32px rgba(0, 240, 255, 0.08),
+        0 0 60px rgba(255, 0, 255, 0.04);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-index {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-index::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      color: #e8e8f0;
+      letter-spacing: 0.5px;
+    }
+
+    .card-title a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .card-title a:hover {
+      color: var(--cyan);
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 16px;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 3px;
+      color: var(--cyan);
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+      background: rgba(0, 240, 255, 0.05);
+    }
+
+    .tag:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--magenta);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+
+    .card-link::after {
+      content: '→';
+      transition: transform 0.2s;
+    }
+
+    .card-link:hover {
+      color: var(--yellow);
+      text-shadow: 0 0 10px rgba(255, 238, 0, 0.4);
+    }
+
+    .card-link:hover::after {
+      transform: translateX(4px);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .footer span {
+      color: var(--cyan);
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes glitch {
+      0%, 100% { transform: none; }
+      2% { transform: skewX(0.5deg); }
+      4% { transform: skewX(-0.5deg); }
+      6% { transform: none; }
+    }
+
+    /* Loading state */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--cyan);
+      font-size: 14px;
+      letter-spacing: 2px;
+      animation: pulse 1.5s infinite;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--magenta);
+      font-size: 14px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .header {
+        padding: 30px 16px 24px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+        letter-spacing: 2px;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .card-title {
+        font-size: 15px;
+      }
+
+      .stats-bar {
+        gap: 16px;
+        padding: 12px 14px;
+      }
+
+      .stat {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .stats-bar {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .stat-divider {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-icon">&#9762;</div>
+      <h1>AI 每日资讯</h1>
+      <p class="subtitle">// CYBER NEWS AGENCY //</p>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat">
+        <span class="stat-label">DATE</span>
+        <span class="stat-value" id="stat-date">----/--/--</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-label">TOTAL</span>
+        <span class="stat-value" id="stat-count">00</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-label">SOURCES</span>
+        <span class="stat-value">AIbase + 36Kr</span>
+      </div>
+    </div>
+
+    <!-- News Grid -->
+    <div class="news-grid" id="news-grid">
+      <div class="loading">// CONNECTING TO NEURAL NETWORK...</div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>POWERED BY <span>AI CYBER NEWS</span> // DATA FROM AIBASE.COM &amp; 36KR.COM</p>
+    </footer>
+  </div>
+
+  <script src="ai-news-data.js"></script>
+  <script>
+  (function () {
+    var grid = document.getElementById('news-grid');
+    var statCount = document.getElementById('stat-count');
+    var statDate = document.getElementById('stat-date');
+
+    // Set date
+    var now = new Date();
+    var y = now.getFullYear();
+    var m = String(now.getMonth() + 1).padStart(2, '0');
+    var d = String(now.getDate()).padStart(2, '0');
+    statDate.textContent = y + '/' + m + '/' + d;
+
+    // Check data
+    if (typeof NEWS_DATA === 'undefined' || !NEWS_DATA.length) {
+      grid.innerHTML = '<div class="no-data">// NO DATA AVAILABLE //</div>';
+      return;
+    }
+
+    statCount.textContent = String(NEWS_DATA.length).padStart(2, '0');
+
+    var html = '';
+    NEWS_DATA.forEach(function (item, i) {
+      var tagsHtml = '';
+      if (item.tags && item.tags.length) {
+        tagsHtml = '<div class="card-tags">' +
+          item.tags.map(function (t) {
+            return '<span class="tag">#' + t + '</span>';
+          }).join('') +
+          '</div>';
+      }
+
+      var desc = item.description || '';
+      if (desc.length > 80) {
+        desc = desc.substring(0, 77) + '...';
+      }
+
+      var idx = String(i + 1).padStart(2, '0');
+
+      html += '<article class="card">' +
+        '<div class="card-index">NO.' + idx + '</div>' +
+        '<h3 class="card-title"><a href="' + item.link + '" target="_blank" rel="noopener">' + escapeHTML(item.title) + '</a></h3>' +
+        '<p class="card-desc">' + escapeHTML(desc) + '</p>' +
+        tagsHtml +
+        '<a class="card-link" href="' + item.link + '" target="_blank" rel="noopener">阅读原文</a>' +
+        '</article>';
+    });
+
+    grid.innerHTML = html;
+
+    function escapeHTML(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  })();
+  </script>
+</body>
+</html>

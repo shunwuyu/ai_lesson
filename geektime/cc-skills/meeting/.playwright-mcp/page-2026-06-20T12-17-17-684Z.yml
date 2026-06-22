@@ -1,0 +1,22 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - img "logo" [ref=e7] [cursor=pointer]
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - button "应用控制台" [ref=e10]:
+            - generic [ref=e11]: 应用控制台
+          - button "文档" [ref=e12]:
+            - generic [ref=e13]: 文档
+        - button "中文" [ref=e14] [cursor=pointer]:
+          - generic [ref=e15]: 中文
+        - button "Github ..." [ref=e16]:
+          - generic [ref=e17]: Github
+          - generic [ref=e18]: ...
+        - button "plus 充值" [ref=e19] [cursor=pointer]:
+          - img "plus" [ref=e20]
+          - text: 充值
+        - button "登录" [ref=e21]
+  - main [ref=e22]:
+    - status [ref=e24]:
+      - paragraph [ref=e32]: 页面加载中...

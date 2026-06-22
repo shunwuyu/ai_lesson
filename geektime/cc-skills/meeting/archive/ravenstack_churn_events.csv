@@ -1,0 +1,601 @@
+churn_event_id,account_id,churn_date,reason_code,refund_amount_usd,preceding_upgrade_flag,preceding_downgrade_flag,is_reactivation,feedback_text
+C-816288,A-c37cab,2024-10-27,pricing,4.03,False,False,False,switched to competitor
+C-5a81e7,A-37f969,2024-06-25,support,96.45,True,False,False,
+C-a174be,A-b07346,2024-11-12,budget,0.0,False,False,False,missing features
+C-accb39,A-1e50e0,2023-11-01,budget,54.94,False,False,False,switched to competitor
+C-92f889,A-956988,2024-12-30,unknown,0.0,False,True,True,too expensive
+C-a8ac26,A-b20d99,2024-03-04,features,0.0,False,False,False,missing features
+C-2e2966,A-526d93,2024-07-10,features,34.4,True,False,False,
+C-ee531b,A-751bd4,2024-09-22,budget,0.0,False,False,False,
+C-e6a0f0,A-ccabf0,2024-10-31,features,0.0,False,False,False,too expensive
+C-9328ba,A-0a62f5,2024-10-10,features,0.0,False,False,False,switched to competitor
+C-c89493,A-3ce5b8,2024-09-18,features,261.49,False,False,False,too expensive
+C-c54ef0,A-3b5cd1,2024-08-30,unknown,77.87,False,False,False,missing features
+C-bb3556,A-bcf664,2024-08-08,competitor,0.0,False,False,False,
+C-875dc5,A-b9f5b1,2023-07-21,features,0.0,False,False,False,switched to competitor
+C-c8f7b4,A-0dbdc6,2024-04-14,pricing,175.02,False,False,False,too expensive
+C-865f19,A-c9bb3e,2024-07-29,pricing,0.0,False,False,False,switched to competitor
+C-102614,A-96e141,2024-07-22,budget,43.53,False,False,False,too expensive
+C-4ab0e2,A-e7a1e2,2024-09-08,support,0.0,True,False,False,missing features
+C-742a59,A-812c5b,2024-05-11,support,11.83,False,False,False,missing features
+C-1f9cf2,A-1e50e0,2024-04-26,pricing,0.0,False,False,False,switched to competitor
+C-5d5a64,A-c70870,2024-12-13,competitor,0.0,False,False,False,switched to competitor
+C-f81017,A-271f46,2024-08-09,features,0.0,False,False,True,missing features
+C-3292be,A-592832,2024-10-04,support,22.66,False,False,False,switched to competitor
+C-e582ea,A-180abf,2023-12-04,support,0.0,False,False,False,
+C-100b97,A-0a282f,2024-10-06,features,0.0,False,False,False,switched to competitor
+C-8843d4,A-e51ec7,2024-01-29,support,0.0,False,False,False,missing features
+C-8b3048,A-034368,2024-08-29,features,0.0,True,False,False,
+C-48f456,A-8bde0c,2024-11-28,features,0.0,False,False,False,missing features
+C-dcdebc,A-08e34e,2024-07-13,competitor,225.18,False,False,False,switched to competitor
+C-8b229b,A-44dc83,2024-11-29,unknown,98.48,False,True,False,missing features
+C-7d13bf,A-78f02b,2024-12-02,unknown,0.0,False,False,False,missing features
+C-78a2bb,A-fce879,2024-12-03,features,0.0,True,False,False,switched to competitor
+C-935f48,A-34ea2f,2024-10-05,unknown,0.0,True,False,False,
+C-366a49,A-0baac2,2024-12-24,unknown,68.65,False,False,False,switched to competitor
+C-62e7a3,A-ac85cd,2024-10-20,features,83.94,False,False,False,
+C-f3aca2,A-439b2f,2024-11-18,features,0.0,False,False,False,switched to competitor
+C-3b7c60,A-0f6450,2024-12-29,competitor,0.0,False,False,False,missing features
+C-736efa,A-b78bf8,2024-12-06,unknown,0.0,False,False,False,
+C-f6e873,A-3b5cd1,2024-07-24,support,35.3,False,False,False,too expensive
+C-2e2a3f,A-7df7a7,2024-07-10,budget,0.0,False,False,False,missing features
+C-762dd4,A-396e5f,2024-11-30,features,0.0,False,False,False,too expensive
+C-f72425,A-32fb14,2023-08-19,budget,0.0,False,False,False,switched to competitor
+C-0e273d,A-4e0e85,2024-03-14,pricing,0.0,False,False,False,
+C-345bbc,A-922109,2024-08-03,support,0.0,True,True,False,too expensive
+C-555f55,A-794a0b,2024-09-09,budget,0.0,False,True,False,switched to competitor
+C-a26ce8,A-5a184f,2024-03-19,support,0.0,False,True,False,missing features
+C-86a446,A-ccb686,2024-06-22,budget,0.0,True,False,False,
+C-10ce15,A-029f69,2024-12-14,competitor,32.73,False,False,False,too expensive
+C-2698c2,A-9208f0,2023-11-18,features,0.0,False,False,False,switched to competitor
+C-48906a,A-5a92e7,2024-11-11,budget,0.0,True,False,False,missing features
+C-4f7342,A-f45426,2024-11-13,pricing,0.0,False,False,False,switched to competitor
+C-23b1d0,A-2446e3,2024-07-29,unknown,47.06,False,False,False,
+C-7f909a,A-d535f6,2024-11-26,features,0.0,False,False,False,switched to competitor
+C-f208d4,A-6da850,2024-10-25,competitor,0.0,False,False,False,missing features
+C-acbc2b,A-249769,2024-12-16,budget,0.0,False,False,False,
+C-859615,A-8e47ca,2024-06-01,competitor,0.0,False,False,False,missing features
+C-035985,A-6da850,2024-01-15,pricing,0.0,False,False,False,too expensive
+C-7cace4,A-484819,2023-12-29,support,0.0,False,False,False,
+C-06a2e6,A-bbc346,2024-10-31,competitor,0.0,True,False,False,too expensive
+C-eb9d5e,A-eb1312,2024-09-28,unknown,0.0,False,False,False,switched to competitor
+C-a45909,A-bf7919,2024-12-06,support,0.0,False,False,False,
+C-7f85f4,A-bece89,2024-07-27,unknown,53.61,False,False,False,switched to competitor
+C-234aa7,A-832ec2,2023-12-19,unknown,0.0,False,False,False,too expensive
+C-0ba0a0,A-22d9d2,2024-10-17,pricing,0.0,False,False,False,
+C-d05e42,A-32728c,2024-06-22,support,0.0,False,False,False,
+C-8d3540,A-37f969,2024-12-12,competitor,50.41,False,False,False,
+C-bedd8c,A-1b9609,2024-11-16,unknown,0.0,False,False,False,
+C-1cea52,A-310452,2024-12-25,budget,0.0,True,False,False,
+C-1e0b1a,A-016043,2024-08-11,competitor,84.75,False,False,False,switched to competitor
+C-c4e7a7,A-80eeb6,2023-10-19,features,0.0,False,False,False,missing features
+C-915973,A-7e0a10,2024-09-26,budget,0.0,False,False,False,missing features
+C-a403fc,A-6a7c9d,2024-11-21,support,0.0,False,False,False,too expensive
+C-025044,A-098560,2024-09-04,pricing,0.0,False,False,False,too expensive
+C-a54597,A-9f9299,2024-03-24,features,0.0,False,False,False,missing features
+C-7ab794,A-ef84cf,2024-11-20,support,0.0,False,False,False,too expensive
+C-7cd070,A-13466a,2024-04-18,pricing,6.51,False,True,True,switched to competitor
+C-1727c8,A-65aeb5,2024-02-27,pricing,0.0,False,False,False,
+C-bb9db4,A-659280,2024-11-22,pricing,27.75,False,False,False,switched to competitor
+C-0a0bf7,A-d49cc5,2024-04-12,competitor,0.0,False,False,False,missing features
+C-64ba8a,A-cc8c8f,2024-09-12,budget,0.0,True,False,False,missing features
+C-fab429,A-180abf,2024-09-12,support,0.0,False,False,False,
+C-872bcf,A-6da850,2024-09-07,budget,0.0,False,False,False,switched to competitor
+C-480232,A-31ab9a,2024-09-23,competitor,0.0,False,False,True,too expensive
+C-108b2a,A-e08cd3,2024-09-21,competitor,0.0,False,False,False,switched to competitor
+C-775d4e,A-0651a4,2024-12-25,support,0.0,False,False,False,too expensive
+C-043665,A-b2225d,2024-06-27,budget,0.0,False,False,True,
+C-2dbe71,A-c222ab,2024-06-14,budget,4.52,False,False,False,too expensive
+C-b60cf0,A-a6d261,2024-03-10,unknown,99.94,True,False,False,missing features
+C-f24343,A-425e76,2023-09-03,budget,0.0,False,False,True,missing features
+C-a1d45c,A-c222ab,2024-06-10,features,27.62,True,False,False,missing features
+C-9d36da,A-bcf664,2024-08-17,competitor,0.0,False,False,True,
+C-b4b58e,A-96e141,2024-09-22,budget,0.0,False,False,False,too expensive
+C-5cd282,A-df1e44,2024-11-20,budget,0.0,False,False,False,missing features
+C-95f56e,A-7f29a7,2024-10-09,unknown,23.97,True,False,False,switched to competitor
+C-bd5b55,A-b07b56,2024-12-24,budget,0.0,False,False,False,switched to competitor
+C-b8127e,A-d792a6,2024-08-13,support,0.0,False,False,False,missing features
+C-8153b7,A-7cfe77,2024-12-19,features,0.0,False,True,False,missing features
+C-b6b828,A-69fad4,2024-06-17,support,0.0,False,False,False,
+C-a666a4,A-4bfa33,2024-12-28,unknown,7.26,True,False,False,switched to competitor
+C-72d074,A-cc1d8d,2024-12-17,features,0.0,False,False,False,too expensive
+C-ced436,A-7f4db3,2023-03-21,support,0.0,True,False,False,missing features
+C-2cccb0,A-692f18,2024-12-23,support,0.0,True,False,False,switched to competitor
+C-b08dda,A-7a0d69,2024-07-09,features,28.95,False,False,False,
+C-66d447,A-fda07f,2024-09-13,support,17.34,False,False,False,missing features
+C-860574,A-4e44e8,2024-10-11,budget,0.0,False,False,True,switched to competitor
+C-a4f797,A-cd458b,2024-11-07,budget,0.0,False,False,False,switched to competitor
+C-4dfeb8,A-56962b,2024-07-27,unknown,45.83,False,False,False,switched to competitor
+C-d3449f,A-2bc93d,2023-08-10,pricing,0.0,False,False,False,missing features
+C-1a5a14,A-104f1a,2024-09-06,support,0.0,False,False,False,too expensive
+C-6c63bc,A-2e3bad,2024-03-30,features,0.0,False,False,False,missing features
+C-1f5828,A-2edab2,2023-12-21,unknown,168.73,False,False,False,switched to competitor
+C-8203f3,A-3be56b,2024-06-20,pricing,0.0,False,False,False,switched to competitor
+C-f518d9,A-6e08f3,2024-02-10,competitor,0.0,False,False,True,
+C-974322,A-712533,2024-07-18,unknown,0.0,True,False,False,missing features
+C-6b610a,A-df10db,2024-07-12,competitor,0.0,False,False,False,missing features
+C-61ced5,A-acb7f7,2024-03-21,competitor,0.0,True,False,False,missing features
+C-bb8317,A-533452,2024-11-19,features,0.0,False,False,False,
+C-576ecc,A-993085,2024-01-21,features,0.0,False,False,False,
+C-2608a3,A-bf7919,2024-12-17,features,0.0,False,True,False,too expensive
+C-30462f,A-bb1486,2024-11-21,budget,0.0,False,False,False,switched to competitor
+C-bc6f48,A-eafc6e,2023-07-31,pricing,0.0,False,False,False,
+C-8052a7,A-faa28c,2024-08-20,features,0.0,False,False,False,
+C-3b399f,A-7dacce,2024-12-08,features,0.0,True,False,False,
+C-a761a8,A-50bb9f,2024-09-12,unknown,0.0,False,True,True,too expensive
+C-192e1d,A-716841,2024-11-13,unknown,0.0,False,False,False,too expensive
+C-494a16,A-5a184f,2024-09-11,support,0.0,False,False,False,switched to competitor
+C-3db212,A-e40f45,2024-11-09,budget,101.23,False,False,False,missing features
+C-47cdaa,A-9affe6,2024-01-12,features,83.06,False,False,False,missing features
+C-ac853d,A-0354fe,2024-11-26,support,0.0,False,True,False,switched to competitor
+C-a24d30,A-f1f639,2024-04-07,budget,0.0,False,False,False,
+C-23a031,A-5247b3,2024-10-16,pricing,0.0,False,False,False,
+C-178070,A-337bc1,2023-10-21,support,0.0,False,False,False,too expensive
+C-70de89,A-039727,2024-12-22,pricing,46.49,False,False,False,switched to competitor
+C-49de12,A-5c9849,2024-11-13,unknown,0.0,False,True,False,too expensive
+C-97ab4b,A-82d8a6,2024-12-29,features,0.0,False,False,False,switched to competitor
+C-23df1e,A-18793f,2024-12-30,support,25.41,True,False,False,
+C-1b0bb3,A-81edc3,2024-09-21,pricing,10.91,False,False,False,too expensive
+C-48c0c8,A-53f4e3,2024-12-06,competitor,0.0,False,True,True,too expensive
+C-eaa652,A-1619f8,2024-06-03,competitor,0.0,True,False,False,missing features
+C-75e17f,A-ed510f,2023-05-05,budget,0.0,False,False,False,too expensive
+C-3dbe46,A-76fa4d,2024-11-26,unknown,1.55,False,False,False,too expensive
+C-4d517f,A-13466a,2023-11-18,support,0.0,False,False,False,switched to competitor
+C-50dbff,A-31ab9a,2024-08-09,budget,0.0,False,False,False,switched to competitor
+C-2d03fc,A-e43bf7,2023-06-24,pricing,0.0,False,False,False,missing features
+C-8bf15d,A-20736a,2024-03-19,competitor,64.98,False,False,False,too expensive
+C-c6998d,A-956988,2024-12-08,budget,0.0,True,False,False,missing features
+C-f8d15f,A-c9bb3e,2024-10-03,unknown,0.0,False,False,False,
+C-8eba65,A-dcc3f1,2024-10-10,features,0.0,False,False,False,switched to competitor
+C-a1253e,A-462d45,2024-05-17,competitor,0.0,False,False,False,missing features
+C-1e4b49,A-e5d6ab,2023-04-24,features,0.0,False,False,False,switched to competitor
+C-354790,A-37f969,2024-02-12,pricing,0.0,False,False,False,missing features
+C-b5bb09,A-0a62f5,2024-09-27,pricing,90.9,False,False,False,switched to competitor
+C-eb8f3d,A-0be015,2024-12-13,unknown,74.68,False,False,False,too expensive
+C-76793b,A-e888d1,2023-09-24,support,0.0,False,False,False,missing features
+C-033d73,A-ffc04f,2024-08-03,unknown,0.0,False,False,False,
+C-2b7d9b,A-180abf,2024-03-09,support,0.0,False,True,False,
+C-6e6bcf,A-7c6b6b,2024-12-09,budget,0.0,False,False,False,too expensive
+C-e26b7f,A-781cc0,2024-12-09,budget,0.0,True,False,False,too expensive
+C-626a5c,A-e19ff6,2024-04-18,unknown,0.0,False,False,False,missing features
+C-fd2fe4,A-78f02b,2024-12-09,budget,0.0,False,False,False,too expensive
+C-049f10,A-271f46,2023-03-04,support,0.0,False,False,False,
+C-57871b,A-6a4e2d,2024-07-19,budget,0.0,False,False,False,
+C-fafb31,A-5a92e7,2024-06-18,features,0.0,True,False,False,missing features
+C-8a3bc6,A-3b37d9,2024-10-13,support,0.0,False,False,False,switched to competitor
+C-8f9053,A-c1e51e,2024-11-09,pricing,0.0,False,False,False,missing features
+C-7690f5,A-4c56c9,2024-04-05,budget,44.23,True,False,False,missing features
+C-fb91f8,A-96bbc6,2024-06-24,competitor,0.0,True,False,True,
+C-02604c,A-9208f0,2024-11-09,features,0.0,False,False,True,too expensive
+C-85e84b,A-4814a3,2024-11-25,pricing,0.0,False,False,False,too expensive
+C-df72bb,A-dcc2f0,2024-04-10,features,0.0,True,False,False,
+C-a41660,A-3cc791,2024-10-09,features,0.0,False,False,True,
+C-3e764b,A-d792a6,2023-09-11,competitor,0.0,False,False,False,too expensive
+C-f46a9e,A-6e7827,2024-04-09,features,0.0,False,False,False,missing features
+C-864f6f,A-e19ff6,2024-01-08,pricing,0.0,False,True,False,switched to competitor
+C-2cec1c,A-712f1c,2024-10-24,budget,68.99,False,False,False,
+C-bc2761,A-68f37c,2024-02-08,competitor,0.0,False,False,False,too expensive
+C-c82861,A-e351e1,2024-10-24,budget,0.0,False,False,False,switched to competitor
+C-7e1bbd,A-0a62f5,2024-12-18,budget,0.0,True,False,False,switched to competitor
+C-6cbc28,A-09316c,2024-12-05,unknown,0.0,False,False,False,switched to competitor
+C-13f833,A-4d1e75,2024-09-05,budget,0.0,False,False,False,missing features
+C-499165,A-8ae3fc,2024-08-10,budget,0.0,False,False,False,
+C-5d5768,A-bb1eaa,2024-08-15,pricing,0.0,False,True,False,too expensive
+C-8ab44a,A-c58f49,2024-08-27,competitor,0.0,True,True,False,too expensive
+C-575802,A-67be94,2024-06-30,competitor,13.72,False,False,False,too expensive
+C-b38b8a,A-cdf020,2023-12-08,budget,105.26,False,False,False,too expensive
+C-e601dc,A-aa9511,2023-10-17,competitor,0.0,False,False,False,
+C-bc805f,A-50bb9f,2024-09-08,unknown,0.0,False,False,False,too expensive
+C-8d2bf5,A-b9eed8,2024-04-23,pricing,0.0,True,False,True,switched to competitor
+C-ae25d5,A-149a69,2024-12-04,pricing,0.0,True,False,False,
+C-d20b00,A-4ef964,2024-06-19,budget,0.0,True,False,False,too expensive
+C-0baa74,A-558c72,2024-11-28,support,43.01,False,False,False,switched to competitor
+C-7762fe,A-54ecc2,2024-09-12,unknown,0.0,True,False,False,missing features
+C-70ab02,A-3b5cd1,2024-01-21,pricing,0.0,True,False,False,missing features
+C-4c2a9f,A-ff3c73,2023-12-09,competitor,0.0,True,False,False,missing features
+C-5b6094,A-296d7c,2024-11-04,budget,0.0,False,False,False,too expensive
+C-c5e093,A-c16101,2024-11-13,features,0.0,False,False,True,too expensive
+C-94eebe,A-9779ad,2024-04-17,unknown,0.0,True,False,False,switched to competitor
+C-65ad11,A-39ddf4,2024-12-13,support,0.0,False,False,False,
+C-ebc01c,A-bd4513,2024-12-07,features,0.0,False,True,False,switched to competitor
+C-ae15f4,A-3793ee,2023-06-16,unknown,0.0,False,False,False,
+C-26576c,A-dbc825,2024-01-14,features,0.0,False,False,False,too expensive
+C-f6fba0,A-f92792,2024-11-03,features,0.0,False,False,True,
+C-cfa54b,A-eb7c38,2024-03-22,budget,6.26,False,True,False,
+C-260dec,A-202b67,2024-09-14,pricing,9.28,False,False,False,
+C-947b6b,A-5a3eb9,2024-04-28,pricing,0.0,False,False,False,missing features
+C-0af764,A-ccabf0,2024-05-05,competitor,0.0,True,False,False,too expensive
+C-e91da6,A-2d4502,2024-05-07,pricing,0.0,True,False,False,
+C-2d8e22,A-fce879,2024-10-07,support,0.0,False,False,False,switched to competitor
+C-47694c,A-0cc442,2024-10-23,budget,59.52,False,False,False,
+C-b6549a,A-151c9a,2023-11-04,support,35.6,False,False,False,missing features
+C-258ade,A-5f2961,2024-11-28,pricing,6.6,False,False,False,switched to competitor
+C-8eda06,A-a865bd,2024-03-18,unknown,0.0,False,False,False,
+C-07be44,A-751c58,2024-11-05,budget,0.0,False,False,True,missing features
+C-62daa0,A-b2225d,2024-03-31,pricing,0.0,False,False,False,too expensive
+C-7d6220,A-2edab2,2024-06-23,features,0.0,False,False,False,too expensive
+C-a65f7c,A-098560,2024-05-30,support,34.35,False,False,False,too expensive
+C-02a354,A-ccb686,2024-11-24,competitor,25.92,False,False,False,
+C-5f43c3,A-db5e9e,2024-12-29,pricing,0.0,False,False,False,missing features
+C-36a955,A-96bbc6,2024-12-04,competitor,0.0,True,False,False,switched to competitor
+C-7074f9,A-dcc3f1,2024-07-16,support,0.0,False,False,False,too expensive
+C-7befdc,A-9779ad,2024-08-11,features,0.0,False,False,False,too expensive
+C-a72f7f,A-158f4e,2023-03-05,budget,0.0,False,False,False,switched to competitor
+C-065699,A-c16cf7,2024-12-07,support,0.0,False,False,False,too expensive
+C-17044c,A-bcf664,2024-10-04,features,75.32,False,False,True,too expensive
+C-d716da,A-96bbc6,2024-12-21,budget,125.6,False,False,False,missing features
+C-dd2ad2,A-30b4ca,2024-09-01,features,0.0,False,False,False,
+C-2c410a,A-712426,2024-12-23,features,0.0,True,False,True,missing features
+C-5f93ed,A-337bc1,2023-12-16,unknown,0.0,False,False,False,missing features
+C-f79e5e,A-7dacce,2024-09-18,unknown,0.0,False,False,False,switched to competitor
+C-c9b84b,A-158f4e,2024-12-04,features,0.0,False,False,False,
+C-aee993,A-1d5444,2024-06-01,support,0.0,False,False,False,too expensive
+C-cc8de6,A-526d93,2024-09-25,support,0.0,True,False,False,missing features
+C-f1773a,A-68f37c,2024-05-15,support,0.0,True,False,False,switched to competitor
+C-fe3853,A-f51f16,2024-12-07,competitor,0.0,True,True,False,too expensive
+C-770066,A-84ebe4,2024-01-05,budget,0.0,False,False,False,switched to competitor
+C-449318,A-5a184f,2023-07-23,features,0.0,False,False,False,too expensive
+C-e2ecb7,A-e7a1e2,2024-12-11,features,0.0,False,False,False,
+C-211191,A-781cc0,2024-10-12,support,0.0,True,False,False,
+C-55f4ec,A-0cc442,2024-07-20,pricing,0.0,False,False,False,too expensive
+C-695fcd,A-2e4581,2024-11-23,budget,0.0,False,False,False,switched to competitor
+C-921335,A-659280,2024-07-23,features,0.0,False,False,False,too expensive
+C-9776b7,A-40a557,2023-12-08,budget,0.0,False,False,False,switched to competitor
+C-b3d895,A-0a62f5,2024-12-27,support,43.6,False,False,False,too expensive
+C-1965c1,A-9f9299,2024-10-08,competitor,0.0,False,False,False,
+C-0ec68d,A-e83938,2024-02-19,features,0.0,False,False,False,too expensive
+C-08d3b3,A-3f9cc0,2024-12-21,budget,0.0,False,False,True,switched to competitor
+C-466a70,A-ee42db,2023-06-23,pricing,0.0,True,False,False,too expensive
+C-02f4fa,A-ae052e,2024-11-13,unknown,0.0,False,False,False,too expensive
+C-ac34ca,A-ab438f,2024-12-02,budget,0.0,True,True,False,
+C-92f5cb,A-90a8c8,2024-08-29,support,0.0,False,False,False,missing features
+C-08b126,A-0cc442,2024-09-26,budget,0.0,True,False,True,too expensive
+C-9cc7a5,A-8e47ca,2024-09-18,competitor,0.0,False,False,False,too expensive
+C-c5b2e8,A-c608c8,2024-06-04,support,0.0,False,False,False,too expensive
+C-be8018,A-684255,2024-07-03,unknown,0.0,False,False,False,too expensive
+C-23ca8f,A-d77f4c,2024-10-03,unknown,0.0,False,True,False,
+C-2d0569,A-c7ffc2,2023-11-11,features,174.92,False,False,False,missing features
+C-4c523f,A-05d3b3,2024-03-12,unknown,0.0,False,False,False,switched to competitor
+C-57a768,A-702032,2024-04-18,features,10.5,False,False,False,switched to competitor
+C-573a5c,A-dec005,2024-11-23,support,0.0,False,False,False,missing features
+C-b7dfcd,A-726cfa,2024-08-08,support,122.11,False,False,False,too expensive
+C-8c9a9a,A-9f0b68,2024-08-10,features,0.0,True,False,False,too expensive
+C-2ce12e,A-712426,2024-11-26,pricing,0.0,False,False,True,
+C-18b303,A-7641d3,2024-06-07,unknown,96.35,False,False,False,missing features
+C-b6bc5f,A-bb1486,2024-11-23,competitor,0.0,False,True,True,switched to competitor
+C-8cce4c,A-fa3095,2023-12-23,support,0.0,False,False,False,missing features
+C-8fcdf5,A-310452,2024-12-27,budget,0.0,False,False,False,too expensive
+C-ddade1,A-463db0,2024-12-30,features,0.0,False,False,True,
+C-5689de,A-00bed1,2024-01-03,unknown,21.17,False,False,False,
+C-2f61e8,A-ad3abd,2023-07-12,competitor,0.0,False,False,False,
+C-4dc992,A-39b19f,2023-03-11,unknown,0.0,False,False,False,
+C-17fb24,A-cc1d8d,2024-12-19,unknown,217.22,False,False,False,too expensive
+C-21efb6,A-fa2041,2024-07-13,competitor,0.0,False,False,False,switched to competitor
+C-486194,A-2ebb4b,2024-12-29,features,0.0,True,False,True,missing features
+C-3091b6,A-eb1312,2024-10-03,unknown,0.0,False,False,False,
+C-b37401,A-dfbd31,2024-12-19,unknown,0.0,False,False,False,too expensive
+C-c93006,A-4e0e85,2023-11-16,competitor,0.0,False,True,False,too expensive
+C-cea92d,A-2e4581,2024-12-05,competitor,0.0,True,False,False,
+C-f7846a,A-117171,2024-10-13,budget,0.0,False,False,False,switched to competitor
+C-f5a863,A-e7a1e2,2024-09-30,budget,6.2,False,False,True,
+C-056c32,A-1e6fc3,2024-03-20,pricing,0.0,False,False,False,switched to competitor
+C-75abb3,A-ac9111,2024-06-25,budget,0.0,True,False,False,missing features
+C-17377e,A-ee42db,2024-03-07,pricing,0.0,False,False,False,missing features
+C-d84a6d,A-a45270,2024-11-12,pricing,0.0,False,False,False,missing features
+C-66b3fa,A-378b99,2024-10-12,pricing,0.0,False,False,False,switched to competitor
+C-600a7c,A-9ee962,2024-10-03,support,0.0,False,True,False,
+C-7aa94d,A-038089,2024-12-25,features,19.34,False,False,False,too expensive
+C-c6a403,A-684255,2024-05-04,budget,0.0,False,False,True,missing features
+C-d3e2ab,A-f1f639,2023-10-18,competitor,0.0,False,False,True,missing features
+C-b3c3ce,A-9f2731,2024-10-15,features,0.0,False,False,False,
+C-d7de9d,A-8b0451,2024-12-29,budget,0.0,False,False,False,too expensive
+C-2447b3,A-c45b23,2024-03-24,support,0.0,False,False,True,missing features
+C-155feb,A-82861f,2024-05-17,support,0.0,False,False,False,
+C-5f450a,A-c1e51e,2024-12-20,support,0.0,False,False,False,switched to competitor
+C-721738,A-d42431,2024-06-26,pricing,0.0,False,False,False,missing features
+C-33fc6a,A-c16101,2024-12-19,features,0.0,False,True,False,
+C-4691eb,A-7c83a1,2024-05-19,unknown,0.0,True,False,False,
+C-2cec7e,A-ce550d,2024-12-28,budget,0.0,True,False,False,too expensive
+C-71ff03,A-f19409,2023-05-25,features,0.0,False,True,False,too expensive
+C-2a64c7,A-029f69,2024-06-17,budget,0.0,False,False,False,
+C-5899b9,A-484819,2023-06-29,support,0.0,True,False,False,
+C-7e5a22,A-6965e1,2024-12-09,features,0.0,False,False,False,
+C-c3815e,A-6965e1,2024-12-04,unknown,0.0,False,False,False,switched to competitor
+C-190a42,A-5fe118,2024-12-16,features,114.86,False,False,False,
+C-d2077d,A-cab532,2024-07-10,support,0.0,True,False,False,too expensive
+C-3b6b00,A-9289f6,2023-08-24,support,17.93,False,False,False,too expensive
+C-42ca6e,A-1b9609,2024-02-02,pricing,0.0,True,False,False,too expensive
+C-d9a1f3,A-118f1c,2024-12-17,budget,0.0,False,False,False,
+C-217360,A-76fa4d,2024-12-03,pricing,31.49,False,False,False,too expensive
+C-aa3075,A-7dacce,2024-12-27,budget,0.0,False,False,False,missing features
+C-3f2f59,A-a8b49c,2024-06-17,features,0.0,False,False,False,missing features
+C-4f6e40,A-cb5333,2024-08-11,features,0.0,False,False,False,too expensive
+C-2f95dd,A-f19409,2023-03-26,competitor,0.0,False,True,False,switched to competitor
+C-38b77f,A-a8d89d,2024-01-18,features,0.0,False,False,False,switched to competitor
+C-58deed,A-81edc3,2024-12-16,support,0.0,False,False,False,too expensive
+C-86f8a6,A-ccc747,2024-04-15,budget,0.0,False,False,False,switched to competitor
+C-5d91cd,A-3f9cc0,2024-08-09,features,0.0,False,False,False,
+C-bfcee5,A-8e47ca,2024-12-31,support,0.0,False,False,False,missing features
+C-450414,A-87aa7b,2024-12-26,budget,0.0,True,False,False,switched to competitor
+C-dd4207,A-f45426,2024-08-05,competitor,47.17,False,False,False,missing features
+C-d4c4c6,A-09540c,2024-03-05,unknown,71.44,False,False,False,
+C-149fc9,A-e1462e,2024-12-05,competitor,0.0,False,False,False,switched to competitor
+C-de3fd0,A-19b2c8,2024-08-16,pricing,0.0,False,False,False,missing features
+C-577ffa,A-10b8f2,2024-06-04,support,0.0,True,False,False,too expensive
+C-a77075,A-32728c,2023-01-25,pricing,0.0,True,False,False,switched to competitor
+C-4cdb6f,A-f25509,2024-06-15,pricing,0.0,False,False,False,missing features
+C-a9e0c4,A-94d3da,2024-04-12,competitor,0.0,False,False,False,switched to competitor
+C-0f0386,A-751c58,2024-09-17,budget,64.22,False,False,False,switched to competitor
+C-3c8ea9,A-7641d3,2023-11-10,support,35.05,True,False,False,missing features
+C-66c9fe,A-86902e,2024-12-07,features,0.0,False,False,False,
+C-533d1c,A-1619f8,2024-07-19,competitor,0.0,False,False,False,
+C-02719d,A-5247b3,2024-10-12,support,28.84,False,True,False,missing features
+C-16ef52,A-9b9fe9,2024-09-04,features,0.0,False,False,False,switched to competitor
+C-6d80a6,A-02fac6,2024-08-21,support,0.0,False,False,False,missing features
+C-23d5a9,A-54ecc2,2024-09-22,pricing,0.0,False,False,False,too expensive
+C-2e9b92,A-855a48,2024-08-01,unknown,7.92,False,False,False,too expensive
+C-a8e84b,A-c1dfe1,2024-06-06,features,0.0,False,False,False,missing features
+C-edb201,A-a7bd4b,2024-10-15,features,0.0,False,False,False,too expensive
+C-92e7a2,A-d535f6,2024-10-05,unknown,0.0,True,False,False,missing features
+C-990050,A-4f18f0,2024-12-01,features,0.0,False,False,False,missing features
+C-e49016,A-b7724f,2024-09-01,competitor,111.42,False,False,True,switched to competitor
+C-151fb1,A-fd7ad3,2024-12-19,support,0.0,True,False,True,missing features
+C-9b229e,A-249769,2024-06-12,pricing,0.0,False,False,True,too expensive
+C-d33672,A-a1b80b,2024-07-11,budget,12.99,False,False,True,switched to competitor
+C-f180f4,A-ac14bb,2024-10-01,competitor,0.0,False,False,False,too expensive
+C-d8d1fd,A-5b1bcd,2024-08-07,competitor,4.45,False,False,False,
+C-f918d7,A-202b67,2024-03-30,features,69.59,False,False,False,
+C-a77cbf,A-bad8c1,2023-10-04,unknown,0.0,False,False,True,too expensive
+C-f5dfda,A-2446e3,2024-07-20,competitor,34.87,True,True,True,missing features
+C-9b80de,A-533452,2024-12-01,pricing,132.32,False,False,False,missing features
+C-515343,A-b54c01,2024-10-23,budget,0.0,True,False,False,too expensive
+C-da7b0d,A-2ebb4b,2023-08-04,pricing,0.0,False,False,False,missing features
+C-efed73,A-9123ac,2024-10-23,competitor,0.0,True,False,False,missing features
+C-8d2855,A-8bde0c,2024-12-30,pricing,0.0,False,False,False,
+C-992f28,A-f44180,2023-04-29,competitor,38.15,False,False,False,too expensive
+C-d47c85,A-c37601,2024-12-17,support,0.0,False,False,False,switched to competitor
+C-ad8b54,A-a09355,2024-09-13,support,0.0,True,False,False,
+C-89198d,A-038089,2024-10-21,competitor,0.0,False,False,False,
+C-f33efc,A-8ed5dd,2024-10-30,support,0.0,True,True,False,switched to competitor
+C-13ca3a,A-313be3,2024-03-23,features,43.03,False,False,False,too expensive
+C-07f6e3,A-e888d1,2023-06-06,budget,0.0,False,False,False,too expensive
+C-65b589,A-7a0d69,2024-12-05,competitor,0.0,False,True,False,switched to competitor
+C-ea6df1,A-e51ec7,2024-04-07,budget,0.0,False,False,False,switched to competitor
+C-f78dc9,A-1619f8,2024-09-21,budget,0.0,False,False,False,
+C-9d9bff,A-f5641b,2024-06-17,features,0.0,False,False,False,too expensive
+C-9d8799,A-dfbd31,2024-01-01,features,0.0,True,False,False,too expensive
+C-2fb169,A-0532a9,2024-10-09,pricing,2.4,False,False,False,too expensive
+C-3bac11,A-f5641b,2024-04-20,pricing,0.0,False,False,False,too expensive
+C-49868d,A-309e54,2024-12-14,support,106.67,False,False,False,missing features
+C-27770c,A-7988d1,2024-06-19,competitor,16.89,False,False,False,too expensive
+C-118bea,A-65aeb5,2024-12-02,budget,0.0,True,False,True,missing features
+C-cf17ca,A-e08cd3,2024-12-17,features,0.0,False,False,False,too expensive
+C-25c0d2,A-e693b6,2024-10-10,budget,0.0,False,True,False,missing features
+C-05224a,A-f17767,2023-05-03,pricing,0.0,True,False,False,
+C-fe7ee4,A-b44e3e,2024-04-14,unknown,0.0,False,False,False,switched to competitor
+C-14ac13,A-68f37c,2024-12-18,features,0.0,False,False,True,too expensive
+C-fa1c87,A-342303,2024-03-20,features,0.0,False,False,False,switched to competitor
+C-29b7f7,A-8ae05d,2024-08-30,unknown,0.0,False,False,False,missing features
+C-22b92e,A-32fb14,2024-04-03,features,0.0,False,False,False,too expensive
+C-46580a,A-81edc3,2024-03-03,unknown,0.0,False,False,False,missing features
+C-ef9abf,A-a33200,2024-10-07,features,21.61,True,False,False,too expensive
+C-88a176,A-d922bf,2024-12-06,support,11.13,False,True,False,too expensive
+C-681c7b,A-ff3c73,2024-05-09,competitor,2.42,False,False,False,missing features
+C-ca1941,A-37f969,2024-11-03,pricing,0.0,False,False,False,too expensive
+C-7fcce6,A-4bfa33,2024-12-08,unknown,0.0,False,False,False,missing features
+C-5328d6,A-0b0d6d,2024-12-31,competitor,0.0,False,False,False,
+C-cd7797,A-a8d89d,2024-08-26,pricing,0.0,False,False,False,
+C-7f0644,A-ae052e,2024-10-17,budget,0.0,False,False,False,too expensive
+C-2d4533,A-117171,2024-10-22,features,102.86,False,False,False,switched to competitor
+C-d9410c,A-87aa7b,2024-06-19,pricing,136.0,False,True,False,missing features
+C-75fdd6,A-0f7d77,2024-11-09,competitor,0.0,False,False,True,missing features
+C-3018d4,A-34ea2f,2024-10-19,unknown,1.85,True,False,False,too expensive
+C-fcbd6e,A-1e1b80,2024-11-13,features,0.0,False,False,False,switched to competitor
+C-79999b,A-58b9ff,2024-10-10,pricing,0.0,False,False,False,too expensive
+C-62ad35,A-6965e1,2024-12-02,budget,0.0,False,False,False,
+C-f0bd80,A-117171,2024-11-14,pricing,0.0,False,False,False,
+C-f49d4c,A-65c341,2024-12-16,unknown,0.0,False,False,False,switched to competitor
+C-462222,A-ae052e,2023-10-07,support,0.0,False,False,False,too expensive
+C-f68651,A-eafc6e,2024-12-12,unknown,0.0,False,False,False,
+C-9c4603,A-c58f49,2024-09-21,support,7.6,False,False,False,switched to competitor
+C-c179a3,A-e7beab,2024-04-25,features,0.0,False,True,False,missing features
+C-2c9dae,A-b179bf,2024-11-25,features,0.0,False,False,False,
+C-2c86b1,A-afa505,2024-03-02,support,0.0,True,False,False,missing features
+C-1172fe,A-4a267b,2024-06-17,support,64.54,False,False,False,missing features
+C-4f6d90,A-6a7c9d,2024-11-15,features,178.84,False,False,False,missing features
+C-f51f1d,A-32fb14,2024-04-28,competitor,0.0,False,False,False,too expensive
+C-bd5e5e,A-bd4513,2024-12-09,budget,35.14,False,False,False,too expensive
+C-9fd0cf,A-eb7fac,2024-07-22,unknown,0.0,False,False,False,switched to competitor
+C-dcbfa4,A-4e44e8,2024-08-25,features,35.48,True,False,False,too expensive
+C-f1268a,A-32728c,2024-07-19,budget,7.58,True,False,True,missing features
+C-0b2d8c,A-1b9609,2024-01-02,unknown,0.0,False,False,False,switched to competitor
+C-26865a,A-854864,2024-12-24,support,8.47,True,False,False,switched to competitor
+C-fba952,A-118d55,2024-12-27,pricing,0.0,False,False,False,too expensive
+C-e4261a,A-417d2f,2024-12-30,budget,0.0,False,False,False,missing features
+C-ab36fc,A-f03140,2024-10-03,competitor,0.0,False,False,False,missing features
+C-fdb715,A-241e75,2024-10-11,unknown,0.0,False,False,False,
+C-fcfc3c,A-98a59a,2024-09-11,support,0.0,True,False,False,switched to competitor
+C-a119b0,A-9f2731,2024-12-09,unknown,136.94,False,False,False,missing features
+C-cdb4d0,A-c222ab,2024-10-05,support,0.0,False,False,False,
+C-d08588,A-e51ec7,2024-01-15,budget,0.0,False,False,False,too expensive
+C-1eead2,A-5790f4,2024-12-26,support,51.18,True,False,False,too expensive
+C-9b6151,A-2bc93d,2024-08-15,competitor,99.1,False,False,True,switched to competitor
+C-cfb464,A-eb2fdc,2024-05-26,competitor,0.0,False,False,False,missing features
+C-249af9,A-ac14bb,2024-08-29,pricing,128.79,False,False,False,switched to competitor
+C-193426,A-7988d1,2024-12-24,unknown,0.0,False,False,False,missing features
+C-6a6704,A-180abf,2024-05-08,support,0.0,False,False,False,switched to competitor
+C-e41103,A-180abf,2024-05-04,competitor,0.0,False,False,False,
+C-53546c,A-e61e98,2024-10-19,features,0.0,False,True,False,switched to competitor
+C-f6f8a5,A-2d1036,2024-10-28,pricing,39.09,True,False,True,switched to competitor
+C-551bc8,A-87aa7b,2024-06-07,budget,0.0,False,False,False,
+C-31a49a,A-9123ac,2024-04-05,support,0.0,True,False,True,too expensive
+C-ef2329,A-0f6450,2024-12-30,competitor,0.0,False,True,False,
+C-88877a,A-313be3,2023-12-09,competitor,0.0,True,False,False,
+C-28085c,A-4bfa33,2024-12-21,budget,92.5,False,False,False,
+C-5f203c,A-80eeb6,2024-02-09,budget,0.0,False,False,False,too expensive
+C-a6d0e1,A-b179bf,2024-12-05,features,0.0,False,False,False,missing features
+C-95a18e,A-241e75,2024-12-19,features,0.0,True,False,False,switched to competitor
+C-b0b16c,A-ae052e,2024-12-14,competitor,0.0,False,False,False,too expensive
+C-dfe189,A-05f0e5,2024-11-25,features,72.19,True,False,False,
+C-9fe257,A-157070,2024-12-27,features,0.0,False,False,False,too expensive
+C-c1bc7e,A-993085,2023-09-20,features,0.0,False,False,False,
+C-27e9c1,A-c16b88,2024-06-01,competitor,0.0,True,False,False,switched to competitor
+C-8f8593,A-05d3b3,2024-09-09,unknown,0.0,False,False,False,switched to competitor
+C-9775db,A-331424,2024-02-21,competitor,0.0,False,False,False,switched to competitor
+C-3efa9b,A-cdf020,2024-11-07,support,0.0,False,False,True,too expensive
+C-917c1d,A-39868b,2024-05-24,budget,0.0,True,False,True,too expensive
+C-2d659a,A-72799b,2024-05-05,pricing,0.0,True,False,False,switched to competitor
+C-5d9db3,A-39868b,2024-05-06,unknown,0.0,False,False,False,
+C-0c829f,A-c7ffc2,2023-04-15,budget,0.0,False,False,False,too expensive
+C-83b55f,A-5790f4,2024-12-25,features,392.92,False,False,False,switched to competitor
+C-fa6149,A-3d957b,2024-05-05,budget,0.0,False,False,False,too expensive
+C-76d762,A-51ec1b,2023-12-09,unknown,0.0,True,False,True,too expensive
+C-4b071b,A-118d55,2024-11-25,unknown,0.0,True,True,False,missing features
+C-b3431e,A-e3bd71,2023-12-30,support,0.0,False,True,False,switched to competitor
+C-9a1ccc,A-b2af2e,2024-11-14,pricing,0.0,False,False,False,
+C-cb924b,A-089363,2023-11-27,pricing,0.0,False,False,False,switched to competitor
+C-a47d71,A-f51f16,2024-07-07,features,0.0,False,False,False,switched to competitor
+C-33c706,A-ffdfd5,2024-08-08,features,0.0,False,False,False,missing features
+C-901c1a,A-425e76,2023-08-10,competitor,0.0,False,False,False,too expensive
+C-481838,A-af0cd2,2023-10-26,unknown,0.0,False,True,False,switched to competitor
+C-ff002d,A-8ed5dd,2024-11-02,unknown,0.0,False,False,False,
+C-1cf079,A-354f12,2024-09-19,competitor,0.0,False,True,False,missing features
+C-f17b79,A-65c341,2024-03-07,support,0.0,False,False,False,too expensive
+C-020446,A-0cc442,2024-10-06,unknown,0.0,True,False,True,switched to competitor
+C-9f95d3,A-157070,2024-01-06,features,0.0,False,False,False,too expensive
+C-54993f,A-c43359,2024-12-19,support,8.92,False,False,False,missing features
+C-75ddda,A-425e76,2023-12-25,competitor,0.0,False,False,False,too expensive
+C-d7ded6,A-e888d1,2024-11-29,features,6.38,False,False,False,switched to competitor
+C-ba8af4,A-bb3bd4,2024-06-30,unknown,0.0,False,False,False,missing features
+C-811879,A-ad64c6,2024-07-29,unknown,0.0,True,False,False,
+C-6736e4,A-3be56b,2024-01-10,competitor,0.0,True,False,False,
+C-0f75be,A-0baac2,2024-10-18,features,30.73,False,False,False,too expensive
+C-59d7bd,A-0f3e88,2024-08-11,budget,0.0,False,False,False,missing features
+C-d0f6d8,A-6e7827,2023-09-19,support,0.0,False,False,False,switched to competitor
+C-9c899e,A-1e1b80,2024-10-14,competitor,0.0,False,False,False,
+C-fad4d3,A-d77f4c,2024-12-03,unknown,0.0,False,False,False,too expensive
+C-07ec1f,A-bbc346,2024-11-03,competitor,15.46,False,False,False,switched to competitor
+C-156544,A-d42431,2024-10-12,budget,17.42,True,False,False,switched to competitor
+C-e11abb,A-cc102e,2024-04-25,unknown,50.06,False,False,False,switched to competitor
+C-d85c26,A-42e5e1,2024-10-04,pricing,0.0,False,False,True,too expensive
+C-d28d0e,A-1e1b80,2023-10-04,competitor,0.0,False,False,False,missing features
+C-3bf203,A-e19ff6,2024-06-27,competitor,0.0,False,False,False,switched to competitor
+C-326d32,A-34d880,2024-12-20,unknown,10.4,False,False,False,missing features
+C-44918f,A-9208f0,2024-09-15,unknown,0.0,True,False,True,too expensive
+C-cf246e,A-7f6b86,2024-07-10,pricing,5.27,False,False,False,
+C-e20cc6,A-cc102e,2024-11-19,pricing,0.0,False,False,False,too expensive
+C-1f4cc0,A-56962b,2024-08-26,pricing,0.0,True,False,False,
+C-0d470e,A-7a0d69,2024-12-29,budget,0.0,True,False,False,
+C-562e14,A-c16cf7,2024-11-08,budget,0.0,True,False,False,
+C-06b32c,A-2ebb4b,2023-08-19,pricing,0.0,False,False,False,missing features
+C-4bbb74,A-c37cab,2024-11-16,competitor,0.0,False,False,False,missing features
+C-8e5c25,A-9b9fe9,2023-12-27,features,27.92,False,False,False,too expensive
+C-8a2d9d,A-0651a4,2024-11-22,features,0.0,False,True,False,missing features
+C-d39666,A-3b37d9,2023-12-26,budget,0.0,False,False,False,
+C-ed4dcb,A-5a3eb9,2024-06-12,competitor,58.37,False,False,False,missing features
+C-105c4c,A-0a62f5,2024-12-07,budget,21.95,False,True,False,
+C-c3b1e4,A-df1e44,2024-10-17,budget,0.0,False,False,False,too expensive
+C-b6997d,A-4ae22a,2024-07-20,pricing,0.0,False,False,False,
+C-36d17e,A-ac85cd,2024-12-13,pricing,102.39,False,False,True,
+C-5cfad3,A-bece89,2023-12-16,budget,56.15,False,False,False,missing features
+C-56b504,A-ef84cf,2024-08-14,unknown,18.81,False,False,True,switched to competitor
+C-2bf465,A-84ebe4,2024-01-20,support,0.0,False,False,False,missing features
+C-54ce4f,A-6dee43,2024-01-14,pricing,143.8,False,False,False,switched to competitor
+C-bb53cb,A-94f8c9,2024-05-02,budget,0.0,False,False,False,
+C-c4e0b8,A-b179bf,2024-10-31,support,0.0,False,False,False,too expensive
+C-ba801a,A-7cfe77,2024-09-09,unknown,0.0,False,True,False,
+C-1f8fd5,A-e351e1,2024-12-04,support,0.0,True,True,True,
+C-f477c9,A-3f9cc0,2024-07-18,pricing,0.0,False,False,False,too expensive
+C-4b854f,A-ef84cf,2024-09-28,pricing,0.0,True,False,True,too expensive
+C-1124ed,A-439b2f,2024-08-02,pricing,17.06,False,False,True,
+C-370962,A-075038,2024-09-05,features,6.38,False,False,False,
+C-cc90be,A-d82ef9,2024-08-06,budget,74.94,False,False,False,switched to competitor
+C-89af4e,A-d77f4c,2024-08-06,budget,0.0,False,True,False,too expensive
+C-e73b7f,A-e1462e,2023-10-05,support,0.0,False,False,True,too expensive
+C-5e0998,A-faa28c,2024-05-24,features,0.0,False,False,False,missing features
+C-09b7c7,A-08e34e,2024-09-01,features,3.57,False,False,False,missing features
+C-2299d7,A-fd7ad3,2024-11-23,support,0.0,False,False,False,too expensive
+C-67d3e1,A-86fc1d,2024-08-12,support,0.0,True,False,False,
+C-ca5f4b,A-832ec2,2024-09-15,pricing,0.0,True,False,False,switched to competitor
+C-0340b2,A-029f69,2024-10-31,competitor,0.0,False,False,False,switched to competitor
+C-5368b0,A-e83938,2024-08-11,pricing,0.0,False,False,False,switched to competitor
+C-ca81a1,A-ccc747,2024-09-02,competitor,0.0,False,False,False,switched to competitor
+C-ad7ea3,A-8145a0,2023-07-12,features,0.0,False,False,False,missing features
+C-864169,A-526d93,2024-08-05,support,6.77,False,False,False,switched to competitor
+C-488b42,A-1b707d,2023-07-21,competitor,0.0,False,False,True,missing features
+C-ce47da,A-cc102e,2024-11-19,pricing,61.1,False,False,False,switched to competitor
+C-fb2a95,A-902ef7,2024-09-26,pricing,0.0,False,False,False,too expensive
+C-8d834b,A-798a3f,2024-07-19,support,0.0,False,False,False,
+C-9e8172,A-ad64c6,2024-07-03,support,19.08,False,False,False,missing features
+C-474d36,A-6f50ae,2024-02-26,features,0.0,False,False,True,
+C-b7e6ac,A-9208f0,2024-05-24,budget,66.37,False,False,False,too expensive
+C-ffc2b8,A-0354fe,2024-11-15,unknown,0.0,False,False,False,switched to competitor
+C-a1bcf0,A-5ed98d,2024-09-27,features,0.0,False,False,False,missing features
+C-675c0a,A-a09355,2024-10-18,support,135.11,False,False,False,
+C-458075,A-4437e4,2024-06-21,features,0.0,False,False,False,too expensive
+C-3003bc,A-c58f49,2024-09-03,unknown,152.36,False,False,False,too expensive
+C-6ac144,A-6f50ae,2023-11-06,unknown,0.0,False,False,False,missing features
+C-9bb1b6,A-5ed98d,2024-10-02,competitor,0.0,False,True,False,missing features
+C-07fd6b,A-e351e1,2024-10-30,unknown,113.84,False,True,False,missing features
+C-2e2f04,A-2d1036,2024-10-19,budget,0.0,True,False,False,missing features
+C-2fc9c4,A-b30291,2024-09-03,competitor,277.54,False,True,False,too expensive
+C-109d03,A-1f0ac7,2024-11-08,support,0.0,True,False,False,missing features
+C-af7968,A-712426,2024-11-21,pricing,0.0,True,False,False,missing features
+C-785e8e,A-f25509,2024-11-10,features,0.0,False,False,False,
+C-2886ac,A-bcbe98,2024-11-25,competitor,0.0,False,False,False,missing features
+C-a40fa4,A-4c6f11,2024-06-29,competitor,0.0,False,False,False,too expensive
+C-965d90,A-df10db,2024-05-19,competitor,0.0,False,False,False,missing features
+C-6a6ed3,A-c1dfe1,2023-09-21,pricing,0.0,True,False,False,missing features
+C-9c89ca,A-3a7284,2024-12-26,unknown,0.0,False,False,False,missing features
+C-1dce6d,A-751c58,2024-12-16,budget,0.0,False,False,False,too expensive
+C-0d5e99,A-68f37c,2024-06-29,unknown,0.0,False,False,True,too expensive
+C-05bc56,A-533452,2024-11-17,features,0.0,False,True,True,missing features
+C-887a83,A-0baac2,2024-07-15,unknown,0.0,True,False,False,missing features
+C-84f039,A-b7724f,2024-01-01,support,78.25,True,False,False,missing features
+C-aad0f7,A-0dbdc6,2023-11-26,support,0.0,False,True,False,missing features
+C-6ab303,A-4c6f11,2024-10-18,competitor,0.0,False,False,False,too expensive
+C-4a3e8e,A-54ecc2,2024-11-23,support,0.0,True,False,False,
+C-f67026,A-b7ef83,2024-07-24,budget,60.25,True,False,False,missing features
+C-c6f6fe,A-922109,2024-12-17,support,0.0,False,False,False,
+C-374d5d,A-c43359,2024-12-12,unknown,0.0,True,False,False,too expensive
+C-8ae2f5,A-f25509,2024-05-17,features,0.0,False,False,True,
+C-c66a6c,A-02cd81,2024-04-30,pricing,0.0,False,False,False,
+C-7007f0,A-67be94,2024-05-28,support,74.55,False,False,False,missing features
+C-b411ad,A-ba6516,2024-03-17,budget,0.0,False,False,False,
+C-ca1379,A-ee42db,2024-11-12,unknown,23.52,False,False,False,
+C-615769,A-ccb686,2024-11-08,unknown,0.0,False,False,False,switched to competitor
+C-db2e8d,A-b7724f,2023-08-25,unknown,52.88,False,False,False,missing features
+C-ed73ea,A-5a3eb9,2024-04-14,features,0.0,True,False,False,
+C-e20d30,A-fd7ad3,2024-12-31,unknown,0.0,True,False,False,
+C-e42d29,A-a865bd,2023-11-26,unknown,0.0,False,False,False,missing features
+C-cd8fba,A-b7ef83,2024-06-01,unknown,0.0,False,False,True,too expensive
+C-2de339,A-e83938,2024-12-29,budget,13.5,False,False,False,
+C-ec714a,A-533452,2024-12-16,support,15.23,False,False,False,missing features
+C-a6aa23,A-ee42db,2023-10-13,support,0.0,False,True,False,missing features
+C-3b4085,A-4f18f0,2024-05-27,features,0.0,True,False,False,
+C-437da0,A-f6b2fb,2024-07-11,support,0.0,True,False,False,
+C-92da55,A-d26ab4,2024-12-26,pricing,86.02,False,False,False,too expensive
+C-307676,A-05f0e5,2024-01-14,unknown,0.0,True,False,False,missing features
+C-22d30d,A-d3c88e,2024-11-18,support,0.0,False,False,False,too expensive
+C-a4a4a7,A-104f1a,2024-09-09,features,0.0,False,False,False,switched to competitor
+C-16ddba,A-b2225d,2024-05-16,support,0.0,True,False,False,switched to competitor
+C-e8f3f5,A-5790f4,2024-12-31,competitor,0.0,True,False,False,too expensive
+C-6b9663,A-104f1a,2024-12-11,unknown,0.0,False,False,False,missing features
+C-65cff3,A-ccc747,2024-08-07,budget,104.25,True,False,False,
+C-a860c5,A-5f7781,2024-12-25,pricing,0.0,False,False,False,
+C-37929d,A-e1b9cd,2024-10-01,unknown,0.0,False,False,False,switched to competitor
+C-efe5bb,A-7988d1,2024-01-06,budget,0.0,False,False,False,too expensive
+C-248550,A-2922b6,2024-12-25,competitor,0.0,False,False,False,missing features
+C-38ef8e,A-0baac2,2024-09-30,pricing,0.0,False,False,False,too expensive
+C-885a34,A-71615e,2024-07-16,pricing,0.0,True,False,False,missing features
+C-c4582f,A-9f0b68,2024-11-01,pricing,0.0,True,False,False,
+C-370175,A-9779ad,2024-08-03,competitor,0.0,False,False,False,missing features
+C-a529cf,A-bb3bd4,2024-05-30,pricing,0.0,True,False,False,missing features
+C-cc0058,A-f3ff05,2024-10-20,unknown,0.0,False,False,False,too expensive
+C-ae47d1,A-425e76,2024-10-22,competitor,0.0,False,False,False,switched to competitor
+C-59499c,A-fd7ad3,2024-11-12,pricing,70.03,False,False,False,switched to competitor
+C-b56a35,A-702032,2024-06-14,competitor,0.0,False,False,False,switched to competitor
+C-7e7822,A-dbc825,2024-02-03,budget,0.0,False,False,False,
+C-484fba,A-0a282f,2024-12-31,support,62.66,False,True,False,too expensive
+C-22f536,A-e5d6ab,2024-05-11,competitor,0.0,True,False,False,
+C-5e0b68,A-1f559b,2024-09-28,features,0.0,False,False,False,

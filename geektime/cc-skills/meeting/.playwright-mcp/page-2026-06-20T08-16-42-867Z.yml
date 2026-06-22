@@ -1,0 +1,278 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]: ☢
+    - heading "AI 每日资讯" [level=1] [ref=e5]
+    - paragraph [ref=e6]: // CYBER NEWS AGENCY //
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]: DATE
+      - generic [ref=e10]: 2026/06/20
+    - generic [ref=e12]:
+      - generic [ref=e13]: TOTAL
+      - generic [ref=e14]: "20"
+    - generic [ref=e16]:
+      - generic [ref=e17]: SOURCES
+      - generic [ref=e18]: AIbase + 36Kr
+  - generic [ref=e19]:
+    - article [ref=e20]:
+      - generic [ref=e21]: NO.01
+      - heading "联想推出百应AI主机300：赋能中小企业的\"算力加速器\"" [level=3] [ref=e22]:
+        - link "联想推出百应AI主机300：赋能中小企业的\"算力加速器\"" [ref=e23] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29022
+      - paragraph [ref=e24]: 联想推出AI主机300，面向中小企业及超级个体，售价26999元。搭载AMD锐龙AI Max+395处理器、128GB内存与2TB SSD，以高性能硬件与...
+      - generic [ref=e25]:
+        - generic [ref=e26]: "#AI硬件"
+        - generic [ref=e27]: "#联想"
+        - generic [ref=e28]: "#中小企业"
+        - generic [ref=e29]: "#算力"
+      - link "阅读原文 →" [ref=e30] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29022
+    - article [ref=e31]:
+      - generic [ref=e32]: NO.02
+      - heading "企业AI转型再添利器：青云科技算力云接入 MiniMax-M3 模型" [level=3] [ref=e33]:
+        - link "企业AI转型再添利器：青云科技算力云接入 MiniMax-M3 模型" [ref=e34] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29021
+      - paragraph [ref=e35]: 青云科技旗下基石智算平台接入国产开源大模型MiniMax-M3，以卓越上下文处理能力等三大核心技术见长，依托自研架构助力企业便捷部署AI业务。
+      - generic [ref=e36]:
+        - generic [ref=e37]: "#大模型"
+        - generic [ref=e38]: "#MiniMax"
+        - generic [ref=e39]: "#青云科技"
+        - generic [ref=e40]: "#企业AI"
+      - link "阅读原文 →" [ref=e41] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29021
+    - article [ref=e42]:
+      - generic [ref=e43]: NO.03
+      - heading "阿里AI内创黑马MuleRun走向前台：钉钉架构大调整，开启全员Agent时代" [level=3] [ref=e44]:
+        - link "阿里AI内创黑马MuleRun走向前台：钉钉架构大调整，开启全员Agent时代" [ref=e45] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29019
+      - paragraph [ref=e46]: 钉钉组织架构大调整，成立核心平台业务部并整合AI Agent团队，原悟空与MuleRun合并为新悟空团队，推动企业协同办公智能化。
+      - generic [ref=e47]:
+        - generic [ref=e48]: "#Agent"
+        - generic [ref=e49]: "#钉钉"
+        - generic [ref=e50]: "#阿里巴巴"
+        - generic [ref=e51]: "#协同办公"
+      - link "阅读原文 →" [ref=e52] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29019
+    - article [ref=e53]:
+      - generic [ref=e54]: NO.04
+      - heading "一年跃升\"独角兽\"：Manifold AI 流形空间再获数亿元融资，加速世界模型落地" [level=3] [ref=e55]:
+        - link "一年跃升\"独角兽\"：Manifold AI 流形空间再获数亿元融资，加速世界模型落地" [ref=e56] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29018
+      - paragraph [ref=e57]: 成立仅一年的世界模型公司Manifold AI宣布完成数亿元融资，获国新基金、毅峰资本、北汽产投及芯能创投等支持，四家老股东超额追加。
+      - generic [ref=e58]:
+        - generic [ref=e59]: "#融资"
+        - generic [ref=e60]: "#世界模型"
+        - generic [ref=e61]: "#独角兽"
+        - generic [ref=e62]: "#创投"
+      - link "阅读原文 →" [ref=e63] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29018
+    - article [ref=e64]:
+      - generic [ref=e65]: NO.05
+      - heading "Kimi Work 迎重大升级：推出\"目标模式\"并打通外部应用插件" [level=3] [ref=e66]:
+        - link "Kimi Work 迎重大升级：推出\"目标模式\"并打通外部应用插件" [ref=e67] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29017
+      - paragraph [ref=e68]: 月之暗面旗下Kimi电脑客户端焕新升级，新增目标模式实现连续自主工作24小时，插件中心对接多家主流办公软件，6月全月Work模式消耗打5折。
+      - generic [ref=e69]:
+        - generic [ref=e70]: "#Kimi"
+        - generic [ref=e71]: "#月之暗面"
+        - generic [ref=e72]: "#Agent"
+        - generic [ref=e73]: "#办公"
+      - link "阅读原文 →" [ref=e74] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29017
+    - article [ref=e75]:
+      - generic [ref=e76]: NO.06
+      - heading "Transformer 核心作者 Noam Shazeer 加盟 OpenAI，谷歌巨资未能挽留" [level=3] [ref=e77]:
+        - link "Transformer 核心作者 Noam Shazeer 加盟 OpenAI，谷歌巨资未能挽留" [ref=e78] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29016
+      - paragraph [ref=e79]: Transformer架构核心作者诺姆·沙泽尔宣布加盟OpenAI。此前谷歌以约27亿美元技术许可费请回这位"巫师"，其迅速转投竞争对手引发AI人才战白热化。
+      - generic [ref=e80]:
+        - generic [ref=e81]: "#OpenAI"
+        - generic [ref=e82]: "#Google"
+        - generic [ref=e83]: "#Transformer"
+        - generic [ref=e84]: "#人才"
+      - link "阅读原文 →" [ref=e85] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29016
+    - article [ref=e86]:
+      - generic [ref=e87]: NO.07
+      - heading "阿里开源统一科学大模型 LOGOS，仅用五十六分之一参数超越微软" [level=3] [ref=e88]:
+        - link "阿里开源统一科学大模型 LOGOS，仅用五十六分之一参数超越微软" [ref=e89] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29015
+      - paragraph [ref=e90]: 阿里ATH-Token Foundry联合人大开源科学基础模型LOGOS，采用统一科学语法与纯序列建模范式，1B参数性能超越微软8×7B模型，覆盖六大科学任务。
+      - generic [ref=e91]:
+        - generic [ref=e92]: "#开源"
+        - generic [ref=e93]: "#科学大模型"
+        - generic [ref=e94]: "#阿里"
+        - generic [ref=e95]: "#LOGOS"
+      - link "阅读原文 →" [ref=e96] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29015
+    - article [ref=e97]:
+      - generic [ref=e98]: NO.08
+      - heading "网易云音乐旗下AI情感陪伴App\"妙时\"宣布7月14日停运" [level=3] [ref=e99]:
+        - link "网易云音乐旗下AI情感陪伴App\"妙时\"宣布7月14日停运" [ref=e100] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29014
+      - paragraph [ref=e101]: 网易云音乐旗下"妙时"AI情感陪伴应用将于7月14日全面停止服务，用户可在8月14日前申请退还剩余代币和会员费，并导出AI恋人聊天记录。
+      - generic [ref=e102]:
+        - generic [ref=e103]: "#AI陪伴"
+        - generic [ref=e104]: "#网易云音乐"
+        - generic [ref=e105]: "#应用停运"
+        - generic [ref=e106]: "#情感AI"
+      - link "阅读原文 →" [ref=e107] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29014
+    - article [ref=e108]:
+      - generic [ref=e109]: NO.09
+      - heading "语音交互大升级：Claude 酝酿多语言支持，通话式体验呼之欲出" [level=3] [ref=e110]:
+        - link "语音交互大升级：Claude 酝酿多语言支持，通话式体验呼之欲出" [ref=e111] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29013
+      - paragraph [ref=e112]: Anthropic正为Claude升级语音模式，突破英语限制，新增中文、粤语、日语、德语等多语种支持，提升多语言交互体验。
+      - generic [ref=e113]:
+        - generic [ref=e114]: "#Claude"
+        - generic [ref=e115]: "#Anthropic"
+        - generic [ref=e116]: "#语音交互"
+        - generic [ref=e117]: "#多语言"
+      - link "阅读原文 →" [ref=e118] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29013
+    - article [ref=e119]:
+      - generic [ref=e120]: NO.10
+      - heading "曹操出行全面启动香港Robotaxi业务，发布\"RoboX\"战略与\"Eva Cab\"车型" [level=3] [ref=e121]:
+        - link "曹操出行全面启动香港Robotaxi业务，发布\"RoboX\"战略与\"Eva Cab\"车型" [ref=e122] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29012
+      - paragraph [ref=e123]: 曹操出行宣布启动香港Robotaxi业务，发布RoboX战略及首款原生自动驾驶出租车Eva Cab，向AI全面转型，致力打造全球领先物理AI移动科技平台。
+      - generic [ref=e124]:
+        - generic [ref=e125]: "#Robotaxi"
+        - generic [ref=e126]: "#自动驾驶"
+        - generic [ref=e127]: "#曹操出行"
+        - generic [ref=e128]: "#AI出行"
+      - link "阅读原文 →" [ref=e129] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29012
+    - article [ref=e130]:
+      - generic [ref=e131]: NO.11
+      - heading "Liblib完成近3亿美元B+轮融资，估值超20亿美元ARR破3亿" [level=3] [ref=e132]:
+        - link "Liblib完成近3亿美元B+轮融资，估值超20亿美元ARR破3亿" [ref=e133] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29008
+      - paragraph [ref=e134]: 中国AI应用公司Liblib完成近3亿美元B+轮融资，由Granite Asia、腾讯、顺为资本联合领投，8个月内两轮累计融资超5亿美元，ARR已突破3亿美元。
+      - generic [ref=e135]:
+        - generic [ref=e136]: "#融资"
+        - generic [ref=e137]: "#Liblib"
+        - generic [ref=e138]: "#AI应用"
+        - generic [ref=e139]: "#创投"
+      - link "阅读原文 →" [ref=e140] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29008
+    - article [ref=e141]:
+      - generic [ref=e142]: NO.12
+      - heading "谁在使用 Claude Code？最新用户画像：平均每周\"爆肝\"20小时" [level=3] [ref=e143]:
+        - link "谁在使用 Claude Code？最新用户画像：平均每周\"爆肝\"20小时" [ref=e144] [cursor=pointer]:
+          - /url: https://www.aibase.com/zh/news/29004
+      - paragraph [ref=e145]: 最新数据显示Claude Code用户平均每周使用20小时，开发者群体成为AI编程工具的深度用户，AI辅助编程正在改变软件开发工作流。
+      - generic [ref=e146]:
+        - generic [ref=e147]: "#Claude Code"
+        - generic [ref=e148]: "#AI编程"
+        - generic [ref=e149]: "#开发者"
+        - generic [ref=e150]: "#工具"
+      - link "阅读原文 →" [ref=e151] [cursor=pointer]:
+        - /url: https://www.aibase.com/zh/news/29004
+    - article [ref=e152]:
+      - generic [ref=e153]: NO.13
+      - heading "为AI芯片\"续命\"，中国人造钻石等来了大机会" [level=3] [ref=e154]:
+        - link "为AI芯片\"续命\"，中国人造钻石等来了大机会" [ref=e155] [cursor=pointer]:
+          - /url: https://www.36kr.com/p/3859519082320898
+      - paragraph [ref=e156]: 在AI芯片领域，金刚石散热技术已是不二之选。人造钻石材料的导热性能优异，正成为AI芯片散热的关键解决方案，中国产业链迎来新机遇。
+      - generic [ref=e157]:
+        - generic [ref=e158]: "#AI芯片"
+        - generic [ref=e159]: "#散热技术"
+        - generic [ref=e160]: "#人造钻石"
+        - generic [ref=e161]: "#半导体"
+      - link "阅读原文 →" [ref=e162] [cursor=pointer]:
+        - /url: https://www.36kr.com/p/3859519082320898
+    - article [ref=e163]:
+      - generic [ref=e164]: NO.14
+      - heading "智谱创始人唐杰隔空对话马斯克：赶超Claude Fable 5不用等到2027年" [level=3] [ref=e165]:
+        - link "智谱创始人唐杰隔空对话马斯克：赶超Claude Fable 5不用等到2027年" [ref=e166] [cursor=pointer]:
+          - /url: https://www.36kr.com/p/3859419411534850
+      - paragraph [ref=e167]: 智谱创始人唐杰公开回应马斯克关于中美AI差距的观点，重新校准中美大模型能力的时间差，展现中国大模型企业的自信与实力。
+      - generic [ref=e168]:
+        - generic [ref=e169]: "#智谱"
+        - generic [ref=e170]: "#大模型"
+        - generic [ref=e171]: "#马斯克"
+        - generic [ref=e172]: "#中美AI"
+      - link "阅读原文 →" [ref=e173] [cursor=pointer]:
+        - /url: https://www.36kr.com/p/3859419411534850
+    - article [ref=e174]:
+      - generic [ref=e175]: NO.15
+      - heading "硅谷最抢手的新岗位出现了" [level=3] [ref=e176]:
+        - link "硅谷最抢手的新岗位出现了" [ref=e177] [cursor=pointer]:
+          - /url: https://www.36kr.com/p/3859434968185734
+      - paragraph [ref=e178]: 模型神话正式退场，落地战争全面打响。AI行业从技术竞赛转向应用落地，催生了全新的职业需求，AI应用部署与运营人才成为硅谷最热招聘方向。
+      - generic [ref=e179]:
+        - generic [ref=e180]: "#AI就业"
+        - generic [ref=e181]: "#硅谷"
+        - generic [ref=e182]: "#应用落地"
+        - generic [ref=e183]: "#招聘"
+      - link "阅读原文 →" [ref=e184] [cursor=pointer]:
+        - /url: https://www.36kr.com/p/3859434968185734
+    - article [ref=e185]:
+      - generic [ref=e186]: NO.16
+      - heading "刚刚，诺贝尔奖得主成Anthropic新员工" [level=3] [ref=e187]:
+        - link "刚刚，诺贝尔奖得主成Anthropic新员工" [ref=e188] [cursor=pointer]:
+          - /url: https://www.36kr.com/p/3860814933660674
+      - paragraph [ref=e189]: 诺贝尔化学奖得主、AlphaFold核心开发者John Jumper官宣加入Anthropic。博士毕业6个月直接领队AlphaFold，7年后拿下诺奖，...
+      - generic [ref=e190]:
+        - generic [ref=e191]: "#Anthropic"
+        - generic [ref=e192]: "#诺贝尔奖"
+        - generic [ref=e193]: "#AlphaFold"
+        - generic [ref=e194]: "#人才"
+      - link "阅读原文 →" [ref=e195] [cursor=pointer]:
+        - /url: https://www.36kr.com/p/3860814933660674
+    - article [ref=e196]:
+      - generic [ref=e197]: NO.17
+      - heading "花钱雇AI当同事，我的生意怎么样了？" [level=3] [ref=e198]:
+        - link "花钱雇AI当同事，我的生意怎么样了？" [ref=e199] [cursor=pointer]:
+          - /url: https://www.36kr.com/p/3860798447686920
+      - paragraph [ref=e200]: 每月一两千元就能把数字员工用到起飞。越来越多的中小商家开始雇佣AI数字员工处理日常业务，AI正从概念走向实际生产场景。
+      - generic [ref=e201]:
+        - generic [ref=e202]: "#AI应用"
+        - generic [ref=e203]: "#数字员工"
+        - generic [ref=e204]: "#商业化"
+        - generic [ref=e205]: "#中小企业"
+      - link "阅读原文 →" [ref=e206] [cursor=pointer]:
+        - /url: https://www.36kr.com/p/3860798447686920
+    - article [ref=e207]:
+      - generic [ref=e208]: NO.18
+      - heading "今天起，Claude Design要把设计师和程序员变成同一种人了" [level=3] [ref=e209]:
+        - link "今天起，Claude Design要把设计师和程序员变成同一种人了" [ref=e210] [cursor=pointer]:
+          - /url: https://www.36kr.com/p/3858531433780228
+      - paragraph [ref=e211]: Anthropic推出Claude Design大更新，设计系统一键导入，代码双向同步，9大平台一键导出。AI跑了八轮自查才敢把设计稿给你看。
+      - generic [ref=e212]:
+        - generic [ref=e213]: "#Claude Design"
+        - generic [ref=e214]: "#Anthropic"
+        - generic [ref=e215]: "#设计工具"
+        - generic [ref=e216]: "#AI"
+      - link "阅读原文 →" [ref=e217] [cursor=pointer]:
+        - /url: https://www.36kr.com/p/3858531433780228
+    - article [ref=e218]:
+      - generic [ref=e219]: NO.19
+      - heading "开发者冲爆了，全球前十AI Lab无限免费，一周烧出3.12万亿Token" [level=3] [ref=e220]:
+        - link "开发者冲爆了，全球前十AI Lab无限免费，一周烧出3.12万亿Token" [ref=e221] [cursor=pointer]:
+          - /url: https://www.36kr.com/p/3858531519288326
+      - paragraph [ref=e222]: 全球前十AI Lab推出无限免费计划，一周总调用量达3.12万亿Token，开发者疯狂涌入，引发对AI基础设施规模化成本的讨论。
+      - generic [ref=e223]:
+        - generic [ref=e224]: "#Token"
+        - generic [ref=e225]: "#AI Lab"
+        - generic [ref=e226]: "#免费"
+        - generic [ref=e227]: "#开发者"
+      - link "阅读原文 →" [ref=e228] [cursor=pointer]:
+        - /url: https://www.36kr.com/p/3858531519288326
+    - article [ref=e229]:
+      - generic [ref=e230]: NO.20
+      - heading "AI 接管交易的最后一步，微信迈出去了" [level=3] [ref=e231]:
+        - link "AI 接管交易的最后一步，微信迈出去了" [ref=e232] [cursor=pointer]:
+          - /url: https://www.36kr.com/p/3858355747765127
+      - paragraph [ref=e233]: 微信开始将AI深度融入交易场景，发挥其得天独厚的社交生态优势。AI正在重塑电商、支付和商业闭环，微信迈出关键一步。
+      - generic [ref=e234]:
+        - generic [ref=e235]: "#微信"
+        - generic [ref=e236]: "#AI交易"
+        - generic [ref=e237]: "#电商"
+        - generic [ref=e238]: "#腾讯"
+      - link "阅读原文 →" [ref=e239] [cursor=pointer]:
+        - /url: https://www.36kr.com/p/3858355747765127
+  - contentinfo [ref=e240]:
+    - paragraph [ref=e241]: POWERED BY AI CYBER NEWS // DATA FROM AIBASE.COM & 36KR.COM

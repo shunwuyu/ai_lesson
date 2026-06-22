@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RavenStack 收入分析仪表盘</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card { @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6; }
+  .metric-value { @apply text-3xl font-bold; }
+  .metric-label { @apply text-sm text-gray-500 mt-1; }
+  .section-title { @apply text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100; }
+  .badge-green { @apply bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-medium; }
+  .badge-red { @apply bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-medium; }
+  .badge-blue { @apply bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-medium; }
+  .badge-yellow { @apply bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded text-xs font-medium; }
+  .insight-box { @apply bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg mb-3; }
+  .insight-box p { @apply text-sm text-gray-700; }
+</style>
+</head>
+<body class="bg-gray-50">
+
+<header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">RavenStack <span class="text-blue-600">收入分析</span></h1>
+      <p class="text-sm text-gray-500 mt-1">SaaS 多维度收入诊断 | 数据来源: RavenStack 合成数据集 | 更新于 2026-06-20</p>
+    </div>
+    <div class="hidden md:flex gap-3">
+      <span class="badge-green">活跃订阅 4,514</span>
+      <span class="badge-blue">总账户 500</span>
+      <span class="badge-yellow">流失率 9.7%</span>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+  <!-- KPI Cards -->
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="card bg-gradient-to-br from-blue-50 to-white">
+      <div class="metric-value text-blue-600">$11.3M</div>
+      <div class="metric-label">总 MRR</div>
+      <div class="text-xs text-gray-400 mt-2">总ARR: $136.1M</div>
+    </div>
+    <div class="card bg-gradient-to-br from-green-50 to-white">
+      <div class="metric-value text-green-600">$10.2M</div>
+      <div class="metric-label">活跃 MRR</div>
+      <div class="text-xs text-gray-400 mt-2">活跃率: 90.3%</div>
+    </div>
+    <div class="card bg-gradient-to-br from-purple-50 to-white">
+      <div class="metric-value text-purple-600">$2,268</div>
+      <div class="metric-label">平均 MRR/订阅</div>
+      <div class="text-xs text-gray-400 mt-2">中位数: $931</div>
+    </div>
+    <div class="card bg-gradient-to-br from-amber-50 to-white">
+      <div class="metric-value text-amber-600">$1.18M</div>
+      <div class="metric-label">已流失 MRR</div>
+      <div class="text-xs text-gray-400 mt-2">486个订阅</div>
+    </div>
+  </section>
+
+  <!-- Plan Tier Analysis -->
+  <section class="card">
+    <h2 class="section-title">📋 计划层级收入结构</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div><canvas id="planMrrChart"></canvas></div>
+      <div><canvas id="planAvgMrrChart"></canvas></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
+      <div class="bg-gray-50 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-gray-700">Enterprise</div>
+        <div class="text-sm text-gray-500">$8.47M MRR (74.7%)</div>
+        <div class="text-xs text-gray-400">1,723 订阅 | 34.5%</div>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-gray-700">Pro</div>
+        <div class="text-sm text-gray-500">$2.11M MRR (18.6%)</div>
+        <div class="text-xs text-gray-400">1,675 订阅 | 33.5%</div>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold text-gray-700">Basic</div>
+        <div class="text-sm text-gray-500">$0.76M MRR (6.7%)</div>
+        <div class="text-xs text-gray-400">1,602 订阅 | 32.0%</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Insights 1 -->
+  <div class="insight-box">
+    <p><strong>关键洞察：</strong>Enterprise 层仅占 34.5% 的订阅量，却贡献了 <strong>74.7% 的 MRR</strong>。Enterprise 平均 MRR ($4,918) 是 Basic ($475) 的 <strong>10.4 倍</strong>。Basic 层 32% 的客户仅贡献 6.7% 收入，升级转化是核心增长杠杆。</p>
+  </div>
+
+  <!-- MRR Trend -->
+  <section class="card">
+    <h2 class="section-title">📈 MRR 月度趋势</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div><canvas id="mrrNewChurnChart"></canvas></div>
+      <div><canvas id="mrrNetChart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- Upgrade/Downgrade & Industry -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="card">
+      <h2 class="section-title">🔄 升级与降级分析</h2>
+      <div><canvas id="upgradeChart"></canvas></div>
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <div class="bg-green-50 rounded-lg p-3 text-center">
+          <div class="text-lg font-bold text-green-600">529</div>
+          <div class="text-xs text-gray-500">总升级 (10.6%)</div>
+        </div>
+        <div class="bg-amber-50 rounded-lg p-3 text-center">
+          <div class="text-lg font-bold text-amber-600">218</div>
+          <div class="text-xs text-gray-500">总降级 (4.4%)</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="section-title">🏭 行业 MRR 分布</h2>
+      <div><canvas id="industryChart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- Insights 2 -->
+  <div class="insight-box">
+    <p><strong>关键洞察：</strong>净升级率为正 (10.6% vs 4.4%)，升级/降级比 2.4:1，产品价值持续提升。但 <strong>Pro 层降级率最高 (5.4%)</strong>，需审视定价与价值匹配度。<strong>EdTech 行业流失率最低 (8%)</strong>且平均 MRR 最高 ($2,603)，是优质客户画像。</p>
+  </div>
+
+  <!-- Referral & Country -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="card">
+      <h2 class="section-title">📣 获客渠道收入贡献</h2>
+      <div><canvas id="referralChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h2 class="section-title">🌍 Top 7 国家 MRR</h2>
+      <div><canvas id="countryChart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- Billing & Cohort -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="card">
+      <h2 class="section-title">💳 计费周期对比</h2>
+      <div><canvas id="billingChart"></canvas></div>
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <div class="text-sm font-semibold text-gray-700">月付</div>
+          <div class="text-xs text-gray-500">2,539订阅 | $5.74M MRR</div>
+          <div class="text-xs text-gray-500">流失 9% | 升级 10%</div>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <div class="text-sm font-semibold text-gray-700">年付</div>
+          <div class="text-xs text-gray-500">2,461订阅 | $5.60M MRR</div>
+          <div class="text-xs text-gray-500">流失 10% | 升级 11%</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="section-title">📅 注册队列 MRR 趋势</h2>
+      <div><canvas id="cohortChart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- Insights 3 -->
+  <div class="insight-box">
+    <p><strong>关键洞察：</strong>年付用户流失率反超月付(10% vs 9%)，这是反直觉信号，需排查年付用户的产品使用深度。印度市场流失率仅 <strong>7%</strong>、平均 MRR ($2,398) 超过美国 ($2,241)，是高价值增长市场。Organic 渠道收入最高但流失也最高 (11%)，自然流量用户期望管理待加强。</p>
+  </div>
+
+  <!-- Trial & Auto-Renew -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="card">
+      <h2 class="section-title">🧪 试用 vs 付费</h2>
+      <div class="space-y-3">
+        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+          <span class="font-medium">付费订阅</span>
+          <span class="text-lg font-bold text-green-600">4,222</span>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
+          <span class="font-medium">试用订阅</span>
+          <span class="text-lg font-bold text-amber-600">778 (15.6%)</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div class="bg-gray-50 rounded-lg p-3">
+            <div class="text-xs text-gray-500">付费平均 MRR</div>
+            <div class="text-lg font-bold text-gray-700">$2,686</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3">
+            <div class="text-xs text-gray-500">试用升级率</div>
+            <div class="text-lg font-bold text-gray-700">10%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="section-title">🔄 自动续费分析</h2>
+      <div class="space-y-3">
+        <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+          <span class="font-medium">自动续费</span>
+          <span class="text-lg font-bold text-blue-600">4,005 (80.1%)</span>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+          <span class="font-medium">手动续费</span>
+          <span class="text-lg font-bold text-red-600">995 (19.9%)</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div class="bg-gray-50 rounded-lg p-3">
+            <div class="text-xs text-gray-500">手动续费 MRR</div>
+            <div class="text-lg font-bold text-gray-700">$2.23M</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3">
+            <div class="text-xs text-gray-500">手动续费流失风险</div>
+            <div class="text-lg font-bold text-red-500">高</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommendations -->
+  <section class="card">
+    <h2 class="section-title">🎯 行动建议</h2>
+    <div class="space-y-4">
+      <div class="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
+        <span class="text-xl">🔴</span>
+        <div>
+          <div class="font-semibold text-red-800">提升 Basic → Pro 升级转化</div>
+          <div class="text-sm text-red-600 mt-1">Basic 层 32% 客户仅贡献 6.7% 收入。通过功能差异化和用量上限触达推动迁移，预估每提升 5% 转化率可增 $190K MRR。</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
+        <span class="text-xl">🔴</span>
+        <div>
+          <div class="font-semibold text-red-800">降低 DevTools 行业流失 (11%)</div>
+          <div class="text-sm text-red-600 mt-1">DevTools 贡献 21.2% 收入但流失率最高，建议深入分析工单和使用数据定位根因。</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+        <span class="text-xl">🟡</span>
+        <div>
+          <div class="font-semibold text-yellow-800">加大 EdTech 和印度市场投入</div>
+          <div class="text-sm text-yellow-600 mt-1">EdTech 流失最低 (8%) + 客单价最高 ($2,603)。印度流失最低 (7%) + 客单价超美国。定向投放。</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 bg-green-50 rounded-lg border border-green-100">
+        <span class="text-xl">🟢</span>
+        <div>
+          <div class="font-semibold text-green-800">手动续费用户定向运营</div>
+          <div class="text-sm text-green-600 mt-1">995 个手动续费订阅贡献 $2.23M MRR，通过续费提醒和激励提升自动续费开通率。</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 bg-green-50 rounded-lg border border-green-100">
+        <span class="text-xl">🟢</span>
+        <div>
+          <div class="font-semibold text-green-800">年付用户到期前续约</div>
+          <div class="text-sm text-green-600 mt-1">年付用户流失率反超月付（10% vs 9%），建议到期前 90 天启动续约干预流程。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bg-white border-t border-gray-200 py-4 text-center text-sm text-gray-400">
+  RavenStack 收入分析仪表盘 | 基于合成数据集 | 数据集作者: River @ Rivalytics
+</footer>
+
+<script>
+// Color palette
+const colors = {
+  blue: '#3b82f6', purple: '#8b5cf6', green: '#22c55e', red: '#ef4444',
+  amber: '#f59e0b', slate: '#94a3b8', sky: '#0ea5e9', pink: '#ec4899'
+};
+
+// Plan Tier MRR Chart
+new Chart(document.getElementById('planMrrChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Basic', 'Pro', 'Enterprise'],
+    datasets: [
+      { label: '总 MRR ($)', data: [760437, 2105089, 8473221], backgroundColor: [colors.slate, colors.blue, colors.purple], borderRadius: 8 },
+      { label: '订阅占比 (%)', data: [32.0, 33.5, 34.5], backgroundColor: [colors.slate+'88', colors.blue+'88', colors.purple+'88'], borderRadius: 8, hidden: true }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '各计划层级总 MRR', font: { size: 14, weight: 'bold' } },
+      legend: { position: 'bottom' },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label.includes('$') ? '$' + ctx.raw.toLocaleString() : ctx.raw + '%' } }
+    },
+    scales: {
+      y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } }
+    }
+  }
+});
+
+// Plan Avg MRR Chart
+new Chart(document.getElementById('planAvgMrrChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Basic', 'Pro', 'Enterprise'],
+    datasets: [
+      { label: '平均 MRR ($)', data: [474.68, 1256.77, 4917.71], backgroundColor: [colors.slate, colors.blue, colors.purple], borderRadius: 8 },
+      { label: '流失率 (%)', data: [9, 10, 10], backgroundColor: [colors.slate+'66', colors.blue+'66', colors.purple+'66'], borderRadius: 8, hidden: true }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '平均 MRR vs 流失率', font: { size: 14, weight: 'bold' } },
+      legend: { position: 'bottom' },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label.includes('$') ? '$' + ctx.raw.toLocaleString() : ctx.raw + '%' } }
+    }
+  }
+});
+
+// MRR New vs Churn Chart
+const months = ['07','08','09','10','11','12','01','02','03','04','05','06'];
+const newMrr = [103719, 177581, 622206, 594491, 802797, 1293139, 716023, 994199, 1133669, 916745, 870830, 965497];
+const churnMrr = [310392, 429930, 463305, 404567, 621413, 456024, 582564, 661359, 509634, 544217, 707041, 910199];
+
+new Chart(document.getElementById('mrrNewChurnChart'), {
+  type: 'bar',
+  data: {
+    labels: months,
+    datasets: [
+      { label: '新增 MRR', data: newMrr, backgroundColor: colors.blue, borderRadius: 6 },
+      { label: '流失 MRR', data: churnMrr, backgroundColor: colors.red, borderRadius: 6 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '月度新增 vs 流失 MRR', font: { size: 14, weight: 'bold' } },
+      legend: { position: 'bottom' }
+    },
+    scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } }
+  }
+});
+
+// Net MRR Change
+const netMrr = newMrr.map((n, i) => n - churnMrr[i]);
+new Chart(document.getElementById('mrrNetChart'), {
+  type: 'bar',
+  data: {
+    labels: months,
+    datasets: [{
+      label: '净 MRR 变化',
+      data: netMrr,
+      backgroundColor: netMrr.map(v => v >= 0 ? colors.green+'88' : colors.red+'88'),
+      borderColor: netMrr.map(v => v >= 0 ? colors.green : colors.red),
+      borderWidth: 1, borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '月度净 MRR 变化', font: { size: 14, weight: 'bold' } },
+      legend: { display: false }
+    },
+    scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } }
+  }
+});
+
+// Upgrade/Downgrade
+new Chart(document.getElementById('upgradeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Basic', 'Enterprise', 'Pro'],
+    datasets: [
+      { label: '升级率 (%)', data: [8.8, 11.3, 11.6], backgroundColor: colors.green, borderRadius: 6 },
+      { label: '降级率 (%)', data: [3.7, 3.9, 5.4], backgroundColor: colors.amber, borderRadius: 6 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '各计划升级/降级率', font: { size: 14, weight: 'bold' } },
+      legend: { position: 'bottom' }
+    },
+    scales: { y: { max: 15, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+// Industry
+new Chart(document.getElementById('industryChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FinTech', 'DevTools', 'CyberSec', 'EdTech', 'HealthTech'],
+    datasets: [
+      { label: '总 MRR ($)', data: [2669496, 2403654, 2253318, 2043167, 1969112], backgroundColor: [colors.blue, colors.purple, colors.sky, colors.green, colors.amber], borderRadius: 8 },
+      { label: '流失率 (%)', data: [9, 11, 10, 8, 10], backgroundColor: [colors.blue+'66', colors.purple+'66', colors.sky+'66', colors.green+'66', colors.amber+'66'], borderRadius: 8, hidden: true }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '行业 MRR 排名', font: { size: 14, weight: 'bold' } },
+      legend: { position: 'bottom' }
+    },
+    scales: { x: { ticks: { callback: v => '$' + (v/1000000).toFixed(1) + 'M' } } }
+  }
+});
+
+// Referral
+new Chart(document.getElementById('referralChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Organic', 'Other', 'Ads', 'Partner', 'Event'],
+    datasets: [
+      { label: 'MRR ($)', data: [2798707, 2377728, 2146619, 2094243, 1921450], backgroundColor: [colors.blue, colors.purple, colors.green, colors.amber, colors.slate], borderRadius: 8, yAxisID: 'y' },
+      { label: '流失率 (%)', data: [11, 9, 10, 9, 10], type: 'line', borderColor: colors.red, backgroundColor: 'transparent', tension: 0.3, pointRadius: 5, yAxisID: 'y1' }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '获客渠道 MRR & 流失率', font: { size: 14, weight: 'bold' } },
+      legend: { position: 'bottom' }
+    },
+    scales: {
+      y: { type: 'linear', position: 'left', title: { display: true, text: 'MRR ($)' }, ticks: { callback: v => '$' + (v/1000000).toFixed(1) + 'M' } },
+      y1: { type: 'linear', position: 'right', title: { display: true, text: '流失率 (%)' }, ticks: { callback: v => v + '%' }, grid: { drawOnChartArea: false }, min: 0, max: 15 }
+    }
+  }
+});
+
+// Country
+new Chart(document.getElementById('countryChart'), {
+  type: 'bar',
+  data: {
+    labels: ['US', 'UK', 'IN', 'AU', 'FR', 'CA', 'DE'],
+    datasets: [
+      { label: '总 MRR ($)', data: [6634595, 1220471, 1194325, 839980, 589796, 477562, 382018], backgroundColor: [colors.blue, colors.purple, colors.green, colors.amber, colors.red, colors.sky, colors.slate], borderRadius: 8, yAxisID: 'y' },
+      { label: '流失率 (%)', data: [10, 11, 7, 11, 12, 10, 9], type: 'line', borderColor: colors.red, backgroundColor: 'transparent', tension: 0.3, pointRadius: 5, yAxisID: 'y1' }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '国家 MRR & 流失率', font: { size: 14, weight: 'bold' } },
+      legend: { position: 'bottom' }
+    },
+    scales: {
+      y: { type: 'linear', position: 'left', title: { display: true, text: 'MRR ($)' }, ticks: { callback: v => '$' + (v/1000000).toFixed(1) + 'M' } },
+      y1: { type: 'linear', position: 'right', title: { display: true, text: '流失率 (%)' }, ticks: { callback: v => v + '%' }, grid: { drawOnChartArea: false }, min: 0, max: 15 }
+    }
+  }
+});
+
+// Billing
+new Chart(document.getElementById('billingChart'), {
+  type: 'bar',
+  data: {
+    labels: ['流失率', '升级率'],
+    datasets: [
+      { label: '月付', data: [9, 10], backgroundColor: colors.blue, borderRadius: 6 },
+      { label: '年付', data: [10, 11], backgroundColor: colors.purple, borderRadius: 6 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '月付 vs 年付: 流失率 & 升级率', font: { size: 14, weight: 'bold' } },
+      legend: { position: 'bottom' }
+    },
+    scales: { y: { max: 15, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+// Cohort
+const cohortMonths = ['2024-07', '08', '09', '10', '11', '12', '2025-01', '02', '03', '04', '05', '06'];
+const cohortMrr = [1099782, 1067198, 1049039, 1265246, 1159544, 1237567, 1053461, 1180190, 1241824, 1178623, 1100721, 1056368];
+const cohortChurn = [7.47, 8.03, 10.05, 10.22, 9.33, 9.85, 10.42, 9.47, 8.09, 9.79, 10.06, 9.90];
+
+new Chart(document.getElementById('cohortChart'), {
+  type: 'line',
+  data: {
+    labels: cohortMonths,
+    datasets: [
+      { label: 'MRR ($)', data: cohortMrr, borderColor: colors.blue, backgroundColor: colors.blue+'22', fill: true, tension: 0.3, yAxisID: 'y' },
+      { label: '流失率 (%)', data: cohortChurn, borderColor: colors.red, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, yAxisID: 'y1' }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: '注册队列 MRR 与流失率趋势', font: { size: 14, weight: 'bold' } },
+      legend: { position: 'bottom' }
+    },
+    scales: {
+      y: { type: 'linear', position: 'left', title: { display: true, text: 'MRR ($)' }, ticks: { callback: v => '$' + (v/1000000).toFixed(2) + 'M' } },
+      y1: { type: 'linear', position: 'right', title: { display: true, text: '流失率 (%)' }, ticks: { callback: v => v + '%' }, grid: { drawOnChartArea: false }, min: 0, max: 15 }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

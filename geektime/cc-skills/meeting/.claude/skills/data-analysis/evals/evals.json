@@ -1,0 +1,23 @@
+{
+  "skill_name": "data-analysis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need to analyze ~/.claude/skills/data-analysis-workspace/test-data/sales_channels.csv - specifically, I want to know which marketing channel has the best conversion rate and ROI. Can you help me figure out where we should invest more budget? Use --auto mode and give me a markdown report.",
+      "expected_output": "Analysis report that: (1) correctly calculates conversion metrics by channel, (2) identifies Organic Search or Email Campaign as top performers, (3) calculates ROI (Revenue/Cost) per channel, (4) provides specific budget allocation recommendations with numbers, (5) includes at least 2 visualizations (channel comparison chart, trend over time), (6) generates a markdown report with embedded charts",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Help me understand user retention in this file: ~/.claude/skills/data-analysis-workspace/test-data/user_behavior.csv. I'm worried about users who sign up but never make a purchase, and also want to see if there's any pattern in how long people stay active. The Age column has some missing values - just use the median to fill those. Give me an interactive HTML report.",
+      "expected_output": "Analysis report that: (1) identifies the percentage of users who never purchased (FirstPurchaseDate is null), (2) calculates average days from signup to first purchase for converters, (3) analyzes retention by cohort or time period, (4) handles missing Age values as requested (median fill), (5) provides insights about user segments (e.g., by age, country, spending level), (6) generates an interactive HTML report with Chart.js visualizations",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "quick analysis of ~/.claude/skills/data-analysis-workspace/test-data/product_inventory.csv --quick --auto - just want to see what products are out of stock and if there are any weird prices. don't need anything fancy, just the key issues",
+      "expected_output": "Quick analysis report that: (1) identifies all products with Stock=0 (out of stock items), (2) detects the negative price anomaly (P016 has -25.99), (3) flags missing values in Price and Stock columns, (4) provides a data quality score, (5) lists specific recommendations for each issue, (6) completes in quick mode without extensive visualizations, (7) outputs a concise markdown summary",
+      "files": []
+    }
+  ]
+}

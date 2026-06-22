@@ -1,0 +1,152 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - heading "RavenStack 收入分析" [level=1] [ref=e5]
+        - paragraph [ref=e6]: "SaaS 多维度收入诊断 | 数据来源: RavenStack 合成数据集 | 更新于 2026-06-20"
+      - generic [ref=e7]:
+        - generic [ref=e8]: 活跃订阅 4,514
+        - generic [ref=e9]: 总账户 500
+        - generic [ref=e10]: 流失率 9.7%
+  - main [ref=e11]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: $11.3M
+        - generic [ref=e15]: 总 MRR
+        - generic [ref=e16]: "总ARR: $136.1M"
+      - generic [ref=e17]:
+        - generic [ref=e18]: $10.2M
+        - generic [ref=e19]: 活跃 MRR
+        - generic [ref=e20]: "活跃率: 90.3%"
+      - generic [ref=e21]:
+        - generic [ref=e22]: $2,268
+        - generic [ref=e23]: 平均 MRR/订阅
+        - generic [ref=e24]: "中位数: $931"
+      - generic [ref=e25]:
+        - generic [ref=e26]: $1.18M
+        - generic [ref=e27]: 已流失 MRR
+        - generic [ref=e28]: 486个订阅
+    - generic [ref=e29]:
+      - heading "📋 计划层级收入结构" [level=2] [ref=e30]
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - generic [ref=e38]: Enterprise
+          - generic [ref=e39]: $8.47M MRR (74.7%)
+          - generic [ref=e40]: 1,723 订阅 | 34.5%
+        - generic [ref=e41]:
+          - generic [ref=e42]: Pro
+          - generic [ref=e43]: $2.11M MRR (18.6%)
+          - generic [ref=e44]: 1,675 订阅 | 33.5%
+        - generic [ref=e45]:
+          - generic [ref=e46]: Basic
+          - generic [ref=e47]: $0.76M MRR (6.7%)
+          - generic [ref=e48]: 1,602 订阅 | 32.0%
+    - paragraph [ref=e50]:
+      - strong [ref=e51]: 关键洞察：
+      - text: Enterprise 层仅占 34.5% 的订阅量，却贡献了
+      - strong [ref=e52]: 74.7% 的 MRR
+      - text: 。Enterprise 平均 MRR ($4,918) 是 Basic ($475) 的
+      - strong [ref=e53]: 10.4 倍
+      - text: 。Basic 层 32% 的客户仅贡献 6.7% 收入，升级转化是核心增长杠杆。
+    - heading "📈 MRR 月度趋势" [level=2] [ref=e55]
+    - generic [ref=e61]:
+      - generic [ref=e62]:
+        - heading "🔄 升级与降级分析" [level=2] [ref=e63]
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - generic [ref=e68]: "529"
+            - generic [ref=e69]: 总升级 (10.6%)
+          - generic [ref=e70]:
+            - generic [ref=e71]: "218"
+            - generic [ref=e72]: 总降级 (4.4%)
+      - heading "🏭 行业 MRR 分布" [level=2] [ref=e74]
+    - paragraph [ref=e78]:
+      - strong [ref=e79]: 关键洞察：
+      - text: 净升级率为正 (10.6% vs 4.4%)，升级/降级比 2.4:1，产品价值持续提升。但
+      - strong [ref=e80]: Pro 层降级率最高 (5.4%)
+      - text: ，需审视定价与价值匹配度。
+      - strong [ref=e81]: EdTech 行业流失率最低 (8%)
+      - text: 且平均 MRR 最高 ($2,603)，是优质客户画像。
+    - generic [ref=e82]:
+      - heading "📣 获客渠道收入贡献" [level=2] [ref=e84]
+      - heading "🌍 Top 7 国家 MRR" [level=2] [ref=e88]
+    - generic [ref=e91]:
+      - generic [ref=e92]:
+        - heading "💳 计费周期对比" [level=2] [ref=e93]
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]: 月付
+            - generic [ref=e99]: 2,539订阅 | $5.74M MRR
+            - generic [ref=e100]: 流失 9% | 升级 10%
+          - generic [ref=e101]:
+            - generic [ref=e102]: 年付
+            - generic [ref=e103]: 2,461订阅 | $5.60M MRR
+            - generic [ref=e104]: 流失 10% | 升级 11%
+      - heading "📅 注册队列 MRR 趋势" [level=2] [ref=e106]
+    - paragraph [ref=e110]:
+      - strong [ref=e111]: 关键洞察：
+      - text: 年付用户流失率反超月付(10% vs 9%)，这是反直觉信号，需排查年付用户的产品使用深度。印度市场流失率仅
+      - strong [ref=e112]: 7%
+      - text: 、平均 MRR ($2,398) 超过美国 ($2,241)，是高价值增长市场。Organic 渠道收入最高但流失也最高 (11%)，自然流量用户期望管理待加强。
+    - generic [ref=e113]:
+      - generic [ref=e114]:
+        - heading "🧪 试用 vs 付费" [level=2] [ref=e115]
+        - generic [ref=e116]:
+          - generic [ref=e117]:
+            - generic [ref=e118]: 付费订阅
+            - generic [ref=e119]: 4,222
+          - generic [ref=e120]:
+            - generic [ref=e121]: 试用订阅
+            - generic [ref=e122]: 778 (15.6%)
+          - generic [ref=e123]:
+            - generic [ref=e124]:
+              - generic [ref=e125]: 付费平均 MRR
+              - generic [ref=e126]: $2,686
+            - generic [ref=e127]:
+              - generic [ref=e128]: 试用升级率
+              - generic [ref=e129]: 10%
+      - generic [ref=e130]:
+        - heading "🔄 自动续费分析" [level=2] [ref=e131]
+        - generic [ref=e132]:
+          - generic [ref=e133]:
+            - generic [ref=e134]: 自动续费
+            - generic [ref=e135]: 4,005 (80.1%)
+          - generic [ref=e136]:
+            - generic [ref=e137]: 手动续费
+            - generic [ref=e138]: 995 (19.9%)
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - generic [ref=e141]: 手动续费 MRR
+              - generic [ref=e142]: $2.23M
+            - generic [ref=e143]:
+              - generic [ref=e144]: 手动续费流失风险
+              - generic [ref=e145]: 高
+    - generic [ref=e146]:
+      - heading "🎯 行动建议" [level=2] [ref=e147]
+      - generic [ref=e148]:
+        - generic [ref=e149]:
+          - generic [ref=e150]: 🔴
+          - generic [ref=e151]:
+            - generic [ref=e152]: 提升 Basic → Pro 升级转化
+            - generic [ref=e153]: Basic 层 32% 客户仅贡献 6.7% 收入。通过功能差异化和用量上限触达推动迁移，预估每提升 5% 转化率可增 $190K MRR。
+        - generic [ref=e154]:
+          - generic [ref=e155]: 🔴
+          - generic [ref=e156]:
+            - generic [ref=e157]: 降低 DevTools 行业流失 (11%)
+            - generic [ref=e158]: DevTools 贡献 21.2% 收入但流失率最高，建议深入分析工单和使用数据定位根因。
+        - generic [ref=e159]:
+          - generic [ref=e160]: 🟡
+          - generic [ref=e161]:
+            - generic [ref=e162]: 加大 EdTech 和印度市场投入
+            - generic [ref=e163]: EdTech 流失最低 (8%) + 客单价最高 ($2,603)。印度流失最低 (7%) + 客单价超美国。定向投放。
+        - generic [ref=e164]:
+          - generic [ref=e165]: 🟢
+          - generic [ref=e166]:
+            - generic [ref=e167]: 手动续费用户定向运营
+            - generic [ref=e168]: 995 个手动续费订阅贡献 $2.23M MRR，通过续费提醒和激励提升自动续费开通率。
+        - generic [ref=e169]:
+          - generic [ref=e170]: 🟢
+          - generic [ref=e171]:
+            - generic [ref=e172]: 年付用户到期前续约
+            - generic [ref=e173]: 年付用户流失率反超月付（10% vs 9%），建议到期前 90 天启动续约干预流程。
+  - contentinfo [ref=e174]: "RavenStack 收入分析仪表盘 | 基于合成数据集 | 数据集作者: River @ Rivalytics"

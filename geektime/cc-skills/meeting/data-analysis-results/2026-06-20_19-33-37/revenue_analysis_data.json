@@ -1,0 +1,316 @@
+{
+  "revenue_overview": {
+    "total_mrr": 11338747.0,
+    "total_arr": 136064964.0,
+    "avg_mrr": 2267.7494,
+    "avg_arr": 27212.9928,
+    "active_mrr": 10159608.0,
+    "active_arr": 121915296.0,
+    "active_count": 4514,
+    "churned_count": 486,
+    "churned_mrr": 1179139.0
+  },
+  "plan_tier": {
+    "subscriptions": {
+      "Basic": 1602,
+      "Enterprise": 1723,
+      "Pro": 1675
+    },
+    "total_mrr": {
+      "Basic": 760437,
+      "Enterprise": 8473221,
+      "Pro": 2105089
+    },
+    "avg_mrr": {
+      "Basic": 474.68,
+      "Enterprise": 4917.71,
+      "Pro": 1256.77
+    },
+    "total_arr": {
+      "Basic": 9125244,
+      "Enterprise": 101678652,
+      "Pro": 25261068
+    },
+    "avg_arr": {
+      "Basic": 5696.16,
+      "Enterprise": 59012.57,
+      "Pro": 15081.23
+    },
+    "avg_seats": {
+      "Basic": 29.57,
+      "Enterprise": 29.37,
+      "Pro": 30.62
+    },
+    "upgrade_rate": {
+      "Basic": 0.09,
+      "Enterprise": 0.11,
+      "Pro": 0.12
+    },
+    "downgrade_rate": {
+      "Basic": 0.04,
+      "Enterprise": 0.04,
+      "Pro": 0.05
+    },
+    "churn_rate": {
+      "Basic": 0.09,
+      "Enterprise": 0.1,
+      "Pro": 0.1
+    },
+    "mrr_share": {
+      "Basic": 6.7,
+      "Enterprise": 74.7,
+      "Pro": 18.6
+    },
+    "sub_share": {
+      "Basic": 32.0,
+      "Enterprise": 34.5,
+      "Pro": 33.5
+    }
+  },
+  "industry_revenue": {
+    "accounts": {
+      "FinTech": 112,
+      "DevTools": 113,
+      "Cybersecurity": 100,
+      "EdTech": 79,
+      "HealthTech": 96
+    },
+    "subscriptions": {
+      "FinTech": 1100,
+      "DevTools": 1158,
+      "Cybersecurity": 1008,
+      "EdTech": 785,
+      "HealthTech": 949
+    },
+    "total_mrr": {
+      "FinTech": 2669496,
+      "DevTools": 2403654,
+      "Cybersecurity": 2253318,
+      "EdTech": 2043167,
+      "HealthTech": 1969112
+    },
+    "avg_mrr": {
+      "FinTech": 2426.81,
+      "DevTools": 2075.69,
+      "Cybersecurity": 2235.43,
+      "EdTech": 2602.76,
+      "HealthTech": 2074.93
+    },
+    "total_arr": {
+      "FinTech": 32033952,
+      "DevTools": 28843848,
+      "Cybersecurity": 27039816,
+      "EdTech": 24518004,
+      "HealthTech": 23629344
+    },
+    "churn_rate": {
+      "FinTech": 0.09,
+      "DevTools": 0.11,
+      "Cybersecurity": 0.1,
+      "EdTech": 0.08,
+      "HealthTech": 0.1
+    },
+    "mrr_share": {
+      "FinTech": 23.5,
+      "DevTools": 21.2,
+      "Cybersecurity": 19.9,
+      "EdTech": 18.0,
+      "HealthTech": 17.4
+    }
+  },
+  "country_top10": {
+    "total_mrr": {
+      "US": 6634595,
+      "UK": 1220471,
+      "IN": 1194325,
+      "AU": 839980,
+      "FR": 589796,
+      "CA": 477562,
+      "DE": 382018
+    },
+    "subscriptions": {
+      "US": 2961,
+      "UK": 590,
+      "IN": 498,
+      "AU": 312,
+      "FR": 211,
+      "CA": 217,
+      "DE": 211
+    },
+    "avg_mrr": {
+      "US": 2240.66,
+      "UK": 2068.59,
+      "IN": 2398.24,
+      "AU": 2692.24,
+      "FR": 2795.24,
+      "CA": 2200.75,
+      "DE": 1810.51
+    },
+    "churn_rate": {
+      "US": 0.1,
+      "UK": 0.11,
+      "IN": 0.07,
+      "AU": 0.11,
+      "FR": 0.12,
+      "CA": 0.1,
+      "DE": 0.09
+    },
+    "mrr_share": {
+      "US": 58.5,
+      "UK": 10.8,
+      "IN": 10.5,
+      "AU": 7.4,
+      "FR": 5.2,
+      "CA": 4.2,
+      "DE": 3.4
+    }
+  },
+  "referral_revenue": {
+    "accounts": {
+      "organic": 114,
+      "other": 103,
+      "ads": 98,
+      "partner": 89,
+      "event": 96
+    },
+    "subscriptions": {
+      "organic": 1170,
+      "other": 1027,
+      "ads": 1000,
+      "partner": 886,
+      "event": 917
+    },
+    "total_mrr": {
+      "organic": 2798707,
+      "other": 2377728,
+      "ads": 2146619,
+      "partner": 2094243,
+      "event": 1921450
+    },
+    "avg_mrr": {
+      "organic": 2392.06,
+      "other": 2315.22,
+      "ads": 2146.62,
+      "partner": 2363.71,
+      "event": 2095.37
+    },
+    "churn_rate": {
+      "organic": 0.11,
+      "other": 0.09,
+      "ads": 0.1,
+      "partner": 0.09,
+      "event": 0.1
+    },
+    "mrr_share": {
+      "organic": 24.7,
+      "other": 21.0,
+      "ads": 18.9,
+      "partner": 18.5,
+      "event": 16.9
+    }
+  },
+  "billing_stats": {
+    "subscriptions": {
+      "annual": 2461,
+      "monthly": 2539
+    },
+    "total_mrr": {
+      "annual": 5597398,
+      "monthly": 5741349
+    },
+    "avg_mrr": {
+      "annual": 2274.44,
+      "monthly": 2261.26
+    },
+    "total_arr": {
+      "annual": 67168776,
+      "monthly": 68896188
+    },
+    "avg_arr": {
+      "annual": 27293.29,
+      "monthly": 27135.17
+    },
+    "churn_rate": {
+      "annual": 0.1,
+      "monthly": 0.09
+    },
+    "upgrade_rate": {
+      "annual": 0.11,
+      "monthly": 0.1
+    },
+    "auto_renew_rate": {
+      "annual": 0.8,
+      "monthly": 0.8
+    },
+    "sub_share": {
+      "annual": 49.2,
+      "monthly": 50.8
+    },
+    "mrr_share": {
+      "annual": 49.4,
+      "monthly": 50.6
+    }
+  },
+  "trial_revenue": {
+    "subscriptions": {
+      "Paid": 4222,
+      "Trial": 778
+    },
+    "total_mrr": {
+      "Paid": 11338747,
+      "Trial": 0
+    },
+    "avg_mrr": {
+      "Paid": 2685.63,
+      "Trial": 0.0
+    },
+    "avg_seats": {
+      "Paid": 29.74,
+      "Trial": 30.46
+    },
+    "churn_rate": {
+      "Paid": 0.1,
+      "Trial": 0.1
+    },
+    "upgrade_rate": {
+      "Paid": 0.11,
+      "Trial": 0.1
+    }
+  },
+  "auto_renew": {
+    "subscriptions": {
+      "Manual Renew": 995,
+      "Auto Renew": 4005
+    },
+    "total_mrr": {
+      "Manual Renew": 2234439,
+      "Auto Renew": 9104308
+    },
+    "avg_mrr": {
+      "Manual Renew": 2245.67,
+      "Auto Renew": 2273.24
+    },
+    "churn_rate": {
+      "Manual Renew": 0.1,
+      "Auto Renew": 0.1
+    },
+    "sub_share": {
+      "Manual Renew": 19.9,
+      "Auto Renew": 80.1
+    }
+  },
+  "mrr_summary": {
+    "count": 5000.0,
+    "mean": 2267.7494,
+    "std": 3421.3753481391386,
+    "min": 0.0,
+    "25%": 285.0,
+    "50%": 931.0,
+    "75%": 2786.0,
+    "max": 33830.0
+  },
+  "upgrade_count": 529,
+  "downgrade_count": 218,
+  "upgrade_rate": 10.58,
+  "downgrade_rate": 4.36
+}

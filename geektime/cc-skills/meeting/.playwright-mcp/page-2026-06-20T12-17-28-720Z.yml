@@ -1,0 +1,45 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - img "logo" [ref=e7] [cursor=pointer]
+        - generic [ref=e8]:
+          - generic [ref=e9]:
+            - button "应用控制台" [ref=e10]:
+              - generic [ref=e11]: 应用控制台
+            - button "文档" [ref=e12]:
+              - generic [ref=e13]: 文档
+          - button "中文" [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]: 中文
+          - button "Github 3.7k 星标" [ref=e35]:
+            - generic [ref=e17]: Github
+            - generic [ref=e18]: 3.7k 星标
+          - button "plus 充值" [ref=e19] [cursor=pointer]:
+            - img "plus" [ref=e20]
+            - text: 充值
+          - button "登录" [ref=e21]
+    - main [ref=e22]
+  - generic [ref=e37]:
+    - dialog:
+      - generic [ref=e40]:
+        - heading "登录" [level=2] [ref=e42]
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - generic [ref=e47] [cursor=pointer]:
+              - combobox [ref=e49]
+              - generic "+86" [ref=e50]
+            - textbox "手机号" [ref=e51]
+          - generic [ref=e52]:
+            - textbox "验证码" [ref=e53]
+            - button "发送" [disabled] [ref=e54]
+          - generic [ref=e55]:
+            - button "登录" [disabled]:
+              - generic: 登录
+        - generic [ref=e58]: 或使用以下方式登录
+        - generic [ref=e60]:
+          - button [ref=e61] [cursor=pointer]:
+            - img [ref=e62]
+          - button [ref=e64] [cursor=pointer]:
+            - img [ref=e65]
+          - button "metamask" [ref=e70] [cursor=pointer]:
+            - img "metamask" [ref=e71]

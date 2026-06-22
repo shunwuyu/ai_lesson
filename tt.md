@@ -1,3 +1,4 @@
+- [Claude Code Skill 入门实战课](https://time.geekbang.org/course/detail/101119601-957882) 
 - [langchain](https://www.bilibili.com/video/BV1Vr25ByEpG/?spm_id_from=333.337.search-card.all.click&vd_source=3d50341f547faf8df242a214b04f2d86)
 
 - langgraph.js https://langgraph.loock.vip/docs/%E5%B8%B8%E8%A7%81%E7%94%A8%E4%BE%8B/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90

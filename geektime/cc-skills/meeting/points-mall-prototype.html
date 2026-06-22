@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>积分商城 - 高保真原型</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: { 50:'#fff5f5',100:'#ffe0e0',200:'#ffb3b3',300:'#ff8585',400:'#ff5252',500:'#ff2d2d',600:'#e02424',700:'#b81c1c' },
+        accent: { 50:'#fff8f0',100:'#ffe8cc',200:'#ffd199',300:'#ffba66',400:'#ffa033',500:'#ff8800',600:'#e67a00',700:'#b36200' },
+        gold: { 50:'#fffdf5',100:'#fff9e0',200:'#ffeeb3',300:'#ffe380',400:'#ffd84d',500:'#ffcc00',600:'#e6b500',700:'#b38f00' }
+      },
+      fontFamily: { sans: ['Noto Sans SC','Poppins','sans-serif'] }
+    }
+  }
+}
+</script>
+<style>
+  * { -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Noto Sans SC', sans-serif; background: #f5f5f5; }
+  .card { border-radius: 16px; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: all .3s; }
+  .card:active { transform: scale(0.98); }
+  .btn-primary { background: linear-gradient(135deg, #ff2d2d, #ff5252); border: none; color: #fff; border-radius: 12px;
+    font-weight: 600; padding: 12px 32px; transition: all .3s; box-shadow: 0 4px 15px rgba(255,45,45,0.3); }
+  .btn-primary:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(255,45,45,0.4); }
+  .btn-primary.animate-pulse { animation: softPulse 2s infinite; }
+  @keyframes softPulse { 0%,100% { box-shadow:0 4px 15px rgba(255,45,45,0.3) } 50% { box-shadow:0 4px 30px rgba(255,45,45,0.55) } }
+  .tab-active { color: #ff2d2d; border-bottom: 3px solid #ff2d2d; font-weight: 700; }
+  .tab-inactive { color: #999; border-bottom: 3px solid transparent; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: flex; align-items: flex-end; justify-content: center; }
+  .modal-sheet { background: #fff; border-radius: 20px 20px 0 0; width: 100%; max-width: 480px; max-height: 85vh; overflow-y: auto; animation: slideUp .3s ease; }
+  @keyframes slideUp { from { transform: translateY(100%) } to { transform: translateY(0) } }
+  .fade-in { animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: translateY(0) } }
+  .lottery-wheel { width: 280px; height: 280px; border-radius: 50%; position: relative; background: conic-gradient(#ff2d2d 0deg 60deg,#ff8800 60deg 120deg,#ffcc00 120deg 180deg,#fff3e0 180deg 240deg,#ff5252 240deg 300deg,#ff8800 300deg 360deg); }
+  .lottery-spinning { animation: spin 3s cubic-bezier(0.17,0.67,0.12,0.99) forwards; }
+  @keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(var(--spin-deg, 1800deg)) } }
+  .badge-hot { background: linear-gradient(135deg, #ff2d2d, #ff5252); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 20px; }
+  .points-display { background: linear-gradient(135deg, #ff8800, #ff2d2d); color: #fff; border-radius: 14px; }
+  .shimmer { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+  @keyframes shimmer { 0% { background-position: -200% 0 } 100% { background-position: 200% 0 } }
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: #bbb; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 200; padding: 12px 24px; border-radius: 12px; font-weight: 600; animation: toastIn .3s ease, toastOut .3s 2s forwards; }
+  @keyframes toastIn { from { opacity:0; transform:translateX(-50%) translateY(-20px) } to { opacity:1; transform:translateX(-50%) translateY(0) } }
+  @keyframes toastOut { from { opacity:1 } to { opacity:0 } }
+  ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+</style>
+</head>
+<body class="min-h-screen">
+<div id="app" class="max-w-lg mx-auto relative min-h-screen bg-gray-50 pb-20">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
+    <div class="px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <i data-lucide="gift" class="w-6 h-6 text-brand-500"></i>
+        <div>
+          <h1 class="text-lg font-bold text-gray-900">积分商城</h1>
+          <p class="text-xs text-gray-400">好物随心兑</p>
+        </div>
+      </div>
+      <div class="points-display px-4 py-2 flex items-center gap-2 cursor-pointer" onclick="showPointsDetail()">
+        <i data-lucide="coins" class="w-4 h-4"></i>
+        <span class="font-bold" id="headerPoints">12,580</span>
+        <span class="text-xs opacity-80">积分</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Category Tabs -->
+  <nav class="sticky top-[57px] z-40 bg-white/95 backdrop-blur border-b border-gray-100">
+    <div class="flex px-2">
+      <button class="flex-1 py-3 text-sm transition-all tab-active" data-tab="all" onclick="switchTab('all',this)">
+        <span class="flex items-center justify-center gap-1"><i data-lucide="layout-grid" class="w-4 h-4"></i>推荐</span>
+      </button>
+      <button class="flex-1 py-3 text-sm transition-all tab-inactive" data-tab="goods" onclick="switchTab('goods',this)">
+        <span class="flex items-center justify-center gap-1"><i data-lucide="package" class="w-4 h-4"></i>实物</span>
+      </button>
+      <button class="flex-1 py-3 text-sm transition-all tab-inactive" data-tab="coupon" onclick="switchTab('coupon',this)">
+        <span class="flex items-center justify-center gap-1"><i data-lucide="ticket" class="w-4 h-4"></i>优惠券</span>
+      </button>
+      <button class="flex-1 py-3 text-sm transition-all tab-inactive" data-tab="lottery" onclick="switchTab('lottery',this)">
+        <span class="flex items-center justify-center gap-1"><i data-lucide="sparkles" class="w-4 h-4"></i>抽奖</span>
+      </button>
+    </div>
+    <!-- Sort Bar -->
+    <div id="sortBar" class="flex px-4 py-2 gap-2 overflow-x-auto text-xs">
+      <button class="sort-btn px-3 py-1.5 rounded-full bg-brand-50 text-brand-600 font-medium whitespace-nowrap" onclick="sortBy('default')">默认</button>
+      <button class="sort-btn px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 whitespace-nowrap" onclick="sortBy('points_asc')">积分从低到高</button>
+      <button class="sort-btn px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 whitespace-nowrap" onclick="sortBy('points_desc')">积分从高到低</button>
+      <button class="sort-btn px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 whitespace-nowrap" onclick="sortBy('hot')">最热门</button>
+    </div>
+  </nav>
+
+  <!-- Banner -->
+  <section class="px-4 pt-4 fade-in">
+    <div class="bg-gradient-to-r from-accent-500 to-brand-500 rounded-2xl p-5 text-white relative overflow-hidden shadow-xl">
+      <div class="absolute right-2 top-2 opacity-20"><i data-lucide="gift" class="w-24 h-24"></i></div>
+      <h3 class="text-lg font-bold">🎉 新人专享好礼</h3>
+      <p class="text-sm opacity-90 mt-1">首次兑换享 9 折积分优惠，快来兑换心仪好物！</p>
+      <button class="mt-3 bg-white text-brand-600 px-4 py-1.5 rounded-full text-sm font-semibold" onclick="switchTab('all',document.querySelector('[data-tab=all]'))">立即查看 →</button>
+    </div>
+  </section>
+
+  <!-- Product Grid -->
+  <section id="productGrid" class="px-4 pt-4 grid grid-cols-2 gap-3"></section>
+
+  <!-- Empty State -->
+  <div id="emptyState" class="empty-state hidden">
+    <i data-lucide="search-x" class="w-16 h-16 mb-4"></i>
+    <p class="text-gray-400 text-sm">暂无符合条件的商品</p>
+  </div>
+
+  <!-- Loading Skeleton -->
+  <div id="loadingSkeleton" class="hidden px-4 pt-4 grid grid-cols-2 gap-3">
+    <div class="rounded-2xl overflow-hidden"><div class="shimmer h-40"></div><div class="p-3 space-y-2"><div class="shimmer h-4 w-3/4 rounded"></div><div class="shimmer h-4 w-1/2 rounded"></div></div></div>
+    <div class="rounded-2xl overflow-hidden"><div class="shimmer h-40"></div><div class="p-3 space-y-2"><div class="shimmer h-4 w-3/4 rounded"></div><div class="shimmer h-4 w-1/2 rounded"></div></div></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white border-t border-gray-100 z-40">
+    <div class="flex">
+      <button class="flex-1 py-2 flex flex-col items-center gap-0.5 text-brand-500" onclick="switchTab('all',document.querySelector('[data-tab=all]'))">
+        <i data-lucide="store" class="w-5 h-5"></i><span class="text-[10px]">商城</span>
+      </button>
+      <button class="flex-1 py-2 flex flex-col items-center gap-0.5 text-gray-400" onclick="showMyOrders()">
+        <i data-lucide="package-check" class="w-5 h-5"></i><span class="text-[10px]">订单</span>
+      </button>
+      <button class="flex-1 py-2 flex flex-col items-center gap-0.5 text-gray-400" onclick="showMyCoupons()">
+        <i data-lucide="ticket-check" class="w-5 h-5"></i><span class="text-[10px]">优惠券</span>
+      </button>
+      <button class="flex-1 py-2 flex flex-col items-center gap-0.5 text-gray-400" onclick="showLotteryRecords()">
+        <i data-lucide="dice-6" class="w-5 h-5"></i><span class="text-[10px]">抽奖</span>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<div id="modals"></div>
+<div id="toasts"></div>
+
+<script>
+// ═══════════ Mock Data ═══════════
+const products = [
+  { id:1, type:'goods', name:'蓝牙降噪耳机 Pro', desc:'主动降噪，40小时续航', points:2800, originalPoints:3500, stock:45, limit:2, image:'🎧', tag:'热卖', badge:'限时特惠', sold:2340, category:'数码' },
+  { id:2, type:'goods', name:'便携充电宝 20000mAh', desc:'大容量快充，轻薄便携', points:1500, originalPoints:1800, stock:120, limit:3, image:'🔋', tag:'推荐', sold:1890, category:'数码' },
+  { id:3, type:'goods', name:'智能手环 Sport', desc:'心率监测，运动记录', points:3200, stock:30, limit:1, image:'⌚', badge:'新品', sold:890, category:'智能穿戴' },
+  { id:4, type:'goods', name:'保温杯 316不锈钢', desc:'24小时保温，500ml', points:800, stock:200, limit:5, image:'☕', tag:'超值', sold:4560, category:'生活' },
+  { id:5, type:'goods', name:'无线鼠标 人体工学', desc:'静音按键，双模连接', points:1200, stock:85, limit:3, image:'🖱️', sold:1670, category:'数码' },
+  { id:6, type:'goods', name:'帆布双肩包 简约款', desc:'大容量防泼水，通勤必备', points:2000, stock:60, limit:2, image:'🎒', sold:720, category:'生活' },
+  { id:7, type:'goods', name:'眼部按摩仪', desc:'热敷气囊按摩缓解疲劳', points:4500, originalPoints:5500, stock:15, limit:1, image:'👁️', tag:'高端', sold:320, category:'健康' },
+  { id:8, type:'goods', name:'桌面迷你小风扇', desc:'三档风力，USB充电', points:600, stock:300, limit:5, image:'🌀', tag:'超值', sold:5120, category:'生活' },
+  { id:9, type:'goods', name:'真无线蓝牙音箱', desc:'360°环绕音效，IPX7防水', points:2600, stock:40, limit:2, image:'🔊', sold:980, category:'数码' },
+  { id:10, type:'goods', name:'折叠晴雨伞', desc:'一键开合，UPF50+防晒', points:500, stock:250, limit:5, image:'☂️', tag:'超值', sold:3450, category:'生活' },
+  { id:11, type:'coupon', name:'全场满减券', desc:'满200减30', points:300, stock:999, limit:3, image:'🎫', tag:'热门', value:'¥30', condition:'满¥200可用', expiry:'30天后过期', category:'优惠券' },
+  { id:12, type:'coupon', name:'精品服饰券', desc:'满500减80', points:500, stock:500, limit:2, image:'👔', tag:'实惠', value:'¥80', condition:'满¥500可用', expiry:'30天后过期', category:'优惠券' },
+  { id:13, type:'coupon', name:'数码专享券', desc:'满1000减150', points:800, stock:300, limit:2, image:'💻', value:'¥150', condition:'满¥1000可用', expiry:'30天后过期', category:'优惠券' },
+  { id:14, type:'coupon', name:'新人专享券', desc:'满100减20', points:100, stock:999, limit:1, image:'🌟', tag:'新人', value:'¥20', condition:'满¥100可用', expiry:'15天后过期', category:'优惠券' },
+  { id:15, type:'coupon', name:'生鲜水果券', desc:'满300减50', points:400, stock:400, limit:3, image:'🍎', value:'¥50', condition:'满¥300可用', expiry:'30天后过期', category:'优惠券' },
+  { id:16, type:'coupon', name:'美妆个护券', desc:'满200减40', points:350, stock:350, limit:2, image:'💄', value:'¥40', condition:'满¥200可用', expiry:'30天后过期', category:'优惠券' },
+];
+
+const lotteryPrizes = [
+  { name:'iPhone 17 Pro', icon:'📱', probability:'0.5%', color:'#ff2d2d' },
+  { name:'蓝牙耳机', icon:'🎧', probability:'3%', color:'#ff8800' },
+  { name:'1000积分', icon:'💰', probability:'8%', color:'#ffcc00' },
+  { name:'500积分', icon:'🪙', probability:'15%', color:'#fff3e0' },
+  { name:'200积分', icon:'✨', probability:'25%', color:'#ff5252' },
+  { name:'感谢参与', icon:'🎈', probability:'48.5%', color:'#ff8800' },
+];
+
+let myPoints = 12580;
+let currentTab = 'all';
+let currentSort = 'default';
+let exchangeHistory = [
+  { id:'E001', item:'蓝牙降噪耳机 Pro', points:2800, time:'2026-06-18 14:30', status:'已发货', icon:'🎧' },
+  { id:'E002', item:'便携充电宝', points:1500, time:'2026-06-15 09:20', status:'已完成', icon:'🔋' },
+  { id:'E003', item:'全场满减券 ¥30', points:300, time:'2026-06-12 16:45', status:'已到账', icon:'🎫' },
+];
+let myCoupons = [
+  { name:'全场满减券', value:'¥30', condition:'满¥200可用', expiry:'2026-07-15', used:false, icon:'🎫' },
+  { name:'数码专享券', value:'¥150', condition:'满¥1000可用', expiry:'2026-07-10', used:false, icon:'💻' },
+  { name:'精品服饰券', value:'¥80', condition:'满¥500可用', expiry:'2026-06-30', used:true, icon:'👔' },
+];
+let lotteryRecords = [
+  { prize:'200积分', time:'2026-06-20 10:30', icon:'✨' },
+  { prize:'500积分', time:'2026-06-19 15:20', icon:'🪙' },
+  { prize:'感谢参与', time:'2026-06-18 11:00', icon:'🎈' },
+];
+let dailyDrawsUsed = 2;
+let dailyDrawsMax = 5;
+let selectedAddress = { name:'张三', phone:'138****8888', addr:'北京市朝阳区望京SOHO T1 1206室' };
+
+// ═══════════ Render ═══════════
+function renderProducts() {
+  const grid = document.getElementById('productGrid');
+  const empty = document.getElementById('emptyState');
+  let items = products.filter(p => currentTab === 'all' ? p.type !== 'coupon' : p.type === currentTab);
+
+  if (currentSort === 'points_asc') items.sort((a,b) => (a.points||0) - (b.points||0));
+  else if (currentSort === 'points_desc') items.sort((a,b) => (b.points||0) - (a.points||0));
+  else if (currentSort === 'hot') items.sort((a,b) => (b.sold||0) - (a.sold||0));
+
+  if (currentTab === 'lottery') {
+    renderLotteryPage();
+    grid.innerHTML = '';
+    empty.classList.add('hidden');
+    return;
+  }
+
+  if (items.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+
+  grid.innerHTML = items.map(p => `
+    <div class="card overflow-hidden cursor-pointer fade-in group" onclick="openProductDetail(${p.id})">
+      <div class="relative bg-gradient-to-br from-gray-50 to-gray-100 h-40 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+        <span class="text-5xl">${p.image}</span>
+        ${p.badge ? `<span class="absolute top-2 left-2 badge-hot">${p.badge}</span>` : ''}
+        ${p.tag ? `<span class="absolute top-2 right-2 bg-accent-500 text-white text-[10px] px-2 py-0.5 rounded-full font-medium">${p.tag}</span>` : ''}
+        ${p.stock < 50 && p.stock > 0 ? `<span class="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full">仅剩${p.stock}件</span>` : ''}
+        ${p.stock === 0 ? `<div class="absolute inset-0 bg-black/40 flex items-center justify-center"><span class="text-white font-bold text-lg">已兑完</span></div>` : ''}
+      </div>
+      <div class="p-3">
+        <h3 class="font-semibold text-sm text-gray-800 line-clamp-1">${p.name}</h3>
+        <p class="text-xs text-gray-400 mt-0.5 line-clamp-1">${p.desc||''}</p>
+        <div class="flex items-center justify-between mt-2">
+          <div class="flex items-baseline gap-1">
+            <span class="text-lg font-extrabold text-brand-500">${p.points?.toLocaleString()||'免费'}</span>
+            <span class="text-xs text-gray-400">积分</span>
+          </div>
+          ${p.originalPoints ? `<span class="text-xs text-gray-300 line-through">${p.originalPoints.toLocaleString()}</span>` : ''}
+        </div>
+        ${p.sold ? `<div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400"><i data-lucide="flame" class="w-3 h-3"></i>${p.sold.toLocaleString()}人已兑换</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+}
+
+function renderLotteryPage() {
+  const grid = document.getElementById('productGrid');
+  const empty = document.getElementById('emptyState');
+  empty.classList.add('hidden');
+  const spinDeg = Math.floor(Math.random() * 3600 + 1440);
+
+  grid.innerHTML = `
+    <div class="col-span-2">
+      <div class="card p-6 text-center">
+        <h2 class="text-xl font-bold text-gray-800 mb-2">🎰 幸运转盘</h2>
+        <p class="text-sm text-gray-400 mb-4">${dailyDrawsUsed}/${dailyDrawsMax} 次  |  每次消耗 <span class="font-bold text-brand-500">100</span> 积分</p>
+        <div class="flex justify-center mb-4">
+          <div class="lottery-wheel relative" id="wheel" style="--spin-deg:${spinDeg}deg">
+            <div class="absolute inset-4 bg-white rounded-full flex items-center justify-center shadow-inner">
+              <button id="drawBtn" class="btn-primary w-16 h-16 rounded-full text-sm flex flex-col items-center justify-center ${dailyDrawsUsed >= dailyDrawsMax ? 'opacity-50' : 'animate-pulse'}"
+                ${dailyDrawsUsed >= dailyDrawsMax ? 'disabled' : ''} onclick="startLottery()">
+                ${dailyDrawsUsed >= dailyDrawsMax ? '<span class="text-xs">已用完</span>' : '<span class="text-xs">抽奖</span>'}
+              </button>
+            </div>
+            ${lotteryPrizes.map((p,i) => {
+              const angle = (i * 60) - 30;
+              const rad = (angle * Math.PI) / 180;
+              const x = 50 + 35 * Math.cos(rad);
+              const y = 50 + 35 * Math.sin(rad);
+              return `<span style="position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%) rotate(${angle}deg);font-size:20px;">${p.icon}</span>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="flex justify-center gap-3 mb-4">
+          <button class="px-4 py-2 rounded-full text-sm font-medium bg-brand-50 text-brand-600" onclick="startLottery()">抽1次</button>
+          <button class="px-4 py-2 rounded-full text-sm font-medium bg-accent-50 text-accent-600" onclick="startLottery(5)">连抽5次 <span class="text-xs">(9折)</span></button>
+        </div>
+        <p class="text-xs text-gray-300">概率公示</p>
+        <div class="flex flex-wrap justify-center gap-2 mt-2">
+          ${lotteryPrizes.map(p => `<span class="text-[10px] bg-gray-50 px-2 py-0.5 rounded-full">${p.icon} ${p.name} ${p.probability}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function startLottery(count = 1) {
+  if (myPoints < 100 * count) { showToast('积分不足，无法抽奖', 'error'); return; }
+  if (dailyDrawsUsed + count > dailyDrawsMax) { showToast('今日抽奖次数不足', 'error'); return; }
+
+  const wheel = document.getElementById('wheel');
+  const btn = document.getElementById('drawBtn');
+  if (wheel) { wheel.classList.add('lottery-spinning'); btn.disabled = true; }
+  myPoints -= 100 * count;
+  dailyDrawsUsed += count;
+  updateHeaderPoints();
+
+  setTimeout(() => {
+    if (wheel) wheel.classList.remove('lottery-spinning');
+    btn.disabled = dailyDrawsUsed >= dailyDrawsMax;
+    const prize = lotteryPrizes[Math.min(Math.floor(Math.random() * lotteryPrizes.length), lotteryPrizes.length - 1)];
+    lotteryRecords.unshift({ prize: prize.name, time: new Date().toLocaleString(), icon: prize.icon });
+    if (prize.name.includes('积分')) {
+      const pts = parseInt(prize.name) || 100;
+      myPoints += pts;
+      updateHeaderPoints();
+      showToast(`🎉 恭喜获得 ${prize.name}！`, 'success');
+    } else if (prize.name === '感谢参与') {
+      showToast('😅 很遗憾，谢谢参与～', 'info');
+    } else {
+      showToast(`🎉 恭喜抽中 ${prize.name}！请填写收货地址`, 'success');
+      setTimeout(() => showAddressModal(prize.name), 1500);
+    }
+    renderLotteryPage();
+  }, 3100);
+}
+
+// ═══════════ Modals ═══════════
+function openProductDetail(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  const modals = document.getElementById('modals');
+  modals.innerHTML = `
+    <div class="modal-overlay" onclick="closeModal()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between rounded-t-[20px]">
+          <button onclick="closeModal()" class="p-1"><i data-lucide="chevron-down" class="w-6 h-6 text-gray-400"></i></button>
+          <span class="font-semibold text-sm">商品详情</span>
+          <div class="w-8"></div>
+        </div>
+        <div class="p-4">
+          <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl h-48 flex items-center justify-center mb-4">
+            <span class="text-7xl">${p.image}</span>
+          </div>
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h2 class="text-lg font-bold text-gray-800">${p.name}</h2>
+              ${p.desc ? `<p class="text-sm text-gray-400 mt-1">${p.desc}</p>` : ''}
+            </div>
+            ${p.badge ? `<span class="badge-hot">${p.badge}</span>` : ''}
+          </div>
+          ${p.type === 'coupon' ? `
+            <div class="bg-accent-50 rounded-xl p-4 mb-4">
+              <div class="flex items-center justify-between">
+                <div class="text-4xl font-extrabold text-accent-500">${p.value}</div>
+                <div class="text-right text-sm text-gray-500"><div>${p.condition}</div><div class="text-xs mt-1">${p.expiry}</div></div>
+              </div>
+            </div>
+          ` : ''}
+          <div class="flex flex-wrap gap-3 mb-4 text-sm">
+            <div class="bg-gray-50 rounded-lg px-3 py-2"><span class="text-gray-400">所需积分：</span><span class="font-bold text-brand-500">${p.points?.toLocaleString()||'免费'}</span></div>
+            ${p.originalPoints ? `<div class="bg-gray-50 rounded-lg px-3 py-2"><span class="text-gray-400">原价：</span><span class="font-bold text-gray-300 line-through">${p.originalPoints.toLocaleString()}</span></div>` : ''}
+            <div class="bg-gray-50 rounded-lg px-3 py-2"><span class="text-gray-400">库存：</span><span class="font-bold ${p.stock < 20 ? 'text-brand-500' : 'text-gray-700'}">${p.stock}</span></div>
+            <div class="bg-gray-50 rounded-lg px-3 py-2"><span class="text-gray-400">限兑：</span><span class="font-bold text-gray-700">${p.limit}次/人</span></div>
+          </div>
+          <div class="flex gap-3">
+            <button class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-500 font-semibold" onclick="closeModal()">再逛逛</button>
+            <button class="flex-[2] btn-primary ${myPoints < (p.points||0) || p.stock === 0 ? 'opacity-50' : ''}"
+              ${myPoints < (p.points||0) || p.stock === 0 ? 'disabled' : ''}
+              onclick="confirmExchange(${p.id})">
+              ${p.stock === 0 ? '已兑完' : myPoints < (p.points||0) ? '积分不足' : '立即兑换'}
+            </button>
+          </div>
+          ${myPoints < (p.points||0) && p.stock > 0 ? `<p class="text-xs text-brand-500 mt-3 text-center">还差 <b>${(p.points - myPoints).toLocaleString()}</b> 积分，<a class="underline cursor-pointer" onclick="closeModal();showToast('去签到/消费获取积分吧～','info')">去获取积分 →</a></p>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function confirmExchange(id) {
+  const p = products.find(x => x.id === id);
+  if (!p || myPoints < (p.points||0)) return;
+  const modals = document.getElementById('modals');
+  modals.innerHTML = `
+    <div class="modal-overlay" onclick="closeModal()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white px-4 py-3 border-b border-gray-100 flex items-center rounded-t-[20px]">
+          <button onclick="closeModal()" class="p-1"><i data-lucide="x" class="w-6 h-6 text-gray-400"></i></button>
+          <span class="flex-1 text-center font-semibold text-sm">确认兑换</span>
+          <div class="w-8"></div>
+        </div>
+        <div class="p-4 text-center">
+          <div class="text-6xl mb-3">${p.image}</div>
+          <h3 class="font-bold text-gray-800">${p.name}</h3>
+          <div class="flex justify-center items-center gap-2 mt-3">
+            <span class="text-sm text-gray-400">消耗积分：</span>
+            <span class="text-2xl font-extrabold text-brand-500">${p.points.toLocaleString()}</span>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-3 mt-4 text-sm text-gray-500 text-left">
+            <div class="flex justify-between py-1"><span>当前积分</span><span class="font-medium">${myPoints.toLocaleString()}</span></div>
+            <div class="flex justify-between py-1"><span>兑换消耗</span><span class="font-medium text-brand-500">-${p.points.toLocaleString()}</span></div>
+            <div class="flex justify-between py-1 border-t border-gray-200 mt-1 pt-1"><span>兑换后剩余</span><span class="font-bold text-gray-800">${(myPoints - p.points).toLocaleString()}</span></div>
+          </div>
+          ${p.type === 'goods' ? `<p class="text-xs text-gray-400 mt-3">兑换后请及时填写收货地址，24小时内未填写将自动取消</p>` : ''}
+          <div class="flex gap-3 mt-4">
+            <button class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-500 font-semibold" onclick="closeModal()">取消</button>
+            <button class="flex-[2] btn-primary" id="confirmBtn" onclick="doExchange(${p.id})">确认兑换</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function doExchange(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  const btn = document.getElementById('confirmBtn');
+  btn.innerHTML = '<span class="inline-block animate-spin">⏳</span> 兑换中...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    myPoints -= p.points;
+    p.stock = Math.max(0, p.stock - 1);
+    updateHeaderPoints();
+    const orderId = 'E' + Date.now().toString(36).toUpperCase();
+    exchangeHistory.unshift({ id: orderId, item: p.name, points: p.points, time: new Date().toLocaleString(), status: p.type === 'goods' ? '待填写地址' : '已到账', icon: p.image });
+    closeModal();
+    showToast('✅ 兑换成功！', 'success');
+    if (p.type === 'goods') {
+      setTimeout(() => showAddressModal(p.name, orderId), 800);
+    } else if (p.type === 'coupon') {
+      myCoupons.unshift({ name: p.name, value: p.value, condition: p.condition, expiry: '30天后到期', used: false, icon: p.image });
+    }
+    renderProducts();
+  }, 1000);
+}
+
+function showAddressModal(itemName, orderId) {
+  const modals = document.getElementById('modals');
+  modals.innerHTML = `
+    <div class="modal-overlay" onclick="closeModal()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white px-4 py-3 border-b border-gray-100 flex items-center rounded-t-[20px]">
+          <span class="font-semibold text-sm">填写收货地址</span>
+          <div class="flex-1"></div>
+          <button onclick="closeModal()"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+        </div>
+        <div class="p-4">
+          <p class="text-sm text-gray-500 mb-4">商品：<b>${itemName||''}</b></p>
+          <div class="space-y-3">
+            <div><label class="text-xs text-gray-400">收货人</label><input class="w-full mt-1 px-3 py-2 bg-gray-50 rounded-lg text-sm border border-gray-100 focus:border-brand-400 outline-none" value="${selectedAddress.name}" placeholder="请输入姓名"></div>
+            <div><label class="text-xs text-gray-400">手机号</label><input class="w-full mt-1 px-3 py-2 bg-gray-50 rounded-lg text-sm border border-gray-100 focus:border-brand-400 outline-none" value="${selectedAddress.phone}" placeholder="请输入手机号"></div>
+            <div><label class="text-xs text-gray-400">详细地址</label><input class="w-full mt-1 px-3 py-2 bg-gray-50 rounded-lg text-sm border border-gray-100 focus:border-brand-400 outline-none" value="${selectedAddress.addr}" placeholder="请输入详细地址"></div>
+          </div>
+          <div class="flex gap-3 mt-6">
+            <button class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-500 font-semibold" onclick="closeModal();showToast('请在24小时内填写地址，逾期将自动取消并退回积分','info')">稍后填写</button>
+            <button class="flex-[2] btn-primary" onclick="closeModal();showToast('📮 地址已保存，我们将尽快发货！','success')">确认提交</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+// ═══════════ Side Panels ═══════════
+function showMyOrders() {
+  const modals = document.getElementById('modals');
+  modals.innerHTML = `
+    <div class="modal-overlay" onclick="closeModal()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white px-4 py-3 border-b border-gray-100 flex items-center rounded-t-[20px]">
+          <span class="font-semibold text-sm">我的兑换订单</span>
+          <div class="flex-1"></div>
+          <button onclick="closeModal()"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+        </div>
+        <div class="p-4 space-y-3">
+          ${exchangeHistory.length === 0 ? '<div class="empty-state"><i data-lucide="package" class="w-12 h-12 mb-3"></i><p>暂无兑换记录</p></div>' :
+          exchangeHistory.map(o => `
+            <div class="bg-gray-50 rounded-xl p-4 flex items-center gap-3">
+              <span class="text-3xl">${o.icon}</span>
+              <div class="flex-1 min-w-0">
+                <div class="font-medium text-sm truncate">${o.item}</div>
+                <div class="text-xs text-gray-400">${o.time}</div>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-semibold text-brand-500">-${o.points.toLocaleString()}</span>
+                <div class="text-xs ${o.status === '已完成' ? 'text-green-500' : o.status === '已发货' ? 'text-blue-500' : 'text-accent-500'}">${o.status}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function showMyCoupons() {
+  const modals = document.getElementById('modals');
+  modals.innerHTML = `
+    <div class="modal-overlay" onclick="closeModal()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white px-4 py-3 border-b border-gray-100 flex items-center rounded-t-[20px]">
+          <span class="font-semibold text-sm">我的优惠券</span>
+          <div class="flex-1"></div>
+          <button onclick="closeModal()"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+        </div>
+        <div class="p-4 space-y-3">
+          ${myCoupons.length === 0 ? '<div class="empty-state"><i data-lucide="ticket" class="w-12 h-12 mb-3"></i><p>暂无优惠券</p></div>' :
+          myCoupons.map(c => `
+            <div class="rounded-xl overflow-hidden border ${c.used ? 'border-gray-100 opacity-50' : 'border-accent-200 bg-gradient-to-r from-accent-50 to-white'}">
+              <div class="flex">
+                <div class="w-24 bg-accent-500 text-white flex items-center justify-center text-2xl font-extrabold">${c.value}</div>
+                <div class="flex-1 p-3">
+                  <div class="font-medium text-sm">${c.name}</div>
+                  <div class="text-xs text-gray-400 mt-1">${c.condition} | ${c.expiry}</div>
+                  <div class="text-xs mt-1 ${c.used ? 'text-gray-400' : 'text-accent-500 font-medium'}">${c.used ? '已使用' : '去消费使用 →'}</div>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function showLotteryRecords() {
+  const modals = document.getElementById('modals');
+  modals.innerHTML = `
+    <div class="modal-overlay" onclick="closeModal()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white px-4 py-3 border-b border-gray-100 flex items-center rounded-t-[20px]">
+          <span class="font-semibold text-sm">抽奖记录</span>
+          <div class="flex-1"></div>
+          <button onclick="closeModal()"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+        </div>
+        <div class="p-4">
+          <div class="flex items-center justify-between mb-4 px-3 py-2 bg-brand-50 rounded-xl">
+            <span class="text-sm text-gray-500">今日抽奖次数</span>
+            <span class="font-bold text-brand-500">${dailyDrawsUsed} / ${dailyDrawsMax}</span>
+          </div>
+          <div class="space-y-2">
+            ${lotteryRecords.length === 0 ? '<div class="empty-state"><i data-lucide="dice-6" class="w-12 h-12 mb-3"></i><p>暂无抽奖记录</p></div>' :
+            lotteryRecords.map(r => `
+              <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                <span class="text-2xl">${r.icon}</span>
+                <div class="flex-1"><div class="font-medium text-sm">${r.prize}</div><div class="text-xs text-gray-400">${r.time}</div></div>
+                ${r.prize === '感谢参与' ? '<span class="text-xs text-gray-300">未中奖</span>' : '<span class="text-xs text-accent-500 font-medium">已发放</span>'}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function showPointsDetail() {
+  const modals = document.getElementById('modals');
+  modals.innerHTML = `
+    <div class="modal-overlay" onclick="closeModal()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white px-4 py-3 border-b border-gray-100 flex items-center rounded-t-[20px]">
+          <span class="font-semibold text-sm">积分明细</span>
+          <div class="flex-1"></div>
+          <button onclick="closeModal()"><i data-lucide="x" class="w-5 h-5 text-gray-400"></i></button>
+        </div>
+        <div class="p-4">
+          <div class="bg-gradient-to-br from-accent-500 to-brand-500 rounded-2xl p-5 text-white text-center mb-4">
+            <p class="text-sm opacity-80">可用积分</p>
+            <p class="text-4xl font-extrabold mt-1">${myPoints.toLocaleString()}</p>
+            <div class="flex justify-center gap-4 mt-3">
+              <button class="bg-white/20 px-4 py-1.5 rounded-full text-sm" onclick="closeModal();showToast('签到成功！+7积分','success');myPoints+=7;updateHeaderPoints()">每日签到</button>
+              <button class="bg-white/20 px-4 py-1.5 rounded-full text-sm" onclick="closeModal();showToast('邀请好友注册可获100积分','info')">邀请好友</button>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm py-2"><span class="text-gray-500">消费返积分</span><span class="font-medium text-green-500">+200</span></div>
+            <div class="flex justify-between text-sm py-2"><span class="text-gray-500">每日签到</span><span class="font-medium text-green-500">+7</span></div>
+            <div class="flex justify-between text-sm py-2"><span class="text-gray-500">兑换-蓝牙耳机</span><span class="font-medium text-red-500">-2,800</span></div>
+            <div class="flex justify-between text-sm py-2"><span class="text-gray-500">邀请好友奖励</span><span class="font-medium text-green-500">+300</span></div>
+            <div class="flex justify-between text-sm py-2"><span class="text-gray-500">兑换-充电宝</span><span class="font-medium text-red-500">-1,500</span></div>
+          </div>
+          <p class="text-xs text-gray-300 text-center mt-4">积分当年有效，于次年12月31日过期</p>
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+// ═══════════ Utilities ═══════════
+function switchTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('[data-tab]').forEach(b => b.className = b.className.replace('tab-active','tab-inactive'));
+  el.className = el.className.replace('tab-inactive','tab-active');
+  document.getElementById('sortBar').style.display = tab === 'lottery' ? 'none' : 'flex';
+  renderProducts();
+}
+
+function sortBy(type) {
+  currentSort = type;
+  document.querySelectorAll('.sort-btn').forEach(b => {
+    const text = b.textContent.trim();
+    b.className = text === '默认' && type === 'default' || text.includes('低到高') && type === 'points_asc' || text.includes('高到低') && type === 'points_desc' || text.includes('热门') && type === 'hot'
+      ? 'sort-btn px-3 py-1.5 rounded-full bg-brand-50 text-brand-600 font-medium whitespace-nowrap'
+      : 'sort-btn px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 whitespace-nowrap';
+  });
+  renderProducts();
+}
+
+function closeModal() { document.getElementById('modals').innerHTML = ''; }
+
+function updateHeaderPoints() { document.getElementById('headerPoints').textContent = myPoints.toLocaleString(); }
+
+function showToast(msg, type = 'info') {
+  const bg = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-gray-800';
+  const t = document.getElementById('toasts');
+  t.innerHTML += `<div class="toast ${bg} text-white text-sm">${msg}</div>`;
+  setTimeout(() => { if (t.firstChild) t.removeChild(t.firstChild); }, 2500);
+}
+
+// Init
+renderProducts();
+lucide.createIcons();
+</script>
+</body>
+</html>
