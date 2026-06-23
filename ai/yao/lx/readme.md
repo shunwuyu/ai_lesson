@@ -96,5 +96,6 @@ demo2
 - 文本 = 一堆食材
 - 分词 切成大小合适的食材块（不大不小刚好下锅）
 - 向量 = 把每一块食材的味道、软硬、品类，变成一组量化数据，方便厨师（大模型）加工计算。
+Token 只是编号，没有语义信息，转为向量能把含义转为数字距离，方便模型计算语义相似度。
 
 https://p26-flow-imagex-sign.byteimg.com/labis/image/9d029aa14f40ce3785849294d2d248d8~tplv-a9rns2rl98-pc_smart_face_crop-v1:512:384.image?lk3s=8e244e95&rcl=2026062310383449E7D4DD5A3109C2D38B&rrcfp=cee388b0&x-expires=2097542331&x-signature=sDIX%2FbfjEouaekADxK0bBfWz3rg%3D
