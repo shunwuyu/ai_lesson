@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS 默认文档流演示</title>
+    <style>
+        /* 统一样式方便观察盒子大小，不改变文档流默认特性 */
+        div {
+            background: #87CEEB;
+            margin: 5px 0;
+            padding: 8px;
+        }
+        span {
+            background: #FFB6C1;
+            padding: 5px;
+            margin: 0 3px;
+        }
+    </style>
+</head>
+<body>
+    <h3>一、块级元素（div、h、p）：独占一行，从上至下垂直排列</h3>
+    <div>块级盒子1（div）</div>
+    <div>块级盒子2（div）</div>
+    <p>p标签也是块级元素，同样独占一行</p>
+
+    <h3>二、内联元素（span、a）：同行从左到右横向排列，宽度不够自动换行</h3>
+    <span>行内元素1</span>
+    <span>行内元素2</span>
+    <span>行内元素3</span>
+    <span>行内元素4</span>
+    <span>行内元素5</span>
+    <span>行内元素6</span>
+    <span>行内元素7</span>
+    <span>行内元素8</span>
+    <span>行内元素9</span>
+    <span>行内元素10</span>
+
+    <h3>三、块级 + 内联混合文档流：块独占行，行内放在块内部横向排列</h3>
+    <div>
+        块容器内部：
+        <span>内嵌行内A</span>
+        <span>内嵌行内B</span>
+        <span>内嵌行内C</span>
+    </div>
+</body>
+</html>
