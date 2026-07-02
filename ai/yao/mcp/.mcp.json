@@ -1,0 +1,10 @@
+
+{
+  "mcpServers": {
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/shunwuyu/workspace/lesson/ai_lesson/ai/yao/mcp"]
+    }
+  }
+}
