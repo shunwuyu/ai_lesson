@@ -37,7 +37,7 @@ const cosineSimilarity = (v1, v2) => {
 const handleInput = async (input) => {
   // 将输入先embedding 转换为向量
   const response = await client.embeddings.create({
-    model: 'text-embedding-ada-002',
+    model: 'text-embedding-v4',
     input  
   })
 

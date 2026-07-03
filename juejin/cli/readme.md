@@ -27,3 +27,5 @@ zod 提供类型校验功能，确保输入参数符合预期格式
 ## demo
 - npm run build 
 - npm run dev @types/node
+
+帮我看看 package.json 里有哪些依赖

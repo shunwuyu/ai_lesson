@@ -12,7 +12,7 @@ const postsWithEmbedding = [];
 
 for (const {title, category} of posts) {
     const response = await client.embeddings.create({
-        model:'text-embedding-ada-002',
+        model:'text-embedding-v4',
         input:`标题：${title}; 分类：${category}`
     })
     postsWithEmbedding.push({
