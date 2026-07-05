@@ -1,0 +1,5 @@
+### 测试分页查询参数依赖函数
+GET http://localhost:8000/items?q=item&skip=10&limit=20
+GET http://localhost:8000/users?q=user&skip=10&limit=20
+GET http://localhost:8000/user/list?page=1&size=10
+GET http://localhost:8000/movie/list?page=1&size=10
