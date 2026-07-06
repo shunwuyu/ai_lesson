@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import 'dotenv/config';   // 这么引入就行
 import { ChatOpenAI } from '@langchain/openai';
 import { tool } from '@langchain/core/tools';
 import {
@@ -11,7 +11,7 @@ import fs from 'node:fs/promises';
 import { z } from 'zod';
 
 const model = new ChatOpenAI({
-    modelName: process.env.MODEL_NAME || 'qwen-coder-turbo',
+    modelName: process.env.MODEL_NAME || 'deepseek-v4-flash',
     apiKey: process.env.OPENAI_API_KEY,
     temperature: 0,
     configuration: {

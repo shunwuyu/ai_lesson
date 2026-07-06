@@ -3,7 +3,7 @@ import { ChatOpenAI } from '@langchain/openai';
 dotenv.config();
 
 const model = new ChatOpenAI({
-    modelName: process.env.MODEL_NAME,
+    modelName: process.env.MODEL_NAME || "deepseek-v4-flash",
     apiKey: process.env.OPENAI_API_KEY,
     configuration: {
         baseURL: process.env.OPENAI_BASE_URL,
