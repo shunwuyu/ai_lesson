@@ -12,7 +12,11 @@
 
 首先， node 里如何执行命令呢？用 child_process 这个内置模块。
 
+该模块用于创建**子进程**，执行外部命令、脚本，实现多进程调度与进程间通信（IPC = Inter（相互）-Process Communication）。
 
+Node.js 主进程自己有一堆业务逻辑要处理，遇到执行 shell 命令、运行外部脚本这类耗时任务，就交给 child_process 创建的子进程单独跑，不用主线程阻塞等待，等子进程执行完毕再把结果回调通知主进程就行。
+
+创建 src/node-exec.mjs
 
 - const command = 'echo -e "n\nn" | pnpm create vite react-todo-app --template react-ts';
 

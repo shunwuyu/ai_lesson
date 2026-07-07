@@ -6,8 +6,8 @@
 // 产卵 
 import { spawn } from'node:child_process';
 
-// const command = 'ls -la';
-const command = 'echo -e "n\nn" | pnpm create vite react-todo-app --template react-ts';
+const command = 'ls -la';
+// const command = 'echo -e "n\nn" | pnpm create vite react-todo-app --template react-ts';
 const cwd = process.cwd(); // 当前工作目录
 
 // 解析命令和参数
