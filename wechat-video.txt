@@ -1,0 +1,19 @@
+- generic [active] [ref=e1]:
+  - img
+  - generic [ref=e6]:
+    - generic [ref=e10]: 视频号
+    - img [ref=e12]
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19] [cursor=pointer]: "当我们纠结于两个选择时，Paul Graham的建议是评估哪个选择让你站在上风位，Stay Upwind，就是大风吹来的那个方向，好处是保证你在下风向上有更多的选择。他的另外一条建议是不要做规划，伟大的事情很多都不是计划出来的。伟大不能被计划。#人生选择 #StayUpwind #创业教父 #选择"
+        - generic [ref=e20]: 2026年7月2日
+      - generic [ref=e24]:
+        - generic [ref=e26] [cursor=pointer]:
+          - img [ref=e28]
+          - generic [ref=e29]: 晓辉博士
+          - img [ref=e31]
+        - generic [ref=e33]:
+          - generic [ref=e36] [cursor=pointer]: "675"
+          - generic [ref=e39] [cursor=pointer]: "1041"
+          - generic [ref=e42] [cursor=pointer]: "281"
+          - generic [ref=e45] [cursor=pointer]: "51"

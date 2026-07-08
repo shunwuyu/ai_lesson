@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hello Everyone — Conference Talk</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ===========================================
+   CSS CUSTOM PROPERTIES (THEME)
+   Dark Studio — indigo gradient on deep charcoal
+   =========================================== */
+:root {
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #888888;
+  --text-muted: #555555;
+  --accent: #6366f1;
+  --accent-light: #a78bfa;
+  --accent-glow: rgba(99,102,241,0.15);
+  --card-bg: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.06);
+  --stage-bg: #000000;
+  --slide-bg: #0f0f0f;
+  --font-display: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --title-size: 100px;
+  --section-size: 72px;
+  --body-size: 26px;
+  --slide-padding: 120px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-normal: 0.6s;
+}
+
+/* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   =========================================== */
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--stage-bg, #000); }
+.deck-viewport { position: fixed; inset: 0; overflow: hidden; background: var(--stage-bg, #000); }
+.deck-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 0 0; background: var(--slide-bg, #fff); }
+.slide { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; display: block; visibility: hidden; opacity: 0; pointer-events: none; background: var(--slide-bg, #fff); }
+.slide.active, .slide.visible { visibility: visible; opacity: 1; pointer-events: auto; z-index: 1; }
+img, video, canvas, svg { max-width: 100%; max-height: 100%; }
+.deck-controls { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 1000; }
+@media print {
+  html, body { width: 1920px; height: auto; overflow: visible; background: #fff; }
+  .deck-viewport { position: static; overflow: visible; background: #fff; }
+  .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
+  .slide { position: relative; display: block !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; width: 1920px; height: 1080px; break-after: page; page-break-after: always; }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+  .deck-controls { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+}
+
+/* ===========================================
+   SLIDE PROGRESS (outside stage)
+   =========================================== */
+.slide-progress { position: fixed; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); z-index: 999; transition: width 0.4s var(--ease-out-expo); }
+.slide-counter { position: fixed; bottom: 16px; right: 24px; font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); z-index: 999; letter-spacing: 0.05em; }
+
+/* ===========================================
+   DARK STUDIO — GLOBAL STYLES
+   =========================================== */
+.slide { font-family: var(--font-display); color: var(--text-primary); }
+.grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 80px 80px; pointer-events: none; }
+.orb { position: absolute; border-radius: 50%; pointer-events: none; }
+.side-number { position: absolute; right: 80px; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-weight: 700; font-size: 180px; color: rgba(255,255,255,0.03); line-height: 1; z-index: 0; pointer-events: none; }
+
+/* ===========================================
+   REVEAL ANIMATIONS
+   =========================================== */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity var(--duration-normal) var(--ease-out-expo), transform var(--duration-normal) var(--ease-out-expo); }
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.reveal:nth-child(1) { transition-delay: 0.05s; }
+.reveal:nth-child(2) { transition-delay: 0.15s; }
+.reveal:nth-child(3) { transition-delay: 0.25s; }
+.reveal:nth-child(4) { transition-delay: 0.35s; }
+.reveal:nth-child(5) { transition-delay: 0.45s; }
+.reveal:nth-child(6) { transition-delay: 0.55s; }
+.reveal:nth-child(7) { transition-delay: 0.65s; }
+.reveal:nth-child(8) { transition-delay: 0.75s; }
+
+/* ===========================================
+   SLIDE 1 — TITLE
+   =========================================== */
+.slide-1 .content { position: absolute; left: var(--slide-padding); top: 50%; transform: translateY(-50%); z-index: 2; }
+.slide-1 .tag { display: inline-block; font-family: var(--font-mono); font-size: 14px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(99,102,241,0.3); padding: 8px 20px; margin-bottom: 40px; }
+.slide-1 h1 { font-weight: 700; font-size: 120px; line-height: 1; margin-bottom: 20px; }
+.slide-1 h1 .highlight { background: linear-gradient(135deg, var(--accent), var(--accent-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.slide-1 .sub { font-size: 24px; color: var(--text-secondary); line-height: 1.5; max-width: 700px; }
+.slide-1 .meta { position: absolute; bottom: 60px; left: var(--slide-padding); display: flex; gap: 48px; }
+.slide-1 .meta-item { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.slide-1 .meta-item span { color: var(--text-secondary); display: block; font-size: 22px; font-family: var(--font-display); font-weight: 700; margin-bottom: 4px; text-transform: none; letter-spacing: 0; }
+.slide-1 .orb-1 { top: -300px; right: -200px; width: 900px; height: 900px; background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%); animation: fadeIn 1.5s 0.3s both; }
+.slide-1 .orb-2 { bottom: -400px; left: -200px; width: 800px; height: 800px; background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%); animation: fadeIn 2s 0.5s both; }
+
+/* ===========================================
+   SLIDE 2 — PROJECTS
+   =========================================== */
+.slide-2 .content { position: absolute; left: var(--slide-padding); right: var(--slide-padding); top: 180px; bottom: 80px; z-index: 2; }
+.slide-2 .section-label { font-family: var(--font-mono); font-size: 14px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px; }
+.slide-2 h2 { font-weight: 700; font-size: var(--section-size); line-height: 1.1; margin-bottom: 60px; }
+.slide-2 .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.slide-2 .project-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 40px; transition: border-color 0.3s, background 0.3s; }
+.slide-2 .project-card:hover { border-color: rgba(99,102,241,0.3); background: rgba(99,102,241,0.05); }
+.slide-2 .project-name { font-weight: 700; font-size: 32px; margin-bottom: 8px; }
+.slide-2 .project-stars { font-family: var(--font-mono); font-size: 20px; color: var(--accent); margin-bottom: 4px; }
+.slide-2 .project-stars small { font-size: 14px; color: var(--text-muted); }
+.slide-2 .project-desc { font-size: 18px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ===========================================
+   SLIDE 3 — WHY SMALL PROJECTS
+   =========================================== */
+.slide-3 .content { position: absolute; left: var(--slide-padding); right: var(--slide-padding); top: 180px; bottom: 80px; z-index: 2; }
+.slide-3 .section-label { font-family: var(--font-mono); font-size: 14px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px; }
+.slide-3 h2 { font-weight: 700; font-size: var(--section-size); line-height: 1.1; margin-bottom: 60px; }
+.slide-3 .reason-list { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+.slide-3 .reason-item { display: flex; gap: 24px; align-items: flex-start; }
+.slide-3 .reason-num { font-family: var(--font-mono); font-size: 48px; font-weight: 700; color: var(--accent); line-height: 1; flex-shrink: 0; width: 60px; }
+.slide-3 .reason-text h3 { font-weight: 600; font-size: 24px; margin-bottom: 8px; }
+.slide-3 .reason-text p { font-size: 18px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ===========================================
+   SLIDE 4 — FINDING IDEAS
+   =========================================== */
+.slide-4 .content { position: absolute; left: var(--slide-padding); right: var(--slide-padding); top: 180px; bottom: 80px; z-index: 2; }
+.slide-4 .section-label { font-family: var(--font-mono); font-size: 14px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px; }
+.slide-4 h2 { font-weight: 700; font-size: var(--section-size); line-height: 1.1; margin-bottom: 50px; }
+.slide-4 .idea-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
+.slide-4 .idea-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 36px; text-align: center; }
+.slide-4 .idea-icon { font-size: 48px; margin-bottom: 20px; display: block; }
+.slide-4 .idea-card h3 { font-weight: 600; font-size: 22px; margin-bottom: 12px; }
+.slide-4 .idea-card p { font-size: 17px; color: var(--text-secondary); line-height: 1.5; }
+.slide-4 .idea-footer { text-align: center; margin-top: 40px; font-size: 20px; color: var(--text-secondary); }
+.slide-4 .idea-footer em { color: var(--accent); font-style: normal; font-weight: 600; }
+
+/* ===========================================
+   SLIDE 5 — WORKING WITH LLMS
+   =========================================== */
+.slide-5 .content { position: absolute; left: var(--slide-padding); right: var(--slide-padding); top: 180px; bottom: 80px; z-index: 2; }
+.slide-5 .section-label { font-family: var(--font-mono); font-size: 14px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px; }
+.slide-5 h2 { font-weight: 700; font-size: var(--section-size); line-height: 1.1; margin-bottom: 50px; }
+.slide-5 .tip-list { display: flex; flex-direction: column; gap: 20px; max-width: 1200px; }
+.slide-5 .tip-item { display: flex; gap: 24px; align-items: flex-start; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 28px 36px; }
+.slide-5 .tip-num { font-family: var(--font-mono); font-size: 20px; font-weight: 700; color: var(--accent); width: 40px; flex-shrink: 0; line-height: 1.4; }
+.slide-5 .tip-text { font-size: 22px; line-height: 1.4; font-weight: 500; }
+
+/* ===========================================
+   KEYFRAMES
+   =========================================== */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="deck-viewport">
+  <main class="deck-stage" id="deckStage">
+
+    <!-- ===== SLIDE 1: Hello Everyone ===== -->
+    <section class="slide slide-1 active visible">
+      <div class="grid-bg reveal-blur" style="animation:fadeIn 1s 0.1s both"></div>
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="side-number">01</div>
+      <div class="content">
+        <div class="tag reveal">Conference Talk 2026</div>
+        <h1 class="reveal">Hello<br><span class="highlight">Everyone</span></h1>
+        <div class="sub reveal">A journey through small projects, big ideas,<br>and what I've learned building them</div>
+        <div class="meta">
+          <div class="meta-item reveal"><span>5</span> Projects Built</div>
+          <div class="meta-item reveal"><span>28.8k</span> GitHub Stars</div>
+          <div class="meta-item reveal"><span>3</span> Key Lessons</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 2: 我开发过的一些小型项目 ===== -->
+    <section class="slide slide-2">
+      <div class="grid-bg" style="animation:fadeIn 1s 0.1s both"></div>
+      <div class="orb orb-1" style="top:-200px;right:-150px;width:600px;height:600px;background:radial-gradient(circle,rgba(99,102,241,0.08) 0%,transparent 70%)"></div>
+      <div class="side-number">02</div>
+      <div class="content">
+        <div class="section-label reveal">Projects</div>
+        <h2 class="reveal">我开发过的一些小型项目</h2>
+        <div class="project-grid">
+          <div class="project-card reveal">
+            <div class="project-name">Frontend Slides</div>
+            <div class="project-stars">⭐ 22,000 <small>GitHub Stars</small></div>
+            <div class="project-desc">零依赖的 HTML 演示文稿生成器，支持动画、模板和 PPT 转换。开源社区广泛使用。</div>
+          </div>
+          <div class="project-card reveal">
+            <div class="project-name">Follow Builders</div>
+            <div class="project-stars">⭐ 5,300 <small>GitHub Stars</small></div>
+            <div class="project-desc">追踪你关注的创作者动态，聚合多平台更新。为独立开发者打造的发现工具。</div>
+          </div>
+          <div class="project-card reveal">
+            <div class="project-name">Tab Out</div>
+            <div class="project-stars">⭐ 1,500 <small>GitHub Stars</small></div>
+            <div class="project-desc">浏览器标签页管理器，轻松组织和切换工作流。简约而不简单的效率工具。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 3: 为什么要做小型产品？ ===== -->
+    <section class="slide slide-3">
+      <div class="grid-bg" style="animation:fadeIn 1s 0.1s both"></div>
+      <div class="orb orb-2" style="bottom:-250px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,0.08) 0%,transparent 70%)"></div>
+      <div class="side-number">03</div>
+      <div class="content">
+        <div class="section-label reveal">Philosophy</div>
+        <h2 class="reveal">为什么要做小型产品？</h2>
+        <div class="reason-list">
+          <div class="reason-item reveal">
+            <div class="reason-num">01</div>
+            <div class="reason-text">
+              <h3>始于微小的起点</h3>
+              <p>所有宏大的事物，都始于微小的起点。每个改变世界的产品，最初都只是一行代码、一个想法。</p>
+            </div>
+          </div>
+          <div class="reason-item reveal">
+            <div class="reason-num">02</div>
+            <div class="reason-text">
+              <h3>创作源于热爱</h3>
+              <p>创作源于热爱，开发只为求知。不是为了追逐风口，而是享受创造的纯粹乐趣。</p>
+            </div>
+          </div>
+          <div class="reason-item reveal">
+            <div class="reason-num">03</div>
+            <div class="reason-text">
+              <h3>有主见才能生存</h3>
+              <p>有鲜明主见的产品才能长久生存。与其做随波逐流的克隆品，不如做独一无二的存在。</p>
+            </div>
+          </div>
+          <div class="reason-item reveal">
+            <div class="reason-num">04</div>
+            <div class="reason-text">
+              <h3>负担得起的试错</h3>
+              <p>小型项目你才负担得起试错成本。失败了大不了重来，这种自由是创新的土壤。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 4: 如何挖掘产品创意 ===== -->
+    <section class="slide slide-4">
+      <div class="grid-bg" style="animation:fadeIn 1s 0.1s both"></div>
+      <div class="orb orb-1" style="top:-150px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,0.08) 0%,transparent 70%)"></div>
+      <div class="side-number">04</div>
+      <div class="content">
+        <div class="section-label reveal">Discovery</div>
+        <h2 class="reveal">如何挖掘产品创意</h2>
+        <div class="idea-grid">
+          <div class="idea-card reveal">
+            <span class="idea-icon">🔍</span>
+            <h3>从自身痛点出发</h3>
+            <p>最好的创意往往来自你亲身经历的麻烦。解决自己的问题，就是解决一群人的问题。</p>
+          </div>
+          <div class="idea-card reveal">
+            <span class="idea-icon">👀</span>
+            <h3>观察被忽视的需求</h3>
+            <p>在大产品的夹缝中寻找被忽视的用户需求。小众市场里藏着大机会。</p>
+          </div>
+          <div class="idea-card reveal">
+            <span class="idea-icon">🛠️</span>
+            <h3>重构现有工具</h3>
+            <p>面对一个复杂的现有工具，问自己：能不能做得更简单、更快、更优雅？</p>
+          </div>
+        </div>
+        <div class="idea-footer reveal">
+          <em>创意的关键不是想一个全新的东西，而是发现一个更好的方式做旧的事情。</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 5: 如何与大模型高效沟通 ===== -->
+    <section class="slide slide-5">
+      <div class="grid-bg" style="animation:fadeIn 1s 0.1s both"></div>
+      <div class="orb orb-2" style="bottom:-200px;right:-150px;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,0.08) 0%,transparent 70%)"></div>
+      <div class="side-number">05</div>
+      <div class="content">
+        <div class="section-label reveal">Best Practices</div>
+        <h2 class="reveal">如何与大模型高效沟通</h2>
+        <div class="tip-list">
+          <div class="tip-item reveal">
+            <div class="tip-num">01</div>
+            <div class="tip-text">选用性能最优的模型，不要将就</div>
+          </div>
+          <div class="tip-item reveal">
+            <div class="tip-num">02</div>
+            <div class="tip-text">把它视作你的联合创始人，而非打工员工</div>
+          </div>
+          <div class="tip-item reveal">
+            <div class="tip-num">03</div>
+            <div class="tip-text">大胆尝试各种方案，不必吝惜调用额度</div>
+          </div>
+          <div class="tip-item reveal">
+            <div class="tip-num">04</div>
+            <div class="tip-text">上线前务必精简、砍掉多余功能</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Slide progress bar -->
+<div class="slide-progress" id="slideProgress" style="width:20%"></div>
+<div class="slide-counter" id="slideCounter">01 / 05</div>
+
+<!-- Edit toggle -->
+<div class="edit-hotzone" id="editHotzone"></div>
+<button class="edit-toggle" id="editToggle" title="Edit (E)">✏️ Edit</button>
+
+<style>
+/* ===========================================
+   INLINE EDITING
+   =========================================== */
+.edit-hotzone { position: fixed; top: 0; left: 0; width: 80px; height: 80px; z-index: 10000; cursor: pointer; }
+.edit-toggle { font-family: var(--font-mono); position: fixed; top: 12px; left: 12px; z-index: 10001; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(8px); }
+.edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+.edit-toggle:hover { background: rgba(255,255,255,0.2); }
+[contenteditable="true"]:focus { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+</style>
+
+<script>
+/* ===========================================
+   SLIDE PRESENTATION CONTROLLER
+   =========================================== */
+class SlidePresentation {
+  constructor() {
+    this.slides = document.querySelectorAll('.slide');
+    this.currentSlide = 0;
+    this.stage = document.getElementById('deckStage');
+    this.progress = document.getElementById('slideProgress');
+    this.counter = document.getElementById('slideCounter');
+    this.setupStageScale();
+    this.setupKeyboardNav();
+    this.setupTouchNav();
+    this.setupWheelNav();
+    this.showSlide(0);
+  }
+  setupStageScale() {
+    const scale = () => {
+      const f = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      const x = (window.innerWidth - 1920 * f) / 2;
+      const y = (window.innerHeight - 1080 * f) / 2;
+      this.stage.style.transform = `translate(${x}px, ${y}px) scale(${f})`;
+    };
+    scale(); window.addEventListener('resize', scale);
+  }
+  setupKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target.getAttribute('contenteditable')) return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); this.next(); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); this.prev(); }
+    });
+  }
+  setupTouchNav() {
+    let sx = 0; let sy = 0;
+    this.stage.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; });
+    this.stage.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - sx;
+      const dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > Math.abs(dy)) { if (dx < -50) this.next(); if (dx > 50) this.prev(); }
+      else { if (dy < -50) this.next(); if (dy > 50) this.prev(); }
+    });
+  }
+  setupWheelNav() {
+    let ticking = false;
+    this.stage.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (!ticking) { ticking = true; setTimeout(() => ticking = false, 600); if (e.deltaY > 0) this.next(); else this.prev(); }
+    }, { passive: false });
+  }
+  showSlide(index) {
+    this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+    this.slides.forEach((s, i) => { s.classList.toggle('active', i === this.currentSlide); s.classList.toggle('visible', i === this.currentSlide); });
+    const pct = ((this.currentSlide + 1) / this.slides.length) * 100;
+    this.progress.style.width = pct + '%';
+    this.counter.textContent = String(this.currentSlide + 1).padStart(2, '0') + ' / ' + String(this.slides.length).padStart(2, '0');
+  }
+  next() { if (this.currentSlide < this.slides.length - 1) this.showSlide(this.currentSlide + 1); }
+  prev() { if (this.currentSlide > 0) this.showSlide(this.currentSlide - 1); }
+}
+
+/* ===========================================
+   INLINE EDITING
+   =========================================== */
+const editToggle = document.getElementById('editToggle');
+const hotzone = document.getElementById('editHotzone');
+let hideTimeout = null;
+let editorActive = false;
+
+const editor = {
+  get isActive() { return editorActive; },
+  toggleEditMode() {
+    editorActive = !editorActive;
+    editToggle.classList.toggle('active', editorActive);
+    document.querySelectorAll('.slide .reveal, h1, h2, h3, p, .project-name, .project-desc, .tag, .sub, .tip-text, .idea-card h3, .idea-card p, .idea-footer, .reason-text h3, .reason-text p').forEach(el => {
+      if (editorActive) {
+        el.setAttribute('contenteditable', 'true');
+        el.style.cursor = 'text';
+      } else {
+        el.removeAttribute('contenteditable');
+        el.style.cursor = '';
+      }
+    });
+    if (!editorActive) editToggle.classList.remove('show');
+  },
+  saveContent() { /* auto-saved via contenteditable */ }
+};
+
+hotzone.addEventListener('mouseenter', () => { clearTimeout(hideTimeout); editToggle.classList.add('show'); });
+hotzone.addEventListener('mouseleave', () => { hideTimeout = setTimeout(() => { if (!editorActive) editToggle.classList.remove('show'); }, 400); });
+editToggle.addEventListener('mouseenter', () => { clearTimeout(hideTimeout); });
+editToggle.addEventListener('mouseleave', () => { hideTimeout = setTimeout(() => { if (!editorActive) editToggle.classList.remove('show'); }, 400); });
+hotzone.addEventListener('click', () => { editor.toggleEditMode(); });
+editToggle.addEventListener('click', () => { editor.toggleEditMode(); });
+document.addEventListener('keydown', (e) => {
+  if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) editor.toggleEditMode();
+});
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); alert('Content saved locally!'); }
+});
+
+new SlidePresentation();
+</script>
+</body>
+</html>

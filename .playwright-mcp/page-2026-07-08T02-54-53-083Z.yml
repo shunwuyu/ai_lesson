@@ -1,0 +1,24 @@
+- generic [active] [ref=f5e1]:
+  - main [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - generic: "01"
+      - generic [ref=f5e5]:
+        - generic [ref=f5e6]: Conference Talk 2026
+        - heading "Hello Everyone" [level=1] [ref=f5e7]:
+          - text: Hello
+          - text: Everyone
+        - generic [ref=f5e8]:
+          - text: A journey through small projects, big ideas,
+          - text: and what I've learned building them
+        - generic [ref=f5e9]:
+          - generic [ref=f5e10]:
+            - generic [ref=f5e11]: "5"
+            - text: Projects Built
+          - generic [ref=f5e12]:
+            - generic [ref=f5e13]: 28.8k
+            - text: GitHub Stars
+          - generic [ref=f5e14]:
+            - generic [ref=f5e15]: "3"
+            - text: Key Lessons
+  - generic [ref=f5e17]: 01 / 05
+  - button "✏️ Edit"
