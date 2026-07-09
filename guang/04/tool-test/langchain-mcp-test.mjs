@@ -4,9 +4,10 @@ import { ChatOpenAI } from '@langchain/openai';
 import chalk from 'chalk';
 import { HumanMessage, SystemMessage, ToolMessage } from '@langchain/core/messages';
 
-const model = new ChatOpenAI({ 
-    modelName: "qwen-plus",
+const model = new ChatOpenAI({
+    modelName: process.env.MODEL_NAME || 'deepseek-v4-flash',
     apiKey: process.env.OPENAI_API_KEY,
+    temperature: 0,
     configuration: {
         baseURL: process.env.OPENAI_BASE_URL,
     },
@@ -27,7 +28,7 @@ const tools = await mcpClient.getTools();
 const modelWithTools = model.bindTools(tools);
 
 const res = await mcpClient.listResources();
-
+console.log(res, '////////');
 let resourceContent = '';
 for (const [serverName, resources] of Object.entries(res)) {
     for (const resource of resources) {
@@ -36,9 +37,14 @@ for (const [serverName, resources] of Object.entries(res)) {
     }
 }
 
+console.log(resourceContent, '////////');
+
+
+
+
 async function runAgentWithTools(query, maxIterations = 30) {
     const messages = [
-        new SystemMessage(resourceContent),
+        // new SystemMessage(resourceContent),
         new HumanMessage(query)
     ];
 
@@ -67,12 +73,14 @@ async function runAgentWithTools(query, maxIterations = 30) {
             }
         }
     }
-
+    // 循环达最大次数 30 次仍无最终回答，返回最后一轮 AI 输出兜底。
+    // 若最后一轮 AI 只返回 tool_calls 无文本 content，content为空字符串。
     return messages[messages.length - 1].content;
 }
 
 
 // await runAgentWithTools("查一下用户 002 的信息");
-await runAgentWithTools("MCP Server 的使用指南是什么");
+// await runAgentWithTools("MCP Server 的使用指南是什么");
+// 关闭所有 MCP 子进程与通信通道，释放进程资源。
 
 await mcpClient.close();
