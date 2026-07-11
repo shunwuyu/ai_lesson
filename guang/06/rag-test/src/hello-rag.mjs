@@ -6,6 +6,11 @@ import "dotenv/config";
 // 从 openai 包导入聊天模型和嵌入模型类
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 // 从 core/documents 导入文档类，这是 LangChain 处理文本的标准格式
+// LangChain 的基础数据单元，包含 pageContent（文本）和 metadata（元数据）
+// 书被切开的其中一页（或一段）
+//  - 整本书太长，直接 embedding 会丢失细节，检索也不准                                 
+//   - 所以先把书切成段落/片段，每段封装成一个 Document                                  
+//   - 每个 Document 独立 embedding，检索时才能精确找到"具体哪一段"回答了问题
 import { Document } from "@langchain/core/documents";
 // 从 classic/vectorstores/memory 导入内存向量数据库（适合测试和小数据量）
 import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";

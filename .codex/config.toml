@@ -4,3 +4,8 @@ url = "http://127.0.0.1:3845/mcp"
 [mcp_servers.playwright]
 command = "npx"
 args = ["@playwright/mcp@latest"]
+
+[mcp_servers.my-mcp-server]
+command = "node"
+args = ["my-mcp-server.mjs"]
+cwd = "/Users/shunwuyu/workspace/lesson/ai_lesson/guang/04/tool-test"

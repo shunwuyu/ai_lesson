@@ -28,7 +28,7 @@ https://developer.amap.com/
 类型选 web 服务就行。
 
 "amap-maps-streamableHTTP": {
-    "url": "https://mcp.amap.com/mcp?key=cf385e5d7f12309e54eaa6a9180e068d"
+    "url": "https://mcp.amap.com/mcp?key=f58f8879063a5"
 }
 从北京西站到故宫怎么走？
 这就是 http 的接入方式。

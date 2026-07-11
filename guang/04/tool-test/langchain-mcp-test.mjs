@@ -82,5 +82,12 @@ async function runAgentWithTools(query, maxIterations = 30) {
 // await runAgentWithTools("查一下用户 002 的信息");
 // await runAgentWithTools("MCP Server 的使用指南是什么");
 // 关闭所有 MCP 子进程与通信通道，释放进程资源。
-
+// 关闭和 MCP Server 的通信通道
+// 结束 my-mcp-server.mjs 这个被启动出来的子进程
+// 释放相关资源，避免脚本一直挂着不退出
+// langchain-mcp-test.mjs
+//   -> 启动一个 node 子进程
+//   -> 子进程运行 my-mcp-server.mjs
+//   -> 主进程通过 stdio 跟它对话
+//   -> close() 时把这个连接和子进程一起关掉
 await mcpClient.close();

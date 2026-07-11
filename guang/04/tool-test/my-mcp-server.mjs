@@ -48,7 +48,7 @@ server.registerTool('query_user', {
     ],
   };
 });
-
+// MCP Server 的使用指南是什么？
 // 修复 registerResource 参数顺序：uri -> name -> options -> handler
 server.registerResource(
   '使用指南',            // 第一位：资源名称
