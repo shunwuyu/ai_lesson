@@ -24,7 +24,7 @@
 花时间打磨指令， 输出质量确实上来了。
 但是每次对话都是从0开始， 你花10分钟调教好的AI,关掉对话框就全忘了。
 
-所以这两个阶段，本质都一样， 都在去优化单个对话。
+所以这两个阶段，本质都一样， 都在优化单个对话。
 所以， 来到第三阶段
 
 - 去构建AI的工作系统
@@ -61,23 +61,22 @@ claude, 他就按手册来。
 - skills.pub 300多个经过筛选的。
 - skills.sh 看数据， 24小时安装量， 历史总量， 1小时趋势
 想知道大家都在用什么
-- skillsmp 
-  特定场景skill 
 
-- 装一个find-skills 的skill
-  说想做什么， 它帮我们找， 还能判断哪个更适合
 
 ## 如何安装？
 
 - 把链接丢给AI， 告诉claude 帮我安装这个。
   
-
   Agent Reach 
   
   youtube 小红书， twitter, 公众号， 一句话去跨平台搜素材。还能直接去
   拉视频字幕。
 
+  给你的 AI Agent 一键装上互联网能力
+
   找素材这件事， 基本不用手动了。
+
+  帮我安装 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md
 
   帮我识别https://weixin.qq.com/sph/AvuhdD3M96 返回字幕文案
 

@@ -1,12 +1,14 @@
 ## 给我3分钟，让你看到一种新的工作方式
 
-- 开了一小时会，要用半小时整理回忆纪要
+- 开了一小时会，要用半小时整理会议纪要
     待办事项， 谁负责， 截止时间
 
 - skill-creator 
 官方提供 
 npx skills add https://github.com/anthropics/skills --skill skill-creator
 符合官方规范的skill 
+
+skill-creator：一个帮助 Agent 根据已有任务或工作流程，自动生成可复用 Skill（包括 skill.md、提示词和所需文件结构）的 Skill，用于把一次性的能力沉淀成可重复使用的插件。
 
 请帮我创建一个skill，这个skill用于生成会议纪要
 根据用户提供的文字稿，生成会议纪要，具体流程为：
