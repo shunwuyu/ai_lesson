@@ -1,3 +1,5 @@
+- 首先讲：Uint8Array
+
 - 如果 LLM 的返回内容可能包含 Markdown（如标题、列表、代码块、加粗等），那么使用 markdown-it 将其转换为 HTML 再渲染到页面上，是最佳实践。
 
 

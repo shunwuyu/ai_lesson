@@ -34,17 +34,17 @@ const update = async () => {
   content.value = "思考中...";
   htmlContent.value = md.render(content.value);
 
-  const endpoint = 'https://api.moonshot.cn/v1/chat/completions';
+  const endpoint = 'https://api.openai.com/v1/chat/completions';
+
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${import.meta.env.VITE_MOONSHOT_API_KEY}`
+    Authorization: `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY}`
   };
-
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: headers,
     body: JSON.stringify({
-      model: 'moonshot-v1-8k',
+      model: 'deepseek-v4-flash',
       messages: [{ role: 'user', content: question.value }],
       stream: stream.value,
     })
