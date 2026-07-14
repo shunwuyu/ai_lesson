@@ -27,7 +27,7 @@ const update = async () => {
   });
 
   if (stream.value) {
-    // ReadableStream<Uint8Array>
+    // ReadableStream<Uint8Array> 标准stream API
     // 可读流，像水管一样一边收一边读，不用等全部下完。
     // ReadableStream 是水管，getReader() 是水龙头。
     const reader = response.body?.getReader();
