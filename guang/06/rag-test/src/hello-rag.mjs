@@ -50,6 +50,8 @@ const documents = [
   new Document({
     pageContent: `光光是一个活泼开朗的小男孩，他有一双明亮的大眼睛，总是带着灿烂的笑容。光光最喜欢的事情就是和朋友们一起玩耍，他特别擅长踢足球，每次在球场上奔跑时，就像一道阳光一样充满活力。`,
     // metadata 用于后续过滤或溯源，不参与向量化计算，但非常有用
+    // 向量化只读取 pageContent metadata 用来后续筛选匹配数据、溯源文档信息 
+    // 比如原网页， 原文章
     metadata: { 
       chapter: 1, 
       character: "光光", 
@@ -119,14 +121,19 @@ const documents = [
 
 // 核心步骤：将上述 documents 数组中的所有文本通过 embeddings 转换成向量，并存入内存数据库
 // 这一步完成后，我们就拥有了一个可以通过“语义”搜索的知识库
+// 放在内存中 
 const vectorStore = await MemoryVectorStore.fromDocuments(
   documents,
   embeddings,
 );
 
+console.log(vectorStore.memoryVectors);
+
 // 将向量数据库转换为“检索器 (Retriever)”
 // retriever 是一个标准接口，输入问题，输出最相关的文档列表
 // { k: 3 } 表示每次检索只返回相似度最高的 3 个文档片段
+// 向量数据库只是仓库。Retriever 相当于专门的翻找员，规定只挑
+//  3 条最匹配内容，LangChain 只会调用翻找员干活。
 const retriever = vectorStore.asRetriever({ k: 3 });
 
 // 定义要测试的问题列表
@@ -153,6 +160,7 @@ for (const question of questions) {
   // similaritySearchWithScore 返回的是 [Document, score] 的元组
   // 注意：OpenAI 的 distance 通常是欧氏距离或余弦距离，数值越小越相似
   const scoredResults = await vectorStore.similaritySearchWithScore(question, 3);
+  console.log(scoredResults, '///////');
 
   // --- 阶段 B: 日志输出 (调试用) ---
   console.log("\n【检索到的文档及相似度评分】");
@@ -165,8 +173,7 @@ for (const question of questions) {
     // 提取原始分数
     const score = scoredResult ? scoredResult[1] : null;
     
-    // 简单的分数转换逻辑：假设 score 是距离 (0 最相似)，这里尝试将其转换为类似相似度的概念 (1 - distance)
-    // 注意：不同向量库的 score 含义不同，有的直接是相似度 (0-1)，有的是距离。
+    // 把距离还原成余弦相似度 越大越相似
     const similarity = score !== null ? (1 - score).toFixed(4) : "N/A";
     
     console.log(`\n[文档 ${i + 1}] 相似度指标: ${similarity} (原始分: ${score})`);
