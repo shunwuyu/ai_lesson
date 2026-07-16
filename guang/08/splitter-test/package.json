@@ -11,8 +11,12 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@langchain/community": "^1.1.29",
     "@langchain/core": "^1.1.29",
+    "@langchain/openai": "^1.5.5",
     "@langchain/textsplitters": "^1.0.1",
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.4.2",
     "js-tiktoken": "^1.0.21"
   }
 }

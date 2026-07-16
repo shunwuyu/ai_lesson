@@ -5,11 +5,18 @@
 1.  聊聊这张图
 
 - 知识可能有各种来源，比如一个视频、一个 pdf、一个网页、一个 word 文档
+Loader 就像各式各样食材（PDF、Word、网页、视频）的处理厨师，把格式杂乱的原材料，统一切制成干净标准的文本食材（Document）交给后面工序。
 - 各种 loader 从中提取信息，把它们转换成 Document
 - 但是 Document 可能会很大，需要用 Splitter 分割成一个个的比较小的 Document（chunk）
     一本书，某个问题的答案就在哪个自然段
 - 用嵌入模型，把分块的文档向量化后存入向量数据库。
 - RAG prompt embedding 后 相识度查询出相关片段， 加入prompt
+
+准确运行逻辑（以 LangChain 的RecursiveCharacterTextSplitter举例）
+第一步：优先用换行符\n做单元拆分，先拆成一行行的片段；
+第二步：它不会单行就生成一个 chunk，循环把单行内容累积加入当前块；
+当拼接后的总字符长度到达chunk‑size上限，结束当前 Chunk，开启下一个 Chunk；
+配套参数chunk_overlap：下一个 chunk 会携带上一段末尾一部分文本，保障上下文不割裂。
 
 2. sperator 和 chunk size
 
