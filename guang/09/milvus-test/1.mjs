@@ -61,11 +61,11 @@ async function main() {
     { vector: [0.5, 0.6, 0.7, 0.8], content: '这是第二条数据' },
   ];
   
-  const insertRes = await client.insert({
-    collection_name: COLLECTION_NAME,
-    data: data,
-  });
-  console.log(`💾 插入成功，ID: ${insertRes.IDs}`);
+  // const insertRes = await client.insert({
+  //   collection_name: COLLECTION_NAME,
+  //   data: data,
+  // });
+  // console.log(`💾 插入成功，ID: ${insertRes.IDs}`);
   // return 
   // 4. 向量搜索
   const searchRes = await client.search({

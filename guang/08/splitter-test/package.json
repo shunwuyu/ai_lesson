@@ -12,7 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "@langchain/community": "^1.1.29",
-    "@langchain/core": "^1.1.29",
+    "@langchain/core": "^1.2.3",
     "@langchain/openai": "^1.5.5",
     "@langchain/textsplitters": "^1.0.1",
     "cheerio": "^1.2.0",

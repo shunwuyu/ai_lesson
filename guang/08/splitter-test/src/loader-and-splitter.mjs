@@ -11,8 +11,15 @@ import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/
 //   ""]）的优先级顺序递归地尝试分割文本，直到每个片段大小不超过设定的        
 //   chunk_size，从而在保持语意完整的前提下将长文本切分成适合模型处理的块。                                                                     
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import { MemoryVectorStore } from "@langchain/community/vectorstores/memory";
+import { MemoryVectorStore } from "./memory-vector-store.mjs";
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
+
+const embeddings = new OpenAIEmbeddings({
+  model: process.env.EMBEDDINGS_MODEL_NAME || "text-embedding-v3",
+});
+const model = new ChatOpenAI({
+  model: process.env.MODEL_NAME || "qwen-plus",
+});
 
 
 

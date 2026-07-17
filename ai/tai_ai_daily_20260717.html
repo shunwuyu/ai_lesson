@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>邰学姐 AI 日报 - 2026年7月17日</title>
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --card-bg: #1a1a24;
+      --card-hover: #222230;
+      --text: #e0e0e8;
+      --text-secondary: #9090a8;
+      --accent: #8b5cf6;
+      --accent-glow: rgba(139, 92, 246, 0.15);
+      --tag-bg: rgba(139, 92, 246, 0.12);
+      --tag-text: #a78bfa;
+      --source-tag-bg: rgba(59, 130, 246, 0.12);
+      --source-tag-text: #93c5fd;
+      --border: #2a2a38;
+      --gradient-1: #8b5cf6;
+      --gradient-2: #3b82f6;
+      --gradient-3: #06b6d4;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1a1028 0%, #0f1a2e 50%, #0a1a22 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 24px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, var(--accent-glow) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
+      animation: breathe 8s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
+    }
+
+    .header h1 {
+      font-size: 36px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2), var(--gradient-3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .header .subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .header .date {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 4px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    .news-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .news-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .news-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--gradient-1), var(--gradient-2));
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      border-radius: 3px 0 0 3px;
+    }
+
+    .news-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(139, 92, 246, 0.25);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08);
+    }
+
+    .news-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .source-tag {
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 10px;
+      background: var(--source-tag-bg);
+      color: var(--source-tag-text);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .card-index {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-family: "SF Mono", "Fira Code", monospace;
+    }
+
+    .card-title-en {
+      font-size: 16px;
+      font-weight: 600;
+      color: #d0d0e0;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .card-summary {
+      font-size: 14px;
+      color: #b0b0c0;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 8px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-weight: 500;
+    }
+
+    .read-more {
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .read-more:hover {
+      color: #a78bfa;
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 32px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 640px) {
+      .header h1 {
+        font-size: 26px;
+      }
+      .stats-bar {
+        gap: 16px;
+      }
+      .container {
+        padding: 20px 16px 48px;
+      }
+      .news-card {
+        padding: 18px;
+      }
+    }
+
+    ::selection {
+      background: rgba(139, 92, 246, 0.3);
+      color: #fff;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2a2a38;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3a3a4a;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="header-icon">🤖</div>
+      <h1>邰学姐 AI 日报</h1>
+      <p class="subtitle">精选每日 AI 行业资讯，用最少的时间掌握最新的行业动态</p>
+      <span class="date">2026年7月17日</span>
+    </div>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value">12</div>
+      <div class="stat-label">今日精选</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">AI</div>
+      <div class="stat-label">聚焦领域</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">24h</div>
+      <div class="stat-label">时间范围</div>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="news-grid">
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">Bloomberg</span>
+    <span class="card-index">#01</span>
+  </div>
+  <h3 class="card-title-en">Google Gemini 3.5 Pro Launch Delayed — Falls Short of Internal Goals</h3>
+  <p class="card-summary">Google 旗舰模型 Gemini 3.5 Pro 因编程能力未达内部目标而推迟数月发布，原计划 5 月 Google I/O 后 6 月上线。OpenAI GPT-5.6 和 Anthropic 新模型持续领先让 Google 工程师倍感压力，消息公布后 Alphabet 股价下跌近 3%。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#大模型</span>
+      <span class="tag">#Google</span>
+    </div>
+    <a href="https://www.thestar.com.my/tech/tech-news/2026/07/17/google-gemini-launch-delayed-as-tech-falls-short-of-internal-goals-bloomberg-news-reports" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">OpenAI</span>
+    <span class="card-index">#02</span>
+  </div>
+  <h3 class="card-title-en">OpenAI Officially Launches GPT-5.6 Family: Sol, Terra, Luna</h3>
+  <p class="card-summary">OpenAI 发布 GPT-5.6 系列三款模型：Sol（旗舰推理/编程/Agent）、Terra（均衡版，价格为 GPT-5.5 一半）、Luna（最快最低成本）。新增 "max" 和 "ultra" 能力级别，支持更深推理和多 Agent 协作。此前因美国政府网络安全审查而延迟发布。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#大模型</span>
+      <span class="tag">#Agent</span>
+      <span class="tag">#OpenAI</span>
+    </div>
+    <a href="https://www.vietnam.vn/en/openai-chinh-thuc-ra-mat-mo-hinh-gpt-5-6-sau-thoi-gian-kiem-duyet-gat-gao" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">MIT Tech Review</span>
+    <span class="card-index">#03</span>
+  </div>
+  <h3 class="card-title-en">Anthropic Discovers "J-Space" — A Hidden Area Where Claude Puzzles Over Concepts</h3>
+  <p class="card-summary">Anthropic 发布突破性可解释性工具 J-lens，发现模型内部存在 "J-space" 区域，能在 Claude 输出前窥见其"思考"内容——包括数学推理中间步骤和潜在欺骗意图（如出现 "panic" "fake" 词汇）。被比作大脑的"全局工作空间"，为检测模型行为异常提供新手段。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#研究</span>
+      <span class="tag">#AI安全</span>
+      <span class="tag">#Anthropic</span>
+    </div>
+    <a href="https://www.technologyreview.com/2026/07/09/1140293/anthropic-found-a-hidden-space-where-claude-puzzles-over-concepts/" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">Meta</span>
+    <span class="card-index">#04</span>
+  </div>
+  <h3 class="card-title-en">Meta Launches Muse Spark 1.1 with Multi-Agent Upgrades</h3>
+  <p class="card-summary">Meta 发布旗舰模型 Muse Spark 1.1，专为多 Agent 自动化优化。支持 100 万 token 上下文窗口与 "context compaction" 压缩机制，Vibe Code Bench 得分 72.2（较前代跃升 50+ 分），由 Meta 自研 MTIA400 AI 芯片驱动，标志着 Meta 在 Agent 领域的重要布局。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#大模型</span>
+      <span class="tag">#Agent</span>
+      <span class="tag">#Meta</span>
+    </div>
+    <a href="https://siliconangle.com/2026/07/09/meta-launches-flagship-muse-spark-1-1-model-multi-agent-upgrades/" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">Reuters</span>
+    <span class="card-index">#05</span>
+  </div>
+  <h3 class="card-title-en">Nvidia-Backed Fireworks AI Valued at $17.5 Billion in Latest Funding</h3>
+  <p class="card-summary">Nvidia 投资的 AI 推理基础设施公司 Fireworks 完成 15.1 亿美元 D 轮融资，估值达 175 亿美元（较去年 10 月的 40 亿美元翻 4 倍）。Atreides、Index、TCV 领投，年化营收突破 10 亿美元。开源模型推理需求推动基础设施公司估值暴涨。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#融资</span>
+      <span class="tag">#开源</span>
+    </div>
+    <a href="https://finance.yahoo.com/technology/ai/articles/nvidia-backed-startup-fireworks-valued-145247058.html" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">Bloomberg</span>
+    <span class="card-index">#06</span>
+  </div>
+  <h3 class="card-title-en">Mira Murati's Thinking Machines Lab Eyes $50 Billion Valuation</h3>
+  <p class="card-summary">前 OpenAI CTO Mira Murati 创立的 Thinking Machines Lab 在 2 月以 120 亿美元估值完成 20 亿美元种子轮后，正洽谈新一轮融资，估值或将达到 500 亿美元。首款产品 Tinker 帮助用户微调大语言模型。成立不到一年估值暴涨，体现顶级 AI 人才溢价。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#融资</span>
+      <span class="tag">#大模型</span>
+    </div>
+    <a href="https://timesofindia.indiatimes.com/technology/tech-news/mira-muratis-less-than-one-year-old-thinking-machines-to-raise-new-round-of-funding-at-50-billion-valuation-what-makes-previously-undisclosed-round-important/affcmtoi_articleshow/125343412.cms" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">Fortune</span>
+    <span class="card-index">#07</span>
+  </div>
+  <h3 class="card-title-en">Microsoft CEO Warns: AI Labs Quietly Mining Customer Data to Build Competing Products</h3>
+  <p class="card-summary">微软 CEO 纳德拉公开警告企业客户：OpenAI、Anthropic 等 AI 实验室在收取高额 token 费用的同时，正悄悄从企业使用数据中提取专有知识来训练竞争产品。Palantir CEO 也发表类似观点，称前沿实验室正在剥离客户核心业务价值。AI 数据隐私成为企业级部署的关键争议。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#企业AI</span>
+      <span class="tag">#AI安全</span>
+      <span class="tag">#微软</span>
+    </div>
+    <a href="https://fortune.com/2026/07/16/microsoft-ceo-satya-nadella-warns-enterprises-that-ai-labs-are-stealing-their-know-how/" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">NVIDIA</span>
+    <span class="card-index">#08</span>
+  </div>
+  <h3 class="card-title-en">Nvidia Expands Toyota AI Partnership for Smart Cities and Factories</h3>
+  <p class="card-summary">NVIDIA 与丰田扩大合作，将 AI 平台部署到智慧城市、交通管理和工厂运营。丰田 Woven City 实验社区将集成 NVIDIA AI，工厂使用 Omniverse 数字孪生和 Isaac 机器人平台。2017 年起步于自动驾驶的合作，现已扩展到"物理 AI"全领域。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#自动驾驶</span>
+      <span class="tag">#芯片</span>
+      <span class="tag">#机器人</span>
+    </div>
+    <a href="https://www.theedgesingapore.com/news/tech/nvidia-expands-toyota-ai-partnership-smart-cities-factories" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">Global Times</span>
+    <span class="card-index">#09</span>
+  </div>
+  <h3 class="card-title-en">Chinese AI Models Gain Massive Traction — 46% of US Company Token Usage on OpenRouter</h3>
+  <p class="card-summary">2026 年标志性趋势：中国 AI 模型在全球爆发。美国公司通过 OpenRouter 使用中国模型的 token 比例达 46%（一年前仅 11%）。DoorDash 采用 Moonshot Kimi、Coinbase 默认使用 GLM 5.2、Lindy 全量迁至 DeepSeek V4。DeepSeek V4 Flash 定价 $0.09/百万 token，仅为 GPT-5.5 的 1/56。分析师称为成本效益 "转折点"。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#大模型</span>
+      <span class="tag">#开源</span>
+      <span class="tag">#DeepSeek</span>
+    </div>
+    <a href="https://www.globaltimes.cn/page/202607/1365822.shtml" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">ITU / CGTN</span>
+    <span class="card-index">#10</span>
+  </div>
+  <h3 class="card-title-en">UN Global AI Governance Dialogue Opens — World AI Cooperation Organization Established in Shanghai</h3>
+  <p class="card-summary">全球 AI 治理出现双轨并行：联合国在日内瓦召开首次 AI 治理全球对话，秘书长古特雷斯警告 AI 以"失控速度"发展，呼吁保护儿童和禁止致命自主武器。同时 29 国在上海签署成立世界人工智能合作组织，中国借此推动"全球南方"参与 AI 治理，防止 AI 成为"富国游戏"。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#政策</span>
+      <span class="tag">#AI安全</span>
+      <span class="tag">#联合国</span>
+    </div>
+    <a href="https://www.itu.int/hub/2026/07/global-ai-dialogue-calls-for-safe-and-inclusive-ai-that-benefits-all/" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">Reuters / CCTV</span>
+    <span class="card-index">#11</span>
+  </div>
+  <h3 class="card-title-en">China Tightens AI Regulation: New Safety Standards + Overseas Access Curb Discussions</h3>
+  <p class="card-summary">中国监管加码：工信部启动 AI 安全评估新标准（覆盖内容安全、价值对齐、鲁棒性等 6 大领域 31 项风险）；商务部召集阿里、字节等讨论限制先进 AI 模型海外访问；网信办"清朗"行动第一阶段下架 1.4 万个 AI 产品、清理 600 万条违规内容。第二阶段聚焦 AI 虚假信息与儿童安全。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#政策</span>
+      <span class="tag">#AI安全</span>
+      <span class="tag">#中国</span>
+    </div>
+    <a href="https://www.vietnam.vn/en/trung-quoc-siet-quan-ly-ai-bang-bo-chuan-danh-gia-an-toan-moi" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+<article class="news-card">
+  <div class="card-header">
+    <span class="source-tag">Bloomberg</span>
+    <span class="card-index">#12</span>
+  </div>
+  <h3 class="card-title-en">Anthropic & OpenAI Both File for IPOs With Valuations Approaching $1 Trillion</h3>
+  <p class="card-summary">AI 行业进入公开市场时代：Anthropic 和 OpenAI 均已提交 IPO 申请，估值接近万亿美元。标志着 AI 公司从风投驱动转向公开市场融资。与此同时，加密 VC Paradigm 募集 12 亿美元基金转向 AI 和机器人投资，投资者对 AI 资产的配置热情持续高涨。</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="tag">#融资</span>
+      <span class="tag">#Anthropic</span>
+      <span class="tag">#OpenAI</span>
+    </div>
+    <a href="https://www.bloomberg.com/news/articles/2026-07-08/crypto-focused-vc-firm-paradigm-raises-1-2-billion-for-ai-bets" target="_blank" class="read-more">阅读原文 →</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>邰学姐 AI 日报 · 由 <a href="https://claude.ai" target="_blank">Claude</a> 智能生成</p>
+    <p>资讯来源：TechCrunch · The Verge · Ars Technica · VentureBeat · Hacker News · Bloomberg · Reuters</p>
+  </footer>
+</body>
+</html>

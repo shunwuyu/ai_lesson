@@ -11,6 +11,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@zilliz/milvus2-sdk-node": "^2.6.10"
+    "@langchain/openai": "^1.5.5",
+    "@zilliz/milvus2-sdk-node": "^2.6.10",
+    "dotenv": "^17.4.2"
   }
 }

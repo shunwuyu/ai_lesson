@@ -63,6 +63,7 @@ async function main() {
     await client.createIndex({
         collection_name: COLLECTION_NAME,
         field_name: 'vector',
+        // 检索时只对比相近簇向量，牺牲一点点精度换更快的查询速度。
         index_type: IndexType.IVF_FLAT, // 推荐使用 AUTOINDEX，智能选择最合适的索引类型 为了加速查询
         metric_type: MetricType.COSINE,
         params: { nlist: 1024 } // 
