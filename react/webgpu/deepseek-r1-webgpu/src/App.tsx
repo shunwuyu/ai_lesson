@@ -16,18 +16,19 @@ function App() {
   // const [error, setError] = useState('加载失败');
   // 加载信息
   const [loadingMessage, setLoadingMessage] = useState("");
-  const [progressItems, setProgressItems] = useState([
-    {
-      file: "model.onnx",
-      progress: 0,
-      total: 123123,
-    },
-    {
-      file: "say.onnx",
-      progress: 10,
-      total: 222121,
-    }
-  ]);
+  // const [progressItems, setProgressItems] = useState([
+  //   {
+  //     file: "model.onnx",
+  //     progress: 0,
+  //     total: 123123,
+  //   },
+  //   {
+  //     file: "say.onnx",
+  //     progress: 10,
+  //     total: 222121,
+  //   }
+  // ]);
+  const [progressItems, setProgressItems] = useState([]);
   const [messages, setMessages] = useState([
     {
       role: "user",
@@ -51,12 +52,13 @@ function App() {
   // 用！！转完后变量值只有 true/false，后续赋值、传参、打印都直观，
   // 不会出现 “真值对象” 这种特殊值引发逻辑意外。
   const IS_WEBGPU_AVAILABLE = !!navigator.gpu;
-  setTimeout(() => {
-    console.log(chatContainerRef.current)
-  }, 2000)
+  // setTimeout(() => {
+  //   console.log(chatContainerRef.current)
+  // }, 2000)
 
   const worker = useRef(null);
-
+  // 生命周期函数
+  // 页面加载完后， 
   useEffect(() => {
     if (!worker.current) {
       worker.current = new Worker(new URL("./worker.js", import.meta.url), {
@@ -64,7 +66,17 @@ function App() {
       });
       worker.current.postMessage({ type: "check" }); // Do a feature check
       worker.current.addEventListener("message", (e) => {
-        console.log(e);
+        switch(e.data.status) {
+          case "loading":
+            // Model file start load: add a new progress item to the list.
+            setStatus("loading");
+            setLoadingMessage(e.data.data);
+          break;
+          case "error":
+            setError(e.data.data);
+            break;
+          
+        }
       });
     }
   }, [])
