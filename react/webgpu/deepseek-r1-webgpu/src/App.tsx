@@ -1,0 +1,168 @@
+import { 
+  useState, // 响应式  
+  useRef, // 可变容器对象 
+  useEffect
+} from 'react'
+import Progress from "./components/Progress";
+import Chat from "./components/Chat";
+import './App.css'
+
+function App() {
+  // null、loading  加载模型、ready 模型加载完成
+  const [status, setStatus] = useState(null)
+  // const [status, setStatus] = useState('ready')
+  // 模型文件下载失败 浏览器无 WebGPU 能力 推理报错
+  const [error, setError] = useState(null);
+  // const [error, setError] = useState('加载失败');
+  // 加载信息
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [progressItems, setProgressItems] = useState([
+    {
+      file: "model.onnx",
+      progress: 0,
+      total: 123123,
+    },
+    {
+      file: "say.onnx",
+      progress: 10,
+      total: 222121,
+    }
+  ]);
+  const [messages, setMessages] = useState([
+    {
+      role: "user",
+      content: "你好",
+      answerIndex: 0,
+    },
+    {
+      role: "assistant",
+      content: "你好，我是 DeepSeek-R1 WebGPU 模型",
+      answerIndex: 0,
+    },
+  ]);
+  const chatContainerRef = useRef(null); // none
+  // 双重取反!!用来把任意变量强制转换成标准布尔值 true/false。
+  // 两个感叹号就是把 navigator.gpu 转成纯粹的 true 或 false。
+  // 浏览器有 WebGPU 接口时 navigator.gpu 是真实对象，单个！会变成 false，
+  // 再加一个！反转回 true；没有的话它就是 undefined，! 后是 true，再！
+  // 就变成 false。简单说！！等于 Boolean ()，专门用来判断浏览器支不支持
+  //  WebGPU。
+  // if 里能直接判断真假，但变量存的是对象 /undefined，不是纯粹布尔；
+  // 用！！转完后变量值只有 true/false，后续赋值、传参、打印都直观，
+  // 不会出现 “真值对象” 这种特殊值引发逻辑意外。
+  const IS_WEBGPU_AVAILABLE = !!navigator.gpu;
+  setTimeout(() => {
+    console.log(chatContainerRef.current)
+  }, 2000)
+
+  const worker = useRef(null);
+
+  useEffect(() => {
+    if (!worker.current) {
+      worker.current = new Worker(new URL("./worker.js", import.meta.url), {
+        type: "module",
+      });
+      worker.current.postMessage({ type: "check" }); // Do a feature check
+      worker.current.addEventListener("message", (e) => {
+        console.log(e);
+      });
+    }
+  }, [])
+
+  return IS_WEBGPU_AVAILABLE ? (
+    <div className="flex flex-col h-screen mx-auto items-center justify-end text-gray-800 bg-white ">
+      <div className="h-full overflow-auto flex justify-center items-center flex-col relative">
+        {/* 任意值语法 */}
+        <div className="flex flex-col items-center mb-1 max-w-[400px] text-center">
+          <h1 className="text-4xl font-bold mb-1">DeepSeek-R1 WebGPU</h1>
+          {/* WebGPU 是浏览器原生硬件图形计算 API，可调用显卡并行算力做渲染、本地 AI 推理。 */}
+          <h2 className="font-semibold">
+            A next-generation reasoning model that runs locally in your
+            browser with WebGPU acceleration.
+          </h2>
+        </div>
+        <div className="flex flex-col items-center px-4">
+          <p className="max-w-[510px] mb-4">
+            <br />
+            You are about to load{" "}
+            <a
+              href="https://huggingface.co/onnx-community/DeepSeek-R1-Distill-Qwen-1.5B-ONNX"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium underline"
+            >
+              {/* DeepSeek-R1 的 15 亿参数量蒸馏版，用 Qwen 架构，适合本地轻量推理。
+                蒸馏Qwen
+              */}
+              DeepSeek-R1-Distill-Qwen-1.5B
+            </a>
+            , a 1.5B parameter reasoning LLM optimized for in-browser
+              inference. Everything runs entirely in your browser with{" "}
+            {/* Transformers.js 本地运行各类 Transformer 大模型。 
+            transformers.js 负责下载、解析、调用这个 1.5B 蒸馏 R1 模型，搭配 WebGPU 在浏览器本地推理。
+            */}
+            <a
+              href="https://huggingface.co/docs/transformers.js"
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              🤗&nbsp;Transformers.js
+            </a>{" "}
+            {/* Open Neural Network Exchange */}
+            and ONNX Runtime Web, meaning no data is sent to a server. Once
+            loaded, it can even be used offline. The source code for the demo
+            is available on{" "}
+          </p>
+
+          {error && (
+              <div className="text-red-500 text-center mb-2">
+                <p className="mb-1">
+                  Unable to load model due to the following error:
+                </p>
+                <p className="text-sm">{error}</p>
+              </div>
+          )}
+
+          <button
+            className="border px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500 disabled:bg-blue-100 cursor-pointer disabled:cursor-not-allowed select-none"
+            onClick={() => {
+              worker.current.postMessage({ type: "load" });
+              setStatus("loading");
+            }}
+            disabled={status !== null || error !== null}
+          >
+            Load model
+          </button>
+        </div>
+      </div>
+      {status === "loading" && (
+        <>
+          <div className="w-full max-w-[500px] text-left mx-auto p-4 bottom-0 mt-auto">
+            <p className="text-center mb-1">{loadingMessage}</p>
+            {progressItems.map(({ file, progress, total }, i) => (
+              <Progress
+                key={i}
+                text={file}
+                percentage={progress}
+                total={total}
+              />
+            ))}
+          </div>
+        </>
+      )}
+      {status === "ready" && (
+        <div
+          ref={chatContainerRef}
+          className="overflow-y-auto scrollbar-thin w-full flex flex-col items-center h-full"
+        >
+          <Chat messages={messages} />
+        </div>
+      )}
+    </div>
+  ):(
+    <div></div>
+  )
+}
+
+export default App
