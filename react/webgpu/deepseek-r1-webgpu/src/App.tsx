@@ -16,6 +16,10 @@ function App() {
   // const [error, setError] = useState('加载失败');
   // 加载信息
   const [loadingMessage, setLoadingMessage] = useState("");
+  const textareaRef = useRef(null);
+  // 模型是否正在生成回答
+  const [isRunning, setIsRunning] = useState(false);
+  const [tps, setTps] = useState(null); // 生成tps的速度
   // const [progressItems, setProgressItems] = useState([
   //   {
   //     file: "model.onnx",
@@ -30,17 +34,18 @@ function App() {
   // ]);
   const [progressItems, setProgressItems] = useState([]);
   const [messages, setMessages] = useState([
-    {
-      role: "user",
-      content: "你好",
-      answerIndex: 0,
-    },
-    {
-      role: "assistant",
-      content: "你好，我是 DeepSeek-R1 WebGPU 模型",
-      answerIndex: 0,
-    },
+    // {
+    //   role: "user",
+    //   content: "你好",
+    //   answerIndex: 0,
+    // },
+    // {
+    //   role: "assistant",
+    //   content: "你好，我是 DeepSeek-R1 WebGPU 模型",
+    //   answerIndex: 0,
+    // },
   ]);
+  const [input, setInput] = useState("");
   const chatContainerRef = useRef(null); // none
   // 双重取反!!用来把任意变量强制转换成标准布尔值 true/false。
   // 两个感叹号就是把 navigator.gpu 转成纯粹的 true 或 false。
@@ -57,6 +62,29 @@ function App() {
   // }, 2000)
 
   const worker = useRef(null);
+  useEffect(() => {
+    resizeInput();
+  }, [input]);
+
+  function resizeInput() {
+    if (!textareaRef.current) return;
+
+    const target = textareaRef.current;
+    target.style.height = "auto";
+    const newHeight = Math.min(Math.max(target.scrollHeight, 24), 200);
+    target.style.height = `${newHeight}px`;
+  }
+
+  function onEnter(message) {
+    // 新增一条内容
+    setMessages((prev) => [...prev, { role: "user", content: message }]);
+    setTps(null);
+    // 开始生成
+    setIsRunning(true);
+    // 清空输入框
+    setInput("");
+  }
+
   // 生命周期函数
   // 页面加载完后， 
   useEffect(() => {
@@ -71,6 +99,36 @@ function App() {
             // Model file start load: add a new progress item to the list.
             setStatus("loading");
             setLoadingMessage(e.data.data);
+          break;
+          // tokenizer, model 文件下载的回调
+          case "initiate":
+            console.log(e.data);
+          setProgressItems((prev) => [...prev, e.data]);
+          break;
+          case "progress":
+          // Model file progress: update one of the progress items.
+          setProgressItems((prev) =>
+            prev.map((item) => {
+              if (item.file === e.data.file) {
+                // 更新数据部分
+                return { ...item, ...e.data };
+              }
+              return item;
+            }),
+          );
+          break;
+
+          case "done":
+          // Model file loaded: remove the progress item from the list.
+          setProgressItems((prev) =>
+            // 过滤出不是当前文件的进度项
+            prev.filter((item) => item.file !== e.data.file),
+          );
+          break;
+
+          case "ready":
+          // Pipeline ready: the worker is ready to accept messages.
+          setStatus("ready");
           break;
           case "error":
             setError(e.data.data);
@@ -171,6 +229,33 @@ function App() {
           <Chat messages={messages} />
         </div>
       )}
+      <div className="mt-2 border border-gray-300  rounded-lg w-[600px] max-w-[80%] max-h-[200px] mx-auto relative mb-3 flex">
+        <textarea
+          ref={textareaRef}
+          className="scrollbar-thin w-[550px] dark:bg-gray-700 px-3 py-4 rounded-lg bg-transparent border-none outline-hidden text-gray-800 disabled:text-gray-400  placeholder-gray-500  disabled:placeholder-gray-200 resize-none disabled:cursor-not-allowed"
+          placeholder="Type your message..."
+          type="text"
+          rows={1}
+          value={input}
+          disabled={status !== "ready"}
+          title={status === "ready" ? "Model is ready" : "Model not loaded yet"}
+          onKeyDown={(e) => {
+            if (
+              input.length > 0 &&
+              !isRunning &&
+              e.key === "Enter" &&
+              !e.shiftKey
+            ) {
+              e.preventDefault(); // Prevent default behavior of Enter key
+              onEnter(input);
+            }
+          }}
+          onInput={(e) => {
+            const target = e.target as HTMLTextAreaElement;
+            setInput(target.value)
+          }}
+        />
+      </div>
     </div>
   ):(
     <div></div>
