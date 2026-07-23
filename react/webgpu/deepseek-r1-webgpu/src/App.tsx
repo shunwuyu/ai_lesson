@@ -139,6 +139,21 @@ function App() {
     }
   }, [])
 
+  // Send the messages to the worker thread whenever the `messages` state changes.
+  useEffect(() => {
+    if (messages.filter((x) => x.role === "user").length === 0) {
+      // No user messages yet: do nothing.
+      return;
+    }
+    if (messages.at(-1).role === "assistant") {
+      // Do not update if the last message is from the assistant
+      return;
+    }
+    setTps(null);
+    worker.current.postMessage({ type: "generate", data: messages });
+    // 更新
+  }, [messages, isRunning]);
+
   return IS_WEBGPU_AVAILABLE ? (
     <div className="flex flex-col h-screen mx-auto items-center justify-end text-gray-800 bg-white ">
       <div className="h-full overflow-auto flex justify-center items-center flex-col relative">

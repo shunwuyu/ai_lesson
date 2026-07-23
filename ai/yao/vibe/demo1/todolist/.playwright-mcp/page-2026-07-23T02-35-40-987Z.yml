@@ -1,0 +1,6 @@
+- generic [ref=f5e3]:
+  - heading "待办清单" [level=1] [ref=f5e5]
+  - generic [ref=f5e6]:
+    - textbox "添加新任务..." [ref=f5e7]
+    - button "添加" [disabled] [ref=f5e8]
+  - paragraph [ref=f5e12]: 暂无任务，添加一条开始吧

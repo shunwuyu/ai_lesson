@@ -86,6 +86,94 @@ const stopping_criteria = new InterruptableStoppingCriteria();
 //   的注意力，推理速度大幅提升。
 let past_key_values_cache = null;
 
+async function generate(messages) {
+  // Retrieve the text-generation pipeline.
+  // 之前load了直接返回
+  const [tokenizer, model] = await TextGenerationPipeline.getInstance();
+  // 分词
+  // apply_chat_template ：给原始消息套上模型要求的格式（如 <|im_start|>user\n你好<|im_end|> ）
+  // 先把对话套上模型格式模板
+  // 然后把结果分好词（转成 token ID），返回的 inputs 就是分词后的 
+  // input_ids + attention_mask ，可以直接喂给模型。
+  // attention_mask（遮罩 忽略） 就是告诉模型"这些位置有内容要认真看，那些位置是空的别管它"
+  const inputs = tokenizer.apply_chat_template(messages, {
+    add_generation_prompt: true,
+    return_dict: true,
+  });
+  
+
+  // 151648: <think>
+  // 151649: </think>
+  const [START_THINKING_TOKEN_ID, END_THINKING_TOKEN_ID] = tokenizer.encode(
+    "<think></think>",
+    { add_special_tokens: false },
+  );
+
+  console.log(START_THINKING_TOKEN_ID, END_THINKING_TOKEN_ID);
+  return 
+  let state = "thinking"; // 'thinking' or 'answering'
+  let startTime;
+  let numTokens = 0;
+  let tps;
+  const token_callback_function = (tokens) => {
+    startTime ??= performance.now();
+
+    if (numTokens++ > 0) {
+      tps = (numTokens / (performance.now() - startTime)) * 1000;
+    }
+    if (tokens[0] == END_THINKING_TOKEN_ID) {
+      state = "answering";
+    }
+  };
+  const callback_function = (output) => {
+    self.postMessage({
+      status: "update",
+      output,
+      tps,
+      numTokens,
+      state,
+    });
+  };
+
+  const streamer = new TextStreamer(tokenizer, {
+    skip_prompt: true,
+    skip_special_tokens: true,
+    callback_function,
+    token_callback_function,
+  });
+
+  // Tell the main thread we are starting
+  self.postMessage({ status: "start" });
+
+  const { past_key_values, sequences } = await model.generate({
+    ...inputs,
+    // TODO: Add back when fixed
+    // past_key_values: past_key_values_cache,
+
+    // Sampling
+    do_sample: false,
+    // repetition_penalty: 1.1,
+    // top_k: 3,
+    // temperature: 0.2,
+
+    max_new_tokens: 2048,
+    streamer,
+    stopping_criteria,
+    return_dict_in_generate: true,
+  });
+  past_key_values_cache = past_key_values;
+
+  const decoded = tokenizer.batch_decode(sequences, {
+    skip_special_tokens: true,
+  });
+
+  // Send the output back to the main thread
+  self.postMessage({
+    status: "complete",
+    output: decoded,
+  });
+}
+
 async function load() {
   self.postMessage({
     status: "loading",
@@ -107,6 +195,8 @@ async function load() {
     // }
     self.postMessage(x);
   });
+// 生成
+
 
   self.postMessage({
     status: "loading",
@@ -125,5 +215,11 @@ self.addEventListener("message", async (e) => {
     case "load":
       load();
       break;
+    case "generate":
+      // 重置停止条件状态，清空上一轮生成的计数、触发标记，
+      // 避免旧轮次终止规则残留干扰新一轮推理，保证生成判定逻辑干净独立。
+      stopping_criteria.reset();
+      generate(data);
+    break;
   }
 })
