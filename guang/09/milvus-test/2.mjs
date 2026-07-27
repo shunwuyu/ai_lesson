@@ -1,5 +1,11 @@
 import "dotenv/config";
-import { MilvusClient, DataType, MetricType, IndexType } from '@zilliz/milvus2-sdk-node';
+import { 
+    MilvusClient, 
+    // Milvus 字段的数据类型
+    DataType, 
+    MetricType, 
+    IndexType 
+} from '@zilliz/milvus2-sdk-node';
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 // ================= 配置区域 =================
@@ -26,8 +32,7 @@ const embeddings = new OpenAIEmbeddings({
 const client = new MilvusClient({
     address: ADDRESS,
     token: TOKEN,
-    // 如果是自签名证书报错，可以加这一行忽略 SSL 验证 (生产环境建议配置好证书)
-    // ssl: true, 
+    
 });
 
 async function getEmbedding(text) {
@@ -49,24 +54,25 @@ async function main() {
     await client.createCollection({
         collection_name: COLLECTION_NAME,
         fields: [
+            // diary_001
             { name: 'id', data_type: DataType.VarChar, max_length: 50, is_primary_key: true },
             { name: 'vector', data_type: DataType.FloatVector, dim: VECTOR_DIM },
             { name: 'content', data_type: DataType.VarChar, max_length: 5000 },
             { name: 'date', data_type: DataType.VarChar, max_length: 50 },
             { name: 'mood', data_type: DataType.VarChar, max_length: 50},
+            // 数组类型
             { name: 'tags', data_type: DataType.Array, element_type: DataType.VarChar, max_capacity: 10, max_length: 50 }
         ]
     });
-    // console.log('Collection created');
+    console.log('Collection created');
     // 创建索引
-    // console.log('\nCreating index...');
+    console.log('\nCreating index...');
     await client.createIndex({
         collection_name: COLLECTION_NAME,
         field_name: 'vector',
         // 检索时只对比相近簇向量，牺牲一点点精度换更快的查询速度。
         index_type: IndexType.IVF_FLAT, // 推荐使用 AUTOINDEX，智能选择最合适的索引类型 为了加速查询
-        metric_type: MetricType.COSINE,
-        params: { nlist: 1024 } // 
+        metric_type: MetricType.COSINE 
     });
     // console.log('Index created');
     console.log('\nLoading collection...');
@@ -114,17 +120,17 @@ async function main() {
 
         console.log('Generating embeddings...');
         const diaryData = await Promise.all(
-                  diaryContents.map(async (diary) => ({
-                    ...diary,
-                    vector: await getEmbedding(diary.content)
-                  }))
-                );
-            
-                const insertResult = await client.insert({
-                  collection_name: COLLECTION_NAME,
-                  data: diaryData
-                });
-                console.log(`✓ Inserted ${insertResult.insert_cnt} records\n`);
+            diaryContents.map(async (diary) => ({
+                ...diary,
+                vector: await getEmbedding(diary.content)
+            }))
+        );
+        // 支持单条， 也支持多条
+        const insertResult = await client.insert({
+            collection_name: COLLECTION_NAME,
+            data: diaryData
+        });
+        console.log(`✓ Inserted ${insertResult.insert_cnt} records\n`);
 }
 
 main();
