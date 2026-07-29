@@ -64,7 +64,9 @@ try {
           { name: 'id', data_type: DataType.VarChar, max_length: 100, is_primary_key: true },
           { name: 'book_id', data_type: DataType.VarChar, max_length: 100 },
           { name: 'book_name', data_type: DataType.VarChar, max_length: 200 },
+          // 32 位有符号整数 章节
           { name: 'chapter_num', data_type: DataType.Int32 },
+          // 片段 500字符一个片段 index 标记了片段在章节中的位置
           { name: 'index', data_type: DataType.Int32 },
           { name: 'content', data_type: DataType.VarChar, max_length: 10000 },
           { name: 'vector', data_type: DataType.FloatVector, dim: VECTOR_DIM }
@@ -77,8 +79,11 @@ try {
       await client.createIndex({
         collection_name: COLLECTION_NAME,
         field_name: 'vector',
+  //       IVF_FLAT 是一种近似最近邻索引，先用 K-Means                                                                                        
+  // 聚类把向量空间划分成多个桶，查询时只搜索最近几个桶内的向量（而不是全量扫描），以此在精度和速度之间取得平衡。 
         index_type: IndexType.IVF_FLAT,
         metric_type: MetricType.COSINE,
+        // nlist 就是 K-Means 聚类的簇数（桶数），这里设为 1024 意味着整个向量空间被划分成 1024 个桶。
         params: { nlist: 1024 }
       });
       console.log('✓ 索引创建成功');
@@ -148,6 +153,8 @@ try {
     // 使用 EPubLoader 加载文件，按章节拆分
     const loader = new EPubLoader(
       EPUB_FILE,
+      // 设为 true 后，documents 数组就是 [第1章的Document, 第2章的Document, ...,                                                           
+  // 第N章的Document]
       {
         splitChapters: true,
       }

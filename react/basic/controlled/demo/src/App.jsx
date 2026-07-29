@@ -2,7 +2,8 @@ import { useState, useRef } from 'react'
 import './App.css'
 import LoginForm from './Login'
 
-
+// 受控组件：表单输入的值由 React state 控制，
+// 变更必须通过 onChange 更新 state，视图完全依附状态。
 function ControlledInput() {
   const [value, setValue] = useState("");
 
@@ -14,7 +15,8 @@ function ControlledInput() {
     />
   );
 }
-
+// useRef：创建一个可变容器，值变更不会触发组
+// 件重渲染，常用来持有 DOM 元素或持久保存变量。
 function UncontrolledInput() {
   const inputRef = useRef(null);
 
@@ -86,6 +88,26 @@ function RegisterForm() {
 }
 
 
+function Demo() {
+  const countRef = useRef(0)
+  const [renderNum, setRenderNum] = useState(0)
+
+  const addRef = () => {
+    countRef.current++
+    console.log(countRef.current)
+  }
+
+  const triggerRender = () => setRenderNum(v => v + 1)
+
+  return (
+    <div>
+      <p>渲染次数：{renderNum}</p>
+      <button onClick={addRef}>修改ref.current（不会刷新页面）</button>
+      <button onClick={triggerRender}>触发重渲染</button>
+    </div>
+  )
+}
+
 
 function App() {
   
@@ -95,6 +117,7 @@ function App() {
       <UncontrolledInput />
       <CommentBox/>
       <RegisterForm /> */}
+      <Demo />
       <LoginForm/>
     </>
   )
