@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 // useRef 的类型参数是保存的内容的类型。
-
+// useRef 用来创建一个可变、组件刷新也不会重置的容器，
+// 既可存放 DOM 实例，也可保存普通持久数据。
 // 这里通过 ref 保存 input 元素的引用，然后在 useEffect 里调用它的 focus 方法。
 
 // ref 的内容是保存在 current 属性上的。
