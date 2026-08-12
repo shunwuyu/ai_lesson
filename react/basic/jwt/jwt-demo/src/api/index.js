@@ -9,3 +9,4 @@ export const getProtected = async () => {
   const res = await axios.get('/get');
   return res.data;
 };
+

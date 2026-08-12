@@ -6,7 +6,7 @@ const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/Login'));
 const Pay = lazy(() => import('./pages/Pay'));
 const Nav = lazy(() => import('./components/Nav'));
-
+const Todos = lazy(() => import('./pages/Todos'));
 
 function App() {
   return (
@@ -16,6 +16,7 @@ function App() {
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/todos" element={<Todos />} />
         <Route path="/login" element={<Login />} />
         <Route path="/pay" element={
           <RequireAuth>

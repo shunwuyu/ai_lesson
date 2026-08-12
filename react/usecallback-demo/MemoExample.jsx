@@ -21,6 +21,7 @@ const Parent = () => {
       <button onClick={() => setCount(count + 1)}>
         点击计数: {count}
       </button>
+      <button onClick={() => setName('Bob')}>改变Name</button>
       <RegularChild name={name} />
       <MemoizedChild name={name} />
     </div>

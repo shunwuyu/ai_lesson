@@ -1,7 +1,14 @@
 import 'dotenv/config';
 import { ChatOpenAI } from '@langchain/openai';
+// LangChain 的 内存对话历史存储 ，把多轮聊天消息存在进程内存里，用于实现带上下文的多轮对话
+// 对话历史存储和读取抽象
 import { InMemoryChatMessageHistory } from "@langchain/core/chat_history";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+
+console.log(process.env.MODEL_NAME,
+  process.env.OPENAI_API_KEY,
+   process.env.OPENAI_BASE_URL
+)
 
 const model = new ChatOpenAI({ 
     modelName: process.env.MODEL_NAME,
@@ -11,7 +18,8 @@ const model = new ChatOpenAI({
         baseURL: process.env.OPENAI_BASE_URL,
     },
 });
-
+// 保存对话历史到内存里，
+// 发新消息时把旧记录一起发给模型，让它记住上下文。
 async function inMemoryDemo() {
     const history = new InMemoryChatMessageHistory();
     const systemMessage = new SystemMessage(

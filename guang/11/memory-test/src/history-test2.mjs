@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { ChatOpenAI } from '@langchain/openai';
 import { FileSystemChatMessageHistory } from "@langchain/community/stores/message/file_system";
 import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
+// "node:path" 是 Node.js 官方推荐的 内置模块前缀 写法，明确告诉引擎这是 Node 内建模块
 import path from "node:path";
 
 const model = new ChatOpenAI({ 
