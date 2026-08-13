@@ -35,12 +35,37 @@ npx create-next-app@latest
 
 npm run dev
 
+## eslint  
+ESLint 按规则检查代码，找出语法错误、潜在 bug 和风格问题，让你写得更规范。
+强制团队写出一致风格的代码，把低级错误在提交前就拦下来，保证代码质量。
+
+mkdir eslint-demo
+npm init -y
+npm i eslint -D
+生成基础配置文件
+npx eslint --init
+一路默认
+rules: {
+    // 0=off 1=warn 2=error
+    "no-var": 2,                // 禁止 var，只能 let/const
+    "no-console": 1,             // console 给出警告
+    "indent": ["error", 2],     // 缩进必须2空格
+    "quotes": ["error", "double"], // 单引号
+    "semi": ["error", "always"] // 语句末尾分号
+  }
+"scripts": {
+  "lint": "eslint .",
+  "lint:fix": "eslint . --fix"
+}
+
+npm run lint
+npm run lint:fix
 
 ## App Router
 
 路由（Router）是 Next.js 应用的重要组成部分。在 Next.js 中，路由决定了一个页面如何渲染或者一个请求该如何返回。
 
-App Router 是默认的路由方案，一起来看看定义方式和常见的文件约定。
+在 Next.js 当中，App Router 现已作为框架默认的路由范式。它依托一套强约束的文件命名约定完成路由声明；这类基于文件系统的约定，本质上将文件夹、文件视作路由配置，省去手动编写路由表，同时天然隔离路由、布局、接口、错误兜底等业务逻辑，实现关注点分离。
 
 ```
 src/
@@ -57,7 +82,7 @@ src/
         └── page.js
 ```
 
-page.js 路由页面；layout.js 共享布局；template.js 每次挂载重渲染；loading 加载页；error 错误捕获；not‑found404；文件夹对应子路由。
+page.js 路由页面， 对应路由 /；layout.js 共享布局 所有页面共享；template.js 每次挂载重渲染；loading 加载页；error 错误捕获；not‑found404；文件夹对应子路由。
 
 举个例子，page.js 首页
 
@@ -84,7 +109,7 @@ export default () => <h1>About us</h1>
 app/page.js 对应路由 /
 app/dashboard/page.js 对应路由 /dashboard
 app/dashboard/settings/page.js 对应路由/dashboard/settings
-analytics 目录下因为没有 page.js 文件，所以没有对应的路由。这个文件可以被用于存放组件、样式表、图片或者其他文件。
+analytics 目录下因为没有 page.js 文件，所以没有对应的路由。
 
 app/page.js
 ```
@@ -155,8 +180,13 @@ template 像每次新建的壳， 每次路由切换都重新执行副作用
 ```
 // app/template.js
 export default function Template({ children }) {
-  return <div>{children}</div>
+  return <div>Template{children}</div>
 }
+app/layout.tsx
+<nav className="flex gap-4 p-4">
+          <Link href="/">首页</Link>
+          <Link href="/about">关于</Link>
+        </nav>
 ```
 你会发现，这用法跟布局一模一样。它们最大的区别就是状态的保持。如果同一目录下既有 template.js 也有 layout.js，最后的输出效果如下：
 <Layout>
@@ -166,33 +196,8 @@ export default function Template({ children }) {
 也就是说 layout 会包裹 template，template 又会包裹 page。
 
 某些情况下，模板会比布局更适合：
-- 依赖于 useEffect 和 useState 的功能，比如记录页面访问数（维持状态就不会在路由切换时记录访问数了）、用户反馈表单（每次重新填写）等
 - 转场动画
 
-## dashboard/layout.js
+## todos
 
-```
-'use client'
-
-import { useState } from 'react'
-import Link from 'next/link'
-
-export default function Layout({ children }) {
-  const [count, setCount] = useState(0)
-  return (
-    <>
-      <div>
-        <Link href="/dashboard/about">About</Link>
-        <br/>
-        <Link href="/dashboard/settings">Settings</Link>
-      </div>
-      <h1>Layout {count}</h1>
-      <button onClick={() => setCount(count + 1)}>
-        Increment
-      </button>
-      {children}
-    </>
-  )
-}
-
-```
+## React Notes
