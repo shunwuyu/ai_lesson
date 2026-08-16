@@ -200,4 +200,43 @@ app/layout.tsx
 
 ## todos
 
+现在 /todos 里的数据是 CSR，不是 SSR。
+
+原因在 app/todos/page.tsx：
+
+'use client'                                           
+  useEffect(() => {                                      
+    fetchTodos() // 浏览器加载页面后，再从 /api/todos    
+  拿数据                                                 
+  }, [])
+
+  页面先渲染空列表，浏览器再发请求，所以 HTML
+  里没有待办数据。
+  ---
+  改成 SSR 的思路
+
+  Next.js App Router 默认就是 Server Component。只要把页
+  面改成服务端组件，在服务端拿数据，数据就会直接渲染进
+  HTML。
+
+  但你现在有增删改交互，所以推荐拆成两层：
+
+  app/todos/page.tsx          # 服务端组件，负责 SSR
+  拿数据
+  app/todos/todos-client.tsx  # 客户端组件，负责交互
+
+
 ## React Notes
+
+## 需求文档 
+
+先让我介绍下 React Notes 的项目效果，正如它的名字表明的那样，这是一个笔记系统，可以增删改查笔记，笔记支持 markdown 格式。
+
+首页效果如下，界面分为两列，左侧是笔记列表，右侧是笔记内容：
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/081f4269b85447a0ae044465ea9fa2f4~tplv-k3u1fbpfcp-jj-mark:3326:0:0:0:q75.awebp#?w=3076&h=1570&s=258799&e=png&b=f4f6f9)
+
+点击左边的 New 按钮，可以增加一个 Note，增加后，左侧笔记列表也会同时更新：
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3411f724c4eb4d1997311f245723df14~tplv-k3u1fbpfcp-jj-mark:3326:0:0:0:q75.awebp#?w=1191&h=720&s=108873&e=gif&f=42&b=f4f6f9)
+
