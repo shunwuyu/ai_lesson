@@ -24,6 +24,22 @@ Docker = 应用 + 运行环境
 
 docker --version
 
+配置 Docker Engine 
+
+{
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": false,
+  "registry-mirrors": [
+    "https://docker.mirrors.ustc.edu.cn",
+    "https://hub-mirror.c.163.com"
+  ]
+}
+
 ## 容器 container 
 
 容器好比打包好的行李箱，把应用和依赖全装进去，在哪跑都一样，不用操心环境差异。
