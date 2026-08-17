@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>闭包实现单例弹窗</title>
+  <style>
+    .mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    .dialog {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+    }
+    button {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button id="openBtn">打开弹窗</button>
+
+  <script>
+    // 闭包实现单例：内部保存实例，外部无法直接访问
+    const createDialog = (() => {
+      let instance = null; // 闭包变量，保存唯一弹窗实例
+
+      return function() {
+        // 如果已经有实例直接返回，不再新建DOM
+        if(instance) return instance;
+
+        // 第一次调用，创建DOM
+        const mask = document.createElement('div');
+        mask.className = 'mask';
+        mask.innerHTML = `
+          <div class="dialog">
+            <h3>我是单例弹窗</h3>
+            <p>无论点多少次按钮，只会有一个弹窗DOM</p>
+            <button class="close">关闭</button>
+          </div>
+        `;
+        document.body.appendChild(mask);
+
+        // 弹窗方法
+        instance = {
+          show() {
+            mask.style.display = 'flex';
+          },
+          hide() {
+            mask.style.display = 'none';
+          }
+        }
+
+        // 关闭事件
+        mask.querySelector('.close').addEventListener('click', ()=>{
+          instance.hide();
+        })
+
+        return instance;
+      }
+    })()
+
+    // 使用
+    const openBtn = document.querySelector('#openBtn');
+    openBtn.addEventListener('click', ()=>{
+      const dialog = createDialog();
+      dialog.show();
+    })
+  </script>
+</body>
+</html>
