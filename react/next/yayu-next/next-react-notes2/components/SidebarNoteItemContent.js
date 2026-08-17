@@ -11,13 +11,17 @@ export default function SidebarNoteContent({
 }) {
   const router = useRouter()
   const pathname = usePathname()
-  const selectedId = pathname?.split('/')[1] || null
-
+  // 从路径末尾提取数字 id：/note/123 → '123'；首页 / → ''
+  const match = pathname.match(/\/(\d+)$/);
+  const selectedId = match ? match[1] : '';
+  console.log(pathname,selectedId, "////")
   const [isExpanded, setIsExpanded] = useState(false)
+  // 派生状态（Derived State） ——直接从已有 props/state 计算出来的值
   const isActive = id === selectedId
 
   // Animate after title is edited.
   const itemRef = useRef(null);
+  // 
   const prevTitleRef = useRef(title);
 
   useEffect(() => {

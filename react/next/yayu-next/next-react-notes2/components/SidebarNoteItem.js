@@ -8,12 +8,13 @@ export default function SidebarNoteItem({ noteId, note}) {
     <SidebarNoteItemContent
       id={noteId}
       title={note.title}
+      // fun={() => {} 不可序列化}
       expandedChildren={
         <p className="sidebar-note-excerpt">
           {content.substring(0, 20) || <i>(No content)</i>}
         </p>
       }>
-        <SidebarNoteItemHeader title={title} updateTime={updateTime} />
+      <SidebarNoteItemHeader title={title} updateTime={updateTime} />
     </SidebarNoteItemContent>
   );
 }

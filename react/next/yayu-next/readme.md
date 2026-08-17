@@ -240,3 +240,5 @@ app/layout.tsx
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3411f724c4eb4d1997311f245723df14~tplv-k3u1fbpfcp-jj-mark:3326:0:0:0:q75.awebp#?w=1191&h=720&s=108873&e=gif&f=42&b=f4f6f9)
 
+
+写在服务端的函数，前端直接调用，不用手写接口和 fetch，代码不暴露浏览器，适合表单提交、改数据库。
