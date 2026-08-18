@@ -12,6 +12,7 @@ TypeScript 是一门静态类型的语言，它在 JavaScript 的基础上引入
     交叉：A & B 用于合并多个类型的属性
 - 字面量类型（Literal Types）：
     如 'GET' | 'POST' | 'PUT'，常用于严格限制值的范围
+    由字符串字面量构成的联合类型
 - 类型别名（Type Alias）和接口（Interface）：
     类型别名：type User = { name: string }
     接口：interface User { name: string }，支持继承和声明合并

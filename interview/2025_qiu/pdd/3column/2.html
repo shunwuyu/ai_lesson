@@ -6,8 +6,11 @@
   <title>Document</title>
   <style>
   .grid-layout {
+    /* Grid 是 CSS 二维布局，可同时控制行与列，轻松实现横竖两个方向的网页排版。 */
   display:grid;
+  /* 设置三列，第一列固定 240px，中间列占剩余全部空间，第三列固定 300px。 */
   grid-template-columns: 240px 1fr 300px;
+  /* 把三列网格区域分别命名为 left、main、right，对应这一行三个单元格。 */
   grid-template-areas: "left main right";
   gap:16px;
 }
@@ -16,6 +19,10 @@
 @media (max-width: 767px) {
   .grid-layout {
     grid-template-columns: 1fr;
+    /* `grid‑template‑areas` 定义 3 行区域：第一行叫 main，
+    第二行叫 left，第三行叫 right，各占整行；
+`.left / .main / .right` 通过`grid‑area`
+把元素绑定到对应命名区域，元素就落到对应网格位置。 */
     grid-template-areas:
       "main"
       "left"

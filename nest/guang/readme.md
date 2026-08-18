@@ -98,3 +98,109 @@ proxy.js
 
 工厂封装复杂构建，可产出 Web、微服务等多种应用实例，屏蔽底层细节。
 
+## ORM
+Object‑Relational Mapping
+对象关系映射
+
+Object：代码里的类、对象
+Relational：关系型数据库（MySQL 这类）
+Mapping：互相转换映射
+
+### 用户登录、注册
+- 新建数据库
+  mydb
+  utf8mb4
+  utf8mb4_unicode_ci
+
+- 准备用户表
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+COLLATE utf8mb4_unicode_ci utf8 字符集
+PRIMARY KEY (`id`), 主键
+`UNIQUE KEY `name` (`name`)`：唯一索引，约束`name`字段的值**不能重复**
+
+### prisma  
+Prisma 是新一代 TypeScript ORM，用 `schema.prisma` 文件定义数据模型，自动生成类型安全客户端，不用手写实体类，自动生成 TS 类型，开发体验好，现在 Nest 新项目主流选择。
+
+npm i prisma@6 -D
+npm i @prisma/client@6
+
+bcrypt 是一个密码哈希库，把明文密码加盐后经过多轮计算转成一串不可逆的哈希值，存库里即使泄露也反推不出原密码。
+
+pnpm i bcrypt
+pnpm i -D @types/bcrypt
+
+初始化 prisma
+npx prisma init
+
+生成 `prisma/schema.prisma` 和 `.env`
+
+.env
+DATABASE_URL="mysql://root:123456@127.0.0.1:3307/mydb?schema=public"
+
+编写 schema.prisma
+```
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 对应你提供的user表结构
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(255)
+  password String @db.VarChar(255)
+
+  @@unique([name])
+  @@map("user")
+}
+
+```
+- npx prisma migrate dev --name create_user_table
+这条命令会：
+
+1. 在 prisma/migrations 生成迁移 sql 文件
+2. 连接 mydb 数据库，自动创建`user`表，等价你贴的 CREATE TABLE 语句
+3. 自动生成 @prisma/client TS 类型
+
+生成 prisma client（migrate dev 已经做了，保险手动跑一次）
+npx prisma generate
+
+Nestjs PrismaModule 封装（全局 Prisma 服务）
+
+生成 prisma 模块
+
+nest g module prisma
+nest g service prisma
+
+x修改 prisma.service.ts
+```
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit {
+  async onModuleInit() {
+    await this.$connect();
+  }
+}
+
+```

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>双飞翼布局</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .wrap {
+      min-height: 100vh;
+    }
+    /* 主内容盒子，浮动，100%宽度 */
+    .main {
+      float: left;
+      width: 100%;
+      background: #fff;
+    }
+    /* main内部真正内容，用margin给左右边栏留出位置 */
+    .main-inner {
+      margin-left: 200px;
+      margin-right: 200px;
+      padding: 20px;
+    }
+    /* 左栏 */
+    .left {
+      float: left;
+      width: 200px;
+      margin-left: -100%; /* 拉到最左侧 */
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    /* 右栏 */
+    .right {
+      float: left;
+      width: 200px;
+      margin-left: -200px; /* 拉到右边 */
+      background: #e0e0e0;
+      padding: 20px;
+    }
+    /* 清除浮动 */
+    .wrap::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- 主内容DOM写最前面，优先渲染 -->
+    <div class="main">
+      <div class="main-inner">
+        <h1>主内容</h1>
+        <p>双飞翼，main内部套一层，用inner的margin挤出两侧空间</p>
+      </div>
+    </div>
+    <div class="left">左侧栏</div>
+    <div class="right">右侧栏</div>
+  </div>
+</body>
+</html>

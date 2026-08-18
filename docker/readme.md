@@ -88,3 +88,15 @@ docker run nginx
 -p 主机端口:容器端口
 文件挂载 -v
 后台运行 -d
+
+## mysql
+docker pull mysql:8.0
+
+docker run -d \
+  --name mysql-demo \
+  -p 3307:3306 \
+  -e MYSQL_ROOT_PASSWORD=123456 \
+  mysql:8.0
+
+安装navicat
+https://www.navicat.com.cn/download/navicat-for-mysql
