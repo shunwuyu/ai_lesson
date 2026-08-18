@@ -72,7 +72,7 @@ docker rmi hello-world
   :123
 - docker pull nginx
 - docker images
-- docker run --name my-nginx -p 80:80 -v /Users/shunwuyu/workspace/lesson/ai_lesson/docker/demo/nginx.conf:/etc/nginx/nginx.conf -d nginx
+- docker run --name my-npe0o-2-=e3iue3iy2er8fjvkjddikginx -p 80:80 -v /Users/shunwuyu/workspace/lesson/ai_lesson/docker/demo/nginx.conf:/etc/nginx/nginx.conf -d nginx
 
 docker run = 创建容器 + 配置容器 + 启动容器
 
