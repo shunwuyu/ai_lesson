@@ -155,3 +155,6 @@ __pycache__/
 .vscode/
 .DS_Store
 CLAUDE.local.md
+
+# Milvus runtime data
+guang/09/milvus/volumes/
