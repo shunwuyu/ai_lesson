@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
 export class SearchAiDiaryDto {
-  @IsString()
+  @IsString({ message: '请输入搜索关键字' })
   content: string;
 }

@@ -2,8 +2,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-
+// InjectRepository 是注入器
 import { InjectRepository } from '@nestjs/typeorm';
+// Repository 是 TypeORM 给每张表配的 数据操作员
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
