@@ -16,7 +16,7 @@ export async function POST(request) {
 // PATCH 修改完成状态
 export async function PATCH(request) {
   const body = await request.json();
-  const todo = toggleTodo(Number(body.id), body.completed);
+  const todo = toggleTodo(body.id, body.completed);
   return Response.json(todo);
 }
 
