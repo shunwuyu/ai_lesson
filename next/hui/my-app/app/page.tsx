@@ -1,17 +1,16 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import useSWR from "swr";
 import { buttonVariants } from "@/components/ui/button";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+async function getHello() {
+  const res = await fetch("http://localhost:3000/api/hello", {
+    cache: "no-store",
+  });
+  return res.json();
+}
 
-export default function Home() {
-  const { data, error, isLoading } = useSWR("/api/hello", fetcher);
-
-  if (error) return <div>加载失败</div>;
-  if (isLoading) return <div>加载中...</div>;
+export default async function Home() {
+  const data = await getHello();
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">

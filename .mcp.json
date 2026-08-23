@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "firecrawl": {
+      "type": "http",
+      "url": "https://mcp.firecrawl.dev/v2/mcp-oauth",
+      "headers": {
+        "Authorization": "Bearer fc-25222eac5308432bb7e93dede2fd7723"
+      }
+    }
+  }
+}

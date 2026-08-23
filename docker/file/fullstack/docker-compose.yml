@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # 1. 后端服务 (NestJS)
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    # 内部网络通信，不需要暴露端口给宿主机（除非你需要直接调试）
+    # ports:
+    #   - "3000:3000" 
+
+  # 2. 前端构建服务 (仅用于构建，构建完即退出)
+  # 注意：这里利用多阶段构建思想，或者单独一个构建容器
+  # 为了简化，我们通常让 Nginx 容器直接依赖构建产物，
+  # 但 Compose 中更清晰的做法是单独定义构建步骤，或者在 Nginx Dockerfile 里做。
+  # 这里采用最稳健的 "Nginx 包含构建" 模式，所以不需要单独的 web 运行容器。
+  
+  # 3. Web 服务 (Nginx + 前端静态资源)
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "80:80"       # 对外暴露 80 端口
+    depends_on:
+      - api           # 确保 API 服务先启动
+    restart: always
