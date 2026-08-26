@@ -9,3 +9,8 @@ args = ["@playwright/mcp@latest"]
 command = "node"
 args = ["my-mcp-server.mjs"]
 cwd = "/Users/shunwuyu/workspace/lesson/ai_lesson/guang/04/tool-test"
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp", "--api-key", "ctx7sk-5061c48d-52b0-4e18-8a91-090f82d50724"]
+startup_timeout_ms = 20_000
