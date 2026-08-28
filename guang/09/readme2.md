@@ -43,8 +43,6 @@ up 启动命令
 
 milvus 跑在19530 端口
 
-http://localhost:9091/health
-
 node 链接milvus
 
 pnpm i @zilliz/milvus2-sdk-node
