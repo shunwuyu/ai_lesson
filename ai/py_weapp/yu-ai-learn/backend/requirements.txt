@@ -1,0 +1,9 @@
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+pydantic>=2.7,<3.0
+pydantic-settings>=2.3,<3.0
+pytest>=8.0,<9.0
+httpx>=0.27,<1.0
+# Optional DeepSeek adapter:
+# langchain-core>=0.3,<1.0
+# langchain-openai>=0.2,<1.0

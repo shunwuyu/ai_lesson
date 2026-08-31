@@ -120,6 +120,4 @@ spec目录下
 再那啥
 ```
 
-/opsx:apply
-
 
