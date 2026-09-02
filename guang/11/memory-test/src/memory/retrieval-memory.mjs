@@ -35,8 +35,7 @@ const embeddings = new OpenAIEmbeddings({
 
 // 初始化 Milvus 客户端
 const client = new MilvusClient({
-    address: ADDRESS,
-    token: TOKEN,
+    address: 'localhost:19530'
     // 如果是自签名证书报错，可以加这一行忽略 SSL 验证 (生产环境建议配置好证书)
     // ssl: true, 
 });
