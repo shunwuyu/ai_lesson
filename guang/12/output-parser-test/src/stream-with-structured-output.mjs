@@ -36,7 +36,7 @@ try {
 
     console.log("📡 接收流式数据:\n");
 
-    forawait (const chunk of stream) {
+    for await (const chunk of stream) {
         chunkCount++;
         result = chunk;
 

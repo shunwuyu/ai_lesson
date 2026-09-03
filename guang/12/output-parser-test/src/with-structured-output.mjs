@@ -20,6 +20,8 @@ const scientistSchema = z.object({
 });
 
 // 使用 withStructuredOutput 方法
+// 它会判断模型是否支持 tool calls，支持的话就用 tool 的方式获取结构化数据，
+// 否则用 output parser 的方式，不用我们自己去处理。
 const structuredModel = model.withStructuredOutput(scientistSchema);
 
 // 调用模型
