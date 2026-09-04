@@ -22,7 +22,8 @@ const schema = z.object({
     famous_works: z.array(z.string()).describe("著名作品列表"),
     biography: z.string().describe("简短传记")
 });
-
+// withStructuredOutput 是要求模型在“生成时”就保证格式，所以没法逐字吐；
+// 而你现在用的 OutputParser 是等模型“吐完后”再去整理格式，所以中间可以尽情流式输出。
 const parser = StructuredOutputParser.fromZodSchema(schema);
 
 const prompt = `详细介绍莫扎特的信息。\n\n${parser.getFormatInstructions()}`;

@@ -98,5 +98,7 @@ docker run -d \
   -e MYSQL_ROOT_PASSWORD=123456 \
   mysql:8.0
 
+docker exec -it mysql-demo bash
+
 安装navicat
 https://www.navicat.com.cn/download/navicat-for-mysql

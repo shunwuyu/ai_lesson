@@ -27,7 +27,7 @@ const structuredModel = model.withStructuredOutput(schema);
 const prompt = `详细介绍莫扎特的信息。`;
 
 console.log("🌊 流式结构化输出演示（withStructuredOutput）\n");
-
+// 是的。流式过来的只是零碎文本片段，无法保证每个片段都是完整、合法的JSON格式。
 try {
     const stream = await structuredModel.stream(prompt);
 
