@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import { ChatOpenAI } from'@langchain/openai';
-import { PromptTemplate } from'@langchain/core/prompts';
+import { ChatOpenAI } from '@langchain/openai';
+import { PromptTemplate } from '@langchain/core/prompts';
 
 // 初始化模型
 const model = new ChatOpenAI({
@@ -33,18 +33,21 @@ const naiveTemplate = PromptTemplate.fromTemplate(`
 - 语气专业但有一点人情味，适合作为给老板和团队抄送的周报。
 `);
 
-// const prompt = await naiveTemplate.format({
-//     company_name: '星航科技',
-//     team_name: '数据智能平台组',
-//     manager_name: '刘总',
-//     week_range: '2025-03-10 ~ 2025-03-16',
-//     team_goal: '完成用户画像服务的灰度上线，并验证核心指标是否达标。',
-//     dev_activities:
-//         '- 阿兵：完成用户画像服务的 Canary 发布与回滚脚本优化，提交 27 次，相关任务：DATA-321 / DATA-335\n' +
-//         '- 小李：接入埋点数据，打通埋点 → Kafka → DWD → 画像服务的全链路，提交 22 次\n' +
-//         '- 小赵：完善画像服务的告警与Dashboard，新增 8 个告警规则，提交 15 次\n' +
-//         '- 小周：配合产品输出 A/B 实验报表，支持 3 条对外汇报用数据',
-//     });
+const prompt = await naiveTemplate.format({
+    company_name: '星航科技',
+    team_name: '数据智能平台组',
+    manager_name: '刘总',
+    week_range: '2025-03-10 ~ 2025-03-16',
+    team_goal: '完成用户画像服务的灰度上线，并验证核心指标是否达标。',
+    dev_activities:
+        '- 阿兵：完成用户画像服务的 Canary 发布与回滚脚本优化，提交 27 次，相关任务：DATA-321 / DATA-335\n' +
+        '- 小李：接入埋点数据，打通埋点 → Kafka → DWD → 画像服务的全链路，提交 22 次\n' +
+        '- 小赵：完善画像服务的告警与Dashboard，新增 8 个告警规则，提交 15 次\n' +
+        '- 小周：配合产品输出 A/B 实验报表，支持 3 条对外汇报用数据',
+    });
+
+// console.log('格式化后的提示词:');
+// console.log(prompt);
 
 const prompt2 = await naiveTemplate.format({
     company_name: '极光云科技',
@@ -58,9 +61,6 @@ const prompt2 = await naiveTemplate.format({
       '- 小陈：梳理告警策略，合并冗余告警 12 条，新增 SLO 监控 3 项，提交 16 次\n' +
       '- 实习生小刘：补齐历史接口的缺失单测，用例覆盖 12 个核心方法，整体覆盖率从 52% 提升到 61%',
   });
-console.log('格式化后的提示词:');
-console.log(prompt2);
-
 console.log('格式化后的提示词:');
 console.log(prompt2);
 

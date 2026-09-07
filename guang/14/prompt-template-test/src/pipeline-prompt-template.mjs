@@ -1,9 +1,6 @@
 import 'dotenv/config';
-import { ChatOpenAI } from'@langchain/openai';
-// PipelinePromptTemplate 是 LangChain 中用于将多个提示模板串联
-// 起来，按顺序处理输入并自动传递中间输出，从而构建复杂多步提示生成流
-// 程的组合模板。
-import { PipelinePromptTemplate, PromptTemplate } from'@langchain/core/prompts';
+import { ChatOpenAI } from '@langchain/openai';
+import { PipelinePromptTemplate, PromptTemplate } from '@langchain/core/prompts';
 
 // 初始化模型
 const model = new ChatOpenAI({
@@ -15,13 +12,13 @@ const model = new ChatOpenAI({
     },
 });
 
-// A. 人设模块
+// A. 人设模块（导出以便在其他场景复用）
 export const personaPrompt = PromptTemplate.fromTemplate(
     `你是一名资深工程团队负责人，写作风格：{tone}。
 你擅长把枯燥的技术细节写得既专业又有温度。\n`
 );
 
-// B. 背景模块
+// B. 背景模块（导出以便在其他场景复用）
 export const contextPrompt = PromptTemplate.fromTemplate(
     `公司：{company_name}
 部门：{team_name}
@@ -64,25 +61,14 @@ const finalWeeklyPrompt = PromptTemplate.fromTemplate(
 现在请生成本周的最终周报：`
 );
 
-const pipelinePrompt = new PipelinePromptTemplate({
-    // name 是提示词的名称，prompt 是提示词模板
+export const pipelinePrompt = new PipelinePromptTemplate({
     pipelinePrompts: [
         { name: 'persona_block', prompt: personaPrompt },
         { name: 'context_block', prompt: contextPrompt },
         { name: 'task_block', prompt: taskPrompt },
         { name: 'format_block', prompt: formatPrompt },
     ],
-    finalPrompt: finalWeeklyPrompt,
-    inputVariables: [
-        'tone',
-        'company_name',
-        'team_name',
-        'manager_name',
-        'week_range',
-        'team_goal',
-        'dev_activities',
-        'company_values',
-    ],
+    finalPrompt: finalWeeklyPrompt
 });
 
 const pipelineFormatted = await pipelinePrompt.format({

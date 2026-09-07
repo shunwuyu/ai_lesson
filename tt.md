@@ -9,3 +9,8 @@
 - DeepSeek 应用开发实战 https://time.geekbang.org/column/article/857404
 - starting-ragchatbot-codebase https://github.com/https-deeplearning-ai/starting-ragchatbot-codebase
 - 
+
+1-3 博扬
+4  罗贤康
+5 陈俊璋 王子恒
+6  
