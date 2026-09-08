@@ -16,8 +16,8 @@ class User(BaseModel):
 # 变量名全部大写 = 视为常量，约定不要修改， 
 # 只是人为规范，代码语法上依旧能改。
 external_data = {
-  # 'id': 123,
-  'id': 'a123',
+  'id': 123,
+  # 'id': 'a123',
   'date_joined': '2030-06-01',
   'departments': ['技术部', '产品部']
 }
@@ -37,4 +37,4 @@ try:
   print(isinstance(user.model_dump(), dict))
 # ValidationError是 Pydantic 专属数据校验异常
 except ValidationError as e:
-  print(e.errors())
+  print(e.errors(), "------")

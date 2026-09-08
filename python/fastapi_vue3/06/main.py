@@ -17,9 +17,9 @@ async def root():
 # 自动pydantic 
 # http://127.0.0.1:8000/p/123
 # http://127.0.0.1:8000/p/ddd
-# @app.get("/p/{article_id}")
-# async def article_detail(article_id: int):
-#   return {"article_id": article_id}
+@app.get("/p/{article_id}")
+async def article_detail(article_id: int):
+  return {"article_id": article_id}
 
 # 升级版本 Annotated 表示注释一下
 # Path 用于给路径参数添加校验规则
@@ -27,17 +27,17 @@ async def root():
 # http://127.0.0.1:8000/p/1 报错
 # Annotated[基础类型, 附加内容]，就是给参数类型额外加规则与元数据。
 # Path()：标记这个变量是URL 路径参数
-@app.get("/p/{article_id}")
-async def article_detail(article_id: Annotated[int, Path(ge=2)]):
-  return {"article_id": article_id}
+# @app.get("/p/{article_id}")
+# async def article_detail(article_id: Annotated[int, Path(ge=2)]):
+#   return {"article_id": article_id}
 
-# 查询参数
-# http://127.0.0.1:8000/article/list?page=2&size=5
+# # 查询参数
+# # http://127.0.0.1:8000/article/list?page=2&size=5
+# # @app.get('/article/list')
+# # async def article_list(page: int = 0, size: int = 10):
+# #   return {"page": page, "size": size}
+
 # @app.get('/article/list')
-# async def article_list(page: int = 0, size: int = 10):
+# async def article_list(page: Annotated[int, Query(ge=1)] = 1,
+#   size: Annotated[int, Query(ge=10)] = 10):
 #   return {"page": page, "size": size}
-
-@app.get('/article/list')
-async def article_list(page: Annotated[int, Query(ge=1)] = 1,
-  size: Annotated[int, Query(ge=10)] = 10):
-  return {"page": page, "size": size}

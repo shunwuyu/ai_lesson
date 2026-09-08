@@ -25,35 +25,45 @@ async/await
 安装python https://www.python.org/ 
 3.11 就好
 
+hello world
+
+```
+print("Hello, World!")
+```
+### conda 
+
 conda 是一个环境管理和包管理工具，用于创建隔离的 Python  环境和管理依赖。
-四个朋友开麻将房， 一个个小包间。
+四个朋友开麻将房， 一个个小包间， 有的打2块的， 有的打5块的。
 创建虚拟环境
 虚拟环境隔离各项目依赖版本，互不冲突，便于管理与部署，保护全局 Python。
 
 anaconda 太大了， 有几个G, 我们安装miniconda, 就够用了。
 
-百度搜 中科大镜像源 输入框输入conda
+百度搜 中科大镜像源 输入框输入anaconda
 点进去 miniconda 选择相应版本
 conda 26.3.2
+
+conda --version
 
 conda init bash  直接打开 bash 输 conda 提示命令不存在：必须执行一次，重载终端后就能永久使用 conda；
 安装时勾选了添加到系统环境变量，或是用 Anaconda Prompt 专用终端：不用执行，开箱即用。
 执行以下， 再打开。
-
+conda env list 列出所有环境
 conda create -n fastapi-env python=3.11
 
 conda activate fastapi-env
-
 deactivate 退出（有需要用）
+conda env remove -n 环境名
 
 - 安装 
 ···
 <!-- 安装 FastAPI 框架本体 standard日常开发必备的全套配套工具 -->
-pip install "fastapi[standard]"
+pip install "fastapi[standard]" --user
 ···
 
 ```
 uvicorn 是 异步 Web 服务器，用来运行 FastAPI 项目，standard 附带常用运行配套依赖。
+uvicorn 跑 async 接口，能同时处理大量请求，不像老服务器要等一个任务做完才接下一个。
 pip install "uvicorn[standard]"
 ```
 - 查看安装在哪里
@@ -64,15 +74,18 @@ pip show fastapi
 ## 创建项目
 - first-demo
   main.py
-  test_main.http
+  <!-- test_main.http -->
   <!-- main = main.py 文件，app = 文件里实例化的 FastAPI 对象 -->
   <!-- uvicorn 启动服务运行项目，--reload 开启热重载，改代码自动重启服务。 -->
   <!-- 当前环境里的 -->
   python -m uvicorn main:app --reload --port 8080  
   main 文件里的 app 实例
+  -m 作为模块运行
+  main:app 从 main.py 文件中导入 app 对象
 ## pydantic
+
 user.py
 '123'  字符串转整数  
-Pydantic 自带智能类型强制转换，合法数字字符串"123"会自动转为 int 类型，不符合格式才会抛出校验错误。
+Pydantic 是 Python 的数据校验库zod，自带智能类型强制转换，合法数字字符串"123"会自动转为 int 类型，不符合格式才会抛出校验错误。
 面向对象， 数据校验、类型转换、数据格式化
 
