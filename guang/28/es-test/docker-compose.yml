@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Elasticsearch 最新稳定版：8.17.0
+  es:
+    image: elasticsearch:8.17.0
+    container_name: es-dev
+    ports:
+      - "9200:9200" # ES 对外提供服务的端口
+    environment:
+      - discovery.type=single-node # 单节点运行（开发环境）
+      - xpack.security.enabled=false # 关闭安全认证，免密码访问
+      - xpack.security.http.ssl.enabled=false # 关闭 HTTPS 加密
+      - xpack.security.transport.ssl.enabled=false # 关闭节点传输加密
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m # JVM 内存配置，避免占用过高
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/es:/usr/share/elasticsearch/data
+    restart: always
+
+  # Kibana 最新稳定版：8.17.0（必须与 ES 版本完全一致）
+  kibana:
+    image: kibana:8.17.0
+    container_name: kibana-dev
+    ports:
+      - "5601:5601" # Kibana 网页控制台端口
+    environment:
+      - ELASTICSEARCH_HOSTS=http://es:9200 # 连接 ES 容器内部地址
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/kibana:/usr/share/kibana/data
+    restart: always
+    depends_on:
+      - es # 等待 ES 启动完成后再启动 Kibana
+
+networks:
+  default:
+    name: common-network
