@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Elasticsearch 最新稳定版：8.17.0
   es:
-    image: elasticsearch:8.17.0
+    build: ./elasticsearch
     container_name: es-dev
     ports:
       - "9200:9200" # ES 对外提供服务的端口
