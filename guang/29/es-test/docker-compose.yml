@@ -1,0 +1,95 @@
+services:
+  # Elasticsearch 8.17.0 + IK 中文分词（内置到镜像）
+  es:
+    build: ./elasticsearch       # 从本地 Dockerfile 构建镜像（自带IK）
+    container_name: es-dev
+    ports:
+      - "9200:9200"               # ES 访问端口
+    environment:
+      - discovery.type=single-node  # 单节点运行（开发环境）
+      - xpack.security.enabled=false  # 关闭安全认证，免密码访问
+      - xpack.security.http.ssl.enabled=false  # 关闭 HTTPS 加密
+      - xpack.security.transport.ssl.enabled=false  # 关闭节点传输加密
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m  # JVM 内存配置，避免占用过高
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/es/data:/usr/share/elasticsearch/data
+    restart: always
+
+  # Kibana 最新稳定版：8.17.0（必须与 ES 版本完全一致）
+  kibana:
+    image: kibana:8.17.0
+    container_name: kibana-dev
+    ports:
+      - "5601:5601"  # Kibana 网页控制台端口
+    environment:
+      - ELASTICSEARCH_HOSTS=http://es:9200  # 连接 ES 容器内部地址
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/kibana:/usr/share/kibana/data
+    restart: always
+    depends_on:
+      - es  # 等待 ES 启动完成后再启动 Kibana
+
+  # Milvus 最新稳定版：2.5.0（必须与 ES 版本完全一致）# Milvus
+  etcd:
+    container_name: etcd-dev
+    image: quay.io/coreos/etcd:v3.5.18
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/etcd:/etcd
+    command: etcd -advertise-client-urls=http://etcd:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    healthcheck:
+      test: ["CMD", "etcdctl", "endpoint", "health"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  minio:
+    container_name: minio-dev
+    image: minio/minio:RELEASE.2024-05-28T17-19-04Z
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    ports:
+      - "9001:9001"
+      - "9000:9000"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/minio:/minio_data
+    command: minio server /minio_data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  standalone:
+    container_name: standalone-dev
+    image: milvusdb/milvus:v2.5.25
+    command: ["milvus", "run", "standalone"]
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      MINIO_REGION: us-east-1
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: minio:9000
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/milvus:/var/lib/milvus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 30s
+      start_period: 90s
+      timeout: 20s
+      retries: 3
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    depends_on:
+      - "etcd"
+      - "minio"
+
+networks:
+  default:
+    name: common-network
