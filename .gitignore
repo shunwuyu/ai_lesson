@@ -158,3 +158,6 @@ CLAUDE.local.md
 
 # Milvus runtime data
 guang/09/milvus/volumes/
+
+# Docker compose runtime data (Elasticsearch / etcd / Milvus)
+guang/29/es-test/volumes/
