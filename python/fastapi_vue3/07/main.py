@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 # Field 用于自定义字段的元数据
+# BaseModel 就是 Pydantic 的基类，继承它就能自动获得数据校验、转模型的全套能力。
 from pydantic import BaseModel,Field
+# Field：用来给模型字段加额外规则，比如默认值、最大最小值、注释描述，补充类型注解做不到的校验。
 from typing import Annotated
 
 app = FastAPI()
-
+# 啥都没有、空、不存在」的特殊对象，不是 0，不是空字符串
 class Item(BaseModel):
   name: str
   # 联合类型
@@ -18,6 +20,7 @@ async def update_item(item_id: int, item: Item):
   # ** 解包字典， 合并到 result 字典中 相当于es6 ...
   # 更新的数据传过来 
   # 校验不通过返回错误信息
+  # Pydantic 模型实例，转成普通 Python 字典
   result = {"item_id": item_id, **item.model_dump()}
   return result
 

@@ -6,12 +6,13 @@ https://github.com/m12305/hello-FastAPI/tree/main
 
 ## FastAPI 
 
-FastAPI 是基于 Python 的高性能、易开发的现代异步 Web 框架。
+FastAPI 是 Python 写的高性能 Web 接口框架，上手简单还速度快，性能能比肩 Go、Node。自动生成交互式接口文档，写代码少，自带类型提示，写错参数直接提示。专门用来做后端 API，写接口不用折腾繁琐配置，开发效率很高，异步支持也原生自带，现在很多项目都在用，很适合快速做后端服务。
 
-FastAPI = Pydantic + Starlette
-Pydantic（数据校验）
+FastAPI = Pydantic + Starlette（负责 Web 底层。接收 HTTP 请求、路由匹配、返回响应，处理网络那一套，自带异步能力，是高性能的 Web 底座。）
+Pydantic（数据校验 有点像 zod）
 路由参数 
 /user/123   123 字符串转整数  必传
+
 
 Starlette（异步）
 async/await 
@@ -58,7 +59,7 @@ conda env remove -n 环境名
 - 安装 
 ···
 <!-- 安装 FastAPI 框架本体 standard日常开发必备的全套配套工具 -->
-pip install "fastapi[standard]" --user
+pip install "fastapi[standard]"
 ···
 
 ```
@@ -82,6 +83,7 @@ pip show fastapi
   main 文件里的 app 实例
   -m 作为模块运行
   main:app 从 main.py 文件中导入 app 对象
+  
 ## pydantic
 
 user.py
