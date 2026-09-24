@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-
+# Python 无显式导出，直接导入模块变量，经主程序挂载后接口才对外生效。
 router = APIRouter(prefix="/user", tags=["user"])
 
 @router.get("/list")

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: k8s-demo
+
+spec:
+  containers:
+    - name: app
+      image: k8s-demo:v1
+      ports:
+        - containerPort: 3000

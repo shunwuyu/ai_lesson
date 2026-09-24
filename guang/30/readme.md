@@ -61,4 +61,17 @@ Milvus 和 ElasticSearch 更像是 “精准找货” 的工具 —— 一个按
 
 GraphRAG 是 “知识图谱 + RAG” 的结合体，它并非推翻我们之前学的传统 RAG，而是对 RAG 检索模块的升维优化，专门解决传统 RAG（依赖 Milvus 向量检索、ElasticSearch 全文检索）无法进行多跳推理、难以捕捉实体关联的痛点。
 
+## docker-compose.yml
 
+docker-compose.yml 里的 volumes 就是给容器外挂硬盘。容器本身是临时的，删掉容器里面数据就没了。挂载 volumes，把宿主机的文件夹连进容器，容器读写数据实际存在宿主机。就算容器删了重建，数据还在，就像游戏存档存在本地，删游戏重装存档还能用。
+
+localhost: 7474
+
+所有的节点， 所有的边
+**Product、Type、Ingredient 全是你自己随便定义的标签**。
+
+`Product`、`Type` 都是**节点标签（类别）**。
+
+第一个节点归类为商品 Product；后两个属于品类 Type。
+
+`[:属于]` 是**自己定义的关系类型**。

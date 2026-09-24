@@ -1,7 +1,5 @@
 import "dotenv/config";
-// @langchain/core/retrievers检索器抽象基类，定义统一检索接口，输入查询、返回相关文档，是 RAG 检索组件标准规范。
-// `BaseDocumentCompressor` 是 LangChain 核心包中**文档压缩器的抽象基类**，
-// 用于定义检索后对文档列表做过滤 / 精简压缩的统一接口。
+// 把检索出来的文档过滤精简，删掉无关内容，只留和问题相关的片段，减少上下文占用。
 import { BaseDocumentCompressor } from "@langchain/core/retrievers/document_compressors";
 // RAG 召回的文档很多，压缩就是**筛掉无关文档**，减少传给大模型的上下文，省 token 还降低干扰，回答更准。
 // 导入LangChain文档压缩器抽象基类，继承它来实现自定义rerank压缩器

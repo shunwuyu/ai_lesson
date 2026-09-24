@@ -7,9 +7,10 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase, Mapped, mapped_column,
 # 会话负责事务、CRUD 操作，隔离数据库交互，控制提交回滚。
 engine = create_engine("sqlite:///./demo.db", echo=True)
 # bind 参数绑定引擎，指定会话使用哪个引擎
-# 相当于你雇了一个极度听话、绝不擅作主张的助手：
-# 你在内存里怎么折腾数据，他都不管（不自动 flush）。
-# 你折腾完了，他也不会自动帮你保存（不自动 commit）。
+# 造出会话工厂 
+# 统一配置会话参数
+# autoflush 是否自动提交内存中的修改到数据库
+# autocommit 关闭自动事务提交，所有增改操作都要手动执行 `session.commit()` 才真正存入数据库。
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 # ═══════════════════════════════════════════════════════════
@@ -17,19 +18,30 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 # ═══════════════════════════════════════════════════════════
 # ORM 模型基类，所有数据表模型都要继承它
 # 继承后自动映射 Python 类 ↔ SQLite 数据表，自动生成表结构、字段映射规则
+# 为什么要包一层空 Base
+# 统一管理所有数据表模型
+# 方便全局扩展模型
+# 解耦第三方类 
+# 以后换 ORM 版本，只改 Base 一处即可，不动所有 User、Article 业务模型。
 class Base(DeclarativeBase):
-    pass # 空类，用于继承， 
+  pass # 空类，用于继承，
+  # `pass`是空语句，表示**什么都不执行**。这个位置语法上必须有代码块，pass 占位，不写会报错。
+    
 # Mapped 类型，用于定义模型字段的类型
 # mapped_column 函数，用于定义模型字段的映射规则
 class User(Base):
     __tablename__ = "users"
+    # 类型注解
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     age: Mapped[int | None] = mapped_column(default=None)
     is_active: Mapped[bool] = mapped_column(default=True)
+    # func 用来调用数据库内置函数
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
-
+    # ORM 关系映射（一对多）
+    # 拿到 user 对象，直接 `user.posts`，就能拿到该用户全部帖子对象列表，不用自己写 JOIN 查询。
+    # back_populates 指定对方模型关联属性，实现双向关系同步，两边对象状态自动保持一致。
     posts: Mapped[list["Post"]] = relationship(back_populates="author")
     # 定义模型的 __repr__ 方法，用于在调试时打印模型实例
     # __repr__ 方法返回一个字符串，描述模型实例的属性值
@@ -92,9 +104,9 @@ def demo():
     print(f"✅ 更新年龄: {found.age}")
 
     # ── Delete ──
-    session.delete(found)
-    session.commit()
-    print(f"✅ 删除用户: {found}")
+    # session.delete(found)
+    # session.commit()
+    # print(f"✅ 删除用户: {found}")
 
   except Exception as e:
     # 回滚事务，撤销所有操作

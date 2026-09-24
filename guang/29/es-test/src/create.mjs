@@ -63,10 +63,15 @@ async function seedData() {
       updated_at: now
     }
   ];
+  // `flatMap`先遍历数组每个元素，对每个 doc 返回`[{index...}, doc]`子数组。
+  // 普通 map 会得到二维数组`[[obj1,doc1],[obj2,doc2]]`；
+  // flatMap 会自动把内层数组拍平，输出一维数组，正好适配 ES bulk 交替「元数据 + 文档」的格式。
   // ES bulk 批量写入的格式
   const operations = docs.flatMap((doc) => [{ index: { _index: INDEX_NAME } }, doc]);
   console.log(operations);
   // 批量操作 API
+  // 批量增写
+  // refresh:true 写完立刻刷新可查询
   await client.bulk({ refresh: true, operations });
   console.log(`✅ 初始化数据完成，共 ${docs.length} 条`);
 }

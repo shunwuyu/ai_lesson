@@ -1,7 +1,7 @@
 https://bailian.console.aliyun.com/cn-beijing/model/market  qwen3-rerank 
 
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \
---header "Authorization: Bearer sk-ws-H.PHHELRY.VNr6.MEQCIDVoKtbVvqz7x4YbDYKQvJiOVxk3ovfKgDel2nEfdwFnAiA15jX4zp__zSsqg-Te_pM667iAOlLvAoncqBFVYcxbjA" \
+--header "Authorization: Bearer " \
 --header 'Content-Type: application/json' \
 --data '{
     "model": "qwen3-rerank",

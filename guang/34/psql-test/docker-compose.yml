@@ -1,0 +1,43 @@
+services:
+  # PostgreSQL with pgvector (AI 向量数据库)
+  postgres:
+      image: pgvector/pgvector:pg16
+      container_name: pg_vector_db
+      restart: always
+      environment:
+        POSTGRES_USER: user
+        POSTGRES_PASSWORD: 123456
+        POSTGRES_DB: hello_pg
+      ports:
+        - "5432:5432"
+      volumes:
+        - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/postgres:/var/lib/postgresql/data
+        - ./init-scripts:/docker-entrypoint-initdb.d
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U user -d hello_pg"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+
+  # PostgreSQL GUI (pgAdmin)
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/pgadmin:/var/lib/pgadmin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/login"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    ports:
+      - "8088:80"
+    depends_on:
+      - postgres
+
+networks:
+  default:
+    name: common-network
