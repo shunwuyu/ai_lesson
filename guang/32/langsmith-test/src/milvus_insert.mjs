@@ -6,7 +6,7 @@ import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 const COLLECTION = process.env.MILVUS_COLLECTION ?? "rag_docs";
-
+// 兼容线上
 const MILVUS_ADDRESS =
   process.env.MILVUS_URI?.replace(/^https?:\/\//, "") ?? "localhost:19530";
 
@@ -33,6 +33,7 @@ async function loadChunks(dataDir = "./data") {
   }));
 
   const splitter = new RecursiveCharacterTextSplitter({
+    // separators ["\n\n", "\n", " ", ""]
     chunkSize: 500,
     chunkOverlap: 50,
   });
