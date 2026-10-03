@@ -1,0 +1,22 @@
+{
+  "name": "mem0-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@langchain/core": "^1.2.14",
+    "@langchain/openai": "^1.6.2",
+    "dotenv": "^18.0.5",
+    "ioredis": "^6.0.0",
+    "langchain": "^1.5.15",
+    "mem0ai": "^3.3.1",
+    "zod": "^4.6.5"
+  }
+}

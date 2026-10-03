@@ -1,0 +1,209 @@
+services:
+  # PostgreSQL
+  postgres:
+      image: pgvector/pgvector:pg16
+      container_name: knowledge_hub_postgres
+      restart: always
+      environment:
+        POSTGRES_USER: user
+        POSTGRES_PASSWORD: 123456
+        POSTGRES_DB: knowledge_hub
+      ports:
+        - "5432:5432"
+      volumes:
+        - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/postgres:/var/lib/postgresql/data
+        - ./init-scripts/postgresql:/docker-entrypoint-initdb.d
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U user -d hello_pg"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+
+  # PostgreSQL GUI (pgAdmin)
+  pgadmin:
+    container_name: knowledge_hub_pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/pgadmin:/var/lib/pgadmin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/login"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    ports:
+      - "8088:80"
+    depends_on:
+      - postgres
+
+  # MongoDB 主库
+  mongodb:
+    image: mongo:7-jammy
+    container_name: knowledge_hub_mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo_user
+      MONGO_INITDB_ROOT_PASSWORD: mongo_pass123
+      MONGO_INITDB_DATABASE: knowledge_hub
+    ports:
+      - "27017:27017"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/mongo:/data/db
+      - ./init-scripts/mongodb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')", "-u", "mongo_user", "-p", "mongo_pass123", "--authenticationDatabase", "admin"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # MongoDB Web GUI: mongo-express
+  mongo-express:
+    image: mongo-express:1.0.2-20-alpine3.19
+    container_name: knowledge_hub_mongo_express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      # 连接 mongo 数据库账号（和mongodb服务保持一致）
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongo_user
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongo_pass123
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      # mongo-express 网页登录账号（区分数据库账号）
+      ME_CONFIG_BASICAUTH_ENABLED: "true"
+      ME_CONFIG_BASICAUTH_USERNAME: me_admin
+      ME_CONFIG_BASICAUTH_PASSWORD: me_123456
+      # 编辑器暗色主题
+      ME_CONFIG_OPTIONS_EDITORTHEME: "3024-night"
+    # 等待mongodb健康就绪再启动
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  # Redis — 密码重置验证码等
+  redis:
+    image: redis:7-alpine
+    container_name: knowledge_hub_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Web GUI: RedisInsight
+  redisinsight:
+    image: redis/redisinsight:2.50
+    container_name: knowledge_hub_redisinsight
+    restart: always
+    ports:
+      - "5540:5540"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/redisinsight:/data
+    environment:
+      - RI_HOST=0.0.0.0
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # RabbitMQ — 文档发布后异步管线（RAG / KG / ES）
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: knowledge_hub_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/rabbitmq:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # Elasticsearch 8.17.0 + IK 中文分词（内置到镜像）
+  es:
+    build: ./elasticsearch       # 从本地 Dockerfile 构建镜像（自带IK）
+    container_name: knowledge_hub_elasticsearch
+    ports:
+      - "9200:9200"               # ES 访问端口
+    environment:
+      - discovery.type=single-node  # 单节点运行（开发环境）
+      - xpack.security.enabled=false  # 关闭安全认证，免密码访问
+      - xpack.security.http.ssl.enabled=false  # 关闭 HTTPS 加密
+      - xpack.security.transport.ssl.enabled=false  # 关闭节点传输加密
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m  # JVM 内存配置，避免占用过高
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/es/data:/usr/share/elasticsearch/data
+    restart: always
+
+  # Kibana 最新稳定版：8.17.0（必须与 ES 版本完全一致）
+  kibana:
+    image: kibana:8.17.0
+    container_name: knowledge_hub_kibana
+    ports:
+      - "5601:5601"  # Kibana 网页控制台端口
+    environment:
+      - ELASTICSEARCH_HOSTS=http://es:9200  # 连接 ES 容器内部地址
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/kibana:/usr/share/kibana/data
+    restart: always
+    depends_on:
+      - es  # 等待 ES 启动完成后再启动 Kibana
+
+  # RustFS（S3 兼容对象存储）— PDF 抽图 / 原文件上传
+  # 文档：https://docs.rustfs.com/installation/docker/
+  rustfs:
+    image: rustfs/rustfs:latest
+    container_name: knowledge_hub_rustfs
+    restart: unless-stopped
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # Console
+    environment:
+      RUSTFS_VOLUMES: /data/rustfs0
+      RUSTFS_ADDRESS: 0.0.0.0:9000
+      RUSTFS_CONSOLE_ADDRESS: 0.0.0.0:9001
+      RUSTFS_CONSOLE_ENABLE: "true"
+      RUSTFS_ACCESS_KEY: rustfsadmin
+      RUSTFS_SECRET_KEY: rustfsadmin
+      RUSTFS_CORS_ALLOWED_ORIGINS: "*"
+      RUSTFS_UNSAFE_BYPASS_DISK_CHECK: "true"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/rustfs0:/data/rustfs0
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:9000/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  # Neo4j — KG 知识图谱
+  neo4j:
+    image: neo4j:2026.04.0
+    container_name: knowledge_hub_neo4j
+    ports:
+      - "7474:7474"   # Web 管理界面
+      - "7687:7687"   # Bolt 协议（代码连接）
+    environment:
+      - NEO4J_AUTH=neo4j/12345678  # 账号：neo4j  密码：12345678
+      - NEO4J_PLUGINS=["apoc"]     # 安装必备插件
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/neo4j/data:/data
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/neo4j/logs:/logs
+    restart: unless-stopped
+
+networks:
+  default:
+    name: common-network
