@@ -49,6 +49,8 @@ const agent = createAgent({
   systemPrompt:
     "你是会话助手。记住用户提到的关键事实，中文简短回答。若看到「此前对话摘要」，请据此继续对话。",
   middleware: [
+    // createSummarizationMiddleware 到达消息阈值就调用 model 做对话摘要，通过 backend 存到指定路径，
+    // 保留最近几条消息，压缩上下文避免超出 LLM 窗口。
     createSummarizationMiddleware({
       model,
       backend,
