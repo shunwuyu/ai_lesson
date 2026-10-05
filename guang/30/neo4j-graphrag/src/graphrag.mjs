@@ -36,11 +36,14 @@ const state = {
   // value: 归约函数，新消息追加到数组末尾，实现消息累加
   // default: 初始为空数组
   messages: {
+    // 老版本用reducer, 新版本改成value 规约函数
     value: (left, right) =>
       left.concat(Array.isArray(right) ? right : [right]),
     default: () => [],
   },
+  // Cypher 是 Neo4j 专属的声明式图查询语言，用类自然语句描述节点与关系，用来对图数据做增删改查。
   cypher: null,    // 保存大模型生成出来的 Cypher 查询语句
+  // rag 
   context: null,   // 保存 neo4j 返回的图谱检索结果(json字符串)
   answer: null,    // 保存最终返回给用户的自然语言答案
 }
@@ -139,6 +142,8 @@ async function generateAnswer(state) {
 // 7. 组装 LangGraph 工作流
 // 工作流顺序：START → generateCypher → executeGraph → generateAnswer → END
 // ======================================================
+// LangGraph 中状态的存储通道, 定义状态字段、读写规则，用来传递、持久化图流程里各节点间的数据。
+// Annotation.Root
 const workflow = new StateGraph({ channels: state })
   // 添加工作流节点，每个节点对应上面写好的异步函数
   .addNode('generateCypher', generateCypher)
@@ -198,7 +203,7 @@ async function runGraphRAG(question) {
   // Promise.all并发跑多个测试样例
   await Promise.all([
     runGraphRAG('我们这款珍珠奶茶有哪些配料？'),
-    runGraphRAG('台式奶茶的饮品都有哪些配料？'),
-    runGraphRAG('珍珠奶茶适合哪些人群饮用？'),
+    // runGraphRAG('台式奶茶的饮品都有哪些配料？'),
+    // runGraphRAG('珍珠奶茶适合哪些人群饮用？'),
   ])
 })().catch(console.error) // 全局捕获异常打印错误

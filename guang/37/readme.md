@@ -48,3 +48,10 @@ Agent 记忆（Agent Memory）
 
 我们分别存取一下试试：
 
+
+用户、会话、Agent 三种级别的 scope 可以独立的存储和检索记忆。
+
+然后我们在 Agent 里接入 mem0 做长期记忆，用 Redis 存做短期记忆
+
+安装依赖：
+

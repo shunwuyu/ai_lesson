@@ -56,3 +56,5 @@ localhost: 7474
 第一个节点归类为商品 Product；后两个属于品类 Type。
 
 `[:属于]` 是**自己定义的关系类型**。
+
+MERGE = MATCH + CREATE
