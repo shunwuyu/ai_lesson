@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AiModule } from './ai/ai.module';
-import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'node:path';
 import { SpeechModule } from './speech/speech.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    AiModule,
     ConfigModule.forRoot({
-      envFilePath: '.env',
       isGlobal: true,
+      envFilePath: '.env',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public')
     }),
     SpeechModule,
   ],

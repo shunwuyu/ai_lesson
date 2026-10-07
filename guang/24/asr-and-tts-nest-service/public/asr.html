@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ASR 录音测试</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        max-width: 720px;
+        margin: 40px auto;
+        padding: 0 16px;
+        line-height: 1.6;
+      }
+      button {
+        margin-right: 8px;
+        margin-bottom: 8px;
+        padding: 8px 14px;
+      }
+      .status {
+        margin: 12px 0;
+        color: #444;
+      }
+      pre {
+        background: #f6f8fa;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ASR 录音上传测试</h1>
+    <p>点击开始录音，结束后自动上传到 <code>/speech/asr</code>。</p>
+
+    <button id="startBtn">开始录音</button>
+    <button id="stopBtn" disabled>停止并上传</button>
+    <div class="status" id="status">状态：未开始</div>
+    <h3>识别结果</h3>
+    <pre id="result">（暂无）</pre>
+
+    <script>
+      const startBtn = document.getElementById("startBtn");
+      const stopBtn = document.getElementById("stopBtn");
+      const statusEl = document.getElementById("status");
+      const resultEl = document.getElementById("result");
+
+      let mediaRecorder = null;
+      let chunks = [];
+      const recordFilename = "record.ogg";
+
+      function setStatus(text) {
+        statusEl.textContent = "状态：" + text;
+      }
+
+      startBtn.addEventListener("click", async () => {
+        try {
+          // 调用浏览器 API，请求获取用户麦克风音频媒体流，拿到后可做录音、音频采集。
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          chunks = [];
+          // 指定音频 MIME 类型，采用 ogg 封装、opus 编码，用于浏览器录音输出音频格式。
+          const preferredMimeType = "audio/ogg;codecs=opus";
+          // 先判断浏览器是否支持 ogg‑opus 音频格式，支持就用该格式创建 MediaRecorder 录音对象；不支持则使用浏览器默认录音格式。
+          mediaRecorder = MediaRecorder.isTypeSupported(preferredMimeType)
+            ? new MediaRecorder(stream, { mimeType: preferredMimeType })
+            : new MediaRecorder(stream);
+          // MediaRecorder 分片产生音频数据块时触发该回调，把非空的音频片段存入 chunks 数组，后续用来拼接完整录音文件。
+          mediaRecorder.ondataavailable = (event) => {
+            if (event.data && event.data.size > 0) {
+              chunks.push(event.data);
+            }
+          };
+
+          mediaRecorder.onstop = async () => {
+            setStatus("录音结束，正在上传...");
+            try {
+              // 把录音分片数组 chunks 合并成二进制 Blob 音频对象，优先用录制时的 MIME 类型，兜底 audio/webm 格式。
+              const blob = new Blob(chunks, {
+                type: mediaRecorder.mimeType || "audio/webm",
+              });
+              if (!blob.size) {
+                throw new Error("录音数据为空，请至少录制 1 秒再上传");
+              }
+              const formData = new FormData();
+              formData.append("audio", blob, recordFilename);
+
+              const response = await fetch("/speech/asr", {
+                method: "POST",
+                body: formData,
+              });
+
+              if (!response.ok) {
+                const text = await response.text();
+                throw new Error(text || "请求失败");
+              }
+
+              const data = await response.json();
+              resultEl.textContent = data.text || "（空结果）";
+              setStatus("上传完成");
+            } catch (error) {
+              setStatus("上传失败");
+              resultEl.textContent = "错误：" + (error.message || String(error));
+            } finally {
+              stream.getTracks().forEach((t) => t.stop());
+            }
+          };
+
+          // 250 是**时间片毫秒值**，每 250 毫秒自动触发`ondataavailable`，输出一块音频分片数据。
+          mediaRecorder.start(250);
+          setStatus("录音中...");
+          startBtn.disabled = true;
+          stopBtn.disabled = false;
+        } catch (error) {
+          setStatus("无法开始录音");
+          resultEl.textContent = "错误：" + (error.message || String(error));
+        }
+      });
+
+      stopBtn.addEventListener("click", () => {
+        if (!mediaRecorder) return;
+        mediaRecorder.stop();
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+      });
+    </script>
+  </body>
+</html>

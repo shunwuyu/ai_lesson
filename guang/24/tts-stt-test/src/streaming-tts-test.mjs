@@ -48,6 +48,7 @@ function buildWsUrl() {
     .createHmac("sha1", SECRET_KEY)
     .update(rawStr)
     .digest("base64");
+  // URLSearchParams 用于快速组装 URL 查询参数字符串，支持对象转拼接好的 query 字符串。
   const searchParams = new URLSearchParams({
     ...params,
     Signature: signature,

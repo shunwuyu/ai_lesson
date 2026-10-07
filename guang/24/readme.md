@@ -34,7 +34,7 @@ https://cloud.tencent.com/document/product/1073/108595
 
 如果只是想合成一段固定文本，用普通 HTTP 接口就够，不需要 WebSocket。
 
-头像 账号信息 
+头像 账号信息 APPID
 
 
 这样，我们就可以来实现豆包同款的语音交互了：
