@@ -45,9 +45,9 @@
       const statusEl = document.getElementById("status");
       const resultEl = document.getElementById("result");
 
-      let mediaRecorder = null;
-      let chunks = [];
-      const recordFilename = "record.ogg";
+      let mediaRecorder = null; // 录音对象
+      let chunks = []; // 录音分片数组
+      const recordFilename = "record.ogg"; // 录音文件名
 
       function setStatus(text) {
         statusEl.textContent = "状态：" + text;
@@ -59,14 +59,18 @@
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
           chunks = [];
           // 指定音频 MIME 类型，采用 ogg 封装、opus 编码，用于浏览器录音输出音频格式。
+          // 一种开源免费的多媒体容器格式
           const preferredMimeType = "audio/ogg;codecs=opus";
           // 先判断浏览器是否支持 ogg‑opus 音频格式，支持就用该格式创建 MediaRecorder 录音对象；不支持则使用浏览器默认录音格式。
+          // 浏览器原生 MediaRecorder API，用于采集麦克风媒体流，把音视频编码输出成 Blob，实现前端录音录像。
           mediaRecorder = MediaRecorder.isTypeSupported(preferredMimeType)
             ? new MediaRecorder(stream, { mimeType: preferredMimeType })
             : new MediaRecorder(stream);
           // MediaRecorder 分片产生音频数据块时触发该回调，把非空的音频片段存入 chunks 数组，后续用来拼接完整录音文件。
           mediaRecorder.ondataavailable = (event) => {
             if (event.data && event.data.size > 0) {
+              console.log(event.data instanceof Blob);
+              // true
               chunks.push(event.data);
             }
           };
@@ -81,7 +85,9 @@
               if (!blob.size) {
                 throw new Error("录音数据为空，请至少录制 1 秒再上传");
               }
+              // 浏览器原生对象，用来组装表单键值对，可直接携带文件 Blob，发送 multipart/form‑data 格式的 POST 请求。
               const formData = new FormData();
+              // 向 FormData 添加名为`audio`的表单项，把音频 blob 作为文件，指定上传的文件名 recordFilename，用于后端接收文件。
               formData.append("audio", blob, recordFilename);
 
               const response = await fetch("/speech/asr", {
