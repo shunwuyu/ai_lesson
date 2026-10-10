@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SpeechService } from './speech.service';
 import { SpeechController } from './speech.controller';
-import { TtsRelayService } from './tts-relay.service';
 import * as tencentcloud from 'tencentcloud-sdk-nodejs';
+import { TtsRelayService } from './tts-relay.service';
 
 const AsrClient = tencentcloud.asr.v20190614.Client;
 
@@ -11,6 +11,7 @@ const AsrClient = tencentcloud.asr.v20190614.Client;
   providers: [
     SpeechService,
     TtsRelayService,
+    // 初始化 AS云 ASR 客户端，用于语音识别
     {
       provide: 'ASR_CLIENT',
       useFactory: (configService: ConfigService) => {
@@ -32,6 +33,7 @@ const AsrClient = tencentcloud.asr.v20190614.Client;
     },
   ],
   controllers: [SpeechController],
+  // 别的模块导入 `SpeechModule`，就能注入使用 `TtsRelayService`。
   exports: [TtsRelayService],
 })
 export class SpeechModule {}

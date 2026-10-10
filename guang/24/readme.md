@@ -52,3 +52,10 @@ https://cloud.tencent.com/document/product/1073/108595
 思路理清了，接下来按照这个实现下豆包同款交互：
 
 先创建后端项目：
+
+## 事件通知
+
+SSE 拿到 AI 文本分片，发给 TTS 模块，触发语音合成。
+注入 EventEmitter，SSE 收到分片就 emit 事件，TTS 模块监听事件执行合成。
+@nestjs/event-emitter 
+

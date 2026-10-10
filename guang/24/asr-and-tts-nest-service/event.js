@@ -1,6 +1,7 @@
 // Node.js 内置事件模块 EventEmitter
 const { EventEmitter } = require('events');
-
+// 发布 - 订阅模式，事件发布者与订阅者解耦，通过事件中心通信。
+// EventEmitter 就是事件中心
 // 创建事件对象
 const emitter = new EventEmitter();
 

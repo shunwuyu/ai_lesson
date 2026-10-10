@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { SpeechModule } from './speech/speech.module';
 import { ConfigModule } from '@nestjs/config';
 import { AiModule } from './ai/ai.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -15,6 +16,10 @@ import { AiModule } from './ai/ai.module';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'public')
+    }),
+    // 引入事件模块，用于事件通知
+    EventEmitterModule.forRoot({
+      maxListeners: 200 // 最大监听器数量，默认 10
     }),
     SpeechModule,
     AiModule,
