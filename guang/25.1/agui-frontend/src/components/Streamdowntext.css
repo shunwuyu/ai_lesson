@@ -1,0 +1,25 @@
+/* Streamdown 本体用 Tailwind 类渲染；此处只做聊天区容器级微调 */
+
+.chat-streamdown {
+  text-align: left;
+  max-width: 100%;
+}
+
+.chat-streamdown__inner {
+  /* 与气泡内正文字号协调 */
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* 段落与表格/代码块之间的呼吸感（Streamdown 块级间距由组件自带，这里补一层保险） */
+.chat-streamdown__inner :where(p + [data-streamdown='table-wrapper']),
+.chat-streamdown__inner :where(p + [data-streamdown='code-block']),
+.chat-streamdown__inner :where([data-streamdown='table-wrapper'] + p) {
+  margin-top: 0.5rem;
+}
+
+/* Shiki 的 pre 也需保留换行（避免被其它全局样式影响） */
+.chat-streamdown [data-streamdown='code-block'] pre {
+  white-space: pre-wrap;
+  overflow-x: auto;
+}

@@ -1,0 +1,161 @@
+@import "tailwindcss";
+@source '../node_modules/streamdown/dist/**/*.js';
+@source '../node_modules/@streamdown/code/dist/**/*.js';
+@source '../node_modules/@streamdown/mermaid/dist/**/*.js';
+
+/* Streamdown 使用 dark: 前缀，与系统深色模式对齐 */
+@variant dark (@media (prefers-color-scheme: dark));
+
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #ffffff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.12);
+  --accent-border: rgba(170, 59, 255, 0.45);
+  --social-bg: rgba(244, 243, 236, 0.85);
+  --tool-panel-bg: #f3edff;
+  --tool-panel-bg-2: #ebe4ff;
+  /* 发送邮件工具卡：青绿系，与紫色联网搜索区分 */
+  --tool-mail-bg: #ecfdf5;
+  --tool-mail-bg-2: #d1fae5;
+  --tool-mail-accent: #0d9488;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  /* Streamdown / shadcn 语义色（组件用 border-border、bg-sidebar 等） */
+  --background: var(--bg);
+  --foreground: var(--text-h);
+  --card: var(--bg);
+  --card-foreground: var(--text-h);
+  --muted: var(--social-bg);
+  --muted-foreground: var(--text);
+  --input: var(--border);
+  --primary: var(--accent);
+  --primary-foreground: #ffffff;
+  --sidebar: #f4f4f6;
+  --sidebar-foreground: var(--text-h);
+  --radius: 0.625rem;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.45);
+    --social-bg: rgba(47, 48, 58, 0.65);
+    --tool-panel-bg: #221a33;
+    --tool-panel-bg-2: #1a1428;
+    --tool-mail-bg: #0f2722;
+    --tool-mail-bg-2: #134e4a;
+    --tool-mail-accent: #2dd4bf;
+    --sidebar: #27272f;
+    --sidebar-foreground: var(--text-h);
+    --primary-foreground: #16171d;
+  }
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+#root {
+  width: 100%;
+  max-width: 1126px;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+p {
+  margin: 0;
+}
+
+code {
+  font-family: var(--mono);
+}
+
+/* 行内 `code`（段落/列表等），勿作用于 Streamdown+Shiki 的 fenced 代码块 */
+p code,
+li code,
+td code,
+th code,
+h1 code,
+h2 code,
+h3 code,
+blockquote code {
+  display: inline-flex;
+  align-items: baseline;
+  border-radius: 4px;
+  color: var(--text-h);
+  font-size: 0.92em;
+  line-height: 135%;
+  padding: 2px 6px;
+  background: var(--code-bg);
+}
+
+/* 代码块：必须块级 + 保留换行，覆盖上面任何误匹配 */
+pre code,
+[data-streamdown='code-block'] code {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
