@@ -1,6 +1,6 @@
 # GO 入门
 
-https://go.dev/dl/
+https://go.dev/dl/ 下载安装
 
 - go version
 
@@ -9,7 +9,7 @@ go env
 
 重点关注：
 
-GOPATH（工作目录）安装的依赖包固定存放在 GOPATH/pkg/mod/
+GOPATH（工作目录）多个项目 共享 安装的依赖包固定存放在 GOPATH/pkg/mod/
 GOROOT（安装目录） 存放官方编译器和标准库；
 
 - first demo
