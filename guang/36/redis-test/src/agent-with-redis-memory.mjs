@@ -12,14 +12,16 @@
  * 输入 exit / quit / :q 退出；:clear 清空当前会话记忆
  */
 import "dotenv/config";
-import Redis from "ioredis";
+import Redis from "ioredis"; // 引入 ioredis 模块，用于连接 Redis
 import * as readline from "node:readline/promises"; // 引入 readline 模块，用于读取用户输入
-import { stdin , stdout } from "node:process";
+import { stdin , stdout } from "node:process"; // 引入 process 模块，用于读取标准输入和标准输出
 import { ChatOpenAI } from "@langchain/openai";
 import {
   // 把大模型正在用的消息对象，压扁成干净普通 JSON，专门用来存数据库 / 缓存。
+  // 将 LangChain 消息实例转为纯 JSON 对象，去掉类方法  HumanMessage -> PlainObject
   mapChatMessagesToStoredMessages, // 把 agent 返回的 messages 转换为存储用的格式
-  // 把数据库读出来的 JSON 消息，重新转成大模型能直接用的消息对象。
+  // 把数据库读出来的 JSON 消息，重新转成大模型能直接用的消息对象。 
+  // 接收从数据库取出的纯 JSON 消息数组，把普通对象还原成 LangChain 的 `BaseMessage` 实例
   mapStoredMessagesToChatMessages, // 把存储用的 messages 转换为 agent 输入的格式
 } from "@langchain/core/messages";
 import { 
@@ -32,7 +34,9 @@ import {
 
 const REDIS_HOST = process.env.REDIS_HOST ?? "localhost";
 const REDIS_PORT = Number(process.env.REDIS_PORT ?? 6380);
-const REDIS_DB = Number(process.env.REDIS_DB ?? 0);
+// Redis 自带 0~15 一共 16 个小仓库，db0 是**默认库**
+const REDIS_DB = Number(process.env.REDIS_DB ?? 0); // 0 shu'ju
+// 如果环境变量 `MEMORY_TTL_SECONDS` 没配置、是空的，就默认用 1800 秒，也就是 30 分钟。
 const MEMORY_TTL = Number(process.env.MEMORY_TTL_SECONDS ?? 1800);
 const KEY_PREFIX = process.env.MEMORY_KEY_PREFIX ?? "agent:short_memory"; // 会话记忆的前缀
 const SESSION_ID = process.env.MEMORY_SESSION_ID ?? "demo_user_001"; // 会话 ID
@@ -121,6 +125,8 @@ const agent = createAgent({
   systemPrompt:
     "你是会话助手。记住用户提到的关键事实，中文简短回答。若消息中有对话摘要，请据此继续对话。",
   middleware: [
+    // 总结中间件
+    // 来自deepagents
     summarizationMiddleware({
       model,
       summaryPrompt,
@@ -163,3 +169,10 @@ try {
 }
 
 await redis.quit();
+
+// 我叫张三
+// 我养了一只猫咪，他叫西西
+//我在北京
+// 今天天气不错
+// 我叫什么
+// 我们刚刚聊了什么

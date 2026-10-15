@@ -90,6 +90,7 @@ async function main() {
   const client = new MemoryClient({ 
     apiKey: process.env.MEM0_API_KEY
   });
+  // 从命令行参数获取操作
   const action = process.argv[2] ?? "add";
 
   if (process.argv.includes("--cleanup")) {
@@ -100,17 +101,17 @@ async function main() {
     return;
   }
 
-  if (action === "add") {
-    await addUserMemory(client);
-    await addSessionMemory(client);
-    await addAgentMemory(client);
-    console.log("\nadd 已提交（异步处理），稍后再运行: pnpm scoped-memory search");
-    return;
-  }
+  // if (action === "add") {
+  //   await addUserMemory(client);
+  //   await addSessionMemory(client);
+  //   await addAgentMemory(client);
+  //   console.log("\nadd 已提交（异步处理），稍后再运行: pnpm scoped-memory search");
+  //   return;
+  // }
 
   if (action === "search") {
-    await searchUserMemory(client);
-    await searchSessionMemory(client);
+    // await searchUserMemory(client);
+    // await searchSessionMemory(client);
     await searchAgentMemory(client);
     return;
   }

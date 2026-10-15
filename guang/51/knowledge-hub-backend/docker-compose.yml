@@ -1,0 +1,98 @@
+services:
+  # PostgreSQL
+  postgres:
+      image: pgvector/pgvector:pg16
+      container_name: knowledge_hub_postgres
+      restart: always
+      environment:
+        POSTGRES_USER: user
+        POSTGRES_PASSWORD: 123456
+        # 会自动创建 knowledge_hub 数据库
+        POSTGRES_DB: knowledge_hub
+      ports:
+        - "5432:5432"
+      volumes:
+        # 数据库文件挂载
+        - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/postgres:/var/lib/postgresql/data
+        # 初始化脚本挂载
+        - ./init-scripts/postgresql:/docker-entrypoint-initdb.d
+      healthcheck:
+        # 用 pg_isready 检测 PostgreSQL
+        test: ["CMD-SHELL", "pg_isready -U user -d knowledge_hub"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+
+  # PostgreSQL GUI (pgAdmin)
+  pgadmin:
+    container_name: knowledge_hub_pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/pgadmin:/var/lib/pgadmin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/login"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    # 将 pgadmin 服务的端口映射到主机的端口 8088
+    ports:
+      - "8088:80"
+    # 等待 postgres 服务健康就绪再启动 pgadmin
+    # 这是为了确保 pgadmin 能够连接到 PostgreSQL 数据库
+    depends_on:
+      - postgres
+
+  # MongoDB 主库
+  # 在企业级知识库中， MongoDB 作为文档型 NoSQL 数据库， 负责**存储结构灵活的对话记录、
+  # 文档元信息、非结构化素材**， Psql 关系型数据库， 负责**存储用户、权限、
+  # 向量、知识库配置这类强约束结构化数据**， 一起结合**各自优势**完成任务。 
+  mongodb:
+    image: mongo:7-jammy
+    container_name: knowledge_hub_mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo_user
+      MONGO_INITDB_ROOT_PASSWORD: mongo_pass123
+      MONGO_INITDB_DATABASE: knowledge_hub
+    ports:
+      - "27017:27017"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/mongo:/data/db
+      - ./init-scripts/mongodb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')", "-u", "mongo_user", "-p", "mongo_pass123", "--authenticationDatabase", "admin"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # MongoDB Web GUI: mongo-express
+  mongo-express:
+    image: mongo-express:1.0.2-20-alpine3.19
+    container_name: knowledge_hub_mongo_express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      # 连接 mongo 数据库账号（和mongodb服务保持一致）
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongo_user
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongo_pass123
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      # mongo-express 网页登录账号（区分数据库账号）
+      ME_CONFIG_BASICAUTH_ENABLED: "true"
+      ME_CONFIG_BASICAUTH_USERNAME: me_admin
+      ME_CONFIG_BASICAUTH_PASSWORD: me_123456
+      # 编辑器暗色主题
+      ME_CONFIG_OPTIONS_EDITORTHEME: "3024-night"
+    # 等待mongodb健康就绪再启动
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  # 把 compose 默认网络固定命名为 common-network，所有容器加入同一内网，可直接用服务名互相通信。
+networks:
+  default:
+    name: common-network

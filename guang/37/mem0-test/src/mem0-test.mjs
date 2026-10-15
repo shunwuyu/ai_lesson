@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import { MemoryClient } from 'mem0ai';
-
+import { MemoryClient } from 'mem0ai';  // 引入 Mem0 客户端库
+// https://app.mem0.ai/ 注册
 const USER_ID = 'demo-user';
 
 function log(title, data) {
@@ -21,14 +21,14 @@ async function main() {
     { role: 'assistant', content: '已记录：北京、爱好跑步。' },
   ];
 
-  const added = await client.add(conversation, { userId: USER_ID });
-  log('添加记忆', added);
+  // const added = await client.add(conversation, { userId: USER_ID });
+  // log('添加记忆', added);
 
-  const searchResult = await client.search('用户的饮食限制是什么？中文回答', {
-    filters: { user_id: USER_ID },
-    topK: 5
-  });
-  log('搜索记忆', searchResult);
+  // const searchResult = await client.search('用户的饮食限制是什么？中文回答', {
+  //   filters: { user_id: USER_ID },
+  //   topK: 5
+  // });
+  // log('搜索记忆', searchResult);
 
   const allMemories = await client.getAll({
     filters: { user_id: USER_ID },

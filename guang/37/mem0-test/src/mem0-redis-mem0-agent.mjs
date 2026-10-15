@@ -14,14 +14,14 @@ import { z } from "zod";
 import { MemoryClient } from "mem0ai";
 import { ChatOpenAI } from "@langchain/openai";
 import {
-  SystemMessage,
-  SystemMessageChunk,
-  HumanMessage,
-  mapChatMessagesToStoredMessages,
-  mapStoredMessagesToChatMessages,
+  SystemMessage, // 系统消息，用于设置助手的行为或提供背景信息。
+  SystemMessageChunk, // 系统消息块，用于分块发送系统消息。
+  HumanMessage, // 人类消息，用户输入的文本。
+  mapChatMessagesToStoredMessages, // 将聊天消息映射为 Mem0 存储的消息 。
+  mapStoredMessagesToChatMessages, // 将 Mem0 存储的消息映射为聊天消息。
 } from "@langchain/core/messages";
 import { 
-  createAgent, 
+  createAgent,  //  
   summarizationMiddleware 
 } from "langchain";
 

@@ -1,0 +1,65 @@
+services:
+  # Redis 短期记忆存储
+  redis:
+    image: redis:7-alpine
+    container_name: redis-mem0-test
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/redis:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis Web GUI
+  redisinsight:
+    image: redis/redisinsight:2.50
+    container_name: redisinsight-mem0-test
+    restart: always
+    ports:
+      - "5540:5540"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/redisinsight:/data
+    environment:
+      - RI_HOST=0.0.0.0
+    depends_on:
+      - redis
+
+  # Mem0 自托管后端服务
+  mem0:
+    image: mem0ai/mem0:latest
+    container_name: mem0-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/mem0:/app/data
+    environment:
+      - MEM0_REDIS_URL=redis://redis:6379
+      - MEM0_DB_PATH=/app/data/mem0.db
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - MEM0_HOST=0.0.0.0
+      - MEM0_PORT=8000
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # Mem0 WebUI
+  mem0-webui:
+    image: mem0ai/webui:latest
+    container_name: mem0-webui
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - MEM0_API_URL=http://mem0:8000
+    depends_on:
+      - mem0
+
+networks:
+  default:
+    name: common-network

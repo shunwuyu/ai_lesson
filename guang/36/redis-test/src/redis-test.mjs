@@ -34,28 +34,28 @@ async function runRedisDemo() {
     await redis.hset('user:1001', 'name', '李四', 'age', 28);
     console.log('Hash user:', await redis.hgetall('user:1001'));
 
-    // =========================
-    // 3. List 列表
-    // =========================
+    // // =========================
+    // // 3. List 列表
+    // // =========================
     await redis.lpush('task:list', '任务1', '任务2');
     await redis.rpush('task:list', '任务3');
     console.log('List:', await redis.lrange('task:list', 0, -1));
 
-    // =========================
-    // 4. Set 集合
-    // =========================
-    await redis.sadd('tag:set', 'redis', 'nest', 'node');
+    // // =========================
+    // // 4. Set 集合
+    // // =========================
+    await redis.sadd('tag:set', 'redis', 'nest', 'node', 'nest');
     console.log('Set:', await redis.smembers('tag:set'));
 
-    // =========================
-    // 5. ZSet 有序集合
-    // =========================
+    // // =========================
+    // // 5. ZSet 有序集合
+    // // =========================
     await redis.zadd('score:rank', 99, '小明', 95, '小红');
     console.log('ZSet 排名:', await redis.zrange('score:rank', 0, -1));
 
-    // =========================
-    // 6. 分布式锁（标准写法）
-    // =========================
+    // // =========================
+    // // 6. 分布式锁（标准写法）
+    // // =========================
     const lockKey = 'lock:order:1001';
     const lockResult = await redis.set(lockKey, 'locked', 'NX', 'EX', 10);
     console.log('分布式锁:', lockResult ? '加锁成功' : '加锁失败');
