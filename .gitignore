@@ -162,3 +162,6 @@ guang/09/milvus/volumes/
 # Docker compose runtime data (Elasticsearch / etcd / Milvus)
 guang/29/es-test/volumes/
 guang/30/neo4j-graphrag/volumes/
+
+# MongoDB WiredTiger journal files
+guang/51/knowledge-hub-backend/volumes/mongo/journal/WiredTigerLog.*
