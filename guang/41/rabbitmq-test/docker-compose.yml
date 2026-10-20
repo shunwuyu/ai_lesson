@@ -1,0 +1,18 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      # AMQP 通信端口，程序收发消息用
+      - "5672:5672"
+      # management 管理后台 Web 页面端口
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: Admin@123456
+      # 默认虚拟主机，所有用户都可以访问
+      RABBITMQ_DEFAULT_VHOST: /
+    # 数据卷
+    volumes:
+      - ./rabbitmq_data:/var/lib/rabbitmq

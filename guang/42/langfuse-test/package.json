@@ -1,0 +1,26 @@
+{
+  "name": "langfuse-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.2.3",
+    "@langchain/langgraph": "^1.4.8",
+    "@langchain/openai": "^1.5.5",
+    "@langfuse/core": "^5.9.1",
+    "@langfuse/langchain": "^5.9.1",
+    "@langfuse/otel": "^5.9.1",
+    "@opentelemetry/sdk-node": "^0.221.0",
+    "deepagents": "^1.11.1",
+    "dotenv": "^17.4.2",
+    "langchain": "^1.5.4",
+    "zod": "^4.4.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
