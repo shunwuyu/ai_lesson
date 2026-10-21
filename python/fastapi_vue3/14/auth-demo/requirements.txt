@@ -1,0 +1,11 @@
+# FastAPI Web 框架
+fastapi
+# ASGI 服务器
+uvicorn[standard]
+# 密码哈希：passlib + bcrypt
+# ⚠️ bcrypt 必须锁 4.0.1：新版 bcrypt 4.1+ 和 passlib 1.7.4 不兼容，
+#   启动时会报 "password cannot be longer than 72 bytes" 错误。
+passlib==1.7.4  # passlib 负责管理密码哈希
+bcrypt==4.0.1 # hashlib 才是内置模块 bcrypt 需要安装 bcrypt 负责提供具体的 bcrypt 算法实现。
+# 解析 form 表单（备用）
+python-multipart
