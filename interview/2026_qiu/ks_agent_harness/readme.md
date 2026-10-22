@@ -11,6 +11,7 @@ LLM 本身只有训练截止前的静态知识，不能联网、查数据库、�
 
 - 模型通过 Function Calling 识别什么时候该调用哪个 Tool，自动生成参数
 - 工具负责和外部系统交互（查订单、查天气、数据库查询、发邮件），返回结果给 LLM
+- MCP 是 AI 领域的“USB-C 标准协议”，把工具、资源、提示词统一成可跨应用复用的接口，解决“每个模型都要单独接一遍工具”的问题。
 
 > 
 > 注意区分：Tool 只负责**单次能力调用**，它不做流程控制、不存历史、不知道下一步该干嘛。
@@ -89,3 +90,68 @@ LangGraph 核心能力：
 ⑦ 再次路由到 Tool 节点，拿到图片链接，写入状态和 Memory；
 ⑧ LLM 再次思考：信息全部齐全，不需要再调用任何工具；条件路由走【结束分支】；
 ⑨ LLM 整合所有信息，生成最终回答返回用户；本轮所有对话、工具交互记录持续保存在 Memory 里。
+
+## 手撕算法：二叉树的层序遍历，并要求按层输出结果
+
+前序、中序、后序遍历都属于深度优先， 它们的共同点都是“一条路走到底”
+
+层序遍历的核心是使用队列（Queue）来实现广度优先搜索。
+
+1. 初始化一个队列，将根节点入队。
+2. 当队列不为空时，记录当前队列长度 size，这个 size 就是当前层的节点数量。
+3. 循环 size 次，依次出队节点，将其值加入当前层结果列表，并将其左右子节点（若存在）入队。
+4. 每处理完一层（即内层循环结束），将该层结果列表加入最终结果集。
+5. 重复直到队列为空。
+
+
+```
+var levelOrder = function(root) {
+    if (!root) return [];
+
+    const queue = [root];
+    const result = []; // 初始化一个一维数组
+
+    while (queue.length > 0) {
+        // 注意：这里依然需要记录 size，用来控制出队次数和子节点入队时机
+        const levelSize = queue.length; 
+
+        for (let i = 0; i < levelSize; i++) {
+            const currentNode = queue.shift();
+            result.push(currentNode.val); // 直接将节点值放入扁平数组
+
+            if (currentNode.left) queue.push(currentNode.left);
+            if (currentNode.right) queue.push(currentNode.right);
+        }
+    }
+
+    return result; // 最终返回如: [3, 9, 20, 15, 7]
+};
+```
+
+- 网咯7层架构是？ OSI 七层协议
+![](https://i-blog.csdnimg.cn/direct/3a113c1586194089a8c4da5782b7c290.jpeg#pic_center)
+
+  - 物理层 (Physical Layer)：负责处理电信号、光信号等物理媒介的传输（如网线、光纤）。
+  - 数据链路层 (Data Link Layer)：负责物理寻址和错误检测，以“帧”为单位在直连设备间传输数据（如 MAC 地址、交换机）。
+  - 网络层 (Network Layer)：负责逻辑寻址和路径选择，将数据包从源主机路由到目标主机（如 IP 地址、路由器）。
+  - 传输层 (Transport Layer)：负责端到端的可靠传输、流量控制和分段（如 TCP、UDP）。
+  - 会话层 (Session Layer)：负责建立、管理和终止应用程序之间的对话或会话。
+    负责帮你跟对方建立连接、记住聊到哪了、断线了能接上、聊完能挂断，不让数据变成无头无尾的乱流。
+  - 表示层 (Presentation Layer)：负责数据的翻译、加密、解密和压缩（如图片编码、SSL 加密）。
+  - 应用层 (Application Layer)：直接为用户应用程序提供网络接口和服务（如 HTTP、FTP、DNS）。
+
+  为什么要三次握手？
+  TCP 三次握手，本质是为了确认双方收发能力正常，并同步初始序列号。
+
+![](https://gips2.baidu.com/it/u=3898048210,2100993062&fm=3074&app=3074&f=JPEG?w=751&h=534&type=normal&func=)
+
+seq 是 Sequence Number，也就是序列号。 
+给每个要发送的数据字节编的“身份证号”，这样接收方收到数据后，才能按顺序排好，或者发现哪个“号”丢了，要求重传。
+
+第一次握手（建立连接请求）：
+客户端发送一个 SYN=1 的包，携带初始序列号 seq=x，进入 SYN_SENT 状态。
+第二次握手（确认请求并同步序列号）：
+服务端收到后，回复一个 ACK=1, SYN=1 的包。它确认客户端的序列号（ack=x+1），并携带自己的初始序列号 seq=y，进入 SYN_RCVD 状态。
+第三次握手（最终确认）：
+客户端收到回复，发送 ACK=1 的包，确认服务端的序列号（ack=y+1），进入 ESTABLISHED 状态。服务端收到此包后，也进入 ESTABLISHED 状态，连接正式建立。
+
