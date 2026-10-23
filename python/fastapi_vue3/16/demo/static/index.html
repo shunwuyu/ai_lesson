@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebSocket Pong 测试</title>
+</head>
+<body>
+<script>
+const ws = new WebSocket("ws://127.0.0.1:8000/ws");
+
+ws.onopen = () => {
+  console.log("已连接 ✅");
+  ws.send("你好！");  // 连接建立后先发一条测试消息
+};
+
+ws.onmessage = (event) => {
+  console.log("收到:", event.data);
+
+  // 尝试解析 JSON，是 ping 就回 pong
+  try {
+    const data = JSON.parse(event.data);
+    // if (data.type === "ping") {
+    //   ws.send(JSON.stringify({ type: "pong" }));
+    //   console.log("← 已回 pong");
+    // }
+  } catch (e) {
+    // 不是 JSON（比如普通文本回复），忽略
+  }
+};
+
+ws.onclose = () => console.log("连接已断开 ❌");
+ws.onerror = (err) => console.log("错误:", err);
+</script>
+</body>
+</html>

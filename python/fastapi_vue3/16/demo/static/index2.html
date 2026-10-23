@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+// 在浏览器控制台中运行
+const ws = new WebSocket("ws://127.0.0.1:8000/ws");
+ws.onopen = () => {
+  console.log("已连接");
+  ws.send("你好！");  // 连接建立成功后再发送
+};
+ws.onmessage = (event) => console.log("收到:", event.data);
+</script>
+</body>
+</html>
