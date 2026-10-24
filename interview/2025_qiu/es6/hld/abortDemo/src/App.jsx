@@ -19,7 +19,7 @@ function App() {
   }, [])
 
   const stop = () => {
-    controller.abort(); // 取消请求
+    controller.abort("取消请求"); // 取消请求
   }
   return (
     <>
