@@ -165,3 +165,4 @@ guang/30/neo4j-graphrag/volumes/
 
 # MongoDB WiredTiger journal files
 guang/51/knowledge-hub-backend/volumes/mongo/journal/WiredTigerLog.*
+volumes/mongo/.mongodb/mongosh/
