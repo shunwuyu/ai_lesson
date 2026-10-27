@@ -38,9 +38,74 @@ Clausewitz 在《战争论》中曾精辟地界定了“战略”与“战术”
 本章涵盖了 design.md 的 4 个核心组成部分。
 ● 系统架构：包括模块划分、职责定义及数据流向。设计需要遵循单一职责原则和关注点分离原则。
 
+单一职责原则： 一个类只负责一项职责，只有一个引起它变化的原因。
+```python
+# <!-- 违反单一职责 -->
+class User:
+    def __init__(self, name):
+        self.name = name
+    # 职责1：用户信息
+    def get_name(self):
+        return self.name
+    # 职责2：保存到数据库
+    def save_to_db(self):
+        print("保存用户到数据库")
+# 正例
+# 只负责用户数据
+class User:
+    def __init__(self, name):
+        self.name = name
+    def get_name(self):
+        return self.name
+
+# 只负责数据库持久化
+class UserRepository:
+    def save(self, user):
+        print(f"保存 {user.name} 到数据库")
+```
+
+关注点分离（Separation of Concerns，SoC）：把不同性质的问题拆开到不同模块，一块代码只解决一类问题。
+```js
+// 不要写一坨代码：拿数据 + 算逻辑 + 渲染页面
+function showUser() {
+  const data = fetch("/user") // 获取数据
+  const name = data.name.toUpperCase() // 业务处理
+  document.body.innerText = name // 渲染UI
+}
+
+// 分离关注点：
+
+// - Model：只管数据
+// - Controller：只管业务逻辑
+// - View：只管页面展示
+
+// Model
+const UserModel = { fetch: () => fetch("/user") }
+// 业务
+const UserService = { formatName: (u) => u.name.toUpperCase() }
+// View
+const UserView = { render: (txt) => document.body.innerText = txt }
+
+
+
+```
+管道式架构？
+
+数据沿着一串独立、可插拔的处理器依次流转，每个单元只做一步转换，前一个输出是后一个输入。
+
+何为微服务？
+
+把一个庞大的单体应用，拆成一组小型、独立、可单独部署、松耦合的服务，每个服务聚焦一块业务，通过网络互相调用。
+
+
+
 ● 技术选型（ADR）：记录每个关键决策的选项、理由及权衡。在 SDD 中，ADR 不仅是供人阅读的文档，更是指导 AI 的技术约束指令。
+
 ● 接口契约：包含数据模型定义与模块接口签名，以确保独立开发的模块能够无缝协作。
+
 ● 非功能性约束：涵盖错误处理、安全性和可运维性。功能性决定了系统是否可用，而非功能性决定了系统能否长久稳定运行。
+
+日志用 JSON 行格式，每一行就是一条独立 JSON，方便工具直接解析。只输出 INFO 和 ERROR 级别的日志，过滤掉冗余调试信息，排查问题时能直接检索、统计，不用费劲解析杂乱文本，运维看日志更省心。
 
 在第 6 章中，我们将在 design.md 的基础上进行任务拆解 —— 将宏大的架构设计拆解为一个个可执行、可验证的子任务，并编写 tasks.md。如果说 design.md 是将军的作战地图，那么 tasks.md 是各分队的行军指令。
 

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>防抖 Debounce 测试</title>
+  <style>
+    body { padding: 40px; font-size: 18px; }
+    input { width: 400px; padding: 10px; font-size: 18px; }
+    .log { margin-top:20px; padding:12px; border:1px solid #ccc; min-height:120px; }
+  </style>
+</head>
+<body>
+  <div>
+    <label>搜索框（防抖500ms）：</label>
+    <input type="text" id="searchInput" placeholder="快速输入看效果">
+    <div class="log" id="logBox">日志输出：<br/></div>
+  </div>
+
+  <script>
+    // 防抖函数 闭包
+    // fn delay timer 是自由变量 保存在闭包中
+    // 多次执行， 不会丢
+    function debounce(fn, delay) {
+      // 1. 保存上一次的定时器
+      let timer = null;
+      // 真正执行的函数 保存在闭包中
+      const debounced = function (...args) {
+        // 2. 每次触发就清掉之前的定时器，重新计时
+        if (timer) clearTimeout(timer);
+        // 3. 等够延迟时间，真正执行目标函数
+        timer = setTimeout(() => {
+          // this 指向 debounced 函数 
+          // 箭头函数 没有this, 指向外部作用域的this
+          // fn 里拿到输入框的值 
+          // 如果不用apply this  指向window
+          // fn(args) 普通函数  this 指向window
+          fn.apply(this, args);
+          // 4. 执行完成后，清空定时器
+          // 如果不写 `timer = null`：`timer` 还留着旧 ID 
+          // `if(timer)` 会误以为还有定时器在跑，尝试 `clearTimeout` 去清一个已经结束的定时器。
+          timer = null;
+        }, delay);
+      }
+      // 5. 提供取消方法
+      debounced.cancel = () => {
+        if (timer) clearTimeout(timer);
+        timer = null;
+      }
+      return debounced;
+    }
+
+    const logBox = document.getElementById('logBox');
+    function printLog(text) {
+      logBox.innerHTML += text + '<br/>';
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    // 防抖包装搜索函数
+    const handleSearch = debounce((keyword) => {
+      printLog(`✅ 发起搜索请求：${keyword}`);
+    }, 500);
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      printLog(`🔸 输入触发：${e.target.value}`);
+      handleSearch(e.target.value);
+    })
+  </script>
+</body>
+</html>

@@ -132,7 +132,7 @@ DailyReport:
 members:
   - name: "张三"
     github: "zhangsan"
-    lark: "zhangsan@company.com"
+    lark: "zhangsan@company.com" #飞书企业邮箱账号
   - name: "李四"
     github: "lisi-dev"
     lark: "lisi@company.com"

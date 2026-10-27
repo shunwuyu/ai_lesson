@@ -1,5 +1,7 @@
 # 智能日报生成器
 
+https://github.com/chenpingan6158-a11y/IDNG.github.io/tree/main
+
 - 编写 proposal.md 文件
 - 这份规范写的够不够完善？
   要素都齐备了 背景、目标、功能范围、技术约束及验收标准
