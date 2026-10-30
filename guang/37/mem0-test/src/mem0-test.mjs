@@ -21,41 +21,44 @@ async function main() {
     { role: 'assistant', content: '已记录：北京、爱好跑步。' },
   ];
 
-  // const added = await client.add(conversation, { userId: USER_ID });
-  // log('添加记忆', added);
-
-  // const searchResult = await client.search('用户的饮食限制是什么？中文回答', {
-  //   filters: { user_id: USER_ID },
-  //   topK: 5
-  // });
-  // log('搜索记忆', searchResult);
-
-  const allMemories = await client.getAll({
-    filters: { user_id: USER_ID },
-    pageSize: 10,
+  const added = await client.add(conversation, { 
+    userId: USER_ID,
+    custom_instructions: "提取记忆必须和输入语言保持一致，输入中文就输出中文，严禁翻译成英文，返回标准 {\"facts\": [...]} "
   });
-  log('列出全部记忆', allMemories);
+  log('添加记忆', added);
 
-//   const firstMemory = allMemories.results?.[0] ?? searchResult.results?.[0];
-//   if (firstMemory?.id) {
-//     const memory = await client.get(firstMemory.id);
-//     log('获取单条记忆', memory);
+  const searchResult = await client.search('用户的饮食限制是什么？中文回答', {
+    filters: { user_id: USER_ID },
+    topK: 5
+  });
+  log('搜索记忆', searchResult);
 
-//     const updated = await client.update(firstMemory.id, {
-//       text: `${memory.memory ?? firstMemory.memory}（已通过示例脚本更新）`,
-//     });
-//     log('更新记忆', updated);
+  // const allMemories = await client.getAll({
+  //   filters: { user_id: USER_ID },
+  //   pageSize: 10,
+  // });
+  // log('列出全部记忆', allMemories);
 
-//     const history = await client.history(firstMemory.id);
-//     log('记忆变更历史', history);
-//   }
+  // const firstMemory = allMemories.results?.[0] ?? searchResult.results?.[0];
+  // if (firstMemory?.id) {
+  //   const memory = await client.get(firstMemory.id);
+  //   log('获取单条记忆', memory);
 
-//   if (process.argv.includes('--cleanup')) {
-//     const deleted = await client.deleteAll({ userId: USER_ID });
-//     log('清理测试数据', deleted);
-//   } else {
-//     console.log('\n提示: 运行 `node src/mem0-test.mjs --cleanup` 可删除本次测试用户的全部记忆');
-//   }
+  //   const updated = await client.update(firstMemory.id, {
+  //     text: `${memory.memory ?? firstMemory.memory}（已通过示例脚本更新）`,
+  //   });
+  //   log('更新记忆', updated);
+
+  //   const history = await client.history(firstMemory.id);
+  //   log('记忆变更历史', history);
+  // }
+
+  // if (process.argv.includes('--cleanup')) {
+  //   const deleted = await client.deleteAll({ userId: USER_ID });
+  //   log('清理测试数据', deleted);
+  // } else {
+  //   console.log('\n提示: 运行 `node src/mem0-test.mjs --cleanup` 可删除本次测试用户的全部记忆');
+  // }
 }
 
 main().catch((error) => {
