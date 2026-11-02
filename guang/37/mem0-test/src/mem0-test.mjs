@@ -27,11 +27,11 @@ async function main() {
   });
   log('添加记忆', added);
 
-  const searchResult = await client.search('用户的饮食限制是什么？中文回答', {
-    filters: { user_id: USER_ID },
-    topK: 5
-  });
-  log('搜索记忆', searchResult);
+  // const searchResult = await client.search('用户的饮食限制是什么？中文回答', {
+  //   filters: { user_id: USER_ID },
+  //   topK: 5
+  // });
+  // log('搜索记忆', searchResult);
 
   // const allMemories = await client.getAll({
   //   filters: { user_id: USER_ID },

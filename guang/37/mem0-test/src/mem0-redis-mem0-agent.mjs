@@ -119,10 +119,14 @@ class RedisMessageStore {
 
 class Mem0MemoryStore {
   constructor({ client, userId, sessionId, topK, classifier }) {
+    // 初始化 Mem0 客户端
     this.client = client;
+    // 初始化用户 ID
     this.userId = userId;
+    // 初始化会话 ID
     this.sessionId = sessionId;
     this.topK = topK;
+    // 初始化记忆分类器
     this.classifier = classifier;
   }
 
@@ -298,6 +302,7 @@ try {
     if (["exit", "quit", ":q"].includes(userText.toLowerCase())) break;
 
     if (userText === ":clear") {
+      // 清空 Redis 短期记忆
       await redisStore.clear(SESSION_ID);
       prevCount = 0;
       console.log("已清空 Redis 短期记忆\n");
@@ -305,6 +310,7 @@ try {
     }
 
     if (userText === ":clear-mem0") {
+      // 清空 Mem0 用户层与当前会话层
       await mem0Store.clear();
       console.log("已清空 Mem0 用户层与当前会话层\n");
       continue;
@@ -329,7 +335,7 @@ try {
 } finally {
   rl.close();
 }
-
+// 关闭 Redis 连接
 await redis.quit();
 
 /*
