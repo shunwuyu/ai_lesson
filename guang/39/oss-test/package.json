@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "ali-oss": "^6.23.0",
-    "dotenv": "^18.0.8"
+    "dotenv": "^18.0.8",
+    "minio": "^8.0.7"
   }
 }

@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  minio:
+    image: minio/minio:RELEASE.2024-05-28T17-19-04Z
+    container_name: minio-server
+    restart: always
+    ports:
+      # S3 对象存储API端口（程序对接用）
+      - "9000:9000"
+      # Web图形控制台端口（浏览器访问UI）
+      - "9001:9001"
+    environment:
+      # 登录控制台、S3接口的账号（至少3位）
+      MINIO_ROOT_USER: admin
+      # 登录密码（至少8位，数字+字母）
+      MINIO_ROOT_PASSWORD: Admin@123456
+    volumes:
+      # 持久化数据到本地 ./minio-data 文件夹
+      - ./minio-data:/data
+    command: server /data --console-address ":9001"

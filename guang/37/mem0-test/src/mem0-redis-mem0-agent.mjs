@@ -116,7 +116,11 @@ class RedisMessageStore {
     return this.redis.ttl(this.messagesKey(sessionId));
   }
 }
-
+// Mem0 的分层记忆管理器
+// 它的核心设计是将记忆分为“用户长期记忆”和“当前会话记忆”两个维度。
+// 在读取时，它通过 search 方法并行查询这两层数据，并利用 buildSystemMessage 
+// 将其格式化后注入到 SystemMessage 中，为 LLM 提供上下文。
+// 在写入时，它利用分类器（Classifier）智能判断一段对话是否需要沉淀，并分别持久化到对应的层级中。
 class Mem0MemoryStore {
   constructor({ client, userId, sessionId, topK, classifier }) {
     // 初始化 Mem0 客户端
@@ -131,11 +135,14 @@ class Mem0MemoryStore {
   }
 
   async search(query) {
+    // 搜索用户层和会话层
     const [userRes, sessionRes] = await Promise.all([
+      // 搜索用户层
       this.client.search(query, {
         filters: { user_id: this.userId },
         topK: this.topK,
       }),
+      // 搜索会话层
       this.client.search(query, {
         filters: {
           AND: [{ user_id: this.userId }, { run_id: this.sessionId }],
@@ -144,23 +151,29 @@ class Mem0MemoryStore {
       }),
     ]);
     return {
+      // 用户层记忆
       user: userRes.results ?? [],
+      // 会话层记忆
       session: sessionRes.results ?? [],
     };
   }
-
+  // 构建系统消息
+  // 包含用户层记忆和会话层记忆
   buildSystemMessage({ user, session }) {
+    // 
     const blocks = [];
+    // 用户层记忆
     if (user.length) {
       blocks.push(`【用户长期记忆】\n${user.map((m) => `- ${m.memory}`).join("\n")}`);
     }
+    // 会话层记忆
     if (session.length) {
       blocks.push(`【当前会话记忆】\n${session.map((m) => `- ${m.memory}`).join("\n")}`);
     }
     if (!blocks.length) return null;
     return new SystemMessage(`${blocks.join("\n\n")}\n\n请结合以上记忆回答，勿编造。`);
   }
-
+  // 分类并持久化记忆
   async classifyAndPersist(userText, assistantText) {
     const turn = [
       { role: "user", content: userText },
@@ -171,7 +184,9 @@ class Mem0MemoryStore {
       new SystemMessage(CLASSIFIER_PROMPT),
       new HumanMessage(`用户：${userText}\n助手：${assistantText}`),
     ]);
-
+    // 写入用户层和会话层
+    // 写入用户层
+    // 写入会话层
     const written = [];
     if (write_user) {
       await this.client.add(turn, { userId: this.userId });
@@ -259,7 +274,8 @@ const llmOpts = {
 };
 
 const model = new ChatOpenAI({ model: process.env.MODEL_NAME, ...llmOpts });
-
+// 分类器
+// 用于判断一段对话是否需要沉淀到用户层记忆或当前会话层记忆
 const classifier = new ChatOpenAI({
   model: process.env.MODEL_NAME,
   ...llmOpts,
