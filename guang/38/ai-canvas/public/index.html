@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>AI 画板</title>
+  <script src="https://registry.npmmirror.com/axios/1.6.5/files/dist/axios.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      min-height: 100vh;
+    }
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 88px;
+    }
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(245, 245, 247, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 16px 20px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .header .back {
+      position: absolute;
+      left: 16px;
+      border: none;
+      background: none;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      color: #1d1d1f;
+      padding: 4px 8px;
+    }
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* List */
+    .list { padding: 8px 16px 24px; }
+    .card {
+      display: flex;
+      gap: 14px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .card:active { transform: scale(0.985); }
+    .thumb {
+      width: 88px;
+      height: 88px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #eee;
+      flex-shrink: 0;
+    }
+    .card-body { flex: 1; min-width: 0; position: relative; padding-right: 28px; }
+    .card-prompt {
+      font-size: 15px;
+      line-height: 1.45;
+      font-weight: 500;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .card-meta { font-size: 13px; color: #86868b; line-height: 1.6; }
+    .card-time {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 12px;
+      color: #aeaeb2;
+    }
+    .card-menu {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border: none;
+      background: none;
+      color: #aeaeb2;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 0 4px 8px;
+      letter-spacing: 1px;
+    }
+    .empty {
+      text-align: center;
+      padding: 80px 24px;
+      color: #86868b;
+    }
+    .empty p { margin-top: 8px; font-size: 14px; line-height: 1.6; }
+
+    /* Create */
+    .create { padding: 8px 16px 24px; }
+    .panel {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #1d1d1f;
+    }
+    .textarea-wrap { position: relative; }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border: 1px solid #e5e5ea;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      line-height: 1.5;
+      resize: vertical;
+      font-family: inherit;
+      outline: none;
+    }
+    textarea:focus { border-color: #1d1d1f; }
+    .counter {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      font-size: 12px;
+      color: #aeaeb2;
+    }
+    .upload-area {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .upload-preview {
+      width: 96px;
+      height: 96px;
+      border-radius: 12px;
+      border: 1px dashed #d1d1d6;
+      position: relative;
+      overflow: hidden;
+      display: none;
+      flex-shrink: 0;
+    }
+    .upload-preview.show { display: block; }
+    .upload-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .upload-preview .remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      line-height: 22px;
+    }
+    .upload-trigger {
+      flex: 1;
+      min-height: 96px;
+      border: 1px dashed #d1d1d6;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      color: #86868b;
+      padding: 12px;
+      text-align: center;
+    }
+    .upload-trigger svg { width: 28px; height: 28px; stroke: #86868b; }
+    .upload-trigger span { font-size: 14px; }
+    .upload-trigger small { font-size: 12px; color: #aeaeb2; }
+    .upload-input { display: none; }
+    .submit {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      background: #1d1d1f;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 15px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .submit:disabled { opacity: 0.45; cursor: not-allowed; }
+    .result-img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+      background: #f2f2f7;
+    }
+    .save-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      color: #1d1d1f;
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .save-link svg { width: 16px; height: 16px; }
+    .status {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #86868b;
+      text-align: center;
+      min-height: 20px;
+      word-break: break-all;
+    }
+    .upload-url {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #f2f2f7;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #515154;
+      line-height: 1.5;
+      word-break: break-all;
+    }
+    .upload-url strong {
+      display: block;
+      font-size: 12px;
+      color: #86868b;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .error { color: #ff3b30; }
+
+    /* Bottom nav */
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid #e5e5ea;
+      display: flex;
+      padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+    }
+    .nav button {
+      flex: 1;
+      border: none;
+      background: none;
+      padding: 8px;
+      font-size: 12px;
+      color: #86868b;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav button.active { color: #1d1d1f; font-weight: 600; }
+    .nav svg { width: 22px; height: 22px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <button class="back" id="backBtn" hidden aria-label="返回">‹</button>
+      <h1>AI 画板</h1>
+    </header>
+
+    <section class="view active" id="listView">
+      <div class="list" id="listContainer"></div>
+    </section>
+
+    <section class="view" id="createView">
+      <div class="create">
+        <div class="panel">
+          <div class="label">输入内容</div>
+          <div class="textarea-wrap">
+            <textarea id="prompt" maxlength="200" placeholder="描述你想生成的图片…"></textarea>
+            <span class="counter"><span id="charCount">0</span>/200</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="label">上传图片（可选）</div>
+          <div class="upload-area">
+            <div class="upload-preview" id="previewBox">
+              <img id="previewImg" alt="" />
+              <button class="remove" id="removeImg" type="button">×</button>
+            </div>
+            <label class="upload-trigger" id="uploadTrigger">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>点击上传图片</span>
+              <small>支持 JPG、PNG 格式，最大 10MB</small>
+              <input class="upload-input" id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" />
+            </label>
+          </div>
+        </div>
+
+        <button class="submit" id="generateBtn">生成图片</button>
+        <div class="upload-url" id="uploadUrlBox" hidden>
+          <strong>已上传</strong>
+          <span id="uploadUrlText"></span>
+        </div>
+        <div class="status" id="status"></div>
+
+        <div class="panel" id="resultPanel" hidden>
+          <div class="label">生成结果</div>
+          <img class="result-img" id="resultImg" alt="生成结果" />
+          <a class="save-link" id="saveLink" href="#" download="ai-canvas.png">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+            保存图片
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="nav">
+      <button class="active" id="navList" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>
+        列表
+      </button>
+      <button id="navCreate" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        创作
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const listContainer = $('#listContainer');
+    const listView = $('#listView');
+    const createView = $('#createView');
+    const backBtn = $('#backBtn');
+    const navList = $('#navList');
+    const navCreate = $('#navCreate');
+    const promptEl = $('#prompt');
+    const charCount = $('#charCount');
+    const fileInput = $('#fileInput');
+    const previewBox = $('#previewBox');
+    const previewImg = $('#previewImg');
+    const uploadTrigger = $('#uploadTrigger');
+    const removeImg = $('#removeImg');
+    const generateBtn = $('#generateBtn');
+    const statusEl = $('#status');
+    const resultPanel = $('#resultPanel');
+    const resultImg = $('#resultImg');
+    const saveLink = $('#saveLink');
+    const uploadUrlBox = $('#uploadUrlBox');
+    const uploadUrlText = $('#uploadUrlText');
+
+    let uploadedImageUrl = null;
+    let pendingFile = null;
+    let uploading = false;
+    let generating = false;
+
+    function formatSize(size) {
+      if (!size) return '1024 × 1024';
+      if (size.includes('*')) return size.replace('*', ' × ');
+      return size;
+    }
+
+    function formatTime(iso) {
+      const date = new Date(iso);
+      const now = new Date();
+      const diff = now - date;
+      const isToday = date.toDateString() === now.toDateString();
+      const yesterday = new Date(now);
+      yesterday.setDate(now.getDate() - 1);
+      const isYesterday = date.toDateString() === yesterday.toDateString();
+      const hh = String(date.getHours()).padStart(2, '0');
+      const mm = String(date.getMinutes()).padStart(2, '0');
+      if (isToday) return `${hh}:${mm}`;
+      if (isYesterday) return `昨天 ${hh}:${mm}`;
+      const mo = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      return `${mo}-${dd} ${hh}:${mm}`;
+    }
+
+    function showView(name) {
+      const isList = name === 'list';
+      listView.classList.toggle('active', isList);
+      createView.classList.toggle('active', !isList);
+      navList.classList.toggle('active', isList);
+      navCreate.classList.toggle('active', !isList);
+      backBtn.hidden = isList;
+      if (isList) loadList();
+    }
+
+    async function loadList() {
+      try {
+        const res = await fetch('/ai/image/list');
+        const items = await res.json();
+        if (!items.length) {
+          listContainer.innerHTML = '<div class="empty"><strong>还没有作品</strong><p>去「创作」页生成你的第一张 AI 图片</p></div>';
+          return;
+        }
+        listContainer.innerHTML = items.map((item) => `
+          <article class="card" data-id="${item.id}">
+            <img class="thumb" src="${item.url}" alt="" loading="lazy" />
+            <div class="card-body">
+              <div class="card-time">${formatTime(item.createdAt)}</div>
+              <div class="card-prompt">${escapeHtml(item.prompt)}</div>
+              <div class="card-meta">${item.mode === 'edit' ? '图片输入' : '文本生成'}</div>
+              <div class="card-meta">${formatSize(item.size)}</div>
+              <button class="card-menu" type="button" data-delete="${item.id}" aria-label="删除">···</button>
+            </div>
+          </article>
+        `).join('');
+      } catch {
+        listContainer.innerHTML = '<div class="empty"><strong>加载失败</strong><p>请确认后端服务已启动</p></div>';
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[c]);
+    }
+
+    listContainer.addEventListener('click', async (e) => {
+      const deleteId = e.target.dataset.delete;
+      if (deleteId) {
+        e.stopPropagation();
+        if (!confirm('确定删除这条记录？')) return;
+        await fetch(`/ai/image/${deleteId}`, { method: 'DELETE' });
+        loadList();
+        return;
+      }
+      const card = e.target.closest('.card');
+      if (!card) return;
+      const id = card.dataset.id;
+      const items = await fetch('/ai/image/list').then((r) => r.json());
+      const item = items.find((i) => i.id === id);
+      if (!item) return;
+      showView('create');
+      promptEl.value = item.prompt;
+      charCount.textContent = item.prompt.length;
+      resultPanel.hidden = false;
+      resultImg.src = item.url;
+      saveLink.href = item.url;
+    });
+
+    promptEl.addEventListener('input', () => {
+      charCount.textContent = promptEl.value.length;
+    });
+
+    removeImg.addEventListener('click', (e) => {
+      e.preventDefault();
+      uploadedImageUrl = null;
+      pendingFile = null;
+      fileInput.value = '';
+      previewBox.classList.remove('show');
+      uploadTrigger.style.display = '';
+      uploadUrlBox.hidden = true;
+      uploadUrlText.textContent = '';
+    });
+
+    function showUploadUrl(url) {
+      uploadUrlBox.hidden = false;
+      uploadUrlText.textContent = url;
+    }
+
+    async function getOSSInfo(ext) {
+      // 把后缀里可能存在的特殊字符转义，避免弄坏 URL 参数。
+      
+      const { data } = await axios.get(
+        `/ai/oss/upload-signature?ext=${encodeURIComponent(ext)}`,
+      );
+      return data;
+    }
+
+    async function uploadToOSS(file) {
+      const ext = file.name.match(/\.[^.]+$/)?.[0] || '.jpg';
+      const ossInfo = await getOSSInfo(ext);
+
+      const formdata = new FormData();
+      formdata.append('key', ossInfo.key);
+      formdata.append('OSSAccessKeyId', ossInfo.OSSAccessKeyId);
+      formdata.append('policy', ossInfo.policy);
+      formdata.append('signature', ossInfo.Signature);
+      formdata.append('success_action_status', '200');
+      formdata.append('file', file);
+
+      // OSS 跨域 POST 成功后浏览器可能读不到响应，视为成功即可
+      try {
+        await fetch(ossInfo.host, { method: 'POST', body: formdata });
+      } catch {
+        // 请求已发出，文件通常已上传成功
+      }
+      console.log(ossInfo);
+      return ossInfo.url;
+    }
+
+    async function ensureUploaded() {
+      if (uploadedImageUrl) return uploadedImageUrl;
+      if (!pendingFile) return null;
+
+      uploading = true;
+      statusEl.textContent = '上传中…';
+      statusEl.classList.remove('error');
+      try {
+        uploadedImageUrl = await uploadToOSS(pendingFile);
+        showUploadUrl(uploadedImageUrl);
+        previewImg.src = URL.createObjectURL(pendingFile);
+        previewBox.classList.add('show');
+        uploadTrigger.style.display = 'none';
+        return uploadedImageUrl;
+      } finally {
+        uploading = false;
+      }
+    }
+
+    async function generateImage() {
+      const prompt = promptEl.value.trim();
+      if (!prompt) {
+        statusEl.textContent = '请输入描述内容';
+        statusEl.classList.add('error');
+        return;
+      }
+
+      generating = true;
+      generateBtn.disabled = true;
+      statusEl.textContent = '生成中，请稍候（约 1–3 分钟）…';
+      statusEl.classList.remove('error');
+      resultPanel.hidden = true;
+
+      try {
+        const imageUrl = await ensureUploaded();
+        const body = { prompt };
+        if (imageUrl) body.imageUrl = imageUrl;
+
+        const { data } = await axios.post('/ai/image', body);
+        resultPanel.hidden = false;
+        resultImg.src = data.url;
+        saveLink.href = data.url;
+        statusEl.textContent = '';
+      } catch (err) {
+        statusEl.textContent = err.response?.data?.message || err.message || '生成失败';
+        statusEl.classList.add('error');
+      } finally {
+        generating = false;
+        generateBtn.disabled = false;
+      }
+    }
+
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) {
+        alert('图片不能超过 10MB');
+        fileInput.value = '';
+        return;
+      }
+
+      pendingFile = file;
+      uploadedImageUrl = null;
+      uploadUrlBox.hidden = true;
+      statusEl.classList.remove('error');
+
+      try {
+        uploadedImageUrl = await ensureUploaded();
+        if (promptEl.value.trim()) {
+          await generateImage();
+        } else {
+          statusEl.textContent = '图片已上传，请填写描述后点击生成';
+        }
+      } catch (err) {
+        statusEl.textContent = err.response?.data?.message || err.message || '上传失败';
+        statusEl.classList.add('error');
+      }
+    });
+
+    generateBtn.addEventListener('click', () => generateImage());
+
+    navList.addEventListener('click', () => showView('list'));
+    navCreate.addEventListener('click', () => showView('create'));
+    backBtn.addEventListener('click', () => showView('list'));
+
+    loadList();
+  </script>
+</body>
+</html>
