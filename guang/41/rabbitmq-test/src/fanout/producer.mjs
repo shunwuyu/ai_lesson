@@ -4,7 +4,7 @@ import { connect } from '../config.mjs';
 const EXCHANGE = 'doc.parse.fanout';
 
 /**
- * ========== fanout 交换机 ==========
+ * ========== fanout 交换机 广播 ==========
  *
  * 行为：把消息广播到所有绑定了该交换机的 Queue，完全忽略 routing key。
  *

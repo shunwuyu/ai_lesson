@@ -89,10 +89,13 @@ export class AiService {
       prompt_extend: options.promptExtend,
       watermark: options.watermark,
       n: 1,
+      // 不开启并行生成，
       enable_interleave: false,
+      // 生成图片的大小
       size: options.size ?? '1K',
     });
-
+    // 确保返回的是 `GenerationResult` 类型
+    // 因为 `wanCall` 方法返回的是 `Promise<GenerationResult>`
     const result = raw as GenerationResult;
     this.assertSuccess(result);
 
@@ -153,7 +156,7 @@ export class AiService {
 
     return undefined;
   }
-
+  // 断言成功
   private assertSuccess(result: GenerationResult): void {
     if (result.status_code !== 200 || result.code) {
       throw new BadRequestException(

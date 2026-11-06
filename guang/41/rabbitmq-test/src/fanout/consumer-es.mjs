@@ -12,8 +12,10 @@ const QUEUE = 'doc.elasticsearch';
  */
 async function main() {
   const { channel } = await connect();
-
+  // 确保交换机和队列存在
   await channel.assertExchange(EXCHANGE, 'fanout', { durable: true });
+  // 确保队列存在
+  // durable: true  队列重启后仍存在（消息是否持久另看消息属性）
   await channel.assertQueue(QUEUE, { durable: true });
 
   // 同样绑定到 fanout；routing key 仍可传空
