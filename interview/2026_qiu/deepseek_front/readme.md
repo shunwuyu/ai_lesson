@@ -889,3 +889,190 @@ minLength = Math.min(minLength, right - left);
 dis 存最近对话，就是滑动窗口。窗口只留最近 N 轮聊天，新对话进来，就把最老的挤出去，不用存全部。太长了还会截断、做摘要压缩上下文，传给大模型，避免 token 超限，和算法滑动窗口逻辑一模一样。
 
 控制 token 数量，减少模型开销，保证响应速度；只保留近期上下文，老对话存入 PG 长期记忆，兼顾效率与记忆能力。
+
+## 十一、 JS 代码题
+
+### 1. 隐式转换
+
+```js
+var a = [0];
+if (a) {
+  console.log(a == true);
+} else {
+  console.log("wut");
+}
+```
+false 
+这题涉及到隐式转换了
+
+第一步：`if (a)`
+
+`a` 是数组 `[0]`。
+在 `if` 判断里，会做**布尔强制转换**：
+
+> 
+> 所有**非空数组**，转布尔都是 `true`
+
+Boolean([0]) // true
+
+第二步：`a == true`，也就是 `[0] == true`
+
+`==` 是宽松相等，遵循 ES 规则：
+
+隐式类型转换规则：
+```
+1. 同类型：直接比较值
+2. `null == undefined` → true；除此以外 null/undefined 和别的都不等
+3. 任意一方是 Boolean：布尔执行 ToNumber，回到 `==` 重走流程
+4. 一方是对象、另一方是原始（string/number/symbol）：对象执行 ToPrimitive（把对象转为原始值，优先 valueOf，不行再 toString），回到 `==` 重走流程
+5. 数字 vs 字符串：字符串 ToNumber
+6. Symbol 和非 Symbol 直接返回 false
+7. 其余情况返回 false
+```
+
+1. 两边类型不一样：一边是对象（数组属于对象），一边是布尔
+2. **布尔值先转数字**：`true → 1`
+现在式子变成：`[0] == 1`
+3. 左边是对象，调用 `ToPrimitive` 转原始值：
+   - 数组先调用 `toString()`：`[0].toString() → "0"`
+   现在式子变成：`"0" == 1`
+4. 字符串和数字比较：字符串转数字：`"0" → 0`
+现在式子变成：`0 == 1` → **false**
+
+```js
+const obj = { valueOf: () => 99 }
+console.log(obj + 1) // 100  toPremitive
+```
+
+### 2. 手写 Promise.all
+
+```js
+const p1 = Promise.resolve('p1')
+
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('p2 延时一秒')
+  }, 1000)
+})
+
+const p3 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('p3 延时两秒')
+  }, 2000)
+})
+
+const p4 = Promise.reject('p4 rejected')
+
+const p5 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject('p5 rejected 延时1.5秒')
+  }, 1500)
+})
+
+// 所有Promise实例都成功
+Promise.all([p1, p2, p3])
+  .then(res => {
+    console.log(res)
+  })
+  .catch(err => console.log(err)) // 2秒后打印 [ 'p1', 'p2 延时一秒', 'p3 延时两秒' ]
+  
+// 一个Promise实例失败
+Promise.all([p1, p2, p4])
+  .then(res => {
+    console.log(res)
+  })
+  .catch(err => console.log(err)) // p4 rejected
+  
+// 一个延时失败的Promise
+ Promise.all([p1, p2, p5])
+  .then(res => {
+    console.log(res)
+  })
+  .catch(err => console.log(err)) // 1.5秒后打印 p5 rejected
+  
+// 两个Promise实例失败
+Promise.all([p1, p4, p5])
+  .then(res => {
+    console.log(res)
+  })
+  .catch(err => console.log(err)) // p4 rejected
+
+```
+
+手动实现Promise.all
+
+Promise.all 接受一个数组，返回值是一个新的 Promise 实例
+
+Promise.MyAll = function (promises) {
+  return new Promise((resolve, reject) => {
+
+  })
+}
+
+
+数组中所有 Promise 实例都成功，Promise.all 才成功。不难想到，咱得需要一个数组来收集这些 Promise 实例的 resolve 结果。但有句俗话说得好：“不怕一万，就怕万一”，万一数组里面有元素不是 Promise咋办 —— 那就得用 Promise.resolve() 把它办了。这里还有一个问题，Promise 实例是不能直接调用 resolve 方法的，咱得在 .then() 中去收集结果。注意要保持结果的顺序。
+
+```js
+// 手写 Promise.all 实现
+Promise.MyAll = function (promises) {
+  // 保存每个promise成功后的结果，顺序和传入数组保持一致
+  let arr = [],
+    // 记录已经成功完成的promise数量
+    count = 0
+  // 返回一个新的Promise
+  return new Promise((resolve, reject) => {
+    // 遍历传入的promise数组
+    promises.forEach((item, i) => {
+      // 使用Promise.resolve包裹，兼容传入非Promise值（普通值会直接成功）
+      Promise.resolve(item)
+        .then(res => {
+          // 按原下标存入结果数组，保证结果顺序和入参一致
+          arr[i] = res
+          // 成功数量+1
+          count += 1
+          // 所有promise都成功，resolve结果数组
+          if (count === promises.length) resolve(arr)
+        })
+        // 只要任意一个promise失败，直接reject，和原生Promise.all行为一致
+        .catch(reject)
+    })
+  })
+}
+```
+### 3. 谈一谈HTTP协议优缺点
+
+超文本传输协议，「HTTP 是一个在计算机世界里专门在两点之间传输文字、图片、音频、视频等超文本数据的约定和规范」。
+HTTP 特点
+
+1. 「灵活可扩展」。一个是语法上只规定了基本格式，空格分隔单词，换行分隔字段等。另外一个就是传输形式上不仅可以传输文本，还可以传输图片，视频等任意数据。
+2. 「请求-应答模式」，通常而言，就是一方发送消息，另外一方要接受消息，或者是做出相应等。
+3. 「可靠传输」，HTTP是基于TCP/IP，因此把这一特性继承了下来。
+3. 「无状态」，这个分场景回答即可。
+HTTP 缺点
+
+1. 「无状态」，有时候，需要保存信息，比如像购物系统，需要保留下顾客信息等等，另外一方面，有时候，无状态也会减少网络开销，比如类似直播行业这样子等，这个还是分场景来说。
+2. 「明文传输」，即协议里的报文(主要指的是头部)不使用二进制数据，而是文本形式。这让HTTP的报文信息暴露给了外界，给攻击者带来了便利。
+3. 「队头阻塞」，当http开启长连接时，共用一个TCP连接，当某个请求时间过长时，其他的请求只能处于阻塞状态，这就是队头阻塞问题。
+
+### 4. HTTP/1.0 HTTP1.1 HTTP2.0版本之间的差异
+
+- HTTP 0.9
+
+1991年,原型版本，功能简陋，只有一个命令GET,只支持纯文本内容，该版本已过时。
+
+- HTTP 1.0
+
+任何格式的内容都可以发送，这使得互联网不仅可以传输文字，还能传输图像、视频、二进制等文件。除了GET命令，还引入了POST命令和HEAD命令。http请求和回应的格式改变，除了数据部分，每次通信都必须包括头信息（HTTP header），用来描述一些元数据。只使用 header 中的 If-Modified-Since 和 Expires 作为缓存失效的标准。不支持断点续传，也就是说，每次都会传送全部的页面和数据。通常每台计算机只能绑定一个 IP，所以请求消息中的 URL 并没有传递主机名（hostname）
+
+- HTTP 1.1
+
+http1.1是目前最为主流的http协议版本，从1999年发布至今，仍是主流的http协议版本。
+
+引入了持久连接（ persistent connection），即TCP连接默认不关闭，可以被多个请求复用，不用声明Connection: keep-alive。长连接的连接时长可以通过请求头中的 keep-alive 来设置引入了管道机制（ pipelining），即在同一个TCP连接里，客户端可以同时发送多个
+请求，进一步改进了HTTP协议的效率。HTTP 1.1 中新增加了 E-tag，If-Unmodified-Since, If-Match, If-None-Match 等缓存控制标头来控制缓存失效。支持断点续传，通过使用请求头中的 Range 来实现。使用了虚拟网络，在一台物理服务器上可以存在多个虚拟主机（Multi-homed Web Servers），并且它们共享一个IP地址。新增方法：PUT、 PATCH、 OPTIONS、 DELETE。
+http1.x版本问题
+
+在传输数据过程中，所有内容都是明文，客户端和服务器端都无法验证对方的身份，无法保证数据的安全性。HTTP/1.1 版本默认允许复用TCP连接，但是在同一个TCP连接里，所有数据通信是按次序进行的，服务器通常在处理完一个回应后，才会继续去处理下一个，这样子就会造成队头阻塞。http/1.x 版本支持Keep-alive，用此方案来弥补创建多次连接产生的延迟，但是同样会给服务器带来压力，并且的话，对于单文件被不断请求的服务，Keep-alive会极大影响性能，因为它在文件被请求之后还保持了不必要的连接很长时间。
+HTTP 2.0
+
+二进制分帧  这是一次彻底的二进制协议，头信息和数据体都是二进制，并且统称为"帧"：头信息帧和数据帧。头部压缩  HTTP 1.1版本会出现 「User-Agent、Cookie、Accept、Server、Range」 等字段可能会占用几百甚至几千字节，而 Body 却经常只有几十字节，所以导致头部偏重。HTTP 2.0 使用 HPACK 算法进行压缩。多路复用 复用TCP连接，在一个连接里，客户端和浏览器都可以同时发送多个请求或回应，且不用按顺序一一对应，这样子解决了队头阻塞的问题。服务器推送 允许服务器未经请求，主动向客户端发送资源，即服务器推送。请求优先级 可以设置数据帧的优先级，让服务端先处理重要资源，优化用户体验。
