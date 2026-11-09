@@ -22,3 +22,13 @@ github.com/shunwuyu/go-tiny-claw 这个包以后在 Github 这个位置，别人
   - internal/tools     工具与执行层
   - internal/memory    状态与记忆层
   - internal/feishu    飞书集成层
+
+> 正如你所见，只要大模型返回的结果中包含“工具调用请求（Tool Call  Request）”，这个 Loop 就会一直循环下去。每一次从“组装 Prompt”到“追加观察结果”，我们称之为一个 Turn（轮次）。
+
+
+- 在 Harness 驾驭引擎中，各个组件（大模型、工具、主循环）之间传递的数据就是上下文（Context）
+
+我们必须定义一套属于 go-tiny-claw 自己的标准数据结构，来承载 ReAct 范式中的“思考”与“行动”。
+
+
+

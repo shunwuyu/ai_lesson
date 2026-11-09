@@ -536,3 +536,29 @@ export class LoginDto {
   password: string;
 }
 ```
+
+## user 模块
+- typeorm 全局配置
+```ts
+"@nestjs/typeorm": "^11.0.3",
+"typeorm": "0.3.27",
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from './user/entities/user.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres' as const,
+        host: config.get<string>('POSTGRES_HOST', 'localhost'),
+        port: config.get<number>('POSTGRES_PORT', 5432),
+        username: config.get<string>('POSTGRES_USER', 'user'),
+        password: config.get<string>('POSTGRES_PASSWORD', '123456'),
+        database: config.get<string>('POSTGRES_DB', 'knowledge_hub'),
+        entities: [
+          UserEntity
+        ],
+        synchronize: false,
+      }),
+    }),
+```

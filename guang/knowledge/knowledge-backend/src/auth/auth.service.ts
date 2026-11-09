@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LoginDto } from './dto/auth.dto';
 import { AuthUser } from './auth-user.interface';
+import { UserService } from '../user/user.service';
 
 export interface LoginResult {
   accessToken: string;
@@ -12,7 +13,17 @@ export interface LoginResult {
 
 @Injectable()
 export class AuthService {
+  constructor(
+    private readonly userService: UserService,
+  ) {
+    
+  }
   async login(dto: LoginDto): Promise<LoginResult> {
+    const user = await this.userService.validateCredentials(
+      dto.username,
+      dto.password,
+    );
+    console.log(user, '////////');
     return {
       accessToken: '123456',
       refreshToken: '123456',
@@ -29,10 +40,7 @@ export class AuthService {
         teamIds: ['123456'],
       },
     }
-    // const user = await this.userService.validateCredentials(
-    //   dto.username,
-    //   dto.password,
-    // );
+    
     // await this.userService.touchLastLogin(user.userId);
     // return this.buildLoginResult(user);
   }
