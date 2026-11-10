@@ -10,8 +10,11 @@ import { UserRoleEntity } from './entities/user-role.entity';
 import { PermissionEntity } from './entities/permission.entity';
 import { UserPermissionEntity } from './entities/user-permission.entity';
 import { PermissionService } from './permission.service';
+import { TeamModule } from '../team/team.module';
+
 @Module({
   imports: [
+    TeamModule,
     // 给当前模块注册**这几张表的仓库**
      TypeOrmModule.forFeature([
       UserEntity,

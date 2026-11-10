@@ -8,7 +8,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user/entities/user.entity';
 import { UserRoleEntity } from './user/entities/user-role.entity';
 import { RoleEntity } from './user/entities/role.entity';
-
+import { PermissionEntity } from './user/entities/permission.entity';
+import { UserPermissionEntity } from './user/entities/user-permission.entity';
+import { RolePermissionEntity } from './user/entities/role-permission.entity';
+import { TeamModule } from './team/team.module';
+import { TeamEntity } from './team/entities/team.entity';
+import { TeamMemberEntity } from './team/entities/team-member.entity';
 
 
 @Module({
@@ -27,12 +32,19 @@ import { RoleEntity } from './user/entities/role.entity';
           UserEntity,
           UserRoleEntity,
           RoleEntity,
+          PermissionEntity,
+          UserPermissionEntity,
+          RolePermissionEntity,
+          TeamEntity,
+          TeamMemberEntity
         ],
         synchronize: false,
+        logging: ['query', 'error']
       }),
     }),
     AuthModule,
-    UserModule
+    UserModule,
+    TeamModule
   ],
   controllers: [AppController],
   providers: [AppService],

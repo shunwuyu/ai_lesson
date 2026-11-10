@@ -17,6 +17,7 @@ import { AuthUser } from '../auth/auth-user.interface';
 import { compare, hash } from 'bcryptjs';
 // 引入 PermissionService 用于获取用户权限
 import { PermissionService } from './permission.service';
+import { TeamService } from '../team/team.service';
 
 @Injectable()
 export class UserService {
@@ -31,6 +32,8 @@ export class UserService {
     private readonly roleRepo: Repository<RoleEntity>,
     // 注入 PermissionService 用于获取用户权限
     private readonly permissionService: PermissionService,
+    // 注入 TeamService 用于获取用户可访问的团队
+    private readonly teamService: TeamService,
   ) {
 
   }
@@ -39,6 +42,7 @@ export class UserService {
     username: string,
     password: string,
   ){
+    console.log(username);
     const user = await this.findByUsername(username);
     console.log(user, '???????????????');
     if (!user) {
@@ -60,10 +64,30 @@ export class UserService {
     const roles = await this.getRoleCodes(user.id);
     console.log(roles, '---------------------')
     const permissions = await this.permissionService.getUserPermissionCodes(user.id);
+    // console.log(permissions, '------------||||---------')
+    return this.toAuthUser(user, roles, permissions);
+  }
 
+  async toAuthUser(
+    user: UserEntity,
+    roles: string[],
+    permissions: string[],
+  ): Promise<AuthUser> {
+    const teamIds = await this.teamService.listAccessibleTeamIds(user.id);
+    return {
+      userId: user.id,
+      username: user.username,
+      realName: user.realName,
+      email: user.email,
+      avatar: user.avatar,
+      roles,
+      permissions,
+      teamIds: teamIds.map(String),
+    };
   }
 
   async findByUsername(username: string): Promise<UserEntity | null> {
+    // console.log(this.userRepo, '????');
     return this.userRepo.findOne({
       where: { username, deleted: false },
     });
