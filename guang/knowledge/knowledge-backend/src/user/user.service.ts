@@ -62,7 +62,7 @@ export class UserService {
       throw new UnauthorizedException('用户名或密码错误');
     }
     const roles = await this.getRoleCodes(user.id);
-    console.log(roles, '---------------------')
+    console.log(roles, '-----------、、、、、----------')
     const permissions = await this.permissionService.getUserPermissionCodes(user.id);
     // console.log(permissions, '------------||||---------')
     return this.toAuthUser(user, roles, permissions);
@@ -109,5 +109,9 @@ export class UserService {
       // 数据库原多条生行数据
       .getRawMany<{ roleCode: string }>();
     return rows.map((r) => r.roleCode);
+  }
+
+  async touchLastLogin(userId: string): Promise<void> {
+    await this.userRepo.update(userId, { lastLoginAt: new Date() });
   }
 }

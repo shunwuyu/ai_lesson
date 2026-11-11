@@ -4,6 +4,7 @@ import { BrandLogo } from '../components/BrandLogo'
 import { useNavigate } from 'react-router-dom'
 import { ApiError } from '../api/client'
 import { authApi } from '../api'
+import { setAuth } from '../auth'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -25,12 +26,12 @@ export default function LoginPage() {
             setLoading(true)
             try {
               const result = await authApi.login(values.username, values.password)
-              // setAuth({
-              //   accessToken: result.accessToken,
-              //   refreshToken: result.refreshToken,
-              //   user: result.userInfo,
-              // })
-              // navigate('/dashboard', { replace: true })
+              setAuth({
+                accessToken: result.accessToken,
+                refreshToken: result.refreshToken,
+                user: result.userInfo,
+              })
+              navigate('/dashboard', { replace: true })
             } catch (error) {
               message.error(error instanceof ApiError ? error.message : '登录失败')
             } finally {

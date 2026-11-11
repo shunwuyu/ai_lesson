@@ -562,3 +562,111 @@ TypeOrmModule.forRootAsync({
       }),
     }),
 ```
+## jwt 登录 
+### 单token 缺点
+
+单token想让它失效只能等过期，没法主动注销。一旦泄露，黑客能一直用。而且为了安全只能把有效期设很短，用户就得频繁重新登录，体验很差。
+
+### 双token 机制
+
+双 Token 本质是把“身份”和“续期”拆开：Access Token 短效无状态，负责鉴权；Refresh Token 长效存服务端，负责换发新 Access Token。
+
+这样既能秒级注销权限，又不用每次请求都查库，兼顾了安全和性能。
+
+```
+用户登录
+  │
+  ▼
+认证服务校验账号密码
+  │
+  ▼
+签发 Access Token（15分钟） + Refresh Token（7天）
+  │
+  ▼
+前端保存：Access Token 放内存，Refresh Token 放 HttpOnly Cookie(XSS 攻击 js 读取localStorage)
+  │
+  ▼
+前端请求业务接口，Header 带 Access Token
+  │
+  ▼
+服务端验签 Access Token
+  │
+  ├─ 有效 → 返回业务数据
+  │
+  └─ 过期 → 返回 401
+        │
+        ▼
+前端拦截 401，用 Refresh Token 调刷新接口
+        │
+        ▼
+服务端校验 Refresh Token：是否存在、是否过期、是否绑定当前设备
+        │
+        ├─ 校验失败 → 要求重新登录
+        │
+        └─ 校验成功 → 发新 Access Token，并轮换 Refresh Token
+              │
+              ▼
+前端拿到新 Token，重试原请求，用户无感知
+```
+
+1. 登录阶段：用户输入账号密码，后端校验通过后，生成一对 Token。Access Token 是 JWT，短效，用来访问业务接口；Refresh Token 通常存 Redis/DB，长效，只用来换新的 Access Token。
+2. 正常请求阶段：前端每次请求业务接口时，在 Authorization: Bearer <Access Token> 里带上 Access Token。后端只验签和检查有效期，不用每次都查库，性能很好。
+3. Access Token 过期阶段：请求返回 401，前端响应拦截器捕获后，静默调用刷新接口，带上 Refresh Token。用户不会跳出登录页。
+4. 刷新阶段：后端校验 Refresh Token 是否有效、是否过期、是否匹配设备指纹。通过后，签发新的 Access Token，并把旧 Refresh Token 作废，生成新的 Refresh Token，这就是 Refresh Token Rotation。
+5. 重试阶段：前端保存新 Token，把刚才失败的请求重新发一遍，用户完全无感。 
+
+面试加分点
+  Access Token 短效：泄露后攻击窗口小。
+  Refresh Token 可撤销：登出、改密码、设备异常时，服务端直接删除或拉黑它。
+  Token 轮换：每次刷新后旧 Refresh Token 失效，防止被盗后反复使用。
+  并发刷新控制：多个请求同时 401 时，用队列/锁避免重复刷新。
+
+## ORM 
+- Entity（实体）：数据库表在代码里的"镜像"，定义 users 表有哪些字段、什么类型。
+  typeorm 提供了装饰器来定义实体，比如 @Entity()、@PrimaryGeneratedColumn()、@Column() 等。
+- DTO（数据传输对象）：出入接口的"表单校验器"，规定前端能传什么、后端返回什么，挡掉脏数据。
+  class-validator 提供了装饰器来校验 DTO，比如 @IsString()、@IsEmail() 等。
+  class-transformer 提供了装饰器来转换 DTO，比如 @Type(() => Number)、@Exclude() 等。
+  全局配置 ValidationPipe 
+  ```ts
+  import { ValidationPipe } from '@nestjs/common';
+
+app.useGlobalPipes(new ValidationPipe({
+  transform: true, // 开启 class-transformer 自动转换（@Type）
+  whitelist: true, // 自动剔除 DTO 上没有定义的字段（挡脏数据）
+  forbidNonWhitelisted: true, // 出现多余字段直接报错
+}));
+  ```
+
+- Repository（仓储）：跟数据库对话的"专属服务员"，封装增删改查，你不用手写 SQL。
+  - 在 Module 里 `TypeOrmModule.forFeature([User])` 注册实体 → 生成 Repository
+  - 在 Service 里通过 `@InjectRepository(User)` 注入 Repository
+  - Service 调用 repository 方法（find、findOne、save、update、delete）
+
+- ORM（TypeORM）：把对象操作翻译成 SQL 的"翻译官"，上面三者都靠它落地。
+
+```
+前端请求 POST /users  { email, password }
+   │
+   ▼
+【Controller】接收 @Body
+   │  触发 ValidationPipe 按 DTO 校验
+   ├─ 不合法（邮箱错/密码太短）→ 直接返回 400，根本进不了业务层 ✅
+   │
+   ▼ 合法，DTO 对象传进 Service
+【Service】业务逻辑层
+   │  调用 Repository 操作数据
+   ▼
+【Repository】userRepo.create() + .save()
+   │  把 DTO 组装成 User 实体
+   ▼
+【ORM / TypeORM】实体 → 翻译成 SQL
+   │  INSERT INTO users(email,password) VALUES(...)
+   ▼
+【数据库 users 表】真正落库
+   │
+   ▼ 返回结果原路回传
+Service 拿到 User 实体 → Controller 返回 → 响应给前端
+```
+
+

@@ -31,7 +31,7 @@ export const ADMIN_OPERATION_PERMISSIONS = [
   'system:team',
   'system:statistics',
   'system:settings',
-] as const;
+] as const; // as const 确保数组元素是 readonly 类型
 
 export const ADMIN_ROLES = [RoleCode.ADMIN] as const;
 
