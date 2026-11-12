@@ -8,3 +8,9 @@ export class LoginDto {
   @IsString()
   password: string;
 }
+
+/** 刷新 Token */
+export class RefreshTokenDto {
+  @IsString()
+  refreshToken: string;
+}

@@ -669,4 +669,11 @@ app.useGlobalPipes(new ValidationPipe({
 Service 拿到 User 实体 → Controller 返回 → 响应给前端
 ```
 
+- RBAC 基于角色的访问控制
 
+SetMetadata + Reflector + Guard` 实现**基于角色 / 权限的鉴权**。
+
+
+## decorators
+
+decorators 目录存放自定义装饰器，用来给接口打标记、便捷注入信息（如 @Public、@CurrentUser）。

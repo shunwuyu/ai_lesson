@@ -1,4 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { 
+  Injectable,
+  UnauthorizedException
+} from '@nestjs/common';
 import { LoginDto } from './dto/auth.dto';
 import { AuthUser } from './auth-user.interface';
 import { UserService } from '../user/user.service';
@@ -92,5 +95,30 @@ export class AuthService {
     return this.jwtService.sign(payload, {
       expiresIn: this.refreshExpires() as `${number}${'s' | 'm' | 'h' | 'd'}`,
     });
+  }
+
+  // 刷新 Token
+  async refresh(refreshToken: string): Promise<LoginResult> {
+    let payload: TokenPayload;
+    try {
+      // 验证 refresh token
+      payload = this.jwtService.verify<TokenPayload>(refreshToken);
+    } catch {
+      throw new UnauthorizedException('refresh token 无效或已过期');
+    }
+    if (payload.type !== 'refresh') {
+      throw new UnauthorizedException('无效的 refresh token');
+    }
+    
+    const user = await this.userService.buildAuthUser(payload.sub);
+    return this.buildLoginResult(user);
+  }
+
+  async getMe(userId: string): Promise<AuthUser> {
+    return this.userService.buildAuthUser(userId);
+  }
+
+  async buildAuthUser(userId: string): Promise<AuthUser> {
+    return this.userService.buildAuthUser(userId);
   }
 }

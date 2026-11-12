@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { SearchModule } from './search/search.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user/entities/user.entity';
@@ -44,7 +45,8 @@ import { TeamMemberEntity } from './team/entities/team-member.entity';
     }),
     AuthModule,
     UserModule,
-    TeamModule
+    TeamModule,
+    SearchModule
   ],
   controllers: [AppController],
   providers: [AppService],

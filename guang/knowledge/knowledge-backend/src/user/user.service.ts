@@ -1,6 +1,7 @@
 import { 
   Injectable,
-  UnauthorizedException 
+  UnauthorizedException,
+  NotFoundException
 } from '@nestjs/common';
 // 注入 Repository 仓库实例
 import { InjectRepository } from '@nestjs/typeorm';
@@ -113,5 +114,26 @@ export class UserService {
 
   async touchLastLogin(userId: string): Promise<void> {
     await this.userRepo.update(userId, { lastLoginAt: new Date() });
+  }
+
+  async buildAuthUser(userId: string): Promise<AuthUser> {
+    const user = await this.findByIdOrThrow(userId);
+    if (user.status !== 1) {
+      throw new UnauthorizedException('账户已禁用');
+    }
+    const roles = await this.getRoleCodes(userId);
+    const permissions =
+      await this.permissionService.getUserPermissionCodes(userId);
+    return this.toAuthUser(user, roles, permissions);
+  }
+
+  async findByIdOrThrow(userId: string): Promise<UserEntity> {
+    const user = await this.userRepo.findOne({
+      where: { id: userId, deleted: false },
+    });
+    if (!user) {
+      throw new NotFoundException('用户不存在');
+    }
+    return user;
   }
 }
