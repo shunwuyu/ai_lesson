@@ -7,6 +7,7 @@ import { AuthUser } from './auth-user.interface';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { RegisterDto } from './dto/auth.dto';
 
 export interface LoginResult {
   accessToken: string;
@@ -122,5 +123,45 @@ export class AuthService {
 
   async buildAuthUser(userId: string): Promise<AuthUser> {
     return this.userService.buildAuthUser(userId);
+  }
+
+  private requireEmailVerification(): boolean {
+    return (
+      this.config.get<string>('REQUIRE_EMAIL_VERIFICATION', 'false') ===
+      'true'
+    );
+  }
+
+  async register(
+    dto: RegisterDto,
+  ): Promise<{ userId: string; message: string; emailVerificationRequired?: boolean }> {
+    const result = await this.userService.register({
+      ...dto,
+      requireEmailVerification: this.requireEmailVerification(),
+    });
+
+    if (result.emailVerificationRequired && dto.email) {
+      const token = await this.emailActivation.createToken(result.userId);
+      try {
+        await this.emailService.sendActivationEmail(
+          dto.email,
+          dto.username,
+          token,
+        );
+      } catch {
+        await this.emailActivation.deleteByToken(token);
+        throw new BadRequestException('激活邮件发送失败，请稍后再试');
+      }
+      return {
+        userId: result.userId,
+        message: '注册成功，请查收邮件激活账户',
+        emailVerificationRequired: true,
+      };
+    }
+
+    return {
+      userId: result.userId,
+      message: '注册成功，请登录',
+    };
   }
 }

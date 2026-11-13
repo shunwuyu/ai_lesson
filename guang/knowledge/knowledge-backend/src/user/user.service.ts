@@ -1,7 +1,9 @@
 import { 
   Injectable,
   UnauthorizedException,
-  NotFoundException
+  ConflictException,
+  NotFoundException,
+  BadRequestException
 } from '@nestjs/common';
 // 注入 Repository 仓库实例
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,6 +21,8 @@ import { compare, hash } from 'bcryptjs';
 // 引入 PermissionService 用于获取用户权限
 import { PermissionService } from './permission.service';
 import { TeamService } from '../team/team.service';
+import { nextSnowflakeId } from '../common/snowflake-id';
+import { RoleCode } from '../common/constants/roles';
 
 @Injectable()
 export class UserService {
@@ -85,6 +89,68 @@ export class UserService {
       permissions,
       teamIds: teamIds.map(String),
     };
+  }
+  
+  async findByEmail(email: string): Promise<UserEntity | null> {
+    return this.userRepo.findOne({ where: { email, deleted: false } });
+  }
+
+  async register(input: {
+    username: string;
+    password: string;
+    email?: string;
+    realName?: string;
+    requireEmailVerification?: boolean;
+  }): Promise<{
+    userId: string;
+    emailVerificationRequired?: boolean;
+  }> {
+    const exists = await this.findByUsername(input.username);
+    if (exists) {
+      throw new ConflictException('用户名已存在');
+    }
+    if (input.email) {
+      const emailUsed = await this.findByEmail(input.email);
+      if (emailUsed) throw new ConflictException('邮箱已被使用');
+    }
+
+    const userId = nextSnowflakeId();
+    const needVerify = input.requireEmailVerification && !!input.email;
+    const user = this.userRepo.create({
+      id: userId,
+      username: input.username,
+      password: await hash(input.password, 10),
+      email: input.email ?? null,
+      realName: input.realName ?? null,
+      status: needVerify ? 0 : 1,
+      emailVerified: needVerify ? 0 : 1,
+    });
+    await this.userRepo.save(user);
+    await this.assignRole(userId, RoleCode.USER);
+
+    return {
+      userId,
+      emailVerificationRequired: needVerify,
+    };
+  }
+
+  async assignRole(userId: string, roleCode: string): Promise<void> {
+    const role = await this.roleRepo.findOne({ where: { roleCode } });
+    if (!role) {
+      throw new NotFoundException(`角色 ${roleCode} 不存在`);
+    }
+    const exists = await this.userRoleRepo.findOne({
+      where: { userId, roleId: role.id },
+    });
+    if (exists) return;
+
+    await this.userRoleRepo.save(
+      this.userRoleRepo.create({
+        id: nextSnowflakeId(),
+        userId,
+        roleId: role.id,
+      }),
+    );
   }
 
   async findByUsername(username: string): Promise<UserEntity | null> {

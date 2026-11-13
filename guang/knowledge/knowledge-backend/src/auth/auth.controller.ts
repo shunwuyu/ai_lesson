@@ -5,7 +5,7 @@ import {
   Get
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, RefreshTokenDto } from './dto/auth.dto';
+import { LoginDto, RefreshTokenDto, RegisterDto } from './dto/auth.dto';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { AuthUser } from './auth-user.interface';
@@ -14,6 +14,12 @@ import type { AuthUser } from './auth-user.interface';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   
+  @Public()
+  @Post('register')
+  register(@Body() dto: RegisterDto) {
+    return this.authService.register(dto);
+  }
+
   @Public()
   @Post('login')
   login(@Body() dto: LoginDto) {
