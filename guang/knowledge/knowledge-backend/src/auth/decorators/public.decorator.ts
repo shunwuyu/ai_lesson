@@ -2,6 +2,6 @@
 import { SetMetadata } from '@nestjs/common';
 // 标记接口无需 JWT（login / register / refresh 等）
 export const IS_PUBLIC_KEY = 'isPublic';
-
+// `Public()` 是一个**工厂装饰器**
 /** 标记接口无需 JWT（login / register / refresh 等） */
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);

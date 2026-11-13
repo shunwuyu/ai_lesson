@@ -32,9 +32,16 @@ export class AuthController {
   logout() {
     return { message: '已退出登录' };
   }
-
-  @Get('me')
+  // 请求进来， 没有 `@Public()`，触发全局 APP_GUARD  Jwt 守卫。
+  // passport-jwt 策略里的 `ExtractJwt`， 在jwt.strategy.ts定义
+  // 取出 Bearer token 中的 accessToken
+  // 拿到 payload，调用 JwtStrategy 的`validate(payload)`，查库组装 AuthUser，挂到`req.user`
+  // `@CurrentUser()` 装饰器读取 `req.user` 注入入参
+  // 进入 me 接口，调用 service 返回用户信息
+  // 任意一步校验失败，直接抛出 401 Unauthorized
+  @Get('me') 
   me(@CurrentUser() user: AuthUser) {
+    console.log(user, '////+++++++++/////');
     return this.authService.getMe(user.userId);
   }
 

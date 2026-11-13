@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
+// NestJS 官方提供的 JwtModule，用于快速集成 JWT 签发、解析、校验 Token 能力。
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PermissionsGuard } from './permissions.guard';
@@ -17,7 +18,6 @@ import { JwtStrategy } from './jwt.strategy';
   // 异步注册 Jwt 模块
   imports: [
     JwtModule.registerAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         // 盐
@@ -31,11 +31,10 @@ import { JwtStrategy } from './jwt.strategy';
   ],
   providers: [
     AuthService,
+    // `JwtStrategy` 是 passport-jwt 的校验策略，负责**提取并校验 
+    // accessToken，校验通过后把用户信息挂载到 request.user**，配合 AuthGuard ('jwt') 做鉴权。
+    
     JwtStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

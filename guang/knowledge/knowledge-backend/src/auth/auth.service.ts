@@ -82,6 +82,7 @@ export class AuthService {
     };
     return this.jwtService.sign(payload, {
       // 我保证这个字符串符合这个格式，你别报错
+      // 过期时间 ${number} 类型
       expiresIn: this.accessExpires() as `${number}${'s' | 'm' | 'h' | 'd'}`,
     });
   }
@@ -92,6 +93,7 @@ export class AuthService {
       username: user.username,
       type: 'refresh',
     };
+    // 把普通`string` 强转成「数字+单位」的字面量模板类型
     return this.jwtService.sign(payload, {
       expiresIn: this.refreshExpires() as `${number}${'s' | 'm' | 'h' | 'd'}`,
     });
