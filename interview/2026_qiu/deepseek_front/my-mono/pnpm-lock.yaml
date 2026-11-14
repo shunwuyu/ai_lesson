@@ -1,0 +1,23 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .: {}
+
+  packages/admin:
+    dependencies:
+      '@my/request':
+        specifier: workspace:*
+        version: link:../request
+
+  packages/h5:
+    dependencies:
+      '@my/request':
+        specifier: workspace:*
+        version: link:../request
+
+  packages/request: {}

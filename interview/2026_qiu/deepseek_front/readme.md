@@ -634,6 +634,198 @@ TopK：向量检索阶段，从向量库召回相似度最高的 K 条候选文�
 
 
 ## 七、 AI 工程化与前端工具链
+### 1. monorepo
+
+Monorepo 是**单仓库多包**方案：多个项目 / 包放在同一个 Git 仓库，统一管理代码、依赖、版本。
+共享代码方便，统一构建、lint、测试；适合组件库、配套服务。缺点是仓库变大、提交更杂，需要工具（pnpm workspace、turbo）治理。
+
+为什么需要？
+
+比如公司一套后台系统：
+`admin-ui`管理端、`user-h5`用户页面、`common-components`公共组件、`request`请求工具。
+
+它们互相依赖、经常一起改需求。 共用 request 工具，避免重复造轮子, 维护也麻烦。
+
+#### 实战
+```
+my-mono/
+├── pnpm-workspace.yaml     # 核心配置
+├── package.json            # 根
+└── packages/
+    ├── request/            # 公共请求包（共享）
+    ├── admin/              # 后台管理项目
+    └── h5/                 # H5页面项目
+```
+- 新建文件夹，初始化
+```
+mkdir my-mono && cd my-mono
+pnpm init
+mkdir packages
+```
+- 新建 `pnpm-workspace.yaml`
+```
+packages:
+  - packages/*
+```
+packages 下面所有文件夹都当做独立包pnpm
+
+- 创建公共包 packages/request
+```
+cd packages/request
+pnpm init
+```
+
+packages/request/package.json
+```
+{
+  "name": "@my/request",
+  "version": "1.0.0",
+  "main": "index.js"
+}
+`@my` 是组织 scope，区分公共 npm 包；`/request` 是包名，`workspace:*` 按这个名字引用本地包。
+```
+packages/request/index.js
+```
+// 统一请求，拦截器、baseURL都写这里
+export function request(url) {
+  console.log('统一请求：', url)
+  return Promise.resolve({code:200})
+}
+```
+- 创建 admin 项目（引用 @my/request）
+```js
+cd ../admin
+pnpm init
+```
+```
+{
+  "name": "@my/admin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@my/request": "workspace:*"
+  }
+}
+依赖本地工作区里名为`@my/request`的包，直接软链接，不用从 npm 拉。
+```
+packages/admin/index.js
+```
+import { request } from '@my/request'
+request('/admin/list')
+```
+
+步骤 5：创建 h5 项目（同样引用 @my/request）
+
+```
+cd ../h5
+pnpm init
+```
+```
+{
+  "name": "@my/h5",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@my/request": "workspace:*"
+  }
+}
+
+```
+packages/h5/index.js
+
+```
+import { request } from '@my/request'
+request('/h5/home')
+```
+
+步骤 6：回到根目录安装（关键！）
+
+```
+pnpm install
+```
+npm 会自动把 `@my/request` 软链接进来，**不用发布 npm 包**pnpm
+
+- 测试
+
+改 `packages/request/index.js` 的打印内容，admin、h5 两边直接生效，不用发包升级。
+
+- 运行
+
+ 跑admin
+node packages/admin/index.js
+ 跑h5
+node packages/h5/index.js
+
+- 根目录 package.json
+```
+"dev:admin": "node packages/admin/index.js",
+    "dev:h5": "node packages/h5/index.js",
+    "dev": "pnpm dev:admin & pnpm dev:h5"
+```
+Monorepo 让关联项目同仓协同，公共能力一处修改全局生效，省去频繁发包升级，统一规范、依赖与流水线，大幅降低多子项目同步迭代的沟通与维护成本。
+
+### 2. LangGraph 里 state、node、edge、checkpoint 分别解决什么问题
+- **State**：维护图运行过程中的全局上下文与数据，是节点之间传递信息的载体。
+- **Node**：图里的执行单元，负责具体业务逻辑、工具调用、大模型推理等计算任务。
+- **Edge**：定义节点之间的流转规则，包含固定跳转和条件分支，用来控制流程走向。
+- **Checkpoint**：对 State 做快照持久化，实现图的中断恢复、回溯重试、多轮会话记忆。
+
+LangGraph 以 State 承载会话数据，Node 执行业务逻辑，Edge 调度分支流转，Checkpoint 提供持久化回溯能力，把大模型任务组装成可暂停、可重试、有状态的可控 Agent 工作流。
+
+### 3. 如何设计一个AI前端项目的标准化目录结构
+
+核心设计原则：模块化（做法）、关注点分离（设计思想）、可扩展性、易于维护。按功能领域（业务域， order， user， ai, goods, 一个目录放这个业务所有相关的 controller、service、model）组织代码，而非按技术类型。
+目录结构设计：
+
+```
+ai-frontend/
+├── src/
+│   ├── app/                # 应用级配置
+│   │   ├── layout/         # 布局组件
+│   │   ├── providers/      # React 上下文 Provider 提供全局共享数据、状态、依赖，供子组件注入使用
+│   │   ├── routes/         # 路由配置
+│   │   └── store/          # 全局状态
+│   ├── features/           # 功能模块（按业务领域划分）
+│   │   ├── chat/           # 聊天功能
+│   │   │   ├── api/        # API接口
+│   │   │   ├── components/ # 组件
+│   │   │   ├── hooks/      # 自定义Hook
+│   │   │   ├── store/      # 模块状态
+│   │   │   └── types/      # 类型定义
+│   │   ├── code-generation/ # 代码生成
+│   │   └── image-generation/ # 图像生成
+│   ├── shared/             # 共享资源
+│   │   ├── components/     # 通用UI组件
+│   │   ├── hooks/          # 通用Hook
+│   │   ├── utils/          # 工具函数
+│   │   ├── constants/      # 常量定义
+│   │   └── configs/        # 配置
+│   ├── ai/                 # AI核心模块
+│   │   ├── models/         # 模型接口
+│   │   ├── prompts/        # 提示词模板
+│   │   ├── tools/          # AI工具函数
+│   │   └── evaluators/     # 评估器
+│   ├── types/              # 全局类型定义
+│   └── styles/             # 全局样式
+├── tests/                  # 测试文件
+├── public/                 # 静态资源
+└── docs/                   # 项目文档
+
+```
+
+- provider  theme
+
+<ThemeProvider>
+  <App />
+</ThemeProvider>
+
+关键设计决策：
+
+1. 按功能模块组织而非技术类型，便于功能扩展
+2. AI 相关代码集中管理，便于模型切换和更新
+3. 严格区分业务逻辑和通用逻辑
+4. 测试文件靠近被测试代码，便于维护
+
 ## 八、 大模型前端集成
 ## 九、 安全 
 ### 1. 谈谈 Prompt injection (提示词注入) 在前端层面的防范
@@ -875,15 +1067,8 @@ left++;
 
 根据题目要求，记录当前窗口的结果。
 
-```
-maxLength = Math.max(maxLength, right - left);
-```
 
-或者
 
-```
-minLength = Math.min(minLength, right - left);
-```
 
 #### 为什么说redis 短期记忆用的滑动窗口？
 dis 存最近对话，就是滑动窗口。窗口只留最近 N 轮聊天，新对话进来，就把最老的挤出去，不用存全部。太长了还会截断、做摘要压缩上下文，传给大模型，避免 token 超限，和算法滑动窗口逻辑一模一样。
@@ -1168,3 +1353,145 @@ CC 不是把整个项目塞给模型，init 建好检索环境，Agent 靠 grep 
 所以 Ai应用开发，
 社会阅历越丰富的人， 知识越广的人， 薪资越高。
 反而只是搞流程，搞代码的，不太高，时代真的变了。  
+
+## 十三、 浏览器
+
+1. 说一说从输入URL到页面呈现发生了什么？
+
+这个问题，无论从深度还是广度上，要真的答好这个题目，或者梳理清楚的话，挺难的，是一个非常综合性的问题。
+
+那么我们就开始吧，假设你输入的内容是
+
+> https://juejin.cn
+
+网络请求
+1. 构建请求
+首先，浏览器构建「请求行」信息（如下所示），构建好后，浏览器准备发起网络请求👇
+
+```
+GET / HTTP/1.1
+GET是请求方法，路径就是根路径，HTTP协议版本1.1
+```
+2. 查找缓存
+
+在真正发起网络请求之前，浏览器会先在浏览器缓存中查询是否有要请求的文件。
+先检查强缓存，如果命中的话直接使用，否则进入下一步
+
+3. DNS解析
+输入的域名的话，我们需要根据域名去获取对应的ip地址。 这个过程需要依赖一个服务系统，叫做是DNS域名解析, 从查找到获取到具体IP的过程叫做是DNS解析。
+
+首先，浏览器提供了DNS数据缓存功能，如果一个域名已经解析过了，那么就会把解析的结果缓存下来，下次查找的话，直接去缓存中找，不需要DNS解析。
+
+「解析过程总结如下」👇
+
+1.「首先查看是否有对应的域名缓存，有的话直接用缓存的ip访问」
+  windows 
+ ipconfig /displaydns
+// 输入这个命令就可以查看对应的电脑中是否有缓存
+  mac 
+  dscacheutil -q host -a name [juejin.cn](https://juejin.cn) 
+  单条的  多个ip 复杂均衡
+
+2.「如果缓存中没有，则去查找hosts文件」 一般在 c:\windows\system32\drivers\etc\hosts
+mac 呢 
+  vi /etc/hosts
+
+  ping bilibili.com
+
+3. 如果hosts文件里没找到想解析的域名，则将「域名发往自己配置的dns服务器」，也叫「本地dns服务器」。
+
+ ipconfig/all
+通过这个命令可以查看自己的本地dns服务器
+
+
+4. 如果「本地dns服务器有相应域名的记录」，则返回记录。
+
+
+电脑的dns服务器一般是各大运营商如电信联通提供的，或者像180.76.76.76，223.5.5.5，4个114等知名dns服务商提供的，本身缓存了大量的常见域名的ip，所以常见的网站，都是有记录的。不需要找根服务器。
+
+
+5. 如果电脑自己的服务器没有记录，会去找根服务器。根服务器全球只要13组，会去找其中之一,找了根服务器后，「根服务器会根据请求的域名，返回对应的“顶级域名服务器”」，如：
+
+如果请求的域名是xxx.com，则返回负责com域的服务器如果是xxx.cn，则发给负责cn域的服务器如果是xxx.ca，则发给负责ca域的服务器
+6.「顶级域服务器收到请求，会返回二级域服务器的地址」
+
+比如一个网址是www.xxx.edu.cn，则顶级域名服务器再转发给负责.edu.cn域的二级服务器
+7.「以此类推，最终会发到负责锁查询域名的，最精确的那台dns，可以得到查询结果。」
+8. 最后一步，「本地dns服务器，把最终的解析结果，返回给客户端，对客户端来讲，只是一去一回的事，客户端并不知道本地dns服务器经过了千山万水。
+
+- 建立TCP链接
+
+我们所了解的就是👉Chrome 在同一个域名下要求同时最多只能有 6 个 TCP 连接，超过 6 个的话剩下的请求就得等待。
+那么我们假设不需要等待，我们进入了TCP连接的建立阶段。
+建立TCP连接经历下面三个阶段：
+
+通过「三次握手」建立客户端和服务器之间的连接。进行数据传输。断开连接的阶段。数据传输完成，现在要断开连接了，通过「四次挥手」来断开连接。
+从上面看得出来，TCP 连接通过什么手段来保证数据传输的可靠性，一是三次握手确认连接，二是数据包校验保证数据到达接收方，三是通过四次挥手断开连接。
+
+- 发送HTTP请求
+TCP连接完成后，接下来就可以与服务器通信了，也就是我们经常说的发送HTTP请求。
+
+发送HTTP请求的话，需要携带三样东西：「请求行」，「请求头」，「请求体」。
+
+我们看看大概是是什么样子的吧👇
+
+```
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: /* 省略cookie信息 */
+Host: juejin.im
+Pragma: no-cache
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36
+
+```
+
+最后就是请求体，请求体的话只有在POST请求场景下存在，常见的就是表单提交
+
+- 网络响应
+
+HTTP 请求到达服务器，服务器进行对应的处理。最后要把数据传给浏览器，也就是通常我们说的返回网络响应。
+
+跟请求部分类似，网络响应具有三个部分:「响应行」、「响应头」和「响应体」。
+
+响应行类似下面这样👇
+
+HTTP/1.1 200 OK
+
+对应的响应头数据是怎么样的呢？我们来举个例子看看👇
+
+Access-Control-Max-Age: 86400
+Cache-control: private
+Connection: close
+Content-Encoding: gzip
+Content-Type: text/html;charset=utf-8
+Date: Wed, 22 Jul 2020 13:24:49 GMT
+Vary: Accept-Encoding
+Set-Cookie: ab={}; path=/; expires=Thu, 22 Jul 2021 13:24:49 GMT; secure; httponly
+Transfer-Encoding: chunked
+
+
+接下来，我们数据拿到了，你认为就会断开TCP连接吗？
+这个的看响应头中的Connection字段。上面的字段值为close，那么就会断开，一般情况下，HTTP1.1版本的话，通常请求头会包含「Connection: Keep-Alive」表示建立了持久连接，这样TCP连接会一直保持，之后请求统一站点的资源会复用这个连接。
+上面的情况就会断开TCP连接，请求-响应流程结束。
+到这里的话，网络请求就告一段落了，接下来的内容就是渲染流程了👇
+
+- 渲染阶段
+
+较为专业的术语总结为以下阶段：
+
+构建DOM树
+样式计算
+布局阶段
+分层 z-index
+绘制
+分块
+  将绘制指令按视口等切分为多个图块，交由 GPU 分批光栅化，优化渲染速度，避免一次性处理大量数据。
+光栅化
+  把矢量图形（绘制指令）转换成像素位图（图片）
+合成
+  把各个光栅化完成的纹理图层，按层叠顺序、透明度、变换等参数合并，输出最终屏幕画面。
+

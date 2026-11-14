@@ -565,11 +565,11 @@ TypeOrmModule.forRootAsync({
 ## jwt 登录 
 ### 单token 缺点
 
-单token想让它失效只能等过期，没法主动注销。一旦泄露，黑客能一直用。而且为了安全只能把有效期设很短，用户就得频繁重新登录，体验很差。
+单 Token 主要缺点：没法主动失效，用户登出、改密后 token 还能用；过期时间不好拿捏，太短频繁登录，太长风险高；无法无感续期，只能等过期重登，被盗后危害大。
 
 ### 双token 机制
 
-双 Token 本质是把“身份”和“续期”拆开：Access Token 短效无状态，负责鉴权；Refresh Token 长效存服务端，负责换发新 Access Token。
+双 Token 本质是把“身份”和“续期”拆开：Access Token 短效无状态，负责鉴权；Refresh Token（不参与业务鉴权，只作为换票凭证） 长效存服务端，负责换发新 Access Token。
 
 这样既能秒级注销权限，又不用每次请求都查库，兼顾了安全和性能。
 
@@ -620,6 +620,38 @@ TypeOrmModule.forRootAsync({
   Refresh Token 可撤销：登出、改密码、设备异常时，服务端直接删除或拉黑它。
   Token 轮换：每次刷新后旧 Refresh Token 失效，防止被盗后反复使用。
   并发刷新控制：多个请求同时 401 时，用队列/锁避免重复刷新。
+
+### 开发流程
+1. signAccessToken 方法
+```ts
+JwtModule.registerAsync({
+    imports: [ConfigModule],
+    inject: [ConfigService],
+    useFactory: (config: ConfigService) => ({
+      // 盐
+      secret: config.get<string>('JWT_SECRET', 'dev-secret-change-me'),
+    }),
+})
+import { JwtService } from '@nestjs/jwt';
+```
+2. 颁发两个token
+3. refresh 
+4. decorators/public.decorator.ts 
+开放的装饰器
+5. APP_GUARD
+注册成了 全局守卫 ，所以 每个 HTTP 请求进入 Controller 之前都会触发一次 。
+中间件 → 守卫(Guard) → 拦截器 → 管道(ValidationPipe) → Controller 方法
+
+```js
+- APP_GUARD 全局守卫注册
+- 任意请求进来，`JwtAuthGuard.canActivate()` 先跑
+- 有`@Public()` 标记（login / refresh）→ 直接`return true` 放行
+- 没有 → 走`super.canActivate()` 触发`JwtStrategy` 验签  jwt-auth.guard.ts 
+- 成功 →`request.user` 
+```
+
+- @CurrentUser 装饰器
+
 
 ## ORM 
 - Entity（实体）：数据库表在代码里的"镜像"，定义 users 表有哪些字段、什么类型。

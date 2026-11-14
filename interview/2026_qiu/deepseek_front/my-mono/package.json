@@ -1,0 +1,15 @@
+{
+  "name": "my-mono",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:admin": "node packages/admin/index.js",
+    "dev:h5": "node packages/h5/index.js",
+    "dev": "pnpm dev:admin & pnpm dev:h5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0"
+}
