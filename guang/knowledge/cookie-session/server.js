@@ -1,4 +1,6 @@
 const http = require('http');
+// 引入 crypto 模块，用于生成随机 sessionId
+// Node.js 内置的 crypto 模块，用于提供加密、哈希、签名、校验、密钥生成等密码学能力
 const crypto = require('crypto');
 
 // ===================== 配置区 =====================
@@ -8,18 +10,21 @@ const userDB = {
   user: { username: 'user', password: '123456', role: '普通用户' }
 };
 
-// 服务端 Session 存储（内存版，重启服务全部丢失，讲解重点！）
+// 服务端 Session 存储（内存版，重启服务全部丢失，不适合分布式， 讲解重点！）
 const sessionStore = {};
 // session 过期时间 5分钟
 const SESSION_EXPIRE = 5 * 60 * 1000;
 
 // 生成唯一 sessionId
 function generateSessionId() {
+  // 安全随机数生成器，生成**16 字节（128 位）**的二进制随机缓冲区
+  // 把 Buffer 里的二进制字节，转成**十六进制字符串**
   return crypto.randomBytes(16).toString('hex');
 }
 
 // 解析 Cookie 字符串 {key:value}
 function parseCookie(cookieStr = '') {
+  console.log(cookieStr)
   const cookieObj = {};
   cookieStr.split(';').forEach(item => {
     const [k, v] = item.trim().split('=');
@@ -99,6 +104,7 @@ function parsePostBody(req) {
     let body = '';
     req.on('data', chunk => body += chunk);
     req.on('end', () => {
+      // 用来便捷解析、拼接、编码 url 查询参数字符串
       const params = new URLSearchParams(body);
       const data = {};
       for (const [k, v] of params) {

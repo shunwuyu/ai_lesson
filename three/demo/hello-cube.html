@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hello 3D — Rotating Cube</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <script type="module">
+    import * as THREE from "three";
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x111318);
+
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000,
+    );
+    camera.position.set(0, 0, 5);
+    camera.lookAt(0, 0, 0);
+
+    const cube = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshStandardMaterial({ color: 0x3a86ff }),
+    );
+    scene.add(cube);
+
+    const light = new THREE.DirectionalLight(0xffffff, 2);
+    light.position.set(3, 4, 5); // shines from its position toward the origin
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+
+    const timer = new THREE.Timer();
+    timer.connect(document); // freezes the delta while the tab is hidden
+
+    function animate() {
+      timer.update(); // advance the timer first thing each frame
+      cube.rotation.x += timer.getDelta();
+      cube.rotation.y += timer.getDelta();
+      renderer.render(scene, camera);
+    }
+    renderer.setAnimationLoop(animate);
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

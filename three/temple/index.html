@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kage — a night walk through a Kyoto mountain temple</title>
+  <meta name="description" content="Kage: a five-chapter cinematic night walk through a fictional Kyoto mountain temple, rendered live in WebGL." />
+  <meta name="theme-color" content="#05060a" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+
+  <!-- Custom cursor (fine pointers only; hidden by CSS otherwise) -->
+  <div id="cursor-dot" class="cursor" aria-hidden="true"></div>
+  <div id="cursor-ring" class="cursor" aria-hidden="true"></div>
+
+  <!-- Live 3D environment (decorative) -->
+  <div id="world" aria-hidden="true"></div>
+
+  <!-- Alpha-preserving foreground cutouts, injected at runtime -->
+  <div id="foreground" aria-hidden="true"></div>
+
+  <header class="site-head">
+    <a class="wordmark" href="#top" aria-label="Kage — back to the beginning">
+      KAGE <span class="jp" lang="ja">影</span>
+    </a>
+    <nav class="head-nav" aria-label="Chapters">
+      <a href="#threshold" data-nav="1">01</a>
+      <a href="#gardens" data-nav="2">02</a>
+      <a href="#pines" data-nav="3">03</a>
+      <a href="#craft" data-nav="4">04</a>
+      <a href="#afterlight" data-nav="5">05</a>
+    </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">MENU</button>
+  </header>
+
+  <nav class="chapter-rail" aria-label="Chapter navigation">
+    <a href="#top" data-nav="0" aria-label="Prologue">0</a>
+    <a href="#threshold" data-nav="1" aria-label="Chapter one — the threshold">1</a>
+    <a href="#gardens" data-nav="2" aria-label="Chapter two — the still gardens">2</a>
+    <a href="#pines" data-nav="3" aria-label="Chapter three — the pines">3</a>
+    <a href="#craft" data-nav="4" aria-label="Chapter four — sacred craft">4</a>
+    <a href="#afterlight" data-nav="5" aria-label="Chapter five — afterlight">5</a>
+  </nav>
+
+  <main id="content">
+
+    <!-- ============================ HERO / PROLOGUE ============================ -->
+    <section class="chapter hero" id="top" data-chapter="0" aria-label="Prologue">
+      <div class="wrap">
+        <div class="hero-layout">
+          <div class="hero-left">
+            <p class="label reveal"><span class="rv">影 — Kage · a night walk</span></p>
+            <h1 class="hero-title reveal"><span class="split">KAGE</span></h1>
+            <p class="hero-sub reveal"><span class="rv">A night walk through a fictional Kyoto mountain temple, told in five chapters.</span></p>
+            <div class="hero-meta reveal">
+              <span class="label-dim rv">Five chapters</span>
+              <span class="label-dim rv">Scroll to descend</span>
+            </div>
+          </div>
+          <div class="hero-jp reveal" lang="ja" aria-hidden="true"><span class="rv">影</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CHAPTER 01 ============================ -->
+    <section class="chapter" id="threshold" data-chapter="1" aria-labelledby="t1">
+      <div class="wrap">
+        <div class="chapter-grid">
+          <div class="chapter-block">
+            <div class="chapter-meta reveal">
+              <span class="label rv">Chapter One</span>
+              <span class="label-dim rv">山門 · Sanmon</span>
+            </div>
+            <div class="chapter-two">
+              <h2 class="display chapter-heading reveal" id="t1"><span class="split">The Threshold</span></h2>
+              <div class="jp-col reveal"><span class="jp-vertical rv" lang="ja">山門</span></div>
+            </div>
+            <p class="body-copy reveal"><span class="rv">The torii rises from the dark like a gate of cinnabar. Beyond it, stone steps climb toward the hall, each riser worn smooth by weather and years. This is the point of crossing — where the road becomes a path, and the path becomes a vow.</span></p>
+          </div>
+
+          <div class="cards">
+            <figure class="card reveal" data-still="threshold">
+              <div class="card-frame">
+                <img alt="The vermilion torii gate standing against the night mountain" />
+                <button class="play" data-goto="#threshold" aria-label="Replay the threshold scene">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+                </button>
+              </div>
+              <figcaption>
+                <p class="cap">Gate of cinnabar — the first crossing.</p>
+                <span class="idx">PLATE 01</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CHAPTER 02 ============================ -->
+    <section class="chapter" id="gardens" data-chapter="2" aria-labelledby="t2">
+      <div class="wrap">
+        <div class="chapter-grid">
+          <div class="chapter-block">
+            <div class="chapter-meta reveal">
+              <span class="label rv">Chapter Two</span>
+              <span class="label-dim rv">石庭 · Sekitei</span>
+            </div>
+            <div class="chapter-two">
+              <h2 class="display chapter-heading reveal" id="t2"><span class="split">Still Gardens</span></h2>
+              <div class="jp-col reveal"><span class="jp-vertical rv" lang="ja">石庭</span></div>
+            </div>
+            <p class="body-copy reveal"><span class="rv">Raked gravel holds the shape of water that is not there. Stones stand in a silence so complete it becomes audible. In the dry garden, nothing moves, and yet everything is in motion — the moon shifting, the mind settling.</span></p>
+          </div>
+
+          <div class="cards">
+            <figure class="card offset reveal" data-still="gardens">
+              <div class="card-frame">
+                <img alt="Raked gravel and standing stones of the dry garden in moonlight" />
+                <button class="play" data-goto="#gardens" aria-label="Replay the still gardens scene">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+                </button>
+              </div>
+              <figcaption>
+                <p class="cap">Water drawn in sand — the second silence.</p>
+                <span class="idx">PLATE 02</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CHAPTER 03 ============================ -->
+    <section class="chapter" id="pines" data-chapter="3" aria-labelledby="t3">
+      <div class="wrap">
+        <div class="chapter-grid">
+          <div class="chapter-block">
+            <div class="chapter-meta reveal">
+              <span class="label rv">Chapter Three</span>
+              <span class="label-dim rv">松 · Matsu</span>
+            </div>
+            <div class="chapter-two">
+              <h2 class="display chapter-heading reveal" id="t3"><span class="split">The Pines</span></h2>
+              <div class="jp-col reveal"><span class="jp-vertical rv" lang="ja">松</span></div>
+            </div>
+            <p class="body-copy reveal"><span class="rv">Wind moves through the black pines like a memory of the sea. Needles fall without hurry, and the air tastes of resin and cold. The mountain keeps its oldest trees close, as if afraid the night would lose them.</span></p>
+          </div>
+
+          <div class="cards">
+            <figure class="card reveal" data-still="pines">
+              <div class="card-frame">
+                <img alt="Black pines gathered on the mountainside under a cold moon" />
+                <button class="play" data-goto="#pines" aria-label="Replay the pines scene">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+                </button>
+              </div>
+              <figcaption>
+                <p class="cap">Needles on the wind — the mountain breathing.</p>
+                <span class="idx">PLATE 03</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CHAPTER 04 ============================ -->
+    <section class="chapter" id="craft" data-chapter="4" aria-labelledby="t4">
+      <div class="wrap">
+        <div class="chapter-grid">
+          <div class="chapter-block">
+            <div class="chapter-meta reveal">
+              <span class="label rv">Chapter Four</span>
+              <span class="label-dim rv">灯籠 · Tōrō</span>
+            </div>
+            <div class="chapter-two">
+              <h2 class="display chapter-heading reveal" id="t4"><span class="split">Sacred Craft</span></h2>
+              <div class="jp-col reveal"><span class="jp-vertical rv" lang="ja">灯籠</span></div>
+            </div>
+            <p class="body-copy reveal"><span class="rv">Stone lanterns, cut by hands that no longer have names, hold small fires against the dark. Shoji glow the color of embers and paper. Light, here, is a discipline — tended, trimmed, never wasted.</span></p>
+          </div>
+
+          <div class="cards">
+            <figure class="card offset reveal" data-still="craft">
+              <div class="card-frame">
+                <img alt="Stone lanterns and glowing shoji screens in the warm dark" />
+                <button class="play" data-goto="#craft" aria-label="Replay the sacred craft scene">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+                </button>
+              </div>
+              <figcaption>
+                <p class="cap">Fire kept in stone — the fourth discipline.</p>
+                <span class="idx">PLATE 04</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CHAPTER 05 ============================ -->
+    <section class="chapter" id="afterlight" data-chapter="5" aria-labelledby="t5">
+      <div class="wrap">
+        <div class="chapter-grid">
+          <div class="chapter-block">
+            <div class="chapter-meta reveal">
+              <span class="label rv">Chapter Five</span>
+              <span class="label-dim rv">残照 · Zanshō</span>
+            </div>
+            <div class="chapter-two">
+              <h2 class="display chapter-heading reveal" id="t5"><span class="split">Afterlight</span></h2>
+              <div class="jp-col reveal"><span class="jp-vertical rv" lang="ja">残照</span></div>
+            </div>
+            <p class="body-copy reveal"><span class="rv">The moon, vermilion and immense, rises over the ridge. What the day could not say, the afterlight whispers: nothing is lost that was witnessed. You descend the mountain the way you came — and yet not the same.</span></p>
+          </div>
+
+          <div class="cards">
+            <figure class="card reveal" data-still="afterlight">
+              <div class="card-frame">
+                <img alt="A vast vermilion moon rising over the mountain ridge" />
+                <button class="play" data-goto="#afterlight" aria-label="Replay the afterlight scene">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+                </button>
+              </div>
+              <figcaption>
+                <p class="cap">The afterlight — nothing lost that was witnessed.</p>
+                <span class="idx">PLATE 05</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================ MANIFESTO FOOTER ============================ -->
+  <footer class="manifesto" id="manifesto" aria-label="Manifesto">
+    <div class="manifesto-wrap">
+      <p class="label reveal"><span class="rv">影 · Afterword</span></p>
+      <h2 class="display manifesto-title reveal"><span class="split">A silent cinema in three dimensions.</span></h2>
+      <p class="manifesto-copy reveal"><span class="rv">Kage is an exercise in restraint — a place built from light, shadow, and slow attention. It has no product to sell and no call to action. It only asks that you walk, and look, and let the night do the rest.</span></p>
+      <div class="manifesto-credits reveal">
+        <span class="label-dim rv">Built with WebGL</span>
+        <span class="label-dim rv">No frameworks</span>
+        <span class="label-dim rv">No tracking</span>
+        <span class="label-dim rv">Generated procedurally</span>
+        <span class="end-mark rv" lang="ja">影</span>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
+    <button class="menu-toggle close" data-close aria-label="Close menu">CLOSE</button>
+    <a href="#top"><span class="idx">00</span> Prologue</a>
+    <a href="#threshold"><span class="idx">01</span> The Threshold</a>
+    <a href="#gardens"><span class="idx">02</span> Still Gardens</a>
+    <a href="#pines"><span class="idx">03</span> The Pines</a>
+    <a href="#craft"><span class="idx">04</span> Sacred Craft</a>
+    <a href="#afterlight"><span class="idx">05</span> Afterlight</a>
+  </nav>
+
+  <!-- Three.js r128 + post-processing (vendored, UMD) -->
+  <script src="js/vendor/three.min.js"></script>
+  <script src="js/vendor/Pass.js"></script>
+  <script src="js/vendor/CopyShader.js"></script>
+  <script src="js/vendor/LuminosityHighPassShader.js"></script>
+  <script src="js/vendor/FilmShader.js"></script>
+  <script src="js/vendor/VignetteShader.js"></script>
+  <script src="js/vendor/MaskPass.js"></script>
+  <script src="js/vendor/ShaderPass.js"></script>
+  <script src="js/vendor/RenderPass.js"></script>
+  <script src="js/vendor/EffectComposer.js"></script>
+  <script src="js/vendor/UnrealBloomPass.js"></script>
+
+  <script src="js/cutouts.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

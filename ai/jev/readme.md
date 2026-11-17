@@ -1,5 +1,7 @@
 # 火爆全网的Jev
 
+`laya-system-one` 是面向 Node.js/ 浏览器、开箱即用的本地高速非自回归文本决策引擎包，基于 Laya 模型，离线毫秒级输出带置信度的结构化判定结果，兼容 Jev 的 System One 协议
+
 非常非常特别的模型 Jev, 发布以后很快就在开发者圈里刷屏。
 
 - Jev 准备去挑战ChatGPT \Claude 的全能模型？

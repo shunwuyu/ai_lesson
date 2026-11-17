@@ -1,0 +1,164 @@
+- generic [active] [ref=f1e1]:
+  - link "Skip to content" [ref=f1e2]:
+    - /url: "#content"
+  - banner:
+    - link "Kage — back to the beginning" [ref=f1e5]:
+      - /url: "#top"
+      - text: KAGE
+      - generic [ref=f1e6]: 影
+    - navigation "Chapters" [ref=f1e7]:
+      - link "01" [ref=f1e8]:
+        - /url: "#threshold"
+      - link "02" [ref=f1e9]:
+        - /url: "#gardens"
+      - link "03" [ref=f1e10]:
+        - /url: "#pines"
+      - link "04" [ref=f1e11]:
+        - /url: "#craft"
+      - link "05" [ref=f1e12]:
+        - /url: "#afterlight"
+  - navigation "Chapter navigation" [ref=f1e13]:
+    - link "Prologue" [ref=f1e14]:
+      - /url: "#top"
+      - text: "0"
+    - link "Chapter one — the threshold" [ref=f1e15]:
+      - /url: "#threshold"
+      - text: "1"
+    - link "Chapter two — the still gardens" [ref=f1e16]:
+      - /url: "#gardens"
+      - text: "2"
+    - link "Chapter three — the pines" [ref=f1e17]:
+      - /url: "#pines"
+      - text: "3"
+    - link "Chapter four — sacred craft" [ref=f1e18]:
+      - /url: "#craft"
+      - text: "4"
+    - link "Chapter five — afterlight" [ref=f1e19]:
+      - /url: "#afterlight"
+      - text: "5"
+  - main [ref=f1e20]:
+    - region "Prologue" [ref=f1e21]:
+      - generic [ref=f1e23]:
+        - generic [ref=f1e24]:
+          - paragraph [ref=f1e25]: 影 — Kage · a night walk
+          - heading "KAGE" [level=1] [ref=f1e26]
+          - paragraph [ref=f1e29]: A night walk through a fictional Kyoto mountain temple, told in five chapters.
+          - generic [ref=f1e30]:
+            - generic [ref=f1e31]: Five chapters
+            - generic [ref=f1e32]: Scroll to descend
+        - generic [aria-hidden] [ref=f1e33]: 影
+    - region "The Threshold" [ref=f1e34]:
+      - generic [ref=f1e36]:
+        - generic [ref=f1e37]:
+          - generic [ref=f1e38]:
+            - generic [ref=f1e39]: Chapter One
+            - generic [ref=f1e40]: 山門 · Sanmon
+          - generic [ref=f1e41]:
+            - heading "The Threshold" [level=2] [ref=f1e42]:
+              - generic [ref=f1e43]:
+                - generic [ref=f1e44]: The
+                - generic [ref=f1e45]: Threshold
+            - generic [ref=f1e46]: 山門
+          - paragraph [ref=f1e48]: The torii rises from the dark like a gate of cinnabar. Beyond it, stone steps climb toward the hall, each riser worn smooth by weather and years. This is the point of crossing — where the road becomes a path, and the path becomes a vow.
+        - figure "Gate of cinnabar — the first crossing. PLATE 01" [ref=f1e50]:
+          - generic [ref=f1e51]:
+            - img "The vermilion torii gate standing against the night mountain" [ref=f1e52]
+            - button "Replay the threshold scene" [ref=f1e53]
+          - generic [ref=f1e56]:
+            - paragraph [ref=f1e57]: Gate of cinnabar — the first crossing.
+            - generic [ref=f1e58]: PLATE 01
+    - region "Still Gardens" [ref=f1e59]:
+      - generic [ref=f1e61]:
+        - generic [ref=f1e62]:
+          - generic [ref=f1e63]:
+            - generic [ref=f1e64]: Chapter Two
+            - generic [ref=f1e65]: 石庭 · Sekitei
+          - generic [ref=f1e66]:
+            - heading "Still Gardens" [level=2] [ref=f1e67]:
+              - generic [ref=f1e68]:
+                - generic [ref=f1e69]: Still
+                - generic [ref=f1e70]: Gardens
+            - generic [ref=f1e71]: 石庭
+          - paragraph [ref=f1e73]: Raked gravel holds the shape of water that is not there. Stones stand in a silence so complete it becomes audible. In the dry garden, nothing moves, and yet everything is in motion — the moon shifting, the mind settling.
+        - figure "Water drawn in sand — the second silence. PLATE 02" [ref=f1e75]:
+          - generic [ref=f1e76]:
+            - img "Raked gravel and standing stones of the dry garden in moonlight" [ref=f1e77]
+            - button "Replay the still gardens scene" [ref=f1e78]
+          - generic [ref=f1e81]:
+            - paragraph [ref=f1e82]: Water drawn in sand — the second silence.
+            - generic [ref=f1e83]: PLATE 02
+    - region "The Pines" [ref=f1e84]:
+      - generic [ref=f1e86]:
+        - generic [ref=f1e87]:
+          - generic [ref=f1e88]:
+            - generic [ref=f1e89]: Chapter Three
+            - generic [ref=f1e90]: 松 · Matsu
+          - generic [ref=f1e91]:
+            - heading "The Pines" [level=2] [ref=f1e92]:
+              - generic [ref=f1e93]:
+                - generic [ref=f1e94]: The
+                - generic [ref=f1e95]: Pines
+            - generic [ref=f1e96]: 松
+          - paragraph [ref=f1e98]: Wind moves through the black pines like a memory of the sea. Needles fall without hurry, and the air tastes of resin and cold. The mountain keeps its oldest trees close, as if afraid the night would lose them.
+        - figure "Needles on the wind — the mountain breathing. PLATE 03" [ref=f1e100]:
+          - generic [ref=f1e101]:
+            - img "Black pines gathered on the mountainside under a cold moon" [ref=f1e102]
+            - button "Replay the pines scene" [ref=f1e103]
+          - generic [ref=f1e106]:
+            - paragraph [ref=f1e107]: Needles on the wind — the mountain breathing.
+            - generic [ref=f1e108]: PLATE 03
+    - region "Sacred Craft" [ref=f1e109]:
+      - generic [ref=f1e111]:
+        - generic [ref=f1e112]:
+          - generic [ref=f1e113]:
+            - generic [ref=f1e114]: Chapter Four
+            - generic [ref=f1e115]: 灯籠 · Tōrō
+          - generic [ref=f1e116]:
+            - heading "Sacred Craft" [level=2] [ref=f1e117]:
+              - generic [ref=f1e118]:
+                - generic [ref=f1e119]: Sacred
+                - generic [ref=f1e120]: Craft
+            - generic [ref=f1e121]: 灯籠
+          - paragraph [ref=f1e123]: Stone lanterns, cut by hands that no longer have names, hold small fires against the dark. Shoji glow the color of embers and paper. Light, here, is a discipline — tended, trimmed, never wasted.
+        - figure "Fire kept in stone — the fourth discipline. PLATE 04" [ref=f1e125]:
+          - generic [ref=f1e126]:
+            - img "Stone lanterns and glowing shoji screens in the warm dark" [ref=f1e127]
+            - button "Replay the sacred craft scene" [ref=f1e128]
+          - generic [ref=f1e131]:
+            - paragraph [ref=f1e132]: Fire kept in stone — the fourth discipline.
+            - generic [ref=f1e133]: PLATE 04
+    - region "Afterlight" [ref=f1e134]:
+      - generic [ref=f1e136]:
+        - generic [ref=f1e137]:
+          - generic [ref=f1e138]:
+            - generic [ref=f1e139]: Chapter Five
+            - generic [ref=f1e140]: 残照 · Zanshō
+          - generic [ref=f1e141]:
+            - heading "Afterlight" [level=2] [ref=f1e142]
+            - generic [ref=f1e145]: 残照
+          - paragraph [ref=f1e147]: "The moon, vermilion and immense, rises over the ridge. What the day could not say, the afterlight whispers: nothing is lost that was witnessed. You descend the mountain the way you came — and yet not the same."
+        - figure "The afterlight — nothing lost that was witnessed. PLATE 05" [ref=f1e149]:
+          - generic [ref=f1e150]:
+            - img "A vast vermilion moon rising over the mountain ridge" [ref=f1e151]
+            - button "Replay the afterlight scene" [ref=f1e152]
+          - generic [ref=f1e155]:
+            - paragraph [ref=f1e156]: The afterlight — nothing lost that was witnessed.
+            - generic [ref=f1e157]: PLATE 05
+  - contentinfo "Manifesto" [ref=f1e158]:
+    - generic [ref=f1e159]:
+      - paragraph [ref=f1e160]: 影 · Afterword
+      - heading "A silent cinema in three dimensions." [level=2] [ref=f1e161]:
+        - generic [ref=f1e162]:
+          - generic [ref=f1e163]: A
+          - generic [ref=f1e164]: silent
+          - generic [ref=f1e165]: cinema
+          - generic [ref=f1e166]: in
+          - generic [ref=f1e167]: three
+          - generic [ref=f1e168]: dimensions.
+      - paragraph [ref=f1e169]: Kage is an exercise in restraint — a place built from light, shadow, and slow attention. It has no product to sell and no call to action. It only asks that you walk, and look, and let the night do the rest.
+      - generic [ref=f1e170]:
+        - generic [ref=f1e171]: Built with WebGL
+        - generic [ref=f1e172]: No frameworks
+        - generic [ref=f1e173]: No tracking
+        - generic [ref=f1e174]: Generated procedurally
+        - generic [ref=f1e175]: 影
