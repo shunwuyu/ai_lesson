@@ -12,6 +12,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PermissionsGuard } from './permissions.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtStrategy } from './jwt.strategy';
+import { EmailActivationService } from './email-activation.service';
+import { EmailService } from './email.service';
 
 @Module({
   // 引入 UserModule 模块，用于操作用户表
@@ -31,9 +33,10 @@ import { JwtStrategy } from './jwt.strategy';
   ],
   providers: [
     AuthService,
+    EmailService,
     // `JwtStrategy` 是 passport-jwt 的校验策略，负责**提取并校验 
     // accessToken，校验通过后把用户信息挂载到 request.user**，配合 AuthGuard ('jwt') 做鉴权。
-    
+    EmailActivationService,
     JwtStrategy,
     {
       provide: APP_GUARD,

@@ -44,7 +44,7 @@ export class PermissionsGuard implements CanActivate {
     // `request.user` 是在 JwtAuthGuard 中设置的，包含用户信息和角色
     const request = context.switchToHttp().getRequest<{ user?: AuthUser }>();
     const user = request.user;
-    console.log(user, '??????');
+    console.log(user, '????????????????');
     if (!user) {
       throw new ForbiddenException('权限不足');
     }

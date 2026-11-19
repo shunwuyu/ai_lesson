@@ -1,6 +1,8 @@
 import { 
   Injectable,
-  UnauthorizedException
+  UnauthorizedException,
+  // 
+  BadRequestException
 } from '@nestjs/common';
 import { LoginDto } from './dto/auth.dto';
 import { AuthUser } from './auth-user.interface';
@@ -8,6 +10,10 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { RegisterDto } from './dto/auth.dto';
+import { EmailActivationService } from './email-activation.service';
+import { EmailService } from './email.service';
+
+
 
 export interface LoginResult {
   accessToken: string;
@@ -31,6 +37,8 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
+    private readonly emailActivation: EmailActivationService,
+    private readonly emailService: EmailService,
   ) {
     
   }
@@ -142,6 +150,7 @@ export class AuthService {
 
     if (result.emailVerificationRequired && dto.email) {
       const token = await this.emailActivation.createToken(result.userId);
+      console.log(token);
       try {
         await this.emailService.sendActivationEmail(
           dto.email,
@@ -163,5 +172,14 @@ export class AuthService {
       userId: result.userId,
       message: '注册成功，请登录',
     };
+  }
+
+  async verifyEmail(token: string): Promise<{ message: string }> {
+    const userId = await this.emailActivation.consumeToken(token);
+    if (!userId) {
+      throw new BadRequestException('激活链接无效或已过期');
+    }
+    const message = await this.userService.activateEmail(userId);
+    return { message };
   }
 }

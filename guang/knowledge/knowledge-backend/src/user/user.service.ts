@@ -202,4 +202,19 @@ export class UserService {
     }
     return user;
   }
+
+  async activateEmail(userId: string): Promise<string> {
+    const user = await this.findByIdOrThrow(userId);
+    if (user.emailVerified === 1) return '账户已激活，请直接登录';
+    user.emailVerified = 1;
+    user.status = 1;
+    await this.userRepo.save(user);
+    return '账户激活成功，请登录';
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const user = await this.findByIdOrThrow(userId);
+    user.deleted = true;
+    await this.userRepo.save(user);
+  }
 }

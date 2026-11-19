@@ -15,11 +15,30 @@ import { RolePermissionEntity } from './user/entities/role-permission.entity';
 import { TeamModule } from './team/team.module';
 import { TeamEntity } from './team/entities/team.entity';
 import { TeamMemberEntity } from './team/entities/team-member.entity';
-
+import { RedisModule } from './redis/redis.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    RedisModule,
+     MailerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        transport: {
+          host: configService.get<string>('MAIL_HOST'),
+          port: Number(configService.get<string>('MAIL_PORT')),
+          secure: configService.get<string>('MAIL_SECURE') === 'true',
+          auth: {
+            user: configService.get<string>('MAIL_USER'),
+            pass: configService.get<string>('MAIL_PASS'),
+          },
+        },
+        defaults: {
+          from: configService.get<string>('MAIL_FROM'),
+        },
+      }),
+    }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({

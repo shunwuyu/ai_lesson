@@ -36,6 +36,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   // 否则调用父类 `AuthGuard('jwt')`，触发 {@link JwtStrategy} 校验 accessToken。
   // 
   canActivate(context: ExecutionContext) {
+    console.log('canActivate, ---------');
     // 读取 {@link Public} 元数据，判断是否为公开接口。
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       // 拿到的是**当前要执行的路由方法函数本身**

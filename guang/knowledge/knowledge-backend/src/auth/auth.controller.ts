@@ -2,7 +2,8 @@ import {
   Controller,
   Post,
   Body,
-  Get
+  Get,
+  Query
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RefreshTokenDto, RegisterDto } from './dto/auth.dto';
@@ -45,10 +46,21 @@ export class AuthController {
   // `@CurrentUser()` 装饰器读取 `req.user` 注入入参
   // 进入 me 接口，调用 service 返回用户信息
   // 任意一步校验失败，直接抛出 401 Unauthorized
+  // @Get('me') 
+  // me() {
+  //   console.log('--------------------')
+  // }
+
   @Get('me') 
   me(@CurrentUser() user: AuthUser) {
     console.log(user, '////+++++++++/////');
     return this.authService.getMe(user.userId);
+  }
+
+  @Public()
+  @Get('verify-email')
+  verifyEmail(@Query('token') token: string) {
+    return this.authService.verifyEmail(token);
   }
 
 }
