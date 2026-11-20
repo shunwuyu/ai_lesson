@@ -116,6 +116,8 @@ export class UserService {
 
     const userId = nextSnowflakeId();
     const needVerify = input.requireEmailVerification && !!input.email;
+    // 注册用户
+    // 只是构建实体对象，不会发 SQL 入库
     const user = this.userRepo.create({
       id: userId,
       username: input.username,
@@ -125,6 +127,7 @@ export class UserService {
       status: needVerify ? 0 : 1,
       emailVerified: needVerify ? 0 : 1,
     });
+    // insert 持久化到数据库
     await this.userRepo.save(user);
     await this.assignRole(userId, RoleCode.USER);
 
@@ -216,5 +219,18 @@ export class UserService {
     const user = await this.findByIdOrThrow(userId);
     user.deleted = true;
     await this.userRepo.save(user);
+  }
+
+  async getUserIdsByRoleCode(roleCode: string): Promise<string[]> {
+    const rows = await this.userRoleRepo
+      .createQueryBuilder('ur')
+      .innerJoin(RoleEntity, 'r', 'r.id = ur.role_id')
+      .innerJoin(UserEntity, 'u', 'u.id = ur.user_id')
+      .where('r.role_code = :roleCode', { roleCode })
+      .andWhere('u.deleted = false')
+      .andWhere('u.status = 1')
+      .select('u.id', 'userId')
+      .getRawMany<{ userId: string }>();
+    return rows.map((r) => String(r.userId));
   }
 }

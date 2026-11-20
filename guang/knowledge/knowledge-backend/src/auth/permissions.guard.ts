@@ -25,12 +25,14 @@ import { RoleCode } from '../common/constants/roles';
  * - 否则 request.user.permissions 须命中其一
  */
 @Injectable()
+// 需要实现接口
 export class PermissionsGuard implements CanActivate {
   // 注入 Reflector 用于读取装饰器挂载的元数据
   // `Reflector` 是 Nest 自带的内置可注入服务，不需要你自己在模块 providers 里注册它。
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
+    console.log(PERMISSIONS_KEY, '---|||||||||||||||---')
     const required = this.reflector.getAllAndOverride<string[]>(
       PERMISSIONS_KEY,
       [context.getHandler(), context.getClass()],
@@ -54,6 +56,7 @@ export class PermissionsGuard implements CanActivate {
     }
 
     const owned = new Set(user.permissions ?? []);
+    // 检查用户是否有任意一个权限码
     const ok = required.some((p) => owned.has(p));
     if (!ok) {
       throw new ForbiddenException('权限不足');

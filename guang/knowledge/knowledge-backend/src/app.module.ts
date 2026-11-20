@@ -22,7 +22,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     RedisModule,
-     MailerModule.forRootAsync({
+    MailerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         transport: {

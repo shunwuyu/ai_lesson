@@ -182,4 +182,8 @@ export class AuthService {
     const message = await this.userService.activateEmail(userId);
     return { message };
   }
+
+  async getReviewerIds(): Promise<string[]> {
+    return this.userService.getUserIdsByRoleCode('ROLE_REVIEWER');
+  }
 }

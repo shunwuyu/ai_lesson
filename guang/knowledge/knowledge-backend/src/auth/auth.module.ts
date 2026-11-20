@@ -14,6 +14,7 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { EmailActivationService } from './email-activation.service';
 import { EmailService } from './email.service';
+import { RolesGuard } from './roles.guard';
 
 @Module({
   // 引入 UserModule 模块，用于操作用户表
@@ -41,6 +42,10 @@ import { EmailService } from './email.service';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
     // `APP_GUARD` 是 nest 内置特殊 token，以此注册的守卫会被框架自动注册为全局守卫，对所有路由生效。
     {

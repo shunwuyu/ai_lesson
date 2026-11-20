@@ -10,6 +10,8 @@ import { LoginDto, RefreshTokenDto, RegisterDto } from './dto/auth.dto';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { AuthUser } from './auth-user.interface';
+import { Roles } from './decorators/roles.decorator';
+import { RoleCode } from '../common/constants/roles';
 
 @Controller('auth')
 export class AuthController {
@@ -61,6 +63,13 @@ export class AuthController {
   @Get('verify-email')
   verifyEmail(@Query('token') token: string) {
     return this.authService.verifyEmail(token);
+  }
+  // 获取审核人ID列表
+  @Get('reviewer-ids')
+  @Roles(RoleCode.ADMIN, RoleCode.REVIEWER)
+  getReviewerIds() {
+    // return { message: '获取审核人ID列表' };
+    return this.authService.getReviewerIds();
   }
 
 }

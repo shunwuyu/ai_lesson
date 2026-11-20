@@ -10,21 +10,22 @@ export const ACTIVATION_TOKEN_TTL_SECONDS = 24 * 3600;
 @Injectable()
 export class EmailActivationService {
   constructor(private readonly redis: RedisService) {}
-
+  // token 找用户 ID
   private tokenKey(token: string): string {
     return `${TOKEN_PREFIX}${token}`;
   }
-
+  // 用户 ID 找 token
   private userKey(userId: string): string {
     return `${USER_PREFIX}${userId}`;
   }
 
   async createToken(userId: string): Promise<string> {
+    // 先删除旧的 token
     const existing = await this.redis.get(this.userKey(userId));
     if (existing) {
       await this.redis.del(this.tokenKey(existing));
     }
-
+    // 生成 32 字节的随机二进制数据，转成十六进制字符串，作为激活令牌。
     const token = randomBytes(32).toString('hex');
     // token → userId：用户点激活链接时，用 token 查出要激活的账号
     await this.redis.set(
